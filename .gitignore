@@ -4,3 +4,19 @@
 *.jar
 *.war
 *.ear
+*.log
+*.bak
+.classpath
+.project
+*.iml
+/**/.gitignore
+/**/META-INF/
+
+# folder #
+target/
+build/
+.settings/
+.idea/
+.gradle/
+bin/
+logs/
