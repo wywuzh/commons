@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 /**
- * 类package-info.java的实现描述：项目公共组件类库-Core
+ * 类package-info.java的实现描述：项目公共组件类库 - Core
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午1:32:20
  * @version v1.0.0

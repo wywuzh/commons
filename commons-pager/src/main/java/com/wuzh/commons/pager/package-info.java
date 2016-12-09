@@ -1,6 +1,4 @@
 /*
- * Copyright 2015-2016 the original author or authors.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,10 +12,10 @@
  * limitations under the License.
  */
 /**
- * 类package-info.java的实现描述：项目公共组件类库
+ * 类package-info.java的实现描述：项目公共组件 - 分页（pagination）
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午1:31:24
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月9日 上午9:20:36
  * @version v1.0.0
  * @since JDK 1.7
  */
-package com.wuzh.commons;
+package com.wuzh.commons.pager;

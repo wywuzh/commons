@@ -1,18 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.wuzh.commons</groupId>
-	<artifactId>commons-parent</artifactId>
-	<version>1.0.0</version>
-	<name>commons-parent</name>
-	<packaging>pom</packaging>
-	<description>项目公共组件类库</description>
+	<artifactId>commons-pager</artifactId>
+	<name>commons-pager</name>
+	<packaging>jar</packaging>
+	<description>分页组件</description>
 	<url>http://git.oschina.net/wywuzh/commons</url>
 	
-	<modules>
-		<module>commons-core</module>
-		<module>commons-pager</module>
-	</modules>
+	<parent>
+		<groupId>com.wuzh.commons</groupId>
+		<artifactId>commons-parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
 	
 	<developers>
 		<developer>
@@ -35,7 +34,6 @@
 		<developerConnection>scm:git:http://git.oschina.net/wywuzh/commons</developerConnection>
 	</scm>
 	
-	
 	<properties>
 		<!-- Maven默认识别 -->
 		<skipTest>true</skipTest>
@@ -43,103 +41,15 @@
 		<maven.compiler.source>1.7</maven.compiler.source>
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<java.version>1.7</java.version>
-		
-		<springframework.version>3.2.17.RELEASE</springframework.version>
-		<aspectj.version>1.8.9</aspectj.version>
-		<junit.version>4.12</junit.version>
-		<mockito.version>1.10.19</mockito.version>
-		
-		<!-- Maven Plugins -->
-		<maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-		<maven-javadoc-plugin.version>2.10.2</maven-javadoc-plugin.version>
-		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 	</properties>
 	
-	
 	<dependencies>
-		<!-- Spring Framework dependency -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-		</dependency>
-		
-		<!-- Spring AOP -->
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
-			<version>${aspectj.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjweaver</artifactId>
-			<version>${aspectj.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		
-		<!-- junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<!-- mockito -->
-        <dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockito.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>${mockito.version}</version>
+			<groupId>com.wuzh.commons</groupId>
+			<artifactId>commons-core</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
-	
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework</groupId>
-				<artifactId>spring-framework-bom</artifactId>
-				<version>${springframework.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-	
 	
 	<build>
 		<plugins>
