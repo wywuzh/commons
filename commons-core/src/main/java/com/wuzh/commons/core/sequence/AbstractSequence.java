@@ -81,7 +81,7 @@ public abstract class AbstractSequence {
      * @return
      */
     private String getThreePart() {
-        return StringHelper.formatToString(getThreePartLength(), currentNumber);
+        return StringHelper.fillZero(getThreePartLength(), currentNumber);
     }
 
     /**
