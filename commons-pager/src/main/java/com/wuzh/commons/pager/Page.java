@@ -27,88 +27,78 @@ public interface Page {
     /**
      * 页码（当前所处页号）。页码从1开始
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 当前所处页号
      */
     public int getPageNo();
 
     /**
      * 每页显示数据量
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 每页显示数据量
      */
     public int getPageSize();
 
     /**
      * 页面总数
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 页面总数
      */
     public int getPageTotal();
 
     /**
      * 行记录总数
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 行记录总数
      */
     public long getRowCount();
 
     /**
      * 当前页面开始行
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 当前页面开始行
      */
     public int getOffSet();
 
     /**
      * 当前页面结束行
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 当前页面结束行
      */
     public int getEndSet();
 
     /**
      * 是否第一页
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:55
-     * @return
+     * @return 返回为true表示当前页是第一页，此时{@link #getPageNo()}的值为1；返回false则表示当前页不是第一页
      */
     public boolean isFirstPage();
 
     /**
      * 是否最后一页
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 返回为true表示当前页是最后一页；返回false则表示当前页不是最后一页
      */
     public boolean isLastPage();
 
     /**
      * 是否有上一页
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 返回为true表示有上一页，此时{@link #isFirstPage()}为false；返回false则表示当前页是第一页，此时{@link #isFirstPage()}为true，
+     *         {@link #getPageNo()}的值为1
      */
     public boolean hasPreviousPage();
 
     /**
      * 是否有下一页
      * 
-     * @author 伍章红 2015年11月6日 上午11:54:58
-     * @return
+     * @return 返回为true表示有下一页，此时{@link #isLastPage()}为false；返回false则表示当前页是最后一页，此时{@link #isLastPage()}为true
      */
     public boolean hasNextPage();
 
     /**
      * 排序字段
      * 
-     * @author 伍章红 2015年11月9日 上午11:53:19
-     * @return
+     * @return 返回分页查询时的排序字段
      */
     public List<Sort> getSorts();
 }
