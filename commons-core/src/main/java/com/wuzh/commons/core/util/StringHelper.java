@@ -19,6 +19,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.wuzh.commons.core.gson.GsonUtil;
 
 /**
@@ -88,6 +90,30 @@ public class StringHelper {
      */
     public static String fillZero(final int length, final long number) {
         return new DecimalFormat(getZeroString(length)).format(number);
+    }
+
+    /**
+     * 当content内容不足length长度时，在内容后面添加剩余长度的str字符
+     * 
+     * @param content
+     *            内容
+     * @param length
+     *            期望内容长度
+     * @param str
+     *            补充字符
+     * @return
+     */
+    public static String fill(String content, int length, char str) {
+        if (StringUtils.isEmpty(content)) {
+            return null;
+        }
+
+        StringBuilder result = new StringBuilder();
+        result.append(content);
+        for (int i = content.length(); i <= length; i++) {
+            result.append(str);
+        }
+        return result.toString();
     }
 
     /**
