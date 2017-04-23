@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wuzh.commons</groupId>
 	<artifactId>commons-parent</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>3.2.17</version>
 	<name>commons-parent</name>
 	<packaging>pom</packaging>
 	<description>项目公共组件类库</description>
@@ -44,7 +44,7 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<java.version>1.7</java.version>
 
-		<springframework.version>3.2.18.RELEASE</springframework.version>
+		<springframework.version>3.2.17.RELEASE</springframework.version>
 		<aspectj.version>1.8.9</aspectj.version>
 		<junit.version>4.12</junit.version>
 		<mockito.version>1.10.19</mockito.version>
