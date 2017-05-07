@@ -18,12 +18,10 @@ package com.wuzh.commons.core.gson;
 import java.lang.reflect.Type;
 
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
 
 /**
  * 类DateSerializer.java的实现描述：java.sql.Date 日期格式转换
@@ -32,7 +30,12 @@ import com.google.gson.JsonSerializer;
  * @version v1.0.0
  * @since JDK 1.7
  */
-public class DateSerializer implements JsonSerializer<java.sql.Date>, JsonDeserializer<java.sql.Date> {
+public class DateSerializer implements TypeSerializer<java.sql.Date> {
+
+    @Override
+    public Type getType() {
+        return java.sql.Date.class;
+    }
 
     @Override
     public JsonElement serialize(java.sql.Date value, Type typeOfSrc, JsonSerializationContext context) {
@@ -50,4 +53,5 @@ public class DateSerializer implements JsonSerializer<java.sql.Date>, JsonDeseri
         }
         return new java.sql.Date(value);
     }
+
 }

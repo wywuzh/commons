@@ -41,17 +41,41 @@ import com.google.gson.JsonSyntaxException;
  */
 public class GsonUtil {
     private static final Log logger = LogFactory.getLog(GsonUtil.class);
+
+    private static GsonBuilder gsonBuilder;
     public static Gson gson = null;
 
     static {
-        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder = new GsonBuilder();
         // 注册java.util.Date 日期时间格式转换
         gsonBuilder.registerTypeAdapter(java.util.Date.class, new DateTimeSerializer());
         // 注册java.sql.Date 日期格式转换
         gsonBuilder.registerTypeAdapter(java.sql.Date.class, new DateSerializer());
         // 解决value为null时key不存在的问题
         gsonBuilder.serializeNulls();
+    }
+
+    public static <T> void register(Class<TypeSerializer<T>> clazz, TypeSerializer<T> typeSerializer) {
+        gsonBuilder.registerTypeAdapter(clazz, typeSerializer);
+    }
+
+    public static <T> void register(Type type, TypeSerializer<T> typeSerializer) {
+        gsonBuilder.registerTypeAdapter(type, typeSerializer);
+    }
+
+    public static <T> void register(List<? extends TypeSerializer<T>> list) {
+        for (TypeSerializer<T> serializer : list) {
+            gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
+        }
+    }
+
+    public static GsonBuilder getGsonBuilder() {
+        return gsonBuilder;
+    }
+
+    public static Gson create() {
         gson = gsonBuilder.create();
+        return gson;
     }
 
     /**
@@ -63,6 +87,9 @@ public class GsonUtil {
      * @return
      */
     public static String format(Object bean) {
+        if (gson == null) {
+            gson = create();
+        }
         return gson.toJson(bean);
     }
 
@@ -77,6 +104,9 @@ public class GsonUtil {
      * @return
      */
     public static String format(Object bean, Type type) {
+        if (gson == null) {
+            gson = create();
+        }
         return gson.toJson(bean, type);
     }
 
@@ -89,6 +119,9 @@ public class GsonUtil {
      * @return
      */
     public static String format(List<?> beanList) {
+        if (gson == null) {
+            gson = create();
+        }
         return gson.toJson(beanList);
     }
 
@@ -103,6 +136,9 @@ public class GsonUtil {
      * @return
      */
     public static String format(List<?> beanList, Type type) {
+        if (gson == null) {
+            gson = create();
+        }
         return gson.toJson(beanList, type);
     }
 
@@ -115,6 +151,10 @@ public class GsonUtil {
      * @return
      */
     public static <T> T parse(String json, Class<T> clazz) {
+        if (gson == null) {
+            gson = create();
+        }
+
         T t = null;
         try {
             t = gson.fromJson(json, clazz);
@@ -125,20 +165,46 @@ public class GsonUtil {
         return t;
     }
 
+    /**
+     * 将json字符串转为JsonObject对象
+     * 
+     * @param json
+     *            json字符串
+     * @return JsonObject对象
+     * @throws JsonSyntaxException
+     */
     public static JsonObject fromObject(String json) throws JsonSyntaxException {
-        JsonParser jsonParser = new JsonParser();
-        return jsonParser.parse(json).getAsJsonObject();
+        JsonElement jsonElement = new JsonParser().parse(json);
+        if (jsonElement.isJsonObject()) {
+            return jsonElement.getAsJsonObject();
+        } else {
+            throw new IllegalArgumentException("传入字符串数据不是JsonObject格式");
+        }
     }
 
+    /**
+     * 将json字符串转为JsonArray对象
+     * 
+     * @param json
+     *            json字符串
+     * @return JsonArray对象
+     * @throws JsonSyntaxException
+     */
     public static JsonArray fromArray(String json) throws JsonSyntaxException {
-        JsonParser jsonParser = new JsonParser();
-        return jsonParser.parse(json).getAsJsonArray();
+        JsonElement jsonElement = new JsonParser().parse(json);
+        if (jsonElement.isJsonArray()) {
+            return jsonElement.getAsJsonArray();
+        } else {
+            throw new IllegalArgumentException("传入字符串数据不是JsonArray格式");
+        }
     }
 
     public static void main(String[] args) {
         Gson gson = new Gson();
         String json = gson.toJson(new Date());
         System.out.println(json);
+        System.out.println(format(new Date()));
+        System.out.println(parse("1494163763359", Date.class));
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("total", "12");
