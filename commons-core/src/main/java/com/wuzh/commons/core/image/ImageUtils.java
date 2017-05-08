@@ -19,13 +19,9 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
 
 /**
  * 类ImageUtils.java的实现描述：TODO 类实现描述
@@ -126,108 +122,6 @@ public class ImageUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 图片压缩，采用JPEGImageEncoder形式对图片流进行输出
-     *
-     * @param sourceFile
-     *            源图片地址
-     * @param destinationFile
-     *            目标图片地址
-     * @param width
-     *            图片宽度
-     * @param height
-     *            图片高度
-     * @return 返回图片缩放后的目录地址
-     * @deprecated {@link #scaleImage(File, File, int, int)}
-     */
-    @Deprecated
-    public static String reduceImg(File sourceFile, File destinationFile, int width, int height) {
-        // 当源文件为空或者源文件不存在时
-        if (sourceFile == null || destinationFile == null || !sourceFile.exists()) {
-            return null;
-        }
-        // 取得目标图片文件夹信息
-        File parentFile = new File(destinationFile.getParent());
-        if (!parentFile.exists()) {
-            parentFile.mkdirs();
-        }
-
-        try {
-            // 开始读取文件并进行压缩
-            BufferedImage srcImage = ImageIO.read(sourceFile);
-            BufferedImage outputImage = new BufferedImage(width, height, Image.SCALE_DEFAULT);
-
-            outputImage.getGraphics().drawImage(srcImage.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0,
-                    null);
-
-            // 采用JPEGImageEncoder形式对图片流进行输出
-            FileOutputStream outputStream = new FileOutputStream(destinationFile);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(outputStream);
-            encoder.encode(outputImage);
-            // 释放资源
-            outputStream.close();
-            encoder.getJPEGEncodeParam();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 图片压缩，采用JPEGImageEncoder形式对图片流进行输出
-     *
-     * @param sourceFile
-     *            源图片地址
-     * @param destinationFile
-     *            目标图片地址
-     * @param rate
-     *            图片压缩比例，如果指定比例为空或0，则取原图
-     * @return 返回图片缩放后的目录地址
-     * @deprecated {@link #scaleImage(File, File, Float)}
-     */
-    @Deprecated
-    public static String reduceImg(File sourceFile, File destinationFile, Float rate) {
-        // 当源文件为空或者源文件不存在时
-        if (sourceFile == null || destinationFile == null || !sourceFile.exists()) {
-            return null;
-        }
-        // 取得目标图片文件夹信息
-        File parentFile = new File(destinationFile.getParent());
-        if (!parentFile.exists()) {
-            parentFile.mkdirs();
-        }
-
-        try {
-            // 开始读取文件并进行压缩
-            BufferedImage srcImage = ImageIO.read(sourceFile);
-            // 图片宽度
-            int width = srcImage.getWidth();
-            // 图片高度
-            int height = srcImage.getHeight();
-            // 当缩放比例不为空时，根据原图进行等比例缩放
-            if (rate != null) {
-                // 指定图片宽度
-                width = (int) (width * rate);
-                // 指定图片高度
-                height = (int) (height * rate);
-            }
-            BufferedImage outputImage = new BufferedImage(width, height, Image.SCALE_DEFAULT);
-
-            outputImage.getGraphics().drawImage(srcImage.getScaledInstance(width, height, Image.SCALE_DEFAULT), 0, 0,
-                    null);
-
-            // 采用JPEGImageEncoder形式对图片流进行输出
-            FileOutputStream outputStream = new FileOutputStream(destinationFile);
-            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(outputStream);
-            encoder.encode(outputImage);
-            outputStream.close();
-            encoder.getJPEGEncodeParam();
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
         return null;
     }
