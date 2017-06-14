@@ -15,6 +15,8 @@
  */
 package com.wuzh.commons.core.gson;
 
+import java.lang.reflect.Type;
+
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
@@ -28,9 +30,9 @@ import com.google.gson.JsonSerializer;
 public interface TypeSerializer<T> extends JsonSerializer<T>, JsonDeserializer<T> {
 
     /**
-     * 返回泛型T的Class
+     * 返回泛型T的Type
      *
      * @return
      */
-    public Class<T> getTClass();
+    public Type getType();
 }

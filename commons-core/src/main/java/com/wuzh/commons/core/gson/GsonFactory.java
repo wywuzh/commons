@@ -90,7 +90,7 @@ public class GsonFactory {
     public static <T> GsonBuilder getGsonBuilder(List<? extends TypeSerializer<T>> list) {
         GsonBuilder gsonBuilder = getGsonBuilder();
         for (TypeSerializer<T> serializer : list) {
-            gsonBuilder.registerTypeAdapter(serializer.getTClass(), serializer);
+            gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
         }
         return gsonBuilder;
     }
