@@ -55,14 +55,36 @@ public class GsonUtil {
         gsonBuilder.serializeNulls();
     }
 
+    /**
+     * 注册类型转换器
+     * 
+     * @param clazz
+     *            数据类型
+     * @param typeSerializer
+     *            类型转换器
+     */
     public static <T> void register(Class<TypeSerializer<T>> clazz, TypeSerializer<T> typeSerializer) {
         gsonBuilder.registerTypeAdapter(clazz, typeSerializer);
     }
 
+    /**
+     * 注册类型转换器
+     * 
+     * @param type
+     *            数据类型
+     * @param typeSerializer
+     *            类型转换器
+     */
     public static <T> void register(Type type, TypeSerializer<T> typeSerializer) {
         gsonBuilder.registerTypeAdapter(type, typeSerializer);
     }
 
+    /**
+     * 注册类型转换器
+     * 
+     * @param list
+     *            类型转换器集合
+     */
     public static <T> void register(List<? extends TypeSerializer<T>> list) {
         for (TypeSerializer<T> serializer : list) {
             gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
@@ -79,12 +101,12 @@ public class GsonUtil {
     }
 
     /**
-     * 将Bean对象转换为json
+     * 将Bean对象转换为JSON
      * 
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:41
      * @param bean
      *            实现Serializable接口的Bean对象
-     * @return
+     * @return JSON格式字符串
      */
     public static String format(Object bean) {
         if (gson == null) {
@@ -101,7 +123,7 @@ public class GsonUtil {
      *            实现Serializable接口的Bean对象
      * @param type
      *            Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
-     * @return
+     * @return JSON格式字符串
      */
     public static String format(Object bean, Type type) {
         if (gson == null) {
@@ -116,7 +138,7 @@ public class GsonUtil {
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:45
      * @param beanList
      *            Bean对象集合
-     * @return
+     * @return JSON格式字符串
      */
     public static String format(List<?> beanList) {
         if (gson == null) {
@@ -133,7 +155,7 @@ public class GsonUtil {
      *            Bean对象集合
      * @param type
      *            Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
-     * @return
+     * @return JSON格式字符串
      */
     public static String format(List<?> beanList, Type type) {
         if (gson == null) {
@@ -147,17 +169,19 @@ public class GsonUtil {
      * 
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
      * @param json
-     * @param clazz
-     * @return
+     *            需要转换的json数据
+     * @param type
+     *            需要转换的数据类型
+     * @return 转换成功的Bean对象
      */
-    public static <T> T parse(String json, Class<T> clazz) {
+    public static <T> T parse(String json, Type type) {
         if (gson == null) {
             gson = create();
         }
 
         T t = null;
         try {
-            t = gson.fromJson(json, clazz);
+            t = gson.fromJson(json, type);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
