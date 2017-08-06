@@ -26,7 +26,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @version v1.0.0
  * @since JDK 1.7
  */
-public class PaginationObject<R extends Serializable, P extends Serializable> extends PaginationParamter<P>
+public class PaginationObject<E extends Serializable, V extends Serializable> extends PaginationParamter<V>
         implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -37,13 +37,13 @@ public class PaginationObject<R extends Serializable, P extends Serializable> ex
     /**
      * 分页结果集
      */
-    public List<R> resultList = new ArrayList<R>();
+    public List<E> resultList = new ArrayList<E>();
 
     public PaginationObject() {
         super();
     }
 
-    public PaginationObject(long rowCount, List<R> resultList) {
+    public PaginationObject(long rowCount, List<E> resultList) {
         super();
         this.rowCount = rowCount;
         this.resultList = resultList;
@@ -58,11 +58,11 @@ public class PaginationObject<R extends Serializable, P extends Serializable> ex
         this.rowCount = rowCount;
     }
 
-    public List<R> getResultList() {
+    public List<E> getResultList() {
         return resultList;
     }
 
-    public void setResultList(List<R> resultList) {
+    public void setResultList(List<E> resultList) {
         this.resultList = resultList;
     }
 
