@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.wuzh.commons</groupId>
 		<artifactId>commons-parent</artifactId>
-		<version>4.3.8</version>
+		<version>4.3.18</version>
 	</parent>
 
 	<developers>
@@ -34,36 +34,29 @@
 	</scm>
 
 	<properties>
-		<!-- Maven默认识别 -->
-		<skipTest>true</skipTest>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<java.version>1.7</java.version>
-
 		<apache-log4j.version>1.2.17</apache-log4j.version>
-		<apache-log4j2.version>2.3</apache-log4j2.version>
-		<slf4j.version>1.7.12</slf4j.version>
+		<apache-log4j2.version>2.11.0</apache-log4j2.version>
+		<slf4j.version>1.7.25</slf4j.version>
 		<json-lib.version>2.4</json-lib.version>
-		<jackson.version>2.6.1</jackson.version>
-		<gson.version>2.3.1</gson.version>
+		<jackson.version>2.9.6</jackson.version>
+		<gson.version>2.8.5</gson.version>
 		<dom4j.version>1.6.1</dom4j.version>
 		<JavaMail.version>1.4.7</JavaMail.version>
 
-		<apache-commons-beanutils.version>1.9.2</apache-commons-beanutils.version>
-		<apache-commons-codec.version>1.10</apache-commons-codec.version>
+		<apache-commons-beanutils.version>1.9.3</apache-commons-beanutils.version>
+		<apache-commons-codec.version>1.11</apache-commons-codec.version>
 		<apache-commons-collections.version>3.2.1</apache-commons-collections.version>
-		<apache-commons-compress.version>1.10</apache-commons-compress.version>
+		<apache-commons-compress.version>1.17</apache-commons-compress.version>
 		<apache-commons-configuration.version>1.10</apache-commons-configuration.version>
-		<apache-commons-email.version>1.4</apache-commons-email.version>
+		<apache-commons-email.version>1.5</apache-commons-email.version>
 		<apache-commons-io.version>2.4</apache-commons-io.version>
-		<apache-commons-lang3.version>3.3</apache-commons-lang3.version>
+		<apache-commons-lang3.version>3.7</apache-commons-lang3.version>
 		<apache-commons-logging.version>1.2</apache-commons-logging.version>
-		<apache-commons-math3.version>3.5</apache-commons-math3.version>
-		<apache-commons-validator.version>1.5.0</apache-commons-validator.version>
-		<guava.version>16.0.1</guava.version>
-		<apache-httpclient.version>4.5.2</apache-httpclient.version>
-		<apache-poi.version>3.13</apache-poi.version>
+		<apache-commons-math3.version>3.6.1</apache-commons-math3.version>
+		<apache-commons-validator.version>1.6</apache-commons-validator.version>
+		<guava.version>25.1-jre</guava.version>
+		<apache-httpclient.version>4.5.5</apache-httpclient.version>
+		<apache-poi.version>3.17</apache-poi.version>
 	</properties>
 
 	<dependencies>
@@ -290,7 +283,7 @@
 					<version>true</version>
 					<author>true</author>
 					<keywords>true</keywords>
-					<aggregate>true</aggregate>
+					<!--<aggregate>true</aggregate>-->
 				</configuration>
 			</plugin>
 			<plugin>

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wuzh.commons</groupId>
 	<artifactId>commons-parent</artifactId>
-	<version>4.3.8</version>
+	<version>4.3.18</version>
 	<name>commons-parent</name>
 	<packaging>pom</packaging>
 	<description>项目公共组件类库</description>
@@ -40,19 +40,19 @@
 		<!-- Maven默认识别 -->
 		<skipTest>true</skipTest>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<java.version>1.7</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<java.version>1.8</java.version>
 
-		<springframework.version>4.3.8.RELEASE</springframework.version>
-		<aspectj.version>1.8.9</aspectj.version>
+		<springframework.version>4.3.18.RELEASE</springframework.version>
+		<aspectj.version>1.8.13</aspectj.version>
 		<junit.version>4.12</junit.version>
-		<mockito.version>1.10.19</mockito.version>
+		<mockito.version>2.19.0</mockito.version>
 
 		<!-- Maven Plugins -->
-		<maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
-		<maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
-		<maven-javadoc-plugin.version>2.10.2</maven-javadoc-plugin.version>
+		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
 		<maven-source-plugin.version>3.0.1</maven-source-plugin.version>
 	</properties>
 
@@ -115,11 +115,6 @@
 		</dependency>
 
 		<!-- mockito -->
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockito.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
@@ -190,7 +185,7 @@
 					<version>true</version>
 					<author>true</author>
 					<keywords>true</keywords>
-					<aggregate>true</aggregate>
+					<!--<aggregate>true</aggregate>-->
 				</configuration>
 			</plugin>
 			<plugin>
