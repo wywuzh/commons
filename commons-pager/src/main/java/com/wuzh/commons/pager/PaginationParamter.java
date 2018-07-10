@@ -16,8 +16,6 @@ package com.wuzh.commons.pager;
 import java.io.Serializable;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 /**
  * 类PaginationParamter.java的实现描述：分页请求参数类
  * 
@@ -66,11 +64,6 @@ public class PaginationParamter<P extends Serializable> extends PageImpl impleme
 
     public void setSorts(List<Sort> sorts) {
         this.sorts = sorts;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
 }

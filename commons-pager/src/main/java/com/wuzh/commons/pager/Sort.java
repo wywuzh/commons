@@ -15,8 +15,6 @@ package com.wuzh.commons.pager;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 /**
  * 类Sort.java的实现描述：排序
  * 
@@ -60,11 +58,6 @@ public class Sort implements Serializable {
 
     public void setOrder(Order order) {
         this.order = order;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
 }
