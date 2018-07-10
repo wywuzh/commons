@@ -18,6 +18,8 @@ package com.wuzh.commons.core.gson;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
+import java.lang.reflect.Type;
+
 /**
  * 类TypeSerializer.java的实现描述：类型转换器接口。序列化，反序列化处理
  *
@@ -28,9 +30,10 @@ import com.google.gson.JsonSerializer;
 public interface TypeSerializer<T> extends JsonSerializer<T>, JsonDeserializer<T> {
 
     /**
-     * 返回泛型T的Class
+     * 返回泛型T的Type
      *
      * @return
      */
-    public Class<T> getTClass();
+    Type getType();
+
 }

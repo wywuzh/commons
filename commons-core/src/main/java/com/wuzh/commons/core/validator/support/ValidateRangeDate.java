@@ -25,8 +25,8 @@ import com.wuzh.commons.core.util.DateUtil;
  * 类ValidateRangeDate.java的实现描述：日期范围验证
  * 
  * @author 伍章红 2015-8-6 下午2:59:47
- * @see com.wuzh.frame.core.validator.Validate
- * @see com.wuzh.frame.core.validator.PatternType
+ * @see com.wuzh.commons.core.validator.Validate
+ * @see com.wuzh.commons.core.validator.PatternType
  * @since JDK 1.7.0_71
  */
 public class ValidateRangeDate extends ValidateDate {

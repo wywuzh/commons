@@ -32,8 +32,8 @@ import com.wuzh.commons.core.validator.Validate;
  * </pre>
  * 
  * @author 伍章红 2015-8-2 下午8:02:52
- * @see com.wuzh.frame.core.validator.Validate
- * @see com.wuzh.frame.core.validator.PatternType
+ * @see com.wuzh.commons.core.validator.Validate
+ * @see com.wuzh.commons.core.validator.PatternType
  * @since JDK 1.7.0_71
  */
 public class ValidateMobile extends Validate {

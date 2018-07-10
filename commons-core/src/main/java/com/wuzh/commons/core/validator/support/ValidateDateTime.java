@@ -22,8 +22,8 @@ import com.wuzh.commons.core.validator.Validate;
  * 类ValidateDateTime.java的实现描述：日期+时间验证(格式：yyyy-MM-dd HH:mm:ss)
  * 
  * @author 伍章红 2015-8-6 下午2:38:04
- * @see com.wuzh.frame.core.validator.Validate
- * @see com.wuzh.frame.core.validator.PatternType
+ * @see com.wuzh.commons.core.validator.Validate
+ * @see com.wuzh.commons.core.validator.PatternType
  * @since JDK 1.7.0_71
  */
 public class ValidateDateTime extends Validate {

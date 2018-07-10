@@ -22,8 +22,8 @@ import com.wuzh.commons.core.validator.Validate;
  * 类ValidateID.java的实现描述： 身份证号码验证
  * 
  * @author 伍章红 2015-8-6 下午2:40:34
- * @see com.wuzh.frame.core.validator.Validate
- * @see com.wuzh.frame.core.validator.PatternType
+ * @see com.wuzh.commons.core.validator.Validate
+ * @see com.wuzh.commons.core.validator.PatternType
  * @since JDK 1.7.0_71
  */
 public class ValidateIdCard extends Validate {
