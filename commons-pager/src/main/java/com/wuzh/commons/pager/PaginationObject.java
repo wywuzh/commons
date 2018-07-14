@@ -21,8 +21,8 @@ import java.util.List;
  * 类PaginationObject.java的实现描述：分页结果对象
  * 
  * @author 伍章红 2015年11月6日 上午10:21:35
- * @version v1.0.0
- * @since JDK 1.7
+ * @version v2.0.2
+ * @since JDK 1.8
  */
 public class PaginationObject<R extends Serializable, P extends Serializable> extends PaginationParamter<P>
         implements Serializable {
