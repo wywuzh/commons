@@ -18,12 +18,12 @@ import java.util.List;
 
 /**
  * 类PaginationParamter.java的实现描述：分页请求参数类
- * 
+ *
  * @author 伍章红 2015年11月6日 下午1:08:24
  * @version v2.0.2
  * @since JDK 1.8
  */
-public class PaginationParamter<P extends Serializable> extends PageImpl implements Serializable {
+public class PaginationParameter<P extends Serializable> extends PageImpl implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -36,11 +36,11 @@ public class PaginationParamter<P extends Serializable> extends PageImpl impleme
      */
     private List<Sort> sorts;
 
-    public PaginationParamter() {
+    public PaginationParameter() {
         super();
     }
 
-    public PaginationParamter(int pageNo, int pageSize) {
+    public PaginationParameter(int pageNo, int pageSize) {
         super(pageNo, pageSize);
     }
 

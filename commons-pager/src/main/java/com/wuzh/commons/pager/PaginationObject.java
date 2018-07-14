@@ -24,7 +24,7 @@ import java.util.List;
  * @version v2.0.2
  * @since JDK 1.8
  */
-public class PaginationObject<R extends Serializable, P extends Serializable> extends PaginationParamter<P>
+public class PaginationObject<R extends Serializable, P extends Serializable> extends PaginationParameter<P>
         implements Serializable {
     private static final long serialVersionUID = 1L;
 
