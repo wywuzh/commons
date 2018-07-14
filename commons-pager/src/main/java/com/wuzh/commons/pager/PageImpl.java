@@ -18,14 +18,14 @@ import java.util.List;
 
 /**
  * 类PageInfo.java的实现描述：分页信息
- * 
+ *
  * <pre>
  * MySQL分页语法：limit m,n。m代表分页开始行（从0开始），n代表每页要查询的数据量
  * </pre>
- * 
+ *
  * @author 伍章红 2015年11月6日 上午10:53:48
- * @version v1.0.0
- * @since JDK 1.7
+ * @version v2.0.2
+ * @since JDK 1.87
  */
 public abstract class PageImpl implements Page, Serializable {
     private static final long serialVersionUID = 1L;
@@ -43,7 +43,6 @@ public abstract class PageImpl implements Page, Serializable {
      * 行记录总数
      */
     // private long rowCount;
-
     public PageImpl() {
         super();
     }

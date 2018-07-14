@@ -19,8 +19,8 @@ import java.io.Serializable;
  * 类Sort.java的实现描述：排序
  * 
  * @author 伍章红 2015年12月4日 上午9:20:16
- * @version v1.0.0
- * @since JDK 1.7
+ * @version v2.0.2
+ * @since JDK 1.8
  */
 public class Sort implements Serializable {
     private static final long serialVersionUID = 1L;
