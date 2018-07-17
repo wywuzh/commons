@@ -209,6 +209,45 @@ public class StringHelper {
         return list;
     }
 
+    /**
+     * 将number长整型数字转为指定length长度的字符，如果值得长度不足，将自动补零处理
+     *
+     * @param length
+     *            指定length长度
+     * @param number
+     *            需要转换的长整型数字
+     * @return
+     */
+    public static String formatToString(int length, long number) {
+        return new DecimalFormat(getZeroString(length)).format(number);
+    }
+
+    /**
+     * 将number浮点型数字转为指定length长度的字符，如果值得长度不足，将自动补零处理
+     *
+     * @param length
+     *            指定length长度
+     * @param number
+     *            需要转换的浮点型数字
+     * @return
+     */
+    public static String formatToString(int length, double number) {
+        return new DecimalFormat(getZeroString(length)).format(number);
+    }
+
+    /**
+     * 将object型值转为指定length长度的字符，如果值得长度不足，将自动补零处理
+     *
+     * @param length
+     *            指定length长度
+     * @param object
+     *            需要转换的object型值
+     * @return
+     */
+    public static String formatToString(int length, Object object) {
+        return new DecimalFormat(getZeroString(length)).format(object);
+    }
+
     public static void main(String[] args) {
         System.out.println(fillZero(3, 2L));
 
