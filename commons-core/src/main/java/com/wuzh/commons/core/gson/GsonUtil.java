@@ -48,6 +48,8 @@ public class GsonUtil {
         gsonBuilder.registerTypeAdapter(java.sql.Date.class, new DateSerializer());
         // 解决value为null时key不存在的问题
         gsonBuilder.serializeNulls();
+
+        create();
     }
 
     /**
