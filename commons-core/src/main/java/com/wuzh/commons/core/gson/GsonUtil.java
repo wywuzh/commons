@@ -233,7 +233,6 @@ public class GsonUtil {
         String json = gson.toJson(new Date());
         System.out.println(json);
         System.out.println(format(new Date()));
-        System.out.println(parse("1494163763359", Date.class));
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("total", "12");
