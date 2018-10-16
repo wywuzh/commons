@@ -25,13 +25,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @version v1.0.0
  * @since JDK 1.7
  */
-public class PaginationParamter<V extends Serializable> extends PageImpl implements Serializable {
+public class PaginationParamter<P extends Serializable> extends PageImpl implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
      * 查询条件
      */
-    private V vo;
+    private P vo;
 
     /**
      * 排序字段
@@ -46,11 +46,11 @@ public class PaginationParamter<V extends Serializable> extends PageImpl impleme
         super(pageNo, pageSize);
     }
 
-    public V getVo() {
+    public P getVo() {
         return vo;
     }
 
-    public void setVo(V vo) {
+    public void setVo(P vo) {
         this.vo = vo;
     }
 

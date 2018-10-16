@@ -15,14 +15,10 @@
  */
 package com.wuzh.commons.core.gson;
 
+import com.google.gson.*;
+
 import java.lang.reflect.Type;
 import java.sql.Timestamp;
-
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
 
 /**
  * 类TimestampSerializer.java的实现描述：java.sql.Timestamp格式转换
@@ -32,6 +28,11 @@ import com.google.gson.JsonSerializationContext;
  * @since JDK 1.7
  */
 public class TimestampSerializer implements TypeSerializer<Timestamp> {
+
+    @Override
+    public Type getType() {
+        return java.sql.Timestamp.class;
+    }
 
     @Override
     public JsonElement serialize(Timestamp src, Type typeOfSrc, JsonSerializationContext context) {
@@ -46,11 +47,6 @@ public class TimestampSerializer implements TypeSerializer<Timestamp> {
             return null;
         }
         return new Timestamp(time);
-    }
-
-    @Override
-    public Type getType() {
-        return java.sql.Timestamp.class;
     }
 
 }

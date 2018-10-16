@@ -15,10 +15,10 @@
  */
 package com.wuzh.commons.core.gson;
 
-import java.lang.reflect.Type;
-
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
+
+import java.lang.reflect.Type;
 
 /**
  * 类TypeSerializer.java的实现描述：类型转换器接口。序列化，反序列化处理
