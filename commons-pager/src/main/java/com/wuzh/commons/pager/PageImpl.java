@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author 伍章红 2015年11月6日 上午10:53:48
  * @version v2.0.2
- * @since JDK 1.87
+ * @since JDK 1.8
  */
 public abstract class PageImpl implements Page, Serializable {
     private static final long serialVersionUID = 1L;
@@ -43,6 +43,7 @@ public abstract class PageImpl implements Page, Serializable {
      * 行记录总数
      */
     // private long rowCount;
+
     public PageImpl() {
         super();
     }
