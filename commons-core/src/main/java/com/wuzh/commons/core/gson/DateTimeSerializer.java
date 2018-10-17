@@ -15,15 +15,9 @@
  */
 package com.wuzh.commons.core.gson;
 
-import java.lang.reflect.Type;
+import com.google.gson.*;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import java.lang.reflect.Type;
 
 /**
  * 类DateTimeSerializer.java的实现描述：java.util.Date 日期时间格式
@@ -38,6 +32,11 @@ import com.google.gson.JsonSerializer;
  * @since JDK 1.7
  */
 public class DateTimeSerializer implements TypeSerializer<java.util.Date> {
+
+    @Override
+    public Type getType() {
+        return java.util.Date.class;
+    }
 
     @Override
     public JsonElement serialize(java.util.Date value, Type typeOfSrc, JsonSerializationContext context) {
@@ -56,8 +55,4 @@ public class DateTimeSerializer implements TypeSerializer<java.util.Date> {
         return new java.util.Date(value);
     }
 
-    @Override
-    public Type getType() {
-        return java.util.Date.class;
-    }
 }

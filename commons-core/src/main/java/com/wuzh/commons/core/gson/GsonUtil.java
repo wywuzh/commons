@@ -29,7 +29,7 @@ import java.util.Map;
 
 /**
  * 类GsonUtil.java的实现描述：Google JSON转换工具类型
- * 
+ *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午9:29:46
  * @version v1.0.0
  * @since JDK 1.7
@@ -54,11 +54,9 @@ public class GsonUtil {
 
     /**
      * 注册类型转换器
-     * 
-     * @param clazz
-     *            数据类型
-     * @param typeSerializer
-     *            类型转换器
+     *
+     * @param clazz          数据类型
+     * @param typeSerializer 类型转换器
      */
     public static <T> void register(Class<TypeSerializer<T>> clazz, TypeSerializer<T> typeSerializer) {
         gsonBuilder.registerTypeAdapter(clazz, typeSerializer);
@@ -66,11 +64,9 @@ public class GsonUtil {
 
     /**
      * 注册类型转换器
-     * 
-     * @param type
-     *            数据类型
-     * @param typeSerializer
-     *            类型转换器
+     *
+     * @param type           数据类型
+     * @param typeSerializer 类型转换器
      */
     public static <T> void register(Type type, TypeSerializer<T> typeSerializer) {
         gsonBuilder.registerTypeAdapter(type, typeSerializer);
@@ -78,9 +74,8 @@ public class GsonUtil {
 
     /**
      * 注册类型转换器
-     * 
-     * @param list
-     *            类型转换器集合
+     *
+     * @param list 类型转换器集合
      */
     public static <T> void register(List<? extends TypeSerializer<T>> list) {
         for (TypeSerializer<T> serializer : list) {
@@ -99,10 +94,9 @@ public class GsonUtil {
 
     /**
      * 将Bean对象转换为JSON
-     * 
+     *
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:41
-     * @param bean
-     *            实现Serializable接口的Bean对象
+     * @param bean 实现Serializable接口的Bean对象
      * @return JSON格式字符串
      */
     public static String format(Object bean) {
@@ -114,12 +108,10 @@ public class GsonUtil {
 
     /**
      * 将Bean对象转换为json
-     * 
+     *
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:17:39
-     * @param bean
-     *            实现Serializable接口的Bean对象
-     * @param type
-     *            Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
+     * @param bean 实现Serializable接口的Bean对象
+     * @param type Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
      * @return JSON格式字符串
      */
     public static String format(Object bean, Type type) {
@@ -131,10 +123,9 @@ public class GsonUtil {
 
     /**
      * 将Bean对象集合转换为json
-     * 
+     *
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:45
-     * @param beanList
-     *            Bean对象集合
+     * @param beanList Bean对象集合
      * @return JSON格式字符串
      */
     public static String format(List<?> beanList) {
@@ -146,12 +137,10 @@ public class GsonUtil {
 
     /**
      * 将Bean对象集合转换为json
-     * 
+     *
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:21:55
-     * @param beanList
-     *            Bean对象集合
-     * @param type
-     *            Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
+     * @param beanList Bean对象集合
+     * @param type     Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
      * @return JSON格式字符串
      */
     public static String format(List<?> beanList, Type type) {
@@ -163,12 +152,10 @@ public class GsonUtil {
 
     /**
      * 将json转换为对象
-     * 
+     *
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
-     * @param json
-     *            需要转换的json数据
-     * @param type
-     *            需要转换的数据类型
+     * @param json 需要转换的json数据
+     * @param type 需要转换的数据类型
      * @return 转换成功的Bean对象
      */
     public static <T> T parse(String json, Type type) {
@@ -192,10 +179,8 @@ public class GsonUtil {
      * 将json转换为对象
      *
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
-     * @param json
-     *            需要转换的json数据
-     * @param type
-     *            需要转换的数据类型
+     * @param json 需要转换的json数据
+     * @param type 需要转换的数据类型
      * @return 转换成功的Bean对象
      */
     public static <T> T parse(JsonElement json, Type type) {
@@ -215,9 +200,8 @@ public class GsonUtil {
 
     /**
      * 将json字符串转为JsonObject对象
-     * 
-     * @param json
-     *            json字符串
+     *
+     * @param json json字符串
      * @return JsonObject对象
      * @throws JsonSyntaxException
      */
@@ -232,9 +216,8 @@ public class GsonUtil {
 
     /**
      * 将json字符串转为JsonArray对象
-     * 
-     * @param json
-     *            json字符串
+     *
+     * @param json json字符串
      * @return JsonArray对象
      * @throws JsonSyntaxException
      */

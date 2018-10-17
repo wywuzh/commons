@@ -12,7 +12,8 @@
 	<modules>
 		<module>commons-core</module>
 		<module>commons-pager</module>
-	</modules>
+        <module>commons-jdbc</module>
+    </modules>
 
 	<developers>
 		<developer>
