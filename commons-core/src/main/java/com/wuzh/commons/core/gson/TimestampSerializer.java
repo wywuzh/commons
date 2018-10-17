@@ -24,7 +24,7 @@ import java.sql.Timestamp;
  * 类TimestampSerializer.java的实现描述：java.sql.Timestamp格式转换
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2017年5月7日 下午9:34:31
- * @version v3.1.10
+ * @version v1.0.0
  * @since JDK 1.7
  */
 public class TimestampSerializer implements TypeSerializer<Timestamp> {
