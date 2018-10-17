@@ -16,6 +16,8 @@
 package com.wuzh.commons.core.returns;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 类ReturnBase.java的实现描述：返回结果基类
@@ -35,8 +37,10 @@ public abstract class ReturnBase implements Serializable {
      * 返回结果消息
      */
     private String message;
-
-    private StringBuilder params;
+    /**
+     * 错误信息
+     */
+    private List<Error> errors;
 
     public ReturnBase() {
         super();
@@ -62,34 +66,40 @@ public abstract class ReturnBase implements Serializable {
     }
 
     public String getMessage() {
-        if (null == params) {
-            return message;
-        }
-        return message + " Params: [" + params.toString() + "]";
+        return message;
     }
 
     public void setMessage(String message) {
         this.message = message;
     }
 
-    public ReturnBase appendParam(Object param) {
-        if (params != null) {
-            params.append("|");
-        } else {
-            params = new StringBuilder();
-        }
-        params.append(param);
-        return this;
+    public List<Error> getErrors() {
+        return errors;
     }
 
-    public ReturnBase appendParam(String name, Object param) {
-        if (params != null) {
-            params.append("|");
-        } else {
-            params = new StringBuilder();
+    public void setErrors(List<Error> errors) {
+        this.errors = errors;
+    }
+
+    public void addError(Error error) {
+        if (errors == null) {
+            errors = new ArrayList<Error>();
         }
-        params.append(name).append("=").append(param);
-        return this;
+        errors.add(error);
+    }
+
+    public void addError(String field, String message) {
+        if (errors == null) {
+            errors = new ArrayList<Error>();
+        }
+        errors.add(new Error(field, message));
+    }
+
+    public void addError(String code, String field, String message) {
+        if (errors == null) {
+            errors = new ArrayList<Error>();
+        }
+        errors.add(new Error(code, field, message));
     }
 
     @Override

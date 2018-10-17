@@ -15,18 +15,13 @@
  */
 package com.wuzh.commons.core.gson;
 
+import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
+
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonIOException;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.stream.JsonReader;
 
 /**
  * 类GsonFactory.java的实现描述：Google Gson工厂
@@ -39,7 +34,7 @@ public class GsonFactory {
 
     /**
      * 得到GsonBuilder对象示例
-     * 
+     *
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      * @return
      */

@@ -27,6 +27,8 @@
 
 		<apache-httpclient.version>4.5.5</apache-httpclient.version>
 		<apache-poi.version>3.17</apache-poi.version>
+		<org.projectlombok.version>1.18.0</org.projectlombok.version>
+		<ma.glasnost.orika.version>1.5.2</ma.glasnost.orika.version>
 	</properties>
 
 	<dependencies>
@@ -46,14 +48,18 @@
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>com.fasterxml.jackson.core</groupId>-->
+			<!--<artifactId>jackson-databind</artifactId>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>com.fasterxml.jackson.module</groupId>-->
+			<!--<artifactId>jackson-module-jaxb-annotations</artifactId>-->
+		<!--</dependency>-->
+		<!--<dependency>-->
+			<!--<groupId>com.fasterxml.jackson.dataformat</groupId>-->
+			<!--<artifactId>jackson-dataformat-xml</artifactId>-->
+		<!--</dependency>-->
 
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -168,6 +174,19 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>${apache-poi.version}</version>
+		</dependency>
+
+		<!-- 方便实用的annotation工具 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${org.projectlombok.version}</version>
+		</dependency>
+		<!-- 对象拷贝工具 -->
+		<dependency>
+			<groupId>ma.glasnost.orika</groupId>
+			<artifactId>orika-core</artifactId>
+			<version>${ma.glasnost.orika.version}</version>
 		</dependency>
 	</dependencies>
 

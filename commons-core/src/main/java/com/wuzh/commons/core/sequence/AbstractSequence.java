@@ -86,14 +86,14 @@ public abstract class AbstractSequence {
 
     /**
      * 时间格式
-     * 
+     *
      * @return
      */
     protected abstract String datePattern();
 
     /**
      * 指定第三部分值长度
-     * 
+     *
      * @return
      */
     protected abstract int getThreePartLength();
