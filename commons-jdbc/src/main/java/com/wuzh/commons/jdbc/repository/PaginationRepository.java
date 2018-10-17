@@ -21,7 +21,7 @@ import com.wuzh.commons.jdbc.Type;
 import com.wuzh.commons.jdbc.entity.AbstractEntity;
 import com.wuzh.commons.jdbc.vo.AbstractVo;
 import com.wuzh.commons.pager.PaginationObject;
-import com.wuzh.commons.pager.PaginationParamter;
+import com.wuzh.commons.pager.PaginationParameter;
 import com.wuzh.commons.pager.Sort;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -53,14 +53,14 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
      *            查询条件字段SQL。如 and code=? and name=?
      * @param conditionObjs
      *            查询条件值。需要注意，条件数组字段的顺序需要和条件SQL字段的顺序一致
-     * @param paginationParamter
+     * @param paginationParameter
      *            分页查询请求，包含分页信息、查询条件信息
      * @param rowMapper
      *            查询结果映射
      * @return
      */
     public PaginationObject<E, V> findPaginationObjectByNativeSQL(String tableName, String columns, String conditionSql,
-                                                                  Object[] conditionObjs, PaginationParamter<V> paginationParamter, RowMapper<E> rowMapper) {
+                                                                  Object[] conditionObjs, PaginationParameter<V> paginationParameter, RowMapper<E> rowMapper) {
         // 查询数据总数
         String rowCountSql = MessageFormat.format(Sql.QUERY, "COUNT(1)", tableName, conditionSql);
         Long rowCount = getJdbcTemplate().queryForObject(rowCountSql, Long.class, conditionObjs);
@@ -69,7 +69,7 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
         StringBuilder resultListSql = new StringBuilder(
                 MessageFormat.format(Sql.QUERY, columns, tableName, conditionSql));
         // 添加排序信息
-        List<Sort> sorts = paginationParamter.getSorts();
+        List<Sort> sorts = paginationParameter.getSorts();
         if (null != sorts && sorts.size() > 0) {
             StringBuilder sortStr = new StringBuilder();
             for (int i = 0; i < sorts.size(); i++) {
@@ -90,14 +90,14 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
         for (int i = 0; i < conditionObjs.length; i++) {
             args[i] = conditionObjs[i];
         }
-        args[args.length - 2] = paginationParamter.getOffSet();
-        args[args.length - 1] = paginationParamter.getPageSize();
+        args[args.length - 2] = paginationParameter.getOffSet();
+        args[args.length - 1] = paginationParameter.getPageSize();
         List<E> resultList = getJdbcTemplate().query(resultListSql.toString(), args, rowMapper);
 
         PaginationObject<E, V> paginationObject = new PaginationObject<E, V>(rowCount, resultList);
-        paginationObject.setPageNo(paginationParamter.getPageNo());
-        paginationObject.setPageSize(paginationParamter.getPageSize());
-        paginationObject.setVo(paginationParamter.getVo());
+        paginationObject.setPageNo(paginationParameter.getPageNo());
+        paginationObject.setPageSize(paginationParameter.getPageSize());
+        paginationObject.setVo(paginationParameter.getVo());
         return paginationObject;
     }
 
@@ -111,19 +111,19 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
      *            查询条件字段集合
      * @param conditionObjs
      *            查询条件。需要注意，条件数组字段的顺序需要和查询条件字段的顺序一致
-     * @param paginationParamter
+     * @param paginationParameter
      * @param rowMapper
      * @return
      */
     public PaginationObject<E, V> findPaginationObjectByNativeSQL(String tableName, String columns,
-                                                                  String[] conditionColumns, Object[] conditionObjs, PaginationParamter<V> paginationParamter,
+                                                                  String[] conditionColumns, Object[] conditionObjs, PaginationParameter<V> paginationParameter,
                                                                   RowMapper<E> rowMapper) {
         StringBuilder conditionSql = new StringBuilder();
         for (int i = 0; i < conditionColumns.length; i++) {
             conditionSql.append(" AND ").append(conditionColumns[i]).append("=?");
         }
         return this.findPaginationObjectByNativeSQL(tableName, columns, conditionSql.toString(), conditionObjs,
-                paginationParamter, rowMapper);
+                paginationParameter, rowMapper);
     }
 
     /**
@@ -138,14 +138,14 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
      *            查询条件。需要注意，条件数组字段的顺序需要和查询条件字段的顺序一致
      * @param sortMap
      *            排序映射对象集合。key为实体类字段，value为表字段。如{"code":"CODE","name":"NAME"}
-     * @param paginationParamter
+     * @param paginationParameter
      * @param rowMapper
      * @return
-     * @deprecated 如需排序，请使用paginationParamter中的sorts字段
+     * @deprecated 如需排序，请使用paginationParameter中的sorts字段
      */
     @Deprecated
     public PaginationObject<E, V> findPaginationObjectByNativeSQL(String tableName, String columns, String conditionSql,
-                                                                  Object[] conditionObjs, Map<String, String> sortMap, PaginationParamter<V> paginationParamter,
+                                                                  Object[] conditionObjs, Map<String, String> sortMap, PaginationParameter<V> paginationParameter,
                                                                   RowMapper<E> rowMapper) {
         // 查询数据总数
         String rowCountSql = MessageFormat.format(Sql.QUERY, "COUNT(1)", tableName, conditionSql);
@@ -155,7 +155,7 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
         StringBuilder resultListSql = new StringBuilder(
                 MessageFormat.format(Sql.QUERY, columns, tableName, conditionSql));
         // 添加排序信息
-        List<Sort> sorts = paginationParamter.getSorts();
+        List<Sort> sorts = paginationParameter.getSorts();
         if (null != sorts && sorts.size() > 0) {
             StringBuilder sortStr = new StringBuilder();
             for (int i = 0; i < conditionObjs.length; i++) {
@@ -177,14 +177,14 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
         for (int i = 0; i < conditionObjs.length; i++) {
             args[i] = conditionObjs[i];
         }
-        args[args.length - 2] = paginationParamter.getOffSet();
-        args[args.length - 1] = paginationParamter.getPageSize();
+        args[args.length - 2] = paginationParameter.getOffSet();
+        args[args.length - 1] = paginationParameter.getPageSize();
         List<E> resultList = getJdbcTemplate().query(resultListSql.toString(), args, rowMapper);
 
         PaginationObject<E, V> paginationObject = new PaginationObject<E, V>(rowCount, resultList);
-        paginationObject.setPageNo(paginationParamter.getPageNo());
-        paginationObject.setPageSize(paginationParamter.getPageSize());
-        paginationObject.setVo(paginationParamter.getVo());
+        paginationObject.setPageNo(paginationParameter.getPageNo());
+        paginationObject.setPageSize(paginationParameter.getPageSize());
+        paginationObject.setVo(paginationParameter.getVo());
         return paginationObject;
     }
 
@@ -200,7 +200,7 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
      *            查询条件。需要注意，条件数组字段的顺序需要和查询条件字段的顺序一致
      * @param sortMap
      *            排序映射对象集合。key为实体类字段，value为表字段。如{"code":"CODE","name":"NAME"}
-     * @param paginationParamter
+     * @param paginationParameter
      * @param rowMapper
      * @return
      * @deprecated
@@ -208,13 +208,13 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
     @Deprecated
     public PaginationObject<E, V> findPaginationObjectByNativeSQL(String tableName, String columns,
                                                                   String[] conditionColumns, Object[] conditionObjs, Map<String, String> sortMap,
-                                                                  PaginationParamter<V> paginationParamter, RowMapper<E> rowMapper) {
+                                                                  PaginationParameter<V> paginationParameter, RowMapper<E> rowMapper) {
         StringBuilder conditionSql = new StringBuilder();
         for (int i = 0; i < conditionColumns.length; i++) {
             conditionSql.append(" AND ").append(conditionColumns[i]).append("=?");
         }
         return this.findPaginationObjectByNativeSQL(tableName, columns, conditionSql.toString(), conditionObjs, sortMap,
-                paginationParamter, rowMapper);
+                paginationParameter, rowMapper);
     }
 
     /**
@@ -225,14 +225,14 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
      *            查询SQL语句。如 select * from table where column1=? and column2=?
      * @param conditionObjs
      *            查询条件。需要注意，条件数组字段的顺序需要和条件SQL字段的顺序一致
-     * @param paginationParamter
+     * @param paginationParameter
      *            分页查询请求，包含分页信息、查询条件信息
      * @param rowMapper
      *            查询结果映射
      * @return
      */
     public PaginationObject<E, V> findPaginationObjectByNativeSQL(String tableName, String sql, Object[] conditionObjs,
-                                                                  PaginationParamter<V> paginationParamter, RowMapper<E> rowMapper) {
+                                                                  PaginationParameter<V> paginationParameter, RowMapper<E> rowMapper) {
         // 查询数据总数
         String rowCountSql = MessageFormat.format(Sql.QUERY, "COUNT(1)", tableName);
         Long rowCount = getJdbcTemplate().queryForObject(rowCountSql, Long.class);
@@ -240,14 +240,14 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
         // 查询分页列表
         String resultListSql = sql + " LIMIT ?,?";
         Object[] args = new Object[] {
-                conditionObjs, paginationParamter.getOffSet(), paginationParamter.getPageSize()
+                conditionObjs, paginationParameter.getOffSet(), paginationParameter.getPageSize()
         };
         List<E> resultList = getJdbcTemplate().query(resultListSql, args, rowMapper);
 
         PaginationObject<E, V> paginationObject = new PaginationObject<E, V>(rowCount, resultList);
-        paginationObject.setPageNo(paginationParamter.getPageNo());
-        paginationObject.setPageSize(paginationParamter.getPageSize());
-        paginationObject.setVo(paginationParamter.getVo());
+        paginationObject.setPageNo(paginationParameter.getPageNo());
+        paginationObject.setPageSize(paginationParameter.getPageSize());
+        paginationObject.setVo(paginationParameter.getVo());
         return paginationObject;
     }
 
@@ -256,24 +256,24 @@ public class PaginationRepository<E extends AbstractEntity, V extends AbstractVo
      * 
      * @param querySql
      *            查询语句
-     * @param paginationParamter
+     * @param paginationParameter
      *            分页参数
      * @return 根据Connection连接信息生成分页SQL语句
      */
-    public String generatePageSql(String querySql, PaginationParamter<V> paginationParamter) {
+    public String generatePageSql(String querySql, PaginationParameter<V> paginationParameter) {
         StringBuilder pageSql = new StringBuilder();
         try {
             DataBase dataBase = new DataBase(getDataSource().getConnection());
             Type type = dataBase.getProduct().getType();
             if (Type.MySQL.equals(type)) {
                 pageSql.append(querySql);
-                pageSql.append(" LIMIT ").append(paginationParamter.getOffSet()).append(",")
-                        .append(paginationParamter.getPageSize());
+                pageSql.append(" LIMIT ").append(paginationParameter.getOffSet()).append(",")
+                        .append(paginationParameter.getPageSize());
             } else if (Type.Oracle.equals(type)) {
                 pageSql.append("SELECT * FROM (SELECT A.*,ROWNUM RN FROM (");
                 pageSql.append(querySql);
-                pageSql.append(")A WHERE ROWNUM <= ").append(paginationParamter.getEndSet());
-                pageSql.append(") WHERE RN > ").append(paginationParamter.getOffSet());
+                pageSql.append(")A WHERE ROWNUM <= ").append(paginationParameter.getEndSet());
+                pageSql.append(") WHERE RN > ").append(paginationParameter.getOffSet());
             }
         } catch (SQLException e) {
             logger.error("生成分页SQL语句异常：", e);
