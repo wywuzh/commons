@@ -188,6 +188,18 @@
 			<artifactId>orika-core</artifactId>
 			<version>${ma.glasnost.orika.version}</version>
 		</dependency>
+
+		<!-- java对象和json相互转化 -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
 	</dependencies>
 
 </project>
