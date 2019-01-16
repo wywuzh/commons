@@ -15,15 +15,11 @@
  */
 package com.wuzh.commons.core.json;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+
+import java.util.*;
 
 /**
  * 类JsonUtil.java的实现描述：JSON工具类
