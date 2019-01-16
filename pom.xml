@@ -13,6 +13,7 @@
 		<module>commons-core</module>
 		<module>commons-pager</module>
         <module>commons-jdbc</module>
+        <module>commons-mybatis-generator</module>
     </modules>
 
 	<developers>
