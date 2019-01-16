@@ -15,6 +15,8 @@
  */
 package com.wuzh.commons.core.util;
 
+import org.springframework.context.annotation.Configuration;
+
 /**
  * 类IdWorker.java的实现描述：Twitter Snowflake
  * 
@@ -38,6 +40,7 @@ package com.wuzh.commons.core.util;
  * @version v1.0.0
  * @since JDK 1.7
  */
+@Configuration
 public class IdWorker {
 
     private final long twepoch = 1288834974657L;
