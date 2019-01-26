@@ -31,6 +31,8 @@ import java.util.List;
 
 /**
  * 类BaseMapperPlugin的实现描述：BaseMapper基类插件
+ * <p>
+ * https://blog.csdn.net/u011781521/article/details/78697775
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/26 9:35
  * @version v2.1.1
@@ -104,9 +106,6 @@ public class BaseMapperPlugin extends BasePlugin {
                     Interface mapperInterface = new Interface(
                             expandDaoTargetPackage + "." + shortName.replace("Mapper", "ExpandMapper"));
                     mapperInterface.setVisibility(JavaVisibility.PUBLIC);
-                    mapperInterface.addJavaDocLine("/**");
-                    mapperInterface.addJavaDocLine(" * " + shortName + "扩展");
-                    mapperInterface.addJavaDocLine(" */");
 
                     FullyQualifiedJavaType daoSuperType = new FullyQualifiedJavaType(expandDaoSuperClass);
                     mapperInterface.addImportedType(daoSuperType);
@@ -128,9 +127,6 @@ public class BaseMapperPlugin extends BasePlugin {
                 Interface mapperInterface = new Interface(daoTargetPackage + "." + shortName + "Mapper");
 
                 mapperInterface.setVisibility(JavaVisibility.PUBLIC);
-                mapperInterface.addJavaDocLine("/**");
-                mapperInterface.addJavaDocLine(" * MyBatis Generator工具自动生成");
-                mapperInterface.addJavaDocLine(" */");
 
                 // import引入依赖类
                 mapperInterface.addImportedType(baseModelJavaType);

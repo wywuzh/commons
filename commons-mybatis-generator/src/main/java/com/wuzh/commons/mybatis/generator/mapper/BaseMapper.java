@@ -1,5 +1,7 @@
 package com.wuzh.commons.mybatis.generator.mapper;
 
+import org.apache.ibatis.annotations.Param;
+
 import java.io.Serializable;
 
 /**
@@ -62,26 +64,26 @@ public interface BaseMapper<T extends Serializable, PK extends Serializable> {
     /**
      * 根据条件查询数据列表总数
      *
-     * @param map 查询参数
+     * @param searchMap 查询参数
      * @return
      */
-    Long selectTotalByParams(java.util.Map<String, Object> map);
+    Long selectTotalByParams(@Param("map") java.util.Map<String, Object> searchMap);
 
     /**
      * 根据条件查询数据列表，支持排序
      *
-     * @param map 查询参数
+     * @param searchMap 查询参数
      * @return
      */
-    java.util.List<T> selectListByParams(java.util.Map<String, Object> map);
+    java.util.List<T> selectListByParams(@Param("map") java.util.Map<String, Object> searchMap);
 
     /**
      * 根据条件查询数据列表（分页），支持排序
      *
-     * @param map      查询参数
-     * @param offset   查询数据开始行
-     * @param pageSize 每页查询数据量
+     * @param searchMap 查询参数
+     * @param offset    查询数据开始行
+     * @param pageSize  每页查询数据量
      * @return
      */
-    java.util.List<T> selectPagerByParams(java.util.Map<String, Object> map, Integer offset, Integer pageSize);
+    java.util.List<T> selectPagerByParams(@Param("map") java.util.Map<String, Object> searchMap, @Param("offset") Integer offset, @Param("pageSize") Integer pageSize);
 }
