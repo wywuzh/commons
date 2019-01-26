@@ -32,7 +32,7 @@ import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import java.util.List;
 
 /**
- * 类QueryPlugin的实现描述：自定义select查询插件
+ * 类SelectByParamsPlugin的实现描述：自定义select查询插件
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/25 21:48
  * @version v2.1.1
