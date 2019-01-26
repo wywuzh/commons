@@ -125,8 +125,6 @@ public class SelectByParamsPlugin extends BasePlugin {
      */
     @Override
     public boolean sqlMapDocumentGenerated(Document document, IntrospectedTable introspectedTable) {
-        document.getRootElement().addElement(generateWhereConditionsElement(introspectedTable));
-
         // 1. selectTotalByParams
         XmlElement selectTotalEle = new XmlElement("select");
         // xml节点设置唯一ID
@@ -159,6 +157,8 @@ public class SelectByParamsPlugin extends BasePlugin {
         selectListEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
         selectListEle.addElement(new TextElement("where 1=1"));
         selectListEle.addElement(includeConditionsEle);
+        // 增加排序功能
+        selectListEle.addElement(generateSortElement(introspectedTable));
         document.getRootElement().addElement(selectListEle);
 
         // 3. selectListByParams
@@ -174,10 +174,16 @@ public class SelectByParamsPlugin extends BasePlugin {
         selectPagerEle.addElement(XmlElementGeneratorTools.getBaseColumnListElement(introspectedTable));
         selectPagerEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
         selectPagerEle.addElement(new TextElement("where 1=1"));
+        // 增加where条件SQL
         selectPagerEle.addElement(includeConditionsEle);
+        // 增加排序功能
+        selectPagerEle.addElement(generateSortElement(introspectedTable));
         // 添加分页SQL
         selectPagerEle.addElement(new TextElement("limit #{offset}, #{pageSize}"));
         document.getRootElement().addElement(selectPagerEle);
+
+        // 生成where条件
+        document.getRootElement().addElement(generateWhereConditionsElement(introspectedTable));
         return true;
     }
 
@@ -211,5 +217,20 @@ public class SelectByParamsPlugin extends BasePlugin {
 
         conditionsElement.addElement(ifElement);
         return conditionsElement;
+    }
+
+    private XmlElement generateSortElement(IntrospectedTable introspectedTable) {
+        XmlElement sortRootElement = new XmlElement("if");
+        sortRootElement.addAttribute(new Attribute("test", "map != null and map.sorts != null and map.sorts.size &gt; 0"));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "map.sorts"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("separator", ","));
+        foreachElement.addElement(new TextElement("${item.sort} ${item.order}"));
+
+        sortRootElement.addElement(foreachElement);
+        return sortRootElement;
     }
 }
