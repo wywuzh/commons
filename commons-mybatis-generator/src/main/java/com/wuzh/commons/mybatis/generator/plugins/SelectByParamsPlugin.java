@@ -136,7 +136,7 @@ public class SelectByParamsPlugin extends BasePlugin {
         commentGenerator.addComment(selectTotalEle);
         selectTotalEle.addElement(new TextElement("select count(1)"));
         selectTotalEle.addElement(new TextElement("from " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        selectTotalEle.addElement(new TextElement("where 1=1"));
+//        selectTotalEle.addElement(new TextElement("where 1=1"));
         // 引入where条件
         XmlElement includeConditionsEle = new XmlElement("include");
         includeConditionsEle.addAttribute(new Attribute("refid", WHERE_CONDITION));
@@ -155,7 +155,7 @@ public class SelectByParamsPlugin extends BasePlugin {
         selectListEle.addElement(new TextElement("select "));
         selectListEle.addElement(XmlElementGeneratorTools.getBaseColumnListElement(introspectedTable));
         selectListEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
-        selectListEle.addElement(new TextElement("where 1=1"));
+//        selectListEle.addElement(new TextElement("where 1=1"));
         selectListEle.addElement(includeConditionsEle);
         // 增加排序功能
         selectListEle.addElement(generateSortElement(introspectedTable));
@@ -173,7 +173,7 @@ public class SelectByParamsPlugin extends BasePlugin {
         selectPagerEle.addElement(new TextElement("select "));
         selectPagerEle.addElement(XmlElementGeneratorTools.getBaseColumnListElement(introspectedTable));
         selectPagerEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
-        selectPagerEle.addElement(new TextElement("where 1=1"));
+//        selectPagerEle.addElement(new TextElement("where 1=1"));
         // 增加where条件SQL
         selectPagerEle.addElement(includeConditionsEle);
         // 增加排序功能
@@ -202,6 +202,8 @@ public class SelectByParamsPlugin extends BasePlugin {
         // 第一步：先判断map是否为空
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "map != null"));
+        // 创建where
+        XmlElement whereElement = new XmlElement("where");
 
         // 获取到table中的所有column
         List<IntrospectedColumn> introspectedColumnList = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
@@ -212,8 +214,9 @@ public class SelectByParamsPlugin extends BasePlugin {
             // 添加column字段查询条件SQL（这里默认给表的所有字段添加and条件）
             mapKeyIfElement.addElement(new TextElement("and " + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn)
                     + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.")));
-            ifElement.addElement(mapKeyIfElement);
+            whereElement.addElement(mapKeyIfElement);
         }
+        ifElement.addElement(whereElement);
 
         conditionsElement.addElement(ifElement);
         return conditionsElement;

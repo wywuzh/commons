@@ -30,9 +30,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 类BaseMapperPlugin的实现描述：BaseMapper基类插件
- * <p>
- * https://blog.csdn.net/u011781521/article/details/78697775
+ * 类BaseMapperPlugin的实现描述：BaseMapper基类插件。参考网址：https://blog.csdn.net/u011781521/article/details/78697775
+ * <pre class="code">
+ * 使用方式：
+ * 1. 添加&lt;plugin&gt;
+ *     &lt;plugin type="com.wuzh.commons.mybatis.generator.plugins.BaseMapperPlugin"&gt;
+ *         &lt;property name="targetProject" value="src/main/java"/&gt;
+ *         &lt;property name="targetPackage" value="com.wuzh.platform.frame.core.mapper"/&gt;
+ *     &lt;/plugin&gt;
+ * 2. 修改javaClientGenerator，添加rootInterface属性
+ *    &lt;javaClientGenerator type="XMLMAPPER" targetPackage="com.wuzh.platform.frame.core.mapper" targetProject="src/main/java"&gt;
+ *         &lt;property name="enableSubPackages" value="true"/&gt;
+ *         &lt;property name="rootInterface" value="com.wuzh.commons.mybatis.generator.mapper.BaseMapper"/&gt;
+ *    &lt;/javaClientGenerator&gt;
+ * </pre>
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/26 9:35
  * @version v2.1.1
