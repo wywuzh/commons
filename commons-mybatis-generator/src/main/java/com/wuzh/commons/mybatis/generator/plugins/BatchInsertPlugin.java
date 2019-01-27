@@ -15,8 +15,10 @@
  */
 package com.wuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.ModelColumnPlugin;
-import com.itfsw.mybatis.generator.plugins.utils.*;
+import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
+import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
+import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.*;
@@ -27,7 +29,7 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * 类BatchInsertPlugin的实现描述：itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口
+ * 类BatchInsertPlugin的实现描述：itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/26 18:49
  * @version v3.0.0
@@ -50,13 +52,6 @@ public class BatchInsertPlugin extends BasePlugin {
                 && "com.microsoft.sqlserver.jdbc.SQLServerDriver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false
                 && "com.mysql.cj.jdbc.Driver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false) {
             warnings.add("itfsw:插件" + this.getClass().getTypeName() + "插件使用前提是数据库为MySQL或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键！");
-            return false;
-        }
-
-
-        // 插件使用前提是使用了ModelColumnPlugin插件
-        if (!PluginTools.checkDependencyPlugin(getContext(), ModelColumnPlugin.class)) {
-            warnings.add("itfsw:插件" + this.getClass().getTypeName() + "插件需配合com.itfsw.mybatis.generator.plugins.ModelColumnPlugin插件使用！");
             return false;
         }
 
@@ -86,13 +81,12 @@ public class BatchInsertPlugin extends BasePlugin {
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         // 1. batchInsert
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
-        listType.addTypeArgument(introspectedTable.getRules().calculateAllFieldsClass());
+//        listType.addTypeArgument(introspectedTable.getRules().calculateAllFieldsClass());
         Method mBatchInsert = JavaElementGeneratorTools.generateMethod(
                 METHOD_BATCH_INSERT,
                 JavaVisibility.DEFAULT,
                 FullyQualifiedJavaType.getIntInstance(),
                 new Parameter(listType, "list", "@Param(\"list\")")
-
         );
         commentGenerator.addGeneralMethodComment(mBatchInsert, introspectedTable);
         // interface 增加方法

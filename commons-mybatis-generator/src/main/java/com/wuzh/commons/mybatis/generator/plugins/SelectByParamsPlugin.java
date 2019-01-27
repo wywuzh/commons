@@ -207,13 +207,19 @@ public class SelectByParamsPlugin extends BasePlugin {
 
         // 获取到table中的所有column
         List<IntrospectedColumn> introspectedColumnList = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
-        for (IntrospectedColumn introspectedColumn : introspectedColumnList) {
+        for (int i = 0; i < introspectedColumnList.size(); i++) {
+            IntrospectedColumn introspectedColumn = introspectedColumnList.get(i);
             // 第二步：添加map中key的空判断
             XmlElement mapKeyIfElement = new XmlElement("if");
             mapKeyIfElement.addAttribute(new Attribute("test", introspectedColumn.getJavaProperty("map.") + " != null"));
             // 添加column字段查询条件SQL（这里默认给表的所有字段添加and条件）
-            mapKeyIfElement.addElement(new TextElement("and " + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn)
-                    + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.")));
+            if (i >= 1) {
+                mapKeyIfElement.addElement(new TextElement("and " + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn)
+                        + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.")));
+            } else {
+                mapKeyIfElement.addElement(new TextElement(MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn)
+                        + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.")));
+            }
             whereElement.addElement(mapKeyIfElement);
         }
         ifElement.addElement(whereElement);

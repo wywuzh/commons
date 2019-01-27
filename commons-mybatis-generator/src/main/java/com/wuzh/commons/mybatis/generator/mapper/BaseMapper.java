@@ -3,6 +3,7 @@ package com.wuzh.commons.mybatis.generator.mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 类BaseMapperPlugin的实现描述：BaseMapper基类插件
@@ -28,6 +29,14 @@ public interface BaseMapper<T extends Serializable, PK extends Serializable> {
      * @return
      */
     int insertSelective(T record);
+
+    /**
+     * 批量新增数据
+     *
+     * @param list
+     * @return
+     */
+    int batchInsert(@Param("list") List<T> list);
 
     /**
      * 修改数据
