@@ -231,6 +231,7 @@ public class SelectByParamsPlugin extends BasePlugin {
     private XmlElement generateSortElement(IntrospectedTable introspectedTable) {
         XmlElement sortRootElement = new XmlElement("if");
         sortRootElement.addAttribute(new Attribute("test", "map != null and map.sorts != null and map.sorts.size &gt; 0"));
+        sortRootElement.addElement(new TextElement("order by"));
 
         // 添加foreach节点
         XmlElement foreachElement = new XmlElement("foreach");
