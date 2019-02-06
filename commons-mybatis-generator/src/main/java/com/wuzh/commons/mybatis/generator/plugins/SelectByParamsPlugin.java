@@ -231,7 +231,8 @@ public class SelectByParamsPlugin extends BasePlugin {
                     JdbcType.NCHAR.equals(jdbcType) ||
                     JdbcType.NCLOB.equals(jdbcType) ||
                     JdbcType.LONGNVARCHAR.equals(jdbcType)) {
-                mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " != ''"));
+                mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
+//                mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " != ''"));
             } else {
                 mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null"));
             }
