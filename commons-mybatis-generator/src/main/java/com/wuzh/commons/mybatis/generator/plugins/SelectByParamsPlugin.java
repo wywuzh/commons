@@ -19,6 +19,7 @@ import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
+import org.apache.ibatis.type.JdbcType;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -211,7 +212,29 @@ public class SelectByParamsPlugin extends BasePlugin {
             IntrospectedColumn introspectedColumn = introspectedColumnList.get(i);
             // 第二步：添加map中key的空判断
             XmlElement mapKeyIfElement = new XmlElement("if");
-            mapKeyIfElement.addAttribute(new Attribute("test", introspectedColumn.getJavaProperty("map.") + " != null"));
+            // 获取Java字段名
+            String javaProperty = introspectedColumn.getJavaProperty("map.");
+            // 获取字段类型
+            int columnJdbcType = introspectedColumn.getJdbcType();
+            JdbcType jdbcType = JdbcType.forCode(columnJdbcType);
+            if (JdbcType.CHAR.equals(jdbcType) ||
+                    JdbcType.VARCHAR.equals(jdbcType) ||
+                    JdbcType.LONGVARCHAR.equals(jdbcType) ||
+
+                    JdbcType.BINARY.equals(jdbcType) ||
+                    JdbcType.VARBINARY.equals(jdbcType) ||
+                    JdbcType.LONGVARBINARY.equals(jdbcType) ||
+
+                    JdbcType.BLOB.equals(jdbcType) ||
+
+                    JdbcType.NVARCHAR.equals(jdbcType) ||
+                    JdbcType.NCHAR.equals(jdbcType) ||
+                    JdbcType.NCLOB.equals(jdbcType) ||
+                    JdbcType.LONGNVARCHAR.equals(jdbcType)) {
+                mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " != ''"));
+            } else {
+                mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null"));
+            }
             // 添加column字段查询条件SQL（这里默认给表的所有字段添加and条件）
             if (i >= 1) {
                 mapKeyIfElement.addElement(new TextElement("and " + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn)
