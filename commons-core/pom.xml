@@ -30,6 +30,7 @@
 		<org.projectlombok.version>1.18.0</org.projectlombok.version>
 		<ma.glasnost.orika.version>1.5.2</ma.glasnost.orika.version>
 		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
+		<UserAgentUtils.version>1.20</UserAgentUtils.version>
 	</properties>
 
 	<dependencies>
@@ -204,6 +205,13 @@
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
 			<version>${org.codehaus.jackson.version}</version>
+		</dependency>
+
+		<!-- User Agent获取浏览器信息 -->
+		<dependency>
+			<groupId>eu.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>${UserAgentUtils.version}</version>
 		</dependency>
 	</dependencies>
 
