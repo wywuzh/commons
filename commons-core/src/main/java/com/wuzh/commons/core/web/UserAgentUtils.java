@@ -97,8 +97,7 @@ public class UserAgentUtils {
      */
     public static Version getBrowserVersion(HttpServletRequest request) {
         Browser browser = getBrowser(request);
-        Version browserVersion = browser.getVersion(request.getHeader("User-Agent"));
-        return null;
+        return browser.getVersion(request.getHeader("User-Agent"));
     }
 
     /**
