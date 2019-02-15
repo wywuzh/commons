@@ -6,6 +6,7 @@ package com.wuzh.commons.core.web;
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
+import eu.bitwalker.useragentutils.Version;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -86,6 +87,18 @@ public class UserAgentUtils {
      */
     public static Browser getBrowser(HttpServletRequest request) {
         return getUserAgent(request).getBrowser();
+    }
+
+    /**
+     * 获取浏览器版本号
+     *
+     * @param request
+     * @return
+     */
+    public static Version getBrowserVersion(HttpServletRequest request) {
+        Browser browser = getBrowser(request);
+        Version browserVersion = browser.getVersion(request.getHeader("User-Agent"));
+        return null;
     }
 
     /**
