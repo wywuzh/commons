@@ -15,12 +15,13 @@
  */
 package com.wuzh.commons.core.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -250,5 +251,119 @@ public class CommonUtil {
             }
         }
         return result;
+    }
+
+    /**
+     * 将多个Set<String>合并成一个
+     *
+     * @param collSet
+     * @return
+     */
+    public static String[] joins(Set<String>... collSet) {
+        return joins(Arrays.asList(collSet), "_");
+    }
+
+    /**
+     * 将多个Set<String>合并成一个
+     *
+     * @param collSet
+     * @param separator 分隔符
+     * @return
+     */
+    public static String[] joins(Set<String>[] collSet, String separator) {
+        return joins(Arrays.asList(collSet), separator);
+    }
+
+    /**
+     * 将多个Set<String>合并成一个
+     *
+     * @param collSet
+     * @param separator 分隔符
+     * @return
+     */
+    public static String[] joins(List<Set<String>> collSet, String separator) {
+        String shareKey = "";
+        if (collSet == null || collSet.size() == 0) {
+            return shareKey.split(",");
+        }
+
+        for (int i = 0; i < collSet.size(); i++) {
+            Set<String> beforeSet = null;
+            if (i == 0) {
+                beforeSet = new HashSet<>();
+            } else {
+                String[] split = shareKey.split(",");
+                beforeSet = new HashSet<>(Arrays.asList(split));
+            }
+            Set<String> set = collSet.get(i);
+            shareKey = join(beforeSet, set, separator);
+        }
+        return shareKey.split(",");
+    }
+
+    /**
+     * 将两个Set合并成一个
+     *
+     * @param firstSet
+     * @param secondSet
+     * @param separator 分隔符
+     * @return
+     */
+    public static String join(Set<String> firstSet, Set<String> secondSet, String separator) {
+        String result = "";
+        if (firstSet != null && firstSet.size() > 0) {
+            int index = 0;
+            for (String firstStr : firstSet) {
+                if (index > 0) {
+                    result = StringUtils.join(result, ",");
+                }
+                result = StringUtils.join(result, firstStr);
+                index++;
+            }
+        }
+        if (secondSet != null && secondSet.size() > 0) {
+            StringBuilder sb = new StringBuilder();
+            int i = 0;
+            for (String secondStr : secondSet) {
+                if (i > 0) {
+                    sb.append(",");
+                }
+                if (StringUtils.isNotEmpty(result)) {
+                    String[] firstStrArr = result.split(",");
+                    int j = 0;
+                    for (String str : firstStrArr) {
+                        if (j > 0) {
+                            sb.append(",");
+                        }
+                        sb.append(str).append(separator).append(secondStr);
+                        j++;
+                    }
+                } else {
+                    sb.append(secondStr);
+                }
+                i++;
+            }
+            result = sb.toString();
+        }
+        return result;
+    }
+
+    public static void main(String[] args) {
+        Set<String> firstSet = new HashSet<>();
+        firstSet.add("Java");
+        firstSet.add("DataSource");
+        firstSet.add("Web");
+        Set<String> secondSet = new HashSet<>();
+        secondSet.add("Spring");
+        secondSet.add("MyBatis");
+        secondSet.add("Spring JDBC");
+        Set<String> threeSet = new HashSet<>();
+        threeSet.add("JavaScript");
+        threeSet.add("CSS");
+        threeSet.add("HTML");
+        String join = join(firstSet, secondSet, "_");
+        System.out.println(join);
+        String[] joins = joins(firstSet, secondSet, threeSet);
+        System.out.println(Arrays.toString(joins));
     }
 }
