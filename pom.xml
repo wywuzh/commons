@@ -14,6 +14,7 @@
 		<module>commons-pager</module>
         <module>commons-jdbc</module>
         <module>commons-mybatis-generator</module>
+        <module>commons-mybatis</module>
     </modules>
 
 	<developers>
