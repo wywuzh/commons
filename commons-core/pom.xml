@@ -16,15 +16,15 @@
 		<json-lib.version>2.4</json-lib.version>
 		<fastjson.version>1.2.58</fastjson.version>
 
-		<apache-commons-beanutils.version>1.9.3</apache-commons-beanutils.version>
-		<apache-commons-collections.version>3.2.1</apache-commons-collections.version>
-		<apache-commons-collections4.version>4.3</apache-commons-collections4.version>
-		<apache-commons-compress.version>1.18</apache-commons-compress.version>
-		<apache-commons-configuration.version>1.10</apache-commons-configuration.version>
-		<apache-commons-configuration2.version>2.4</apache-commons-configuration2.version>
-		<apache-commons-io.version>2.6</apache-commons-io.version>
-		<apache-commons-math3.version>3.6.1</apache-commons-math3.version>
-		<apache-commons-validator.version>1.6</apache-commons-validator.version>
+		<commons-beanutils.version>1.9.3</commons-beanutils.version>
+		<commons-collections.version>3.2.1</commons-collections.version>
+		<commons-collections4.version>4.3</commons-collections4.version>
+		<commons-compress.version>1.18</commons-compress.version>
+		<commons-configuration.version>1.10</commons-configuration.version>
+		<commons-configuration2.version>2.4</commons-configuration2.version>
+		<commons-io.version>2.6</commons-io.version>
+		<commons-math3.version>3.6.1</commons-math3.version>
+		<commons-validator.version>1.6</commons-validator.version>
 		<guava.version>27.1-jre</guava.version>
 
 		<apache-poi.version>4.1.0</apache-poi.version>
@@ -102,7 +102,7 @@
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>${apache-commons-beanutils.version}</version>
+			<version>${commons-beanutils.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -111,32 +111,32 @@
 		<!--<dependency>-->
 			<!--<groupId>commons-collections</groupId>-->
 			<!--<artifactId>commons-collections</artifactId>-->
-			<!--<version>${apache-commons-collections.version}</version>-->
+			<!--<version>${commons-collections.version}</version>-->
 		<!--</dependency>-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-			<version>${apache-commons-collections4.version}</version>
+			<version>${commons-collections4.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>${apache-commons-compress.version}</version>
+			<version>${commons-compress.version}</version>
 		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>commons-configuration</groupId>-->
 			<!--<artifactId>commons-configuration</artifactId>-->
-			<!--<version>${apache-commons-configuration.version}</version>-->
+			<!--<version>${commons-configuration.version}</version>-->
 		<!--</dependency>-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-configuration2</artifactId>
-			<version>${apache-commons-configuration2.version}</version>
+			<version>${commons-configuration2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${apache-commons-io.version}</version>
+			<version>${commons-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -145,12 +145,12 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
-			<version>${apache-commons-math3.version}</version>
+			<version>${commons-math3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
-			<version>${apache-commons-validator.version}</version>
+			<version>${commons-validator.version}</version>
 		</dependency>
 		<!-- Import Apache plugins dependency END -->
 
@@ -179,7 +179,7 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<!--<optional>true</optional>-->
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
