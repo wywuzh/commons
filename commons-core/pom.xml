@@ -23,7 +23,7 @@
 		<commons-io.version>2.4</commons-io.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<commons-validator.version>1.6</commons-validator.version>
-		<guava.version>16.0.1</guava.version>
+		<guava.version>27.0.1-jre</guava.version>
 
 		<apache-httpclient.version>4.5.5</apache-httpclient.version>
 		<apache-poi.version>3.17</apache-poi.version>
@@ -73,12 +73,12 @@
 		</dependency>
 		<!-- JSON -->
 		<!-- json-lib是需要区分jdk版本的，pom.xml中的配置应加上<classifier>标签，如用jdk15： -->
-		<dependency>
-			<groupId>net.sf.json-lib</groupId>
-			<artifactId>json-lib</artifactId>
-			<version>${json-lib.version}</version>
-			<classifier>jdk15</classifier>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>net.sf.json-lib</groupId>-->
+<!--			<artifactId>json-lib</artifactId>-->
+<!--			<version>${json-lib.version}</version>-->
+<!--			<classifier>jdk15</classifier>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
@@ -102,6 +102,12 @@
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
 			<version>${commons-beanutils.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
@@ -121,6 +127,16 @@
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
 			<version>${commons-configuration.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-lang</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -140,6 +156,16 @@
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
 			<version>${commons-validator.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-beanutils</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-collections</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- Import Apache plugins dependency END -->
 
