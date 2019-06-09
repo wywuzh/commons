@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
 package com.wuzh.commons.core.json;
 
 import net.sf.json.JSONArray;
@@ -21,7 +20,6 @@ import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 import java.util.*;
-*/
 
 /**
  * 类JsonUtil.java的实现描述：JSON工具类
@@ -30,18 +28,15 @@ import java.util.*;
  * @version v1.0.0
  * @since JDK 1.7
  */
-/*
 public class JsonUtil {
 
-    */
-/**
+    /**
      * 把javaBean转换为JSONObject
      * 
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:46:22
      * @param bean
      * @return
-     *//*
-
+     */
     public static JSONObject convertJsonObject(Object bean) {
         JsonConfig jsonConfig = new JsonConfig();
         jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
@@ -54,15 +49,13 @@ public class JsonUtil {
         return jsonObject;
     }
 
-    */
-/**
+    /**
      * 把对象转换为JSONArray
      * 
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:46:37
      * @param obj
      * @return
-     *//*
-
+     */
     public static JSONArray convertJsonArray(Object obj) {
         JsonConfig jsonConfig = new JsonConfig();
         jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
@@ -93,4 +86,3 @@ public class JsonUtil {
         System.out.println("json:" + jo.toString());
     }
 }
-*/

@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/*
 package com.wuzh.commons.core.json;
 
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
-*/
 
 /**
  * 类JsonDateValueProcessor.java的实现描述：java.util.Date对象转换为json工具类
@@ -30,7 +28,6 @@ import net.sf.json.processors.JsonValueProcessor;
  * @version v1.0.0
  * @since JDK 1.7
  */
-/*
 public class JsonDateValueProcessor implements JsonValueProcessor {
 
     @Deprecated
@@ -82,4 +79,3 @@ public class JsonDateValueProcessor implements JsonValueProcessor {
         }
     }
 }
-*/
