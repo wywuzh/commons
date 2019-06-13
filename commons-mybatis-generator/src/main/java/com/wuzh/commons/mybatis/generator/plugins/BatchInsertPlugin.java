@@ -46,12 +46,15 @@ public class BatchInsertPlugin extends BasePlugin {
     @Override
     public boolean validate(List<String> warnings) {
 
-        // 插件使用前提是数据库为MySQL或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键
-        if ("com.mysql.jdbc.Driver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false
-                && "com.microsoft.jdbc.sqlserver.SQLServer".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false
-                && "com.microsoft.sqlserver.jdbc.SQLServerDriver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false
-                && "com.mysql.cj.jdbc.Driver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false) {
-            warnings.add("itfsw:插件" + this.getClass().getTypeName() + "插件使用前提是数据库为MySQL或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键！");
+        // 插件使用前提是数据库为MySQL、MariaDB、Oracle或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键
+        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+        if ("com.mysql.jdbc.Driver".equalsIgnoreCase(driverClass) == false
+                && "com.mysql.cj.jdbc.Driver".equalsIgnoreCase(driverClass) == false
+                && "com.mariadb.jdbc.Driver".equalsIgnoreCase(driverClass) == false
+                && "oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass) == false
+                && "com.microsoft.jdbc.sqlserver.SQLServer".equalsIgnoreCase(driverClass) == false
+                && "com.microsoft.sqlserver.jdbc.SQLServerDriver".equalsIgnoreCase(driverClass) == false) {
+            warnings.add("itfsw:插件" + this.getClass().getTypeName() + "插件使用前提是数据库为MySQL、MariaDB、Oracle或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键！");
             return false;
         }
 
@@ -116,6 +119,45 @@ public class BatchInsertPlugin extends BasePlugin {
         // 使用JDBC的getGenereatedKeys方法获取主键并赋值到keyProperty设置的领域模型属性中。所以只支持MYSQL和SQLServer
         XmlElementGeneratorTools.useGeneratedKeys(batchInsertEle, introspectedTable);
 
+        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+        if ("oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass)) {
+            // 生成Oracle批量新增SQL
+            generateOracle(document, introspectedTable, batchInsertEle);
+        } else {
+            // 生成MySQL批量新增SQL
+            generateMySQL(document, introspectedTable, batchInsertEle);
+        }
+
+        document.getRootElement().addElement(batchInsertEle);
+        logger.debug("itfsw(批量插入插件):" + introspectedTable.getMyBatis3XmlMapperFileName() + "增加batchInsert实现方法。");
+        return true;
+    }
+
+    private void generateOracle(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+        batchInsertEle.addElement(new TextElement("insert all"));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "list"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+
+        foreachElement.addElement(new TextElement("into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
+        // column构建
+        for (Element element : XmlElementGeneratorTools.generateKeys(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), true)) {
+            foreachElement.addElement(element);
+        }
+        // values 构建
+        foreachElement.addElement(new TextElement("values"));
+        for (Element element : XmlElementGeneratorTools.generateValues(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), "item.")) {
+            foreachElement.addElement(element);
+        }
+
+        batchInsertEle.addElement(foreachElement);
+
+        batchInsertEle.addElement(new TextElement("select 1 from dual"));
+    }
+
+    private void generateMySQL(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
         batchInsertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
         for (Element element : XmlElementGeneratorTools.generateKeys(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), true)) {
             batchInsertEle.addElement(element);
@@ -134,8 +176,5 @@ public class BatchInsertPlugin extends BasePlugin {
         // values 构建
         batchInsertEle.addElement(new TextElement("values"));
         batchInsertEle.addElement(foreachElement);
-        document.getRootElement().addElement(batchInsertEle);
-        logger.debug("itfsw(批量插入插件):" + introspectedTable.getMyBatis3XmlMapperFileName() + "增加batchInsert实现方法。");
-        return true;
     }
 }
