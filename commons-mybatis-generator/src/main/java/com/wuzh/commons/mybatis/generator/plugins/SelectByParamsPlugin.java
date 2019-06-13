@@ -82,7 +82,7 @@ public class SelectByParamsPlugin extends BasePlugin {
         commentGenerator.addGeneralMethodComment(mSelectTotal, introspectedTable);
         // interface 增加方法
         FormatTools.addMethodWithBestPosition(interfaze, mSelectTotal);
-        logger.debug("selectTotalByParams插件:" + interfaze.getType().getShortName() + "增加selectTotalByParams方法。");
+        logger.debug("itfsw(查询插件):" + interfaze.getType().getShortName() + "增加selectTotalByParams方法。");
 
         // 2. selectListByParam
         // 查询接口返回数据
@@ -97,22 +97,27 @@ public class SelectByParamsPlugin extends BasePlugin {
         commentGenerator.addGeneralMethodComment(mSelectList, introspectedTable);
         // interface 增加方法
         FormatTools.addMethodWithBestPosition(interfaze, mSelectList);
-        logger.debug("selectListByParams插件:" + interfaze.getType().getShortName() + "增加selectListByParams方法。");
+        logger.debug("itfsw(查询插件):" + interfaze.getType().getShortName() + "增加selectListByParams方法。");
 
         // 3. selectPagerByParams
         // 查询接口返回数据
+        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+        Parameter secondParameter = new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "pageSize", "@Param(\"pageSize\")");
+        if ("oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass) == true) {
+            secondParameter = new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "endset", "@Param(\"endset\")");
+        }
         Method mSelectPager = JavaElementGeneratorTools.generateMethod(
                 METHOD_SELECT_PAGER,
                 JavaVisibility.DEFAULT,
                 resultType,
                 new Parameter(searchMapType, "searchMap", "@Param(\"map\")"),
                 new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "offset", "@Param(\"offset\")"),
-                new Parameter(new FullyQualifiedJavaType("java.lang.Integer"), "pageSize", "@Param(\"pageSize\")")
+                secondParameter
         );
         commentGenerator.addGeneralMethodComment(mSelectPager, introspectedTable);
         // interface 增加方法
         FormatTools.addMethodWithBestPosition(interfaze, mSelectPager);
-        logger.debug("selectPagerByParams插件:" + interfaze.getType().getShortName() + "增加selectPagerByParams方法。");
+        logger.debug("itfsw(查询插件):" + interfaze.getType().getShortName() + "增加selectPagerByParams方法。");
         return true;
     }
 
@@ -171,21 +176,49 @@ public class SelectByParamsPlugin extends BasePlugin {
         selectPagerEle.addAttribute(new Attribute("parameterType", "map"));
         // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
         commentGenerator.addComment(selectPagerEle);
+
+        if ("oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass())) {
+            // 生成Oracle分页查询SQL
+            generateOraclePager(document, introspectedTable, selectPagerEle, includeConditionsEle);
+        } else {
+            // 生成MySQL分页查询SQL
+            generateMySQLPager(document, introspectedTable, selectPagerEle, includeConditionsEle);
+        }
+
+        document.getRootElement().addElement(selectPagerEle);
+
+        // 生成where条件
+        document.getRootElement().addElement(generateWhereConditionsElement(introspectedTable));
+        return true;
+    }
+
+    private void generateMySQLPager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle) {
         selectPagerEle.addElement(new TextElement("select "));
         selectPagerEle.addElement(XmlElementGeneratorTools.getBaseColumnListElement(introspectedTable));
         selectPagerEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
-//        selectPagerEle.addElement(new TextElement("where 1=1"));
         // 增加where条件SQL
         selectPagerEle.addElement(includeConditionsEle);
         // 增加排序功能
         selectPagerEle.addElement(generateSortElement(introspectedTable));
         // 添加分页SQL
         selectPagerEle.addElement(new TextElement("limit #{offset}, #{pageSize}"));
-        document.getRootElement().addElement(selectPagerEle);
+    }
 
-        // 生成where条件
-        document.getRootElement().addElement(generateWhereConditionsElement(introspectedTable));
-        return true;
+    private void generateOraclePager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle) {
+        selectPagerEle.addElement(new TextElement("select * from ("));
+        selectPagerEle.addElement(new TextElement("select a.*, ROWNUM rn from ("));
+        selectPagerEle.addElement(new TextElement("select "));
+        selectPagerEle.addElement(XmlElementGeneratorTools.getBaseColumnListElement(introspectedTable));
+        selectPagerEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
+        // 增加where条件SQL
+        selectPagerEle.addElement(includeConditionsEle);
+        // 增加排序功能
+        selectPagerEle.addElement(generateSortElement(introspectedTable));
+        // 添加分页SQL
+        selectPagerEle.addElement(new TextElement(")a"));
+        selectPagerEle.addElement(new TextElement("where ROWNUM &lt;= #{endset}"));
+        selectPagerEle.addElement(new TextElement(")"));
+        selectPagerEle.addElement(new TextElement("where rn &gt; #{offset}"));
     }
 
     /**
