@@ -17,16 +17,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-
 /**
  * 类PaginationObject.java的实现描述：分页结果对象
  * 
  * @author 伍章红 2015年11月6日 上午10:21:35
- * @version v1.0.0
- * @since JDK 1.7
+ * @version v2.0.2
+ * @since JDK 1.8
  */
-public class PaginationObject<R extends Serializable, P extends Serializable> extends PaginationParamter<P>
+public class PaginationObject<R extends Serializable, P extends Serializable> extends PaginationParameter<P>
         implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -64,11 +62,6 @@ public class PaginationObject<R extends Serializable, P extends Serializable> ex
 
     public void setResultList(List<R> resultList) {
         this.resultList = resultList;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 
 }

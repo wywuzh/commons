@@ -15,23 +15,7 @@
  */
 package com.wuzh.commons.core.http;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.SSLContext;
-
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -42,12 +26,7 @@ import org.apache.http.client.config.AuthSchemes;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -63,7 +42,22 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 类HttpUtil.java的实现描述：HTTP、HTTPS调用工具类
@@ -87,8 +81,8 @@ import org.springframework.util.Assert;
  * @version v1.0.0
  * @since JDK 1.7
  */
-public class HttpUtil {
-    private static final Log logger = LogFactory.getLog(HttpUtil.class);
+public class HttpClientUtils {
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 
     /**
      * GET请求数据
@@ -426,7 +420,7 @@ public class HttpUtil {
      *            请求URI地址
      * @param param
      *            请求参数
-     * @param files
+     * @param fileList
      *            附件列表
      * @return
      */
@@ -446,7 +440,7 @@ public class HttpUtil {
      *            请求参数
      * @param header
      *            header参数
-     * @param files
+     * @param fileList
      *            附件列表
      * @return
      */
@@ -616,14 +610,11 @@ public class HttpUtil {
                 result = EntityUtils.toString(httpResponse.getEntity(), charset);
             }
         } catch (ClientProtocolException e) {
-            e.printStackTrace();
-            logger.error(e);
+            logger.error("ClientProtocolException：", e);
         } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e);
+            logger.error("IOException：", e);
         } catch (URISyntaxException e) {
-            e.printStackTrace();
-            logger.error(e);
+            logger.error("URISyntaxException：", e);
         }
         return result;
     }

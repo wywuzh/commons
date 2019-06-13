@@ -7,90 +7,71 @@
 	<url>http://git.oschina.net/wywuzh/commons</url>
 
 	<parent>
-		<groupId>com.wuzh.commons</groupId>
+		<groupId>com.wuzh.commons.springboot</groupId>
 		<artifactId>commons-parent</artifactId>
-		<version>3.2.17</version>
+		<version>2.1.5</version>
 	</parent>
 
-	<developers>
-		<developer>
-			<name>wywuzh</name>
-			<email>wywuzh@163.com</email>
-			<url>http://git.oschina.net/wywuzh</url>
-		</developer>
-	</developers>
-
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0</url>
-		</license>
-	</licenses>
-
-	<scm>
-		<url>http://git.oschina.net/wywuzh/commons</url>
-		<connection>scm:git:http://git.oschina.net/wywuzh/commons</connection>
-		<developerConnection>scm:git:http://git.oschina.net/wywuzh/commons</developerConnection>
-	</scm>
-
 	<properties>
-		<!-- Maven默认识别 -->
-		<skipTest>true</skipTest>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<java.version>1.7</java.version>
-
-		<apache-log4j.version>1.2.17</apache-log4j.version>
-		<apache-log4j2.version>2.3</apache-log4j2.version>
-		<slf4j.version>1.7.12</slf4j.version>
 		<json-lib.version>2.4</json-lib.version>
-		<jackson.version>2.6.1</jackson.version>
-		<gson.version>2.3.1</gson.version>
-		<dom4j.version>1.6.1</dom4j.version>
-		<JavaMail.version>1.4.7</JavaMail.version>
+		<fastjson.version>1.2.58</fastjson.version>
 
-		<apache-commons-beanutils.version>1.9.2</apache-commons-beanutils.version>
-		<apache-commons-codec.version>1.10</apache-commons-codec.version>
-		<apache-commons-collections.version>3.2.1</apache-commons-collections.version>
-		<apache-commons-compress.version>1.10</apache-commons-compress.version>
-		<apache-commons-configuration.version>1.10</apache-commons-configuration.version>
-		<apache-commons-email.version>1.4</apache-commons-email.version>
-		<apache-commons-io.version>2.4</apache-commons-io.version>
-		<apache-commons-lang3.version>3.3</apache-commons-lang3.version>
-		<apache-commons-logging.version>1.2</apache-commons-logging.version>
-		<apache-commons-math3.version>3.5</apache-commons-math3.version>
-		<apache-commons-validator.version>1.5.0</apache-commons-validator.version>
-		<guava.version>16.0.1</guava.version>
-		<apache-httpclient.version>4.5.2</apache-httpclient.version>
-		<apache-poi.version>3.13</apache-poi.version>
+		<commons-beanutils.version>1.9.3</commons-beanutils.version>
+		<commons-collections.version>3.2.1</commons-collections.version>
+		<commons-collections4.version>4.3</commons-collections4.version>
+		<commons-compress.version>1.18</commons-compress.version>
+		<commons-configuration.version>1.10</commons-configuration.version>
+		<commons-configuration2.version>2.4</commons-configuration2.version>
+		<commons-io.version>2.6</commons-io.version>
+		<commons-math3.version>3.6.1</commons-math3.version>
+		<commons-validator.version>1.6</commons-validator.version>
+		<guava.version>27.1-jre</guava.version>
+
+		<apache-poi.version>4.1.0</apache-poi.version>
+		<org.projectlombok.version>1.18.8</org.projectlombok.version>
+		<ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
+		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
+		<UserAgentUtils.version>1.21</UserAgentUtils.version>
 	</properties>
 
 	<dependencies>
-		<!-- Apache Log4j -->
 		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>${apache-log4j.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<scope>provided</scope>
 		</dependency>
 
-		<!-- slf4j -->
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>${slf4j.version}</version>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-nop</artifactId>
-			<version>${slf4j.version}</version>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
 		<!-- JSON -->
 		<!-- json-lib是需要区分jdk版本的，pom.xml中的配置应加上<classifier>标签，如用jdk15： -->
 		<dependency>
@@ -99,46 +80,21 @@
 			<version>${json-lib.version}</version>
 			<classifier>jdk15</classifier>
 		</dependency>
-
 		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-core</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.module</groupId>
-			<artifactId>jackson-module-jaxb-annotations</artifactId>
-			<version>${jackson.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>${gson.version}</version>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
 		</dependency>
 
 		<!-- XML -->
 		<dependency>
 			<groupId>dom4j</groupId>
 			<artifactId>dom4j</artifactId>
-			<version>${dom4j.version}</version>
 		</dependency>
 
-		<!-- JavaMail -->
 		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>${JavaMail.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
 		<!-- Import Apache plugins dependency START -->
@@ -146,57 +102,55 @@
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>${apache-commons-beanutils.version}</version>
+			<version>${commons-beanutils.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
-			<version>${apache-commons-codec.version}</version>
 		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>commons-collections</groupId>-->
+			<!--<artifactId>commons-collections</artifactId>-->
+			<!--<version>${commons-collections.version}</version>-->
+		<!--</dependency>-->
 		<dependency>
-			<groupId>commons-collections</groupId>
-			<artifactId>commons-collections</artifactId>
-			<version>${apache-commons-collections.version}</version>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${commons-collections4.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>${apache-commons-compress.version}</version>
+			<version>${commons-compress.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
-			<version>${apache-commons-configuration.version}</version>
+			<version>${commons-configuration.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-email</artifactId>
-			<version>${apache-commons-email.version}</version>
+			<artifactId>commons-configuration2</artifactId>
+			<version>${commons-configuration2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${apache-commons-io.version}</version>
+			<version>${commons-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
-			<version>${apache-commons-lang3.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>${apache-commons-logging.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
-			<version>${apache-commons-math3.version}</version>
+			<version>${commons-math3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
-			<version>${apache-commons-validator.version}</version>
+			<version>${commons-validator.version}</version>
 		</dependency>
 		<!-- Import Apache plugins dependency END -->
 
@@ -210,22 +164,22 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>${apache-httpclient.version}</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient-cache</artifactId>
-			<version>${apache-httpclient.version}</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient-osgi</artifactId>
-			<version>${apache-httpclient.version}</version>
+			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<version>${apache-httpclient.version}</version>
+			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -238,74 +192,38 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>${apache-poi.version}</version>
 		</dependency>
+
+		<!-- 方便实用的annotation工具 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${org.projectlombok.version}</version>
+		</dependency>
+		<!-- 对象拷贝工具 -->
+		<dependency>
+			<groupId>ma.glasnost.orika</groupId>
+			<artifactId>orika-core</artifactId>
+			<version>${ma.glasnost.orika.version}</version>
+		</dependency>
+
+		<!-- java对象和json相互转化 -->
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-core-asl</artifactId>
+			<version>${org.codehaus.jackson.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>${org.codehaus.jackson.version}</version>
+		</dependency>
+
+		<!-- User Agent获取浏览器信息 -->
+		<dependency>
+			<groupId>eu.bitwalker</groupId>
+			<artifactId>UserAgentUtils</artifactId>
+			<version>${UserAgentUtils.version}</version>
+		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<!-- 资源配置插件 xml、properties文件都是资源文件，编码的时候遇到中文总要进行转码，我们可以通过<encoding>${project.build.sourceEncoding}</encoding>配置来进行强制转码 -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>${maven-resources-plugin.version}</version>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<!-- 编译插件 -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
-				<configuration>
-					<!-- 源代码编译版本 -->
-					<source>${java.version}</source>
-					<!-- 目标平台编译版本 一般而言，target与source是保持一致的，但是，有时候为了让程序能在其他版本的jdk中运行(对于低版本目标jdk，源代码中需要没有使用低版本jdk中不支持的语法)，会存在target不同于source的情况 -->
-					<target>${java.version}</target>
-					<!-- 字符集编码 -->
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<charset>${project.build.sourceEncoding}</charset>
-					<docletArtifact>
-						<groupId>com.iggroup.oss.restdoclet</groupId>
-						<artifactId>restdoclet-doclet</artifactId>
-						<version>2.2.0</version>
-					</docletArtifact>
-					<useStandardDocletOptions>true</useStandardDocletOptions>
-					<breakiterator>true</breakiterator>
-					<version>true</version>
-					<author>true</author>
-					<keywords>true</keywords>
-					<aggregate>true</aggregate>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven-source-plugin.version}</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>

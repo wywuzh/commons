@@ -23,7 +23,6 @@ import java.io.Serializable;
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:21:12
  * @version v1.0.0
  * @see java.io.Serializable
- * @serial com.wuzh.framework.entity.Entity
  * @since JDK 1.7
  */
 public interface Entity extends Serializable {

@@ -15,10 +15,10 @@
  */
 package com.wuzh.commons.core.sequence;
 
-import java.util.Date;
-
 import com.wuzh.commons.core.util.DateUtil;
 import com.wuzh.commons.core.util.StringHelper;
+
+import java.util.Date;
 
 /**
  * 类AbstractSequence.java的实现描述：序列基类
@@ -86,16 +86,14 @@ public abstract class AbstractSequence {
 
     /**
      * 时间格式
-     * 
-     * @param pattern
+     *
      * @return
      */
     protected abstract String datePattern();
 
     /**
      * 指定第三部分值长度
-     * 
-     * @param length
+     *
      * @return
      */
     protected abstract int getThreePartLength();

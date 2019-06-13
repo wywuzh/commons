@@ -17,8 +17,8 @@ package com.wuzh.commons.pager;
  * 类Order.java的实现描述：排序类型
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:27:25
- * @version v1.0.0
- * @since JDK 1.7
+ * @version v2.0.2
+ * @since JDK 1.8
  */
 public enum Order {
 

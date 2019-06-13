@@ -65,7 +65,12 @@ public class DateUtil {
     /**
      * 时间格式化工具
      */
-    private static SimpleDateFormat dateFormat;
+    private static ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<SimpleDateFormat>() {
+        @Override
+        protected SimpleDateFormat initialValue() {
+            return new SimpleDateFormat(PATTERN_DATE_TIME);
+        }
+    };
 
     /**
      * 获取SimpleDateFormat实例
@@ -79,10 +84,7 @@ public class DateUtil {
      * @return SimpleDateFormat实例
      */
     public static SimpleDateFormat getInstance() {
-        if (null == dateFormat) {
-            dateFormat = new SimpleDateFormat(PATTERN_DATE_TIME);
-        }
-        return dateFormat;
+        return threadLocal.get();
     }
 
     /**
@@ -98,13 +100,7 @@ public class DateUtil {
      * @return
      */
     public static SimpleDateFormat getInstance(String pattern) {
-        if (null == dateFormat) {
-            if (StringUtils.isNotEmpty(pattern)) {
-                dateFormat = new SimpleDateFormat(pattern);
-            } else {
-                dateFormat = getInstance();
-            }
-        }
+        SimpleDateFormat dateFormat = threadLocal.get();
         dateFormat.applyPattern(pattern);
         return dateFormat;
     }

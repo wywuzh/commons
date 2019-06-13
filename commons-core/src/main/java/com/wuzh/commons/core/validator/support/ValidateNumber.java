@@ -22,8 +22,8 @@ import com.wuzh.commons.core.validator.Validate;
  * 类ValidateNumber.java的实现描述：验证验证（零和非零开头的数字，支持负数）
  * 
  * @author 伍章红 2015-8-6 下午2:43:19
- * @see com.wuzh.frame.core.validator.Validate
- * @see com.wuzh.frame.core.validator.PatternType
+ * @see com.wuzh.commons.core.validator.Validate
+ * @see com.wuzh.commons.core.validator.PatternType
  * @since JDK 1.7.0_71
  */
 public class ValidateNumber extends Validate {
