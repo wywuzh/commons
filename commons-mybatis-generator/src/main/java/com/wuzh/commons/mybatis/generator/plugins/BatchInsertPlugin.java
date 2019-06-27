@@ -50,7 +50,7 @@ public class BatchInsertPlugin extends BasePlugin {
         String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
         if ("com.mysql.jdbc.Driver".equalsIgnoreCase(driverClass) == false
                 && "com.mysql.cj.jdbc.Driver".equalsIgnoreCase(driverClass) == false
-                && "com.mariadb.jdbc.Driver".equalsIgnoreCase(driverClass) == false
+                && "org.mariadb.jdbc.Driver".equalsIgnoreCase(driverClass) == false
                 && "oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass) == false
                 && "com.microsoft.jdbc.sqlserver.SQLServer".equalsIgnoreCase(driverClass) == false
                 && "com.microsoft.sqlserver.jdbc.SQLServerDriver".equalsIgnoreCase(driverClass) == false) {
