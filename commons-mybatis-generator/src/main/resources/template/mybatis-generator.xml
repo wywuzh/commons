@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
     <!--数据库驱动-->
-    <classPathEntry location="D:\Program Files\Apache\Maven\repository\mysql\mysql-connector-java\5.1.46\mysql-connector-java-5.1.46.jar"/>
+    <classPathEntry location="D:\Program Files\Apache\Maven\repository\mysql\mysql-connector-java\5.1.47\mysql-connector-java-5.1.47.jar"/>
 
     <context id="mysql" targetRuntime="MyBatis3">
         <property name="javaFileEncoding" value="UTF-8" />
@@ -32,6 +32,8 @@
             -->
             <property name="allowMultiQueries" value="false"/>
         </plugin>
+        <!-- 自定义查询插件 -->
+        <plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin"></plugin>
         
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -62,10 +64,13 @@
         </javaClientGenerator>
 
         <!--生成对应表及类名-->
-        <table tableName="system_request_log" domainObjectName="SystemRequestLog" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
-            <columnOverride column="REQUEST_PARAMS" javaType="java.lang.String" jdbcType="VARCHAR" />
-            <columnOverride column="EXCEPTION_INFO" javaType="java.lang.String" jdbcType="VARCHAR" />
+        <table tableName="system_request_log" domainObjectName="SystemRequestLog"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <property name="conditionsLikeColumns" value=""/>
+            <property name="conditionsForeachInColumns" value=""/>
+            <columnOverride column="REQUEST_PARAMS" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <columnOverride column="EXCEPTION_INFO" javaType="java.lang.String" jdbcType="VARCHAR"/>
         </table>
         <table tableName="system_dict_type" domainObjectName="SystemDictType" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
