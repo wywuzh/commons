@@ -29,7 +29,10 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import org.mybatis.generator.config.TableConfiguration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -56,6 +59,15 @@ public class SelectByParamsPlugin extends BasePlugin {
      * where条件SQL
      */
     public static final String WHERE_CONDITION = "appendConditions";
+
+    /**
+     * Like模糊查询
+     */
+    public static final String CONDITIONS_LIKE_COLUMNS = "conditionsLikeColumns";
+    /**
+     * Foreach in查询
+     */
+    public static final String CONDITIONS_FOREACH_IN_COLUMNS = "conditionsForeachInColumns";
 
     /**
      * Java Client Methods 生成
@@ -228,6 +240,13 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      */
     private XmlElement generateWhereConditionsElement(IntrospectedTable introspectedTable) {
+        TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
+
+        // 开启Like模糊查询
+        List<String> conditionsLikeColumns = getConditionsLikeColumns(tableConfiguration);
+        // 开启Foreach in查询
+        List<String> conditionsForeachInColumns = getConditionsForeachInColumns(tableConfiguration);
+
         XmlElement conditionsElement = new XmlElement("sql");
         conditionsElement.addAttribute(new Attribute("id", WHERE_CONDITION));
         // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
@@ -270,19 +289,111 @@ public class SelectByParamsPlugin extends BasePlugin {
                 mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null"));
             }
             // 添加column字段查询条件SQL（这里默认给表的所有字段添加and条件）
+            String columnName = MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn);
             if (i >= 1) {
-                mapKeyIfElement.addElement(new TextElement("and " + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn)
+                mapKeyIfElement.addElement(new TextElement("and " + columnName
                         + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.")));
             } else {
-                mapKeyIfElement.addElement(new TextElement(MyBatis3FormattingUtilities.getAliasedEscapedColumnName(introspectedColumn)
+                mapKeyIfElement.addElement(new TextElement(columnName
                         + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.")));
             }
             whereElement.addElement(mapKeyIfElement);
+
+            // 添加 like 模糊查询支持
+            if (conditionsLikeColumns != null && conditionsLikeColumns.size() > 0 &&
+                    conditionsLikeColumns.contains(columnName)) {
+                addElementForLike(whereElement, introspectedColumn, columnName, javaProperty + "Like");
+            }
+
+            // 添加 foreach in 查询支持
+            if (conditionsForeachInColumns != null && conditionsForeachInColumns.size() > 0 &&
+                    conditionsForeachInColumns.contains(columnName)) {
+                addElementForIn(whereElement, introspectedColumn, columnName, javaProperty + "s");
+            }
         }
         ifElement.addElement(whereElement);
 
         conditionsElement.addElement(ifElement);
         return conditionsElement;
+    }
+
+    /**
+     * @param whereElement
+     * @param columnName   表字段名
+     * @param javaProperty Java字段名
+     */
+    private void addElementForLike(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+        // 第二步：添加map中key的空判断
+        XmlElement mapKeyIfElement = new XmlElement("if");
+        mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
+        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+        if ("oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass)) {
+            // 生成Oracle模糊查询SQL
+            String likeSql = " like '%'||" + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.") + "||'%'";
+            mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
+        } else {
+            // 生成MySQL模糊查询SQL
+            String likeSql = " like concat('%'," + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.") + ",'%')";
+            mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
+        }
+        whereElement.addElement(mapKeyIfElement);
+    }
+
+    /**
+     * @param whereElement
+     * @param columnName   表字段名
+     * @param javaProperty Java字段名
+     */
+    private void addElementForIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+        // 第二步：添加map中key的空判断
+        XmlElement mapKeyIfElement = new XmlElement("if");
+        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " &gt; 0"));
+        mapKeyIfElement.addElement(new TextElement("and " + columnName + " in"));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", javaProperty));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("open", "("));
+        foreachElement.addAttribute(new Attribute("close", ")"));
+        foreachElement.addAttribute(new Attribute("separator", ","));
+        foreachElement.addElement(new TextElement("#{item}"));
+
+        mapKeyIfElement.addElement(foreachElement);
+
+        whereElement.addElement(mapKeyIfElement);
+    }
+
+    /**
+     * 开启Like模糊查询
+     *
+     * @param tableConfiguration
+     * @return
+     */
+    private List<String> getConditionsLikeColumns(TableConfiguration tableConfiguration) {
+        List<String> conditionsLikeColumnList = new ArrayList<>(0);
+
+        String conditionsLikeColumns = tableConfiguration.getProperty(CONDITIONS_LIKE_COLUMNS);
+        if (conditionsLikeColumns != null && conditionsLikeColumns.length() > 0) {
+            conditionsLikeColumnList = Arrays.asList(conditionsLikeColumns.split(","));
+        }
+        return conditionsLikeColumnList;
+    }
+
+    /**
+     * 开启Foreach in查询
+     *
+     * @param tableConfiguration
+     * @return
+     */
+    private List<String> getConditionsForeachInColumns(TableConfiguration tableConfiguration) {
+        List<String> conditionsForeachInColumnList = new ArrayList<>(0);
+
+        String conditionsForeachInColumns = tableConfiguration.getProperty(CONDITIONS_FOREACH_IN_COLUMNS);
+        if (conditionsForeachInColumns != null && conditionsForeachInColumns.length() > 0) {
+            conditionsForeachInColumnList = Arrays.asList(conditionsForeachInColumns.split(","));
+        }
+        return conditionsForeachInColumnList;
     }
 
     private XmlElement generateSortElement(IntrospectedTable introspectedTable) {
