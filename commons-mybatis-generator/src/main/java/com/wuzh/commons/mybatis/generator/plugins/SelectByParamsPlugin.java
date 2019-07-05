@@ -32,7 +32,6 @@ import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.TableConfiguration;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -284,7 +283,17 @@ public class SelectByParamsPlugin extends BasePlugin {
                     JdbcType.NCLOB.equals(jdbcType) ||
                     JdbcType.LONGNVARCHAR.equals(jdbcType)) {
                 mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
-//                mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " != ''"));
+            } else if (JdbcType.BIT.equals(jdbcType) ||
+                    JdbcType.TINYINT.equals(jdbcType) ||
+                    JdbcType.SMALLINT.equals(jdbcType) ||
+                    JdbcType.INTEGER.equals(jdbcType) ||
+                    JdbcType.BIGINT.equals(jdbcType) ||
+                    JdbcType.FLOAT.equals(jdbcType) ||
+                    JdbcType.REAL.equals(jdbcType) ||
+                    JdbcType.DOUBLE.equals(jdbcType) ||
+                    JdbcType.NUMERIC.equals(jdbcType) ||
+                    JdbcType.DECIMAL.equals(jdbcType)) {
+                mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " != ''"));
             } else {
                 mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null"));
             }
@@ -326,14 +335,16 @@ public class SelectByParamsPlugin extends BasePlugin {
         // 第二步：添加map中key的空判断
         XmlElement mapKeyIfElement = new XmlElement("if");
         mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
+
+        javaProperty = "#{" + javaProperty + "}";
         String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
         if ("oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass)) {
             // 生成Oracle模糊查询SQL
-            String likeSql = " like '%'||" + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.") + "||'%'";
+            String likeSql = " like '%'||" + javaProperty + "||'%'";
             mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
         } else {
             // 生成MySQL模糊查询SQL
-            String likeSql = " like concat('%'," + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "map.") + ",'%')";
+            String likeSql = " like concat('%'," + javaProperty + ",'%')";
             mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
         }
         whereElement.addElement(mapKeyIfElement);
@@ -371,13 +382,20 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      */
     private List<String> getConditionsLikeColumns(TableConfiguration tableConfiguration) {
-        List<String> conditionsLikeColumnList = new ArrayList<>(0);
+        List<String> resultList = new ArrayList<>(0);
 
         String conditionsLikeColumns = tableConfiguration.getProperty(CONDITIONS_LIKE_COLUMNS);
         if (conditionsLikeColumns != null && conditionsLikeColumns.length() > 0) {
-            conditionsLikeColumnList = Arrays.asList(conditionsLikeColumns.split(","));
+            String[] dataArr = conditionsLikeColumns.split(",");
+            for (String str : dataArr) {
+                str = str.trim();
+                if (str == null || "".equals(str)) {
+                    continue;
+                }
+                resultList.add(str);
+            }
         }
-        return conditionsLikeColumnList;
+        return resultList;
     }
 
     /**
@@ -387,13 +405,20 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      */
     private List<String> getConditionsForeachInColumns(TableConfiguration tableConfiguration) {
-        List<String> conditionsForeachInColumnList = new ArrayList<>(0);
+        List<String> resultList = new ArrayList<>(0);
 
         String conditionsForeachInColumns = tableConfiguration.getProperty(CONDITIONS_FOREACH_IN_COLUMNS);
         if (conditionsForeachInColumns != null && conditionsForeachInColumns.length() > 0) {
-            conditionsForeachInColumnList = Arrays.asList(conditionsForeachInColumns.split(","));
+            String[] dataArr = conditionsForeachInColumns.split(",");
+            for (String str : dataArr) {
+                str = str.trim();
+                if (str == null || "".equals(str)) {
+                    continue;
+                }
+                resultList.add(str);
+            }
         }
-        return conditionsForeachInColumnList;
+        return resultList;
     }
 
     private XmlElement generateSortElement(IntrospectedTable introspectedTable) {
