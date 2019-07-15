@@ -277,6 +277,7 @@ public class SelectByParamsPlugin extends BasePlugin {
                     JdbcType.LONGVARBINARY.equals(jdbcType) ||
 
                     JdbcType.BLOB.equals(jdbcType) ||
+                    JdbcType.CLOB.equals(jdbcType) ||
 
                     JdbcType.NVARCHAR.equals(jdbcType) ||
                     JdbcType.NCHAR.equals(jdbcType) ||
