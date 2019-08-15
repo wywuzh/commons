@@ -277,6 +277,7 @@ public class SelectByParamsPlugin extends BasePlugin {
                     JdbcType.LONGVARBINARY.equals(jdbcType) ||
 
                     JdbcType.BLOB.equals(jdbcType) ||
+                    JdbcType.CLOB.equals(jdbcType) ||
 
                     JdbcType.NVARCHAR.equals(jdbcType) ||
                     JdbcType.NCHAR.equals(jdbcType) ||
@@ -358,7 +359,7 @@ public class SelectByParamsPlugin extends BasePlugin {
     private void addElementForIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
         // 第二步：添加map中key的空判断
         XmlElement mapKeyIfElement = new XmlElement("if");
-        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " &gt; 0"));
+        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + ".size &gt; 0"));
         mapKeyIfElement.addElement(new TextElement("and " + columnName + " in"));
 
         // 添加foreach节点
