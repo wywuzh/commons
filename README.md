@@ -5,8 +5,8 @@
 ### 依赖资源
 | 依赖资源 | 依赖版本 |
 | ------- | ------- |
-| spring-boot | 2.1.4.RELEASE |
-| spring | 5.1.6.RELEASE |
+| spring-boot | 2.1.5.RELEASE |
+| spring | 5.1.7.RELEASE |
 | aspectj | 1.9.2 |
 | junit | 4.12 |
 | mockito | 2.23.4 |
