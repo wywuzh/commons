@@ -5,7 +5,11 @@
 ### 依赖资源
 | 依赖资源 | 依赖版本 |
 | ------- | ------- |
-| spring-boot | 2.0.3.RELEASE |
-| aspectj | 1.8.13 |
-| junit | 4.2 |
-| mockito | 2.19.0 |
+| spring-boot | 2.1.1.RELEASE |
+| spring | 5.1.3.RELEASE |
+| aspectj | 1.9.2 |
+| junit | 4.12 |
+| mockito | 2.23.4 |
+| mybatis | 3.4.6 |
+| mybatis-spring | 1.3.3 |
+| mybatis-spring-boot | 1.3.2 |
