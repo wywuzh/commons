@@ -10,6 +10,6 @@
 | aspectj | 1.9.2 |
 | junit | 4.12 |
 | mockito | 2.23.4 |
-| mybatis | 3.5.2 |
+| mybatis | 3.5.1 |
 | mybatis-spring | 2.0.1 |
 | mybatis-spring-boot | 2.0.1 |
