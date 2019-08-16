@@ -67,8 +67,11 @@
         <table tableName="system_request_log" domainObjectName="SystemRequestLog"
                enableUpdateByExample="false" enableDeleteByExample="false"
                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <!-- Where条件语句：like。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
             <property name="conditionsLikeColumns" value=""/>
+            <!-- Where条件语句：in。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
             <property name="conditionsForeachInColumns" value=""/>
+            <!-- 大文本格式 -->
             <columnOverride column="REQUEST_PARAMS" javaType="java.lang.String" jdbcType="VARCHAR"/>
             <columnOverride column="EXCEPTION_INFO" javaType="java.lang.String" jdbcType="VARCHAR"/>
         </table>

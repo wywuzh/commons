@@ -19,6 +19,7 @@ import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -277,6 +278,7 @@ public class SelectByParamsPlugin extends BasePlugin {
                     JdbcType.LONGVARBINARY.equals(jdbcType) ||
 
                     JdbcType.BLOB.equals(jdbcType) ||
+                    JdbcType.CLOB.equals(jdbcType) ||
 
                     JdbcType.NVARCHAR.equals(jdbcType) ||
                     JdbcType.NCHAR.equals(jdbcType) ||
@@ -332,6 +334,28 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @param javaProperty Java字段名
      */
     private void addElementForLike(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+        // 获取字段类型
+        int columnJdbcType = introspectedColumn.getJdbcType();
+        JdbcType jdbcType = JdbcType.forCode(columnJdbcType);
+        if (!(JdbcType.CHAR.equals(jdbcType) ||
+                JdbcType.VARCHAR.equals(jdbcType) ||
+                JdbcType.LONGVARCHAR.equals(jdbcType) ||
+
+                JdbcType.BINARY.equals(jdbcType) ||
+                JdbcType.VARBINARY.equals(jdbcType) ||
+                JdbcType.LONGVARBINARY.equals(jdbcType) ||
+
+                JdbcType.BLOB.equals(jdbcType) ||
+                JdbcType.CLOB.equals(jdbcType) ||
+
+                JdbcType.NVARCHAR.equals(jdbcType) ||
+                JdbcType.NCHAR.equals(jdbcType) ||
+                JdbcType.NCLOB.equals(jdbcType) ||
+                JdbcType.LONGNVARCHAR.equals(jdbcType))) {
+            // 过滤掉不是字符类型的字段
+            return;
+        }
+
         // 第二步：添加map中key的空判断
         XmlElement mapKeyIfElement = new XmlElement("if");
         mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
@@ -358,7 +382,7 @@ public class SelectByParamsPlugin extends BasePlugin {
     private void addElementForIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
         // 第二步：添加map中key的空判断
         XmlElement mapKeyIfElement = new XmlElement("if");
-        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + " &gt; 0"));
+        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + ".size &gt; 0"));
         mapKeyIfElement.addElement(new TextElement("and " + columnName + " in"));
 
         // 添加foreach节点
@@ -385,8 +409,10 @@ public class SelectByParamsPlugin extends BasePlugin {
         List<String> resultList = new ArrayList<>(0);
 
         String conditionsLikeColumns = tableConfiguration.getProperty(CONDITIONS_LIKE_COLUMNS);
-        if (conditionsLikeColumns != null && conditionsLikeColumns.length() > 0) {
-            String[] dataArr = conditionsLikeColumns.split(",");
+        if (StringUtils.isNotBlank(conditionsLikeColumns)) {
+            // conditionsLikeColumns 兼容全角和半角的逗号分隔符
+            conditionsLikeColumns = StringUtils.replace(conditionsLikeColumns, "，", ",");
+            String[] dataArr = StringUtils.split(conditionsLikeColumns, ",");
             for (String str : dataArr) {
                 str = str.trim();
                 if (str == null || "".equals(str)) {
@@ -408,8 +434,10 @@ public class SelectByParamsPlugin extends BasePlugin {
         List<String> resultList = new ArrayList<>(0);
 
         String conditionsForeachInColumns = tableConfiguration.getProperty(CONDITIONS_FOREACH_IN_COLUMNS);
-        if (conditionsForeachInColumns != null && conditionsForeachInColumns.length() > 0) {
-            String[] dataArr = conditionsForeachInColumns.split(",");
+        if (StringUtils.isNotBlank(conditionsForeachInColumns)) {
+            // conditionsForeachInColumns 兼容全角和半角的逗号分隔符
+            conditionsForeachInColumns = StringUtils.replace(conditionsForeachInColumns, "，", ",");
+            String[] dataArr = StringUtils.split(conditionsForeachInColumns, ",");
             for (String str : dataArr) {
                 str = str.trim();
                 if (str == null || "".equals(str)) {

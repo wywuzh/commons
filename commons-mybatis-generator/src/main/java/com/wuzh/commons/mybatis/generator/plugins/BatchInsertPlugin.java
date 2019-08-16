@@ -84,7 +84,7 @@ public class BatchInsertPlugin extends BasePlugin {
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         // 1. batchInsert
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
-//        listType.addTypeArgument(introspectedTable.getRules().calculateAllFieldsClass());
+        listType.addTypeArgument(introspectedTable.getRules().calculateAllFieldsClass());
         Method mBatchInsert = JavaElementGeneratorTools.generateMethod(
                 METHOD_BATCH_INSERT,
                 JavaVisibility.DEFAULT,
