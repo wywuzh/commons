@@ -334,6 +334,28 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @param javaProperty Java字段名
      */
     private void addElementForLike(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+        // 获取字段类型
+        int columnJdbcType = introspectedColumn.getJdbcType();
+        JdbcType jdbcType = JdbcType.forCode(columnJdbcType);
+        if (!(JdbcType.CHAR.equals(jdbcType) ||
+                JdbcType.VARCHAR.equals(jdbcType) ||
+                JdbcType.LONGVARCHAR.equals(jdbcType) ||
+
+                JdbcType.BINARY.equals(jdbcType) ||
+                JdbcType.VARBINARY.equals(jdbcType) ||
+                JdbcType.LONGVARBINARY.equals(jdbcType) ||
+
+                JdbcType.BLOB.equals(jdbcType) ||
+                JdbcType.CLOB.equals(jdbcType) ||
+
+                JdbcType.NVARCHAR.equals(jdbcType) ||
+                JdbcType.NCHAR.equals(jdbcType) ||
+                JdbcType.NCLOB.equals(jdbcType) ||
+                JdbcType.LONGNVARCHAR.equals(jdbcType))) {
+            // 过滤掉不是字符类型的字段
+            return;
+        }
+
         // 第二步：添加map中key的空判断
         XmlElement mapKeyIfElement = new XmlElement("if");
         mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
