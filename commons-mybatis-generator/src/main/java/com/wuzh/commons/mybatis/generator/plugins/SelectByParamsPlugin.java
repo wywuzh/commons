@@ -19,6 +19,7 @@ import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -386,8 +387,10 @@ public class SelectByParamsPlugin extends BasePlugin {
         List<String> resultList = new ArrayList<>(0);
 
         String conditionsLikeColumns = tableConfiguration.getProperty(CONDITIONS_LIKE_COLUMNS);
-        if (conditionsLikeColumns != null && conditionsLikeColumns.length() > 0) {
-            String[] dataArr = conditionsLikeColumns.split(",");
+        if (StringUtils.isNotBlank(conditionsLikeColumns)) {
+            // conditionsLikeColumns 兼容全角和半角的逗号分隔符
+            conditionsLikeColumns = StringUtils.replace(conditionsLikeColumns, "，", ",");
+            String[] dataArr = StringUtils.split(conditionsLikeColumns, ",");
             for (String str : dataArr) {
                 str = str.trim();
                 if (str == null || "".equals(str)) {
@@ -409,8 +412,10 @@ public class SelectByParamsPlugin extends BasePlugin {
         List<String> resultList = new ArrayList<>(0);
 
         String conditionsForeachInColumns = tableConfiguration.getProperty(CONDITIONS_FOREACH_IN_COLUMNS);
-        if (conditionsForeachInColumns != null && conditionsForeachInColumns.length() > 0) {
-            String[] dataArr = conditionsForeachInColumns.split(",");
+        if (StringUtils.isNotBlank(conditionsForeachInColumns)) {
+            // conditionsForeachInColumns 兼容全角和半角的逗号分隔符
+            conditionsForeachInColumns = StringUtils.replace(conditionsForeachInColumns, "，", ",");
+            String[] dataArr = StringUtils.split(conditionsForeachInColumns, ",");
             for (String str : dataArr) {
                 str = str.trim();
                 if (str == null || "".equals(str)) {
