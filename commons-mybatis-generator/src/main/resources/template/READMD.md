@@ -1,4 +1,5 @@
 ## mybatis-generator代码自动生成插件使用
+### commons-mybatis-generator 插件使用说明
 第一步：pom.xml文件引入依赖包：
 ```xml
 <dependency>
@@ -43,3 +44,41 @@
     </dependencies>
 </plugin>
 ```
+
+
+### commons-mybatis-generator 插件功能清单
+#### BatchInsertPlugin 批量新增插件
+插件全路径：com.wuzh.commons.mybatis.generator.plugins.BatchInsertPlugin。
+
+该插件是itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖。
+
+使用：
+```xml
+    <!-- 批量插入插件 -->
+    <plugin type="com.wuzh.commons.mybatis.generator.plugins.BatchInsertPlugin">
+        <!--
+        开启后可以实现官方插件根据属性是否为空决定是否插入该字段功能！
+        需开启allowMultiQueries=true多条sql提交操作，所以不建议使用！插件默认不开启
+        -->
+        <property name="allowMultiQueries" value="false"/>
+    </plugin>
+```
+
+
+### SelectByParamsPlugin 自定义select查询插件
+插件全路径：com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin。
+
+插件使用：
+```xml
+    <!-- 批量插入插件 -->
+    <plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin"></plugin>
+```
+
+该插件会在Mapper接口中自动生成selectTotalByParams、selectListByParams、selectPagerByParams三个查询方法，Mapper映射器中会生成对应的查询SQL语句：
+1. `<sql id="appendConditions">`：取出表中的所有字段，封装成一个公共的Where条件，这样减少了我们对每个表的SQL查询封装
+2. selectPagerByParams：根据配置的驱动`driverClass`生成相应的分页SQL。目前支持MySQL、Oracle
+3. selectListByParams、selectPagerByParams：生成通用的排序SQL。`map.sorts`
+
+该插件同时也对`<table>`的功能进行了增强
+1. conditionsLikeColumns：Like模糊查询，有多个字段时可用逗号分隔，支持全角和半角。`<property name="conditionsLikeColumns" value=""/>`
+2. conditionsForeachInColumns：Foreach in查询，有多个字段时可用逗号分隔，支持全角和半角。`<property name="conditionsForeachInColumns" value=""/>`
