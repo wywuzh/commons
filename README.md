@@ -11,5 +11,5 @@
 | junit | 4.12 |
 | mockito | 2.23.4 |
 | mybatis | 3.4.6 |
-| mybatis-spring | 1.3.3 |
-| mybatis-spring-boot | 1.3.2 |
+| mybatis-spring | 1.3.2 |
+| mybatis-spring-boot | 1.3.3 |
