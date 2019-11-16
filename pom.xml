@@ -54,21 +54,20 @@
 		<java.version>1.8</java.version>
 
 		<json-lib.version>2.4</json-lib.version>
-		<fastjson.version>1.2.58</fastjson.version>
+		<fastjson.version>1.2.62</fastjson.version>
 		<dom4j.version>2.1.1</dom4j.version>
 
-		<commons-beanutils.version>1.9.3</commons-beanutils.version>
-		<commons-collections.version>3.2.1</commons-collections.version>
-		<commons-collections4.version>4.3</commons-collections4.version>
-		<commons-compress.version>1.18</commons-compress.version>
+		<commons-beanutils.version>1.9.4</commons-beanutils.version>
+		<commons-collections4.version>4.4</commons-collections4.version>
+		<commons-compress.version>1.19</commons-compress.version>
 		<commons-configuration.version>1.10</commons-configuration.version>
-		<commons-configuration2.version>2.4</commons-configuration2.version>
+		<commons-configuration2.version>2.6</commons-configuration2.version>
 		<commons-io.version>2.6</commons-io.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<commons-validator.version>1.6</commons-validator.version>
-		<guava.version>28.0-jre</guava.version>
+		<guava.version>28.1-jre</guava.version>
 
-		<apache-poi.version>4.1.0</apache-poi.version>
+		<apache-poi.version>4.1.1</apache-poi.version>
 		<ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
 		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
 		<UserAgentUtils.version>1.21</UserAgentUtils.version>
