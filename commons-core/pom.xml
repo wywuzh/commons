@@ -9,30 +9,8 @@
 	<parent>
 		<groupId>com.wuzh.commons.springboot</groupId>
 		<artifactId>commons-parent</artifactId>
-		<version>2.1.9</version>
+		<version>2.2.0</version>
 	</parent>
-
-	<properties>
-		<json-lib.version>2.4</json-lib.version>
-		<fastjson.version>1.2.58</fastjson.version>
-
-		<commons-beanutils.version>1.9.3</commons-beanutils.version>
-		<commons-collections.version>3.2.1</commons-collections.version>
-		<commons-collections4.version>4.3</commons-collections4.version>
-		<commons-compress.version>1.18</commons-compress.version>
-		<commons-configuration.version>1.10</commons-configuration.version>
-		<commons-configuration2.version>2.4</commons-configuration2.version>
-		<commons-io.version>2.6</commons-io.version>
-		<commons-math3.version>3.6.1</commons-math3.version>
-		<commons-validator.version>1.6</commons-validator.version>
-		<guava.version>28.0-jre</guava.version>
-
-		<apache-poi.version>4.1.0</apache-poi.version>
-		<org.projectlombok.version>1.18.8</org.projectlombok.version>
-		<ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
-		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
-		<UserAgentUtils.version>1.21</UserAgentUtils.version>
-	</properties>
 
 	<dependencies>
 		<dependency>
@@ -77,18 +55,16 @@
 		<dependency>
 			<groupId>net.sf.json-lib</groupId>
 			<artifactId>json-lib</artifactId>
-			<version>${json-lib.version}</version>
 			<classifier>jdk15</classifier>
 		</dependency>
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>${fastjson.version}</version>
 		</dependency>
 
 		<!-- XML -->
 		<dependency>
-			<groupId>dom4j</groupId>
+			<groupId>org.dom4j</groupId>
 			<artifactId>dom4j</artifactId>
 		</dependency>
 
@@ -102,41 +78,30 @@
 		<dependency>
 			<groupId>commons-beanutils</groupId>
 			<artifactId>commons-beanutils</artifactId>
-			<version>${commons-beanutils.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>commons-collections</groupId>-->
-			<!--<artifactId>commons-collections</artifactId>-->
-			<!--<version>${commons-collections.version}</version>-->
-		<!--</dependency>-->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
-			<version>${commons-collections4.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-compress</artifactId>
-			<version>${commons-compress.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-configuration</groupId>
 			<artifactId>commons-configuration</artifactId>
-			<version>${commons-configuration.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-configuration2</artifactId>
-			<version>${commons-configuration2.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
@@ -145,19 +110,16 @@
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-math3</artifactId>
-			<version>${commons-math3.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
 			<artifactId>commons-validator</artifactId>
-			<version>${commons-validator.version}</version>
 		</dependency>
 		<!-- Import Apache plugins dependency END -->
 
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
-			<version>${guava.version}</version>
 		</dependency>
 
 		<!-- Apache HttpClient -->
@@ -185,44 +147,38 @@
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi</artifactId>
-			<version>${apache-poi.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
-			<version>${apache-poi.version}</version>
 		</dependency>
 
 		<!-- 方便实用的annotation工具 -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${org.projectlombok.version}</version>
 		</dependency>
+
 		<!-- 对象拷贝工具 -->
 		<dependency>
 			<groupId>ma.glasnost.orika</groupId>
 			<artifactId>orika-core</artifactId>
-			<version>${ma.glasnost.orika.version}</version>
 		</dependency>
 
 		<!-- java对象和json相互转化 -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-core-asl</artifactId>
-			<version>${org.codehaus.jackson.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>${org.codehaus.jackson.version}</version>
 		</dependency>
 
 		<!-- User Agent获取浏览器信息 -->
 		<dependency>
 			<groupId>eu.bitwalker</groupId>
 			<artifactId>UserAgentUtils</artifactId>
-			<version>${UserAgentUtils.version}</version>
 		</dependency>
 	</dependencies>
 
