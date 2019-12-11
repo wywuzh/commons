@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>commons-static-okadmin</artifactId>
+    <name>commons-static-okadmin</name>
+    <packaging>jar</packaging>
+    <description>ok-admin v2.0 后台模板，一款基于Layui框架的轻量级扁平化且完全免费开源的网站后台管理系统模板。https://gitee.com/bobi1234/ok-admin</description>
+
+    <parent>
+        <artifactId>commons-static</artifactId>
+        <groupId>com.wuzh.commons.springboot</groupId>
+        <version>2.2.0</version>
+    </parent>
+
+</project>
