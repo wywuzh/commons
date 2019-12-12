@@ -213,6 +213,13 @@
 			<artifactId>UserAgentUtils</artifactId>
 			<version>${UserAgentUtils.version}</version>
 		</dependency>
+
+		<!-- JEP：解析字符串数学公式 -->
+		<dependency>
+			<groupId>jep</groupId>
+			<artifactId>jep</artifactId>
+			<version>2.24</version>
+		</dependency>
 	</dependencies>
 
 </project>
