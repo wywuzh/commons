@@ -180,6 +180,13 @@
 			<groupId>eu.bitwalker</groupId>
 			<artifactId>UserAgentUtils</artifactId>
 		</dependency>
+
+		<!-- JEP：解析字符串数学公式 -->
+		<dependency>
+			<groupId>jep</groupId>
+			<artifactId>jep</artifactId>
+			<version>2.24</version>
+		</dependency>
 	</dependencies>
 
 </project>
