@@ -22,6 +22,7 @@ import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -348,6 +349,54 @@ public class CommonUtil {
         return result;
     }
 
+    /**
+     * 分割中英文，一个英文占一行，相邻的中文占一行
+     *
+     * @param content
+     * @return
+     */
+    public static List<String> splitEnglishCharacter(String content) {
+        char[] chars = content.toCharArray();
+        // 拼装规则：一个英文占一行，相邻的中文占一行
+        List<String> expressions = new LinkedList<>();
+        StringBuilder sb = new StringBuilder();
+        for (char c : chars) {
+            if (isContainChinese(String.valueOf(c))) {
+                sb.append(c);
+            } else {
+                // 检查sb中是否存在字符
+                if (sb.length() > 0) {
+                    expressions.add(sb.toString());
+                }
+                expressions.add(String.valueOf(c));
+                sb = new StringBuilder();
+            }
+        }
+        // 检查最后一部分没有加入的
+        if (sb.length() > 0) {
+            expressions.add(sb.toString());
+        }
+        return expressions;
+    }
+
+    /**
+     * 字符串是否包含中文
+     *
+     * @param str 待校验字符串
+     * @return true 包含中文字符  false 不包含中文字符
+     */
+    public static boolean isContainChinese(String str) {
+        if (StringUtils.isEmpty(str)) {
+            throw new IllegalArgumentException("context is empty!");
+        }
+        Pattern p = Pattern.compile("[\u4E00-\u9FA5|\\！|\\，|\\。|\\（|\\）|\\《|\\》|\\“|\\”|\\？|\\：|\\；|\\【|\\】]");
+        Matcher m = p.matcher(str);
+        if (m.find()) {
+            return true;
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         Set<String> firstSet = new HashSet<>();
         firstSet.add("Java");
@@ -365,5 +414,16 @@ public class CommonUtil {
         System.out.println(join);
         String[] joins = joins(firstSet, secondSet, threeSet);
         System.out.println(Arrays.toString(joins));
+
+        // 计算公式
+        String content = "word分词不满足需求，咋办？";
+        System.out.println(isContainChinese(content));
+        // 分割计算公式：将中英文分割开
+        List<String> characters = splitEnglishCharacter(content);
+        for (String e : characters) {
+            System.out.println(e + "\t==>" + isContainChinese(e));
+        }
+        String result = StringUtils.join(characters, "");
+        System.out.println(result);
     }
 }

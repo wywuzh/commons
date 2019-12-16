@@ -1,5 +1,13 @@
 ## 更新日志
 
+### SpringBoot/V2.2.0
+1. 代码合并自`SpringBoot/2.1.9`分支，`2.1.9`之后的分支不再合并到`2.2.x`分支
+2. 各个模块的依赖包都移动到`commons-parent`文件中统一管理
+3. 新增commons-static模块：
+    1. commons-static-jeesite4子模块：JeeSite4 后台模板
+    2. commons-static-okadmin子模块：ok-admin v2.0 后台模板
+
+
 ### SpringBoot/V2.1.1
 修改commons-core模块：
  1. 增加`JsonMapper`类：java对象和json相互转化。
