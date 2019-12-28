@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wuzh.commons</groupId>
 	<artifactId>commons-parent</artifactId>
-	<version>4.3.18</version>
+	<version>4.3.18-SNAPSHOT</version>
 	<name>commons-parent</name>
 	<packaging>pom</packaging>
 	<description>项目公共组件类库</description>
@@ -166,7 +166,7 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${maven-javadoc-plugin.version}</version>
@@ -191,9 +191,9 @@
 					<version>true</version>
 					<author>true</author>
 					<keywords>true</keywords>
-					<!--<aggregate>true</aggregate>-->
+					<aggregate>true</aggregate>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
@@ -209,5 +209,38 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<!-- 阿里云Maven私服 -->
+		<!--<repository>
+			<id>maven-ali</id>
+			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+				<checksumPolicy>fail</checksumPolicy>
+			</snapshots>
+		</repository>-->
+		<repository>
+			<id>nexus</id>
+			<url>http://139.129.93.153:8081/nexus/content/groups/public/</url>
+		</repository>
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>releases</id>
+			<name>Nexus Release Repository</name>
+			<url>http://139.129.93.153:8081/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshots</id>
+			<name>Nexus Snapshot Repository</name>
+			<url>http://139.129.93.153:8081/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
 </project>

@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>com.wuzh.commons</groupId>
 		<artifactId>commons-parent</artifactId>
-		<version>4.3.18</version>
+		<version>4.3.18-SNAPSHOT</version>
 	</parent>
 
 	<developers>
@@ -34,14 +34,11 @@
 		<developerConnection>scm:git:http://git.oschina.net/wywuzh/commons</developerConnection>
 	</scm>
 
-	<properties>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.wuzh.commons</groupId>
 			<artifactId>commons-core</artifactId>
-			<version>4.3.18</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
 
@@ -70,7 +67,7 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
-			<plugin>
+			<!--<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>${maven-javadoc-plugin.version}</version>
@@ -95,9 +92,9 @@
 					<version>true</version>
 					<author>true</author>
 					<keywords>true</keywords>
-					<!--<aggregate>true</aggregate>-->
+					<aggregate>true</aggregate>
 				</configuration>
-			</plugin>
+			</plugin>-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
