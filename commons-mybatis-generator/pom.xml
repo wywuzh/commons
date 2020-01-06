@@ -24,14 +24,25 @@
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.itfsw</groupId>
-            <artifactId>mybatis-generator-plugin</artifactId>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.itfsw</groupId>-->
+<!--            <artifactId>mybatis-generator-plugin</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <!-- 模板引擎 -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+        <!-- xml 解析 -->
+        <dependency>
+            <groupId>org.dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+<!--            <version>1.6.1</version>-->
         </dependency>
     </dependencies>
 
