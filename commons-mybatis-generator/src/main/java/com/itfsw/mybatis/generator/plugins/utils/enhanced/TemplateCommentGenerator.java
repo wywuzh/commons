@@ -49,11 +49,15 @@ import static org.mybatis.generator.internal.util.StringUtility.isTrue;
  * ---------------------------------------------------------------------------
  * @author: hewei
  * @time:2017/6/8 13:21
+ * @author <a mailto="wywuzh@163.com">伍章红</a> 2020-01-09 09:47
  * ---------------------------------------------------------------------------
  */
 public class TemplateCommentGenerator implements CommentGenerator {
     protected static final Logger logger = LoggerFactory.getLogger(TemplateCommentGenerator.class);
 
+    /**
+     * CommentPlugin 评论插件中 template 属性指定的模板路径下的模板内容：key=comment ID，value=模板内容
+     */
     private Map<EnumNode, Template> templates = new HashMap<>();
 
     private boolean suppressDate = false;
@@ -77,6 +81,8 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
             // 遍历comment 节点
             if (doc != null) {
+                // 通过 EnumNode 枚举类指定的节点ID来查询 templatePath 模板文件中的节点数据
+                // 说明：templatePath 模板文件中节点ID指定不是任意的，只能指定 EnumNode 枚举类的这些ID
                 for (EnumNode node : EnumNode.values()) {
                     Element element = doc.getRootElement().elementByID(node.value());
                     if (element != null) {
@@ -89,12 +95,16 @@ public class TemplateCommentGenerator implements CommentGenerator {
             }
 
             // 解析mybatis generator 注释配置
+            // 说明：解析 <commentGenerator> 节点，该节点为mybatis内置节点，这里 CommentPlugin 评论插件会拿 <commentGenerator> 节点中配置的 suppressDate、suppressAllComments 属性
             CommentGeneratorConfiguration config = context.getCommentGeneratorConfiguration();
             if (config != null) {
+                // 解析 <commentGenerator> 节点中配置的 suppressDate、suppressAllComments 属性
+                // suppressDate：
+                // suppressAllComments：是否去除自动生成的注释（true=是，false=否）
                 this.addConfigurationProperties(config.getProperties());
             }
         } catch (Exception e) {
-            logger.error("注释模板XML解析失败！", e);
+            logger.error("{} 注释模板XML解析失败！", templatePath, e);
         }
     }
 

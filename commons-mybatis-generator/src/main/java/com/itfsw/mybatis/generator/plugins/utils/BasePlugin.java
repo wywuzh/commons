@@ -37,6 +37,7 @@ import java.util.List;
  * ---------------------------------------------------------------------------
  * @author: hewei
  * @time:2017/4/28 13:57
+ * @author <a mailto="wywuzh@163.com">伍章红</a> 2020-01-09 09:47
  * ---------------------------------------------------------------------------
  */
 public class BasePlugin extends PluginAdapter {
@@ -48,7 +49,7 @@ public class BasePlugin extends PluginAdapter {
      * mybatis 版本
      */
     public static final String PRO_MYBATIS_VERSION = "mybatisVersion";
-    protected String mybatisVersion = "3.5.0";
+    protected String mybatisVersion = "3.5.3";
 
     /**
      * Set the context under which this plugin is running.
@@ -64,9 +65,12 @@ public class BasePlugin extends PluginAdapter {
         // 配置插件使用的模板引擎
         PluginConfiguration cfg = PluginTools.getPluginConfiguration(context, CommentPlugin.class);
 
+        // 检查context上下文中是否有配置 CommentPlugin 插件，并且 template 属性定义的模板路径是否配置
         if (cfg == null || cfg.getProperty(CommentPlugin.PRO_TEMPLATE) == null) {
+            // 如果没有配置 CommentPlugin 插件，或者配置了 CommentPlugin 插件但 template 属性
             commentGenerator = context.getCommentGenerator();
         } else {
+            // 如果配置了 CommentPlugin 插件，并且 template 属性指定了模板路径，则根据其指定的模板路径生成一个 TemplateCommentGenerator 模板注释器
             TemplateCommentGenerator templateCommentGenerator = new TemplateCommentGenerator(context, cfg.getProperty(CommentPlugin.PRO_TEMPLATE));
 
             // ITFSW 插件使用的注释生成器
@@ -75,8 +79,10 @@ public class BasePlugin extends PluginAdapter {
             // 修正系统插件
             try {
                 // 先执行一次生成CommentGenerator操作，然后再替换
+                // 预处理 mybatis-generator-core 内置的内容插件
                 context.getCommentGenerator();
 
+                // 通过反射机制，将 context 上下文中的 commentGenerator 字段值设置为我们自定义的 TemplateCommentGenerator 模板注释器对象
                 BeanUtils.setProperty(context, "commentGenerator", templateCommentGenerator);
             } catch (Exception e) {
                 logger.error("反射异常", e);
