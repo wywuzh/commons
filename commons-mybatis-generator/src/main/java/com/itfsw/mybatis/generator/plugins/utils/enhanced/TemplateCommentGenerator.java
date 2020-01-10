@@ -131,7 +131,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
             }
 
         } catch (Exception e) {
-            logger.error("freemarker 解析失败！", e);
+            logger.error("commentID={} freemarker 解析失败！", node.value, e);
         }
 
         return null;
@@ -139,9 +139,10 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * 添加评论
+     *
      * @param javaElement
      * @param map
-     * @param node
+     * @param node        评论模板节点ID
      */
     private void addJavaElementComment(JavaElement javaElement, Map<String, Object> map, EnumNode node) {
         if (this.suppressAllComments) {
@@ -163,9 +164,10 @@ public class TemplateCommentGenerator implements CommentGenerator {
 
     /**
      * 添加评论
+     *
      * @param compilationUnit
      * @param map
-     * @param node
+     * @param node            评论模板节点ID
      */
     private void addCompilationUnitComment(CompilationUnit compilationUnit, Map<String, Object> map, EnumNode node) {
         if (this.suppressAllComments) {
@@ -216,11 +218,13 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * This method will be called before any of the other methods.
      * @param properties All properties from the configuration
      */
+    // 解析 <commentGenerator> 节点中配置的 suppressDate、suppressAllComments 属性
     @Override
     public void addConfigurationProperties(Properties properties) {
         suppressDate = isTrue(properties
                 .getProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_DATE));
 
+        // 是否去除自动生成的注释（true=是，false=否）
         suppressAllComments = isTrue(properties
                 .getProperty(PropertyRegistry.COMMENT_GENERATOR_SUPPRESS_ALL_COMMENTS));
     }
@@ -236,6 +240,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param introspectedTable  the introspected table
      * @param introspectedColumn the introspected column
      */
+    // 字段
     @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         Map<String, Object> map = new HashMap<>();
@@ -253,6 +258,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param field             the field
      * @param introspectedTable the introspected table
      */
+    // 字段
     @Override
     public void addFieldComment(Field field, IntrospectedTable introspectedTable) {
         Map<String, Object> map = new HashMap<>();
@@ -292,6 +298,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param innerClass        the inner class
      * @param introspectedTable the introspected table
      */
+    // 类
     @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable) {
         if (innerClass instanceof InnerInterfaceWrapperToInnerClass) {
@@ -321,6 +328,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param introspectedTable the introspected table
      * @param markAsDoNotDelete the mark as do not delete
      */
+    // 类
     @Override
     public void addClassComment(InnerClass innerClass, IntrospectedTable introspectedTable, boolean markAsDoNotDelete) {
         Map<String, Object> map = new HashMap<>();
@@ -338,6 +346,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param innerEnum         the inner enum
      * @param introspectedTable the introspected table
      */
+    // 枚举
     @Override
     public void addEnumComment(InnerEnum innerEnum, IntrospectedTable introspectedTable) {
         Map<String, Object> map = new HashMap<>();
@@ -355,6 +364,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param introspectedTable  the introspected table
      * @param introspectedColumn the introspected column
      */
+    // getter方法
     @Override
     public void addGetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         Map<String, Object> map = new HashMap<>();
@@ -373,6 +383,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param introspectedTable  the introspected table
      * @param introspectedColumn the introspected column
      */
+    // setter方法
     @Override
     public void addSetterComment(Method method, IntrospectedTable introspectedTable, IntrospectedColumn introspectedColumn) {
         Map<String, Object> map = new HashMap<>();
@@ -390,6 +401,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * @param method            the method
      * @param introspectedTable the introspected table
      */
+    // Java方法
     @Override
     public void addGeneralMethodComment(Method method, IntrospectedTable introspectedTable) {
         Map<String, Object> map = new HashMap<>();
@@ -411,6 +423,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * The default implementation does nothing.
      * @param compilationUnit the compilation unit
      */
+    // Java文件
     @Override
     public void addJavaFileComment(CompilationUnit compilationUnit) {
         Map<String, Object> map = new HashMap<>();
@@ -426,6 +439,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * element was generated and is subject to regeneration.
      * @param xmlElement the xml element
      */
+    // xml 节点
     @Override
     public void addComment(XmlElement xmlElement) {
         Map<String, Object> map = new HashMap<>();
@@ -445,6 +459,7 @@ public class TemplateCommentGenerator implements CommentGenerator {
      * The default implementation does nothing.
      * @param rootElement the root element
      */
+    // xml root 节点
     @Override
     public void addRootComment(XmlElement rootElement) {
         Map<String, Object> map = new HashMap<>();

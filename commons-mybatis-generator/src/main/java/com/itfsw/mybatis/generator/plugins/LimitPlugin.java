@@ -52,8 +52,10 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
     @Override
     public boolean validate(List<String> warnings) {
         // 该插件只支持MYSQL
-        if ("com.mysql.jdbc.Driver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false
-                && "com.mysql.cj.jdbc.Driver".equalsIgnoreCase(this.getContext().getJdbcConnectionConfiguration().getDriverClass()) == false) {
+        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+        if (DRIVER_MySQL.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MySQL6.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MariaDB.equalsIgnoreCase(driverClass) == false) {
             warnings.add("itfsw:插件" + this.getClass().getTypeName() + "只支持MySQL数据库！");
             return false;
         }
