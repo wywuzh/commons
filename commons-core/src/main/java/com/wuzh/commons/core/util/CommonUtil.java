@@ -216,44 +216,6 @@ public class CommonUtil {
         }
     }
 
-    public static String htmlEncode(String value) {
-        String result = "";
-        if (!isNull(value)) {
-            result = value.replaceAll("&", "&amp;").replaceAll(">", "&gt;").replaceAll("<", "&lt;").replaceAll("\"", "&quot;").replaceAll(" ", "&nbsp;").replaceAll("\r?\n", "<br/>");
-        }
-        return result;
-    }
-
-    public static String htmlDecode(String value) {
-        String result = "";
-        if (!isNull(value)) {
-            result = value.replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("&quot;", "\"").replace("&nbsp;", " ");
-        }
-        return result;
-    }
-
-    /**
-     * 字符串编码(默认使用UTF-8)
-     */
-    public static String stringEncode(String value) {
-        return stringEncode(value, "UTF-8");
-    }
-
-    public static String stringEncode(String value, String encoding) {
-        String result = null;
-        if (!isNull(value)) {
-            try {
-                if (isNull(encoding)) {
-                    encoding = "UTF-8";
-                }
-                result = new String(value.getBytes("ISO-8859-1"), encoding);
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
     /**
      * 将多个Set<String>合并成一个
      *
