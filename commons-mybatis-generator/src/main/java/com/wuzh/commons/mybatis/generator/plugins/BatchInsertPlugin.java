@@ -48,12 +48,12 @@ public class BatchInsertPlugin extends BasePlugin {
 
         // 插件使用前提是数据库为MySQL、MariaDB、Oracle或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键
         String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
-        if ("com.mysql.jdbc.Driver".equalsIgnoreCase(driverClass) == false
-                && "com.mysql.cj.jdbc.Driver".equalsIgnoreCase(driverClass) == false
-                && "org.mariadb.jdbc.Driver".equalsIgnoreCase(driverClass) == false
-                && "oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass) == false
-                && "com.microsoft.jdbc.sqlserver.SQLServer".equalsIgnoreCase(driverClass) == false
-                && "com.microsoft.sqlserver.jdbc.SQLServerDriver".equalsIgnoreCase(driverClass) == false) {
+        if (DRIVER_MySQL.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MySQL6.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MariaDB.equalsIgnoreCase(driverClass) == false
+                && DRIVER_ORACLE.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MICROSOFT_JDBC.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MICROSOFT_SQLSERVER.equalsIgnoreCase(driverClass) == false) {
             warnings.add("itfsw:插件" + this.getClass().getTypeName() + "插件使用前提是数据库为MySQL、MariaDB、Oracle或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键！");
             return false;
         }

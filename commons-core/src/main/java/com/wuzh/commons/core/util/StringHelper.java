@@ -15,17 +15,19 @@
  */
 package com.wuzh.commons.core.util;
 
+import com.wuzh.commons.core.gson.GsonUtil;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.*;
-
-import org.apache.commons.lang3.StringUtils;
-
-import com.wuzh.commons.core.gson.GsonUtil;
 
 /**
  * 类StringHelper.java的实现描述：字符串
@@ -426,6 +428,67 @@ public class StringHelper {
             }
         }
         return decompressed;
+    }
+
+    public static String htmlEncode(String value) {
+        String result = "";
+        if (StringUtils.isNotBlank(value)) {
+            result = value.replaceAll("&", "&amp;").replaceAll(">", "&gt;").replaceAll("<", "&lt;").replaceAll("\"", "&quot;").replaceAll(" ", "&nbsp;").replaceAll("\r?\n", "<br/>");
+        }
+        return result;
+    }
+
+    public static String htmlDecode(String value) {
+        String result = "";
+        if (StringUtils.isNotBlank(value)) {
+            result = value.replaceAll("&amp;", "&").replaceAll("&gt;", ">").replaceAll("&lt;", "<").replaceAll("&quot;", "\"").replace("&nbsp;", " ");
+        }
+        return result;
+    }
+
+    /**
+     * 字符串编码(默认使用UTF-8)
+     */
+    public static String stringEncode(String value) {
+        return stringEncode(value, "UTF-8");
+    }
+
+    public static String stringEncode(String value, String encoding) {
+        String result = null;
+        if (StringUtils.isNotBlank(value)) {
+            try {
+                if (StringUtils.isBlank(encoding)) {
+                    encoding = "UTF-8";
+                }
+                result = new String(value.getBytes("ISO-8859-1"), encoding);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * unicode编码转换为汉字
+     *
+     * @param unicodeStr 待转化的编码
+     * @return 返回转化后的汉子
+     */
+    public static String unicodeToCN(String unicodeStr) {
+        Pattern pattern = Pattern.compile("(\\\\u(\\p{XDigit}{4}))");
+        Matcher matcher = pattern.matcher(unicodeStr);
+        char ch;
+        while (matcher.find()) {
+            //group
+            String group = matcher.group(2);
+            //ch:'李四'
+            ch = (char) Integer.parseInt(group, 16);
+            //group1
+            String group1 = matcher.group(1);
+            unicodeStr = unicodeStr.replace(group1, ch + "");
+        }
+
+        return unicodeStr.replace("\\", "").trim();
     }
 
     public static void main(String[] args) {

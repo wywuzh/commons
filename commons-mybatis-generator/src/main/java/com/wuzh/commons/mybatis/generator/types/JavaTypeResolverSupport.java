@@ -20,5 +20,7 @@ public class JavaTypeResolverSupport extends JavaTypeResolverDefaultImpl {
         super();
         // 把数据库的 TINYINT 映射成 Integer
         super.typeMap.put(Types.TINYINT, new JdbcTypeInformation("TINYINT", new FullyQualifiedJavaType(Integer.class.getName())));
+        // 把数据库的 TINYINT 映射成 Integer
+        super.typeMap.put(Types.SMALLINT, new JdbcTypeInformation("SMALLINT", new FullyQualifiedJavaType(Integer.class.getName())));
     }
 }

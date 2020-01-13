@@ -5,7 +5,7 @@
 <dependency>
     <groupId>com.wuzh.commons.springboot</groupId>
     <artifactId>commons-mybatis-generator</artifactId>
-    <version>2.1.1</version>
+    <version>2.2.1</version>
 </dependency>
 ```
 
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.wuzh.commons.springboot</groupId>
             <artifactId>commons-mybatis-generator</artifactId>
-            <version>2.1.1</version>
+            <version>2.2.1</version>
         </dependency>
     </dependencies>
 </plugin>
