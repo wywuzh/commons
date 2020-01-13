@@ -126,22 +126,18 @@
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient-cache</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient-osgi</artifactId>
-			<optional>true</optional>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpmime</artifactId>
-			<optional>true</optional>
 		</dependency>
 
 		<dependency>
@@ -185,7 +181,7 @@
 		<dependency>
 			<groupId>jep</groupId>
 			<artifactId>jep</artifactId>
-			<version>2.24</version>
+			<version>${jep.version}</version>
 		</dependency>
 	</dependencies>
 
