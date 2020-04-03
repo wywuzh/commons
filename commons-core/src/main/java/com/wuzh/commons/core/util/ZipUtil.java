@@ -31,12 +31,12 @@ import org.springframework.util.Assert;
 
 /**
  * 类ZipUtil.java的实现描述：压缩文件工具类
- * 
+ *
  * <pre>
  *  1.压缩文件：{@link #zipFile(String, String, Format)}
  *  2.解压缩文件：{@link #unZipFile(String, String)}
  * </pre>
- * 
+ *
  * @author 伍章红 2015-9-24 上午9:32:38
  * @version v1.0.0
  * @since JDK 1.7.0_71
@@ -45,7 +45,7 @@ public class ZipUtil {
 
     /**
      * 压缩文件格式
-     * 
+     *
      * @author 伍章红 2015-9-24 上午9:51:43
      * @version v1.0.0
      * @since JDK 1.7.0_71
@@ -83,13 +83,13 @@ public class ZipUtil {
     /**
      * TODO 压缩文件。
      * <压缩文件名不需传入，默认采用filePath传入的名称。
-     * 
+     *
      * <pre>
      *  <code>filePath</code>支持文件和文件目录两种方式：
      *  1.文件：对单个文件进行压缩。压缩文件名为文件名,如<code>filePath</code>传入为 <strong>E:\\document\\java压缩文件.txt</strong>，则压缩文件名为 <strong>java压缩文件</strong>；
      *  2.文件目录：对指定的文件目录下的所有文件进行压缩（支持文件目录下包含多重子级文件目录）。压缩文件名为文件目录最低级文件夹名称
      * </pre>
-     * 
+     *
      * @author 伍章红 2015-9-24 上午9:35:04
      * @param filePath
      *            需要压缩的文件或文件路径。如 E:\\document 或 E:\\document\\java 压缩文件.txt
@@ -198,7 +198,7 @@ public class ZipUtil {
 
     /**
      * 压缩文件夹
-     * 
+     *
      * @author wywuzh 2016年4月25日 下午5:53:22
      * @param directory
      * @param outputStream
@@ -244,7 +244,7 @@ public class ZipUtil {
 
     /**
      * TODO 解压缩文件
-     * 
+     *
      * @author 伍章红 2015-9-24 上午9:36:07
      * @param zipFilePath
      *            压缩文件路径。如E:\\windows.zip
@@ -258,11 +258,20 @@ public class ZipUtil {
     public static void main(String[] args) {
         // String filePath
         // ="E:\\work\\schabm\\document\\技术文档\\Spring帮助文档\\Spring MVC";
-        String filePath = "E:\\360Downloads\\Software";
-        String zipFilePath = "E:\\";
 
         try {
-            // zipFile(filePath, zipFilePath, Format.RAR);
+            String filePath = "D:\\www\\logs\\learning\\SpringBoot\\MyBatis3\\Multi-DataSource";
+            String zipFilePath = "D:\\";
+            // 注意：zipFile方法需要指定具体文件的文件夹，不支持递归查找文件操作
+            zipFile(filePath, zipFilePath, Format.RAR);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            String filePath = "D:\\www\\logs\\learning";
+            String zipFilePath = "D:\\learning.zip";
+            // 注意：compress需要指定压缩文件名称，支持递归查找文件操作
             compress(filePath, zipFilePath, Format.RAR);
         } catch (Exception e) {
             e.printStackTrace();
