@@ -133,7 +133,8 @@ public class BatchInsertPlugin extends BasePlugin {
         return true;
     }
 
-    private void generateOracle(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+    @Deprecated
+    private void generateOracleForInsertAll(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
         batchInsertEle.addElement(new TextElement("insert all"));
 
         // 添加foreach节点
@@ -155,6 +156,29 @@ public class BatchInsertPlugin extends BasePlugin {
         batchInsertEle.addElement(foreachElement);
 
         batchInsertEle.addElement(new TextElement("select 1 from dual"));
+    }
+
+    private void generateOracle(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+        batchInsertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
+        // column构建
+        for (Element element : XmlElementGeneratorTools.generateKeys(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), true)) {
+            batchInsertEle.addElement(element);
+        }
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "list"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("separator", "union all"));
+
+        // 构建虚拟表
+        foreachElement.addElement(new TextElement("select"));
+        for (Element element : XmlElementGeneratorTools.generateValues(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), "item.", false)) {
+            foreachElement.addElement(element);
+        }
+        foreachElement.addElement(new TextElement("from dual"));
+
+        batchInsertEle.addElement(foreachElement);
     }
 
     private void generateMySQL(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
