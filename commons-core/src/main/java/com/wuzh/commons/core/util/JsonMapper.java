@@ -26,6 +26,8 @@ import java.util.List;
 public class JsonMapper {
     private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);
 
+    public static JsonMapper DEFAULT_JSON_MAPPER = JsonMapper.buildNormalMapper();
+
     private ObjectMapper mapper;
 
     public JsonMapper(Inclusion inclusion) {
@@ -36,6 +38,8 @@ public class JsonMapper {
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         //禁止使用int代表Enum的order()來反序列化Enum,非常危險
         mapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
+        // 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
     }
 
     /**
