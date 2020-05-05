@@ -14,4 +14,12 @@
         <version>2.2.6-SNAPSHOT</version>
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.wuzh.commons.springboot</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
