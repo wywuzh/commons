@@ -15,6 +15,7 @@
  */
 package com.wuzh.commons.core.reflect;
 
+import com.wuzh.commons.core.util.CalculationUtils;
 import com.wuzh.commons.core.util.JsonMapper;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
@@ -22,6 +23,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 
 /**
  * 类ReflectUtils的实现描述：反射工具类
@@ -165,8 +167,26 @@ public class ReflectUtils {
             String targetFieldName = targetFields[i];
 
             try {
+                // source
+                Field sourceField = FieldUtils.getField(sourceInstance.getClass(), sourceFieldName, true);
+                Object sourceFieldValue = sourceField.get(sourceInstance);
+                // target
                 Field targetField = FieldUtils.getField(targetInstance.getClass(), targetFieldName, true);
-                targetField.set(targetInstance, ReflectUtils.getValue(sourceInstance, sourceFieldName));
+                Object targetFieldValue = targetField.get(targetField);
+                Object mergeValue = null;
+                if (sourceField.getType().equals(targetField.getType())) {
+                    if (targetField.getType().getName().equals(Byte.class)
+                            || targetField.getType().getName().equals(Short.class)
+                            || targetField.getType().getName().equals(Integer.class)
+                            || targetField.getType().getName().equals(Long.class)
+                            || targetField.getType().getName().equals(Double.class)
+                            || targetField.getType().getName().equals(Float.class)
+                            || targetField.getType().getName().equals(BigDecimal.class)) {
+                        mergeValue = CalculationUtils.add(new BigDecimal(sourceFieldValue.toString()), new BigDecimal(targetFieldValue.toString()));
+                    }
+                }
+
+                targetField.set(targetInstance, mergeValue);
             } catch (Exception e) {
                 LOGGER.error("sourceInstance.class={}, targetInstance.class={}, sourceFieldName={}, targetFieldName={} 获取源字段值、设置目标字段值失败：",
                         sourceInstance.getClass(), targetInstance.getClass(), sourceFieldName, targetFieldName, e);
