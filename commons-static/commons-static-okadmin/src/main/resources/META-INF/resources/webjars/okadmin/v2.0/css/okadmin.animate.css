@@ -3478,6 +3478,7 @@
     animation-name: slideOutLeft;
 }
 
+
 @-webkit-keyframes slideOutRight {
     from {
         -webkit-transform: translate3d(0, 0, 0);
@@ -3534,10 +3535,75 @@
         transform: translate3d(0, -100%, 0);
     }
 }
-
 .slideOutUp {
     -webkit-animation-name: slideOutUp;
     animation-name: slideOutUp;
+}
+
+
+/**从小到大旋转**/
+.scale {
+    animation-name: scale;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+}
+@keyframes scale {
+    0% {
+        transform: translate3d(0, 0, 0) rotate(0deg) scale(0);
+    }
+    50% {
+        transform: translate3d(0, 0, 0) rotate(1440deg) scale(1.2);
+    }
+    100% {
+        transform: translate3d(0, 0, 0) rotate(2880deg) scale(1);
+    }
+}
+/**渐变*/
+.gradual{
+    animation-name: gradual;
+    animation-duration: 1.5s;
+    animation-timing-function: linear;
+}
+
+@keyframes gradual {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/**文字颜色渐变*/
+.colorGradual{
+    color: transparent;
+    /*background: linear-gradient(to top right, green, greenyellow);
+    -webkit-background-clip: text;*/
+    animation-name: colorGradual;
+    animation-duration: 16s;
+    -webkit-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
+}
+/*red, orange, yellow, green, greenyellow, blue, and violet;*/
+@keyframes colorGradual {
+    0% {
+        color: red;
+    }
+    20% {
+        color: orange;
+    }
+    40% {
+        color: yellow;
+    }
+    60% {
+        color: green;
+    }
+    80% {
+        color: blue;
+    }
+    100% {
+        color: violet;
+    }
 }
 
 .ok-anim {
@@ -3547,11 +3613,64 @@
     animation-fill-mode: both;
 }
 
+/**无限循环播放*/
 .ok-anim.infinite {
     -webkit-animation-iteration-count: infinite;
     animation-iteration-count: infinite;
 }
+/**动画应该轮流反向播放*/
+.ok-anim.alternate{
+    -webkit-animation-direction: alternate;
+    animation-direction: alternate;
+}
 
+
+
+.ok-anim.duration-05s{
+    -webkit-animation-duration: .5s;
+    animation-duration: .5s;
+}
+.ok-anim.duration-1s{
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+}
+.ok-anim.duration-1-5s{
+    -webkit-animation-duration: 1.5s;
+    animation-duration: 1.5s;
+}
+.ok-anim.duration-2s{
+    -webkit-animation-duration: 2s;
+    animation-duration: 2s;
+}
+.ok-anim.duration-2-5s{
+    -webkit-animation-duration: 2.5s;
+    animation-duration: 2.5s;
+}
+.ok-anim.duration-3s{
+    -webkit-animation-duration: 3s;
+    animation-duration: 3s;
+}
+.ok-anim.duration-3-5s{
+    -webkit-animation-duration: 3.5s;
+    animation-duration: 3.5s;
+}
+.ok-anim.duration-4s{
+    -webkit-animation-duration: 4s;
+    animation-duration: 4s;
+}
+.ok-anim.duration-4-5s{
+    -webkit-animation-duration: 4.5s;
+    animation-duration: 4.5s;
+}
+.ok-anim.duration-5s{
+    -webkit-animation-duration: 5s;
+    animation-duration: 5s;
+}
+
+.ok-anim.delay-05s {
+    -webkit-animation-delay: .5s;
+    animation-delay: .5s;
+}
 .ok-anim.delay-1s {
     -webkit-animation-delay: 1s;
     animation-delay: 1s;
@@ -3598,7 +3717,7 @@
 }
 
 @media (print), (prefers-reduced-motion: reduce) {
-    .ok-anim {
+    .ok-anim, .layui-layer-oksetting {
         -webkit-animation-duration: 1ms !important;
         animation-duration: 1ms !important;
         -webkit-transition-duration: 1ms !important;
@@ -3607,3 +3726,21 @@
         animation-iteration-count: 1 !important;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

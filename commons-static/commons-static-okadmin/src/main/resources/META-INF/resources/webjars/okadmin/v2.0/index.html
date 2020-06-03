@@ -9,7 +9,7 @@
    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
    <link rel="stylesheet" href="css/okadmin.css">
    <link rel="stylesheet" href="lib/loading/okLoading.css"/>
-
+   <script type="text/javascript" src="./js/okconfig.js"></script>
    <script type="text/javascript" src="lib/loading/okLoading.js"></script>
 </head>
 <body class="layui-layout-body">
@@ -57,7 +57,7 @@
 
          <!-- 全屏 -->
          <li class="layui-nav-item layui-hide-xs">
-            <a id="fullScreen" class=" pr10 pl10" href="javascript:">
+            <a id="fullScreen" class=" pr10 pl10" href="javascript:;">
                <i class="layui-icon layui-icon-screen-full"></i>
             </a>
          </li>
@@ -78,6 +78,13 @@
                </dd>
                <dd><a href="javascript:void(0)" id="logout">退出登录</a></dd>
             </dl>
+         </li>
+
+         <!-- 菜单 -->
+         <li class="layui-nav-item layui-hide-xs">
+            <a id="okSetting" class="pr10 pl10" href="javascript:;">
+               <i style="font-size: 18px" class="ok-icon ok-icon-moreandroid"></i>
+            </a>
          </li>
       </ul>
    </div>
@@ -143,14 +150,74 @@
 
    <!--底部信息-->
    <div class="layui-footer okadmin-text-center">
-      Copyright ©2018-©2019 ok-admin v2.0 All Rights Reserved
+      Copyright ©2018-©2020 ok-admin v2.0 All Rights Reserved
       <button class="layui-btn layui-btn-danger layui-btn-xs donate">捐赠作者</button>
       <button class="layui-btn layui-btn-danger layui-btn-xs communication">QQ群交流</button>
    </div>
 </div>
-<div class="yy"></div>
+
+<!-- 锁屏 -->
+<div class="lock-screen">
+   <div class="lock-bg">
+      <img class="active lock-gradual" src="./images/wallpaper/9f28afe0e71b3ba8778e307bea2f006K.jpg" alt="" />
+      <img class="lock-gradual" src="./images/wallpaper/9f28afe0e71b3ba8778e307bea2f006d.jpg" alt="" />
+      <img class="lock-gradual" src="./images/wallpaper/29bce2d5cf30fc96866dcb5e287661ea.jpg" alt="" />
+      <img class="lock-gradual" src="./images/wallpaper/b4b55f8ec6b2763a737a2d6e1c50b71e.jpg" alt="" />
+      <img class="lock-gradual" src="./images/wallpaper/b8df65c6452dcf8b0302b8bfce9e7ec9.jpg" alt="" />
+      <img class="lock-gradual" src="./images/wallpaper/b390e4c33b7d656f09dc7fd155759a4f.jpg" alt="" />
+      <img class="lock-gradual" src="./images/wallpaper/3fded2e777723f145a4773dfdb68a9e3.jpg" alt="" />
+   </div>
+   <div class="lock-content">
+      <!--雪花-->
+      <div class="snowflake">
+         <canvas id="snowflake"></canvas>
+      </div>
+      <!--雪花 END-->
+      <div class="time">
+         <div>
+            <div class="hhmmss"></div>
+            <div class="yyyymmdd"></div>
+         </div>
+      </div>
+      <div class="quit" id="lockQuit">
+         <i class="layui-icon layui-icon-logout" title="退出登录"></i>
+      </div>
+      <table class="unlock">
+         <tr>
+            <td>
+               <div class="layui-form lock-form">
+                  <div class="lock-head">
+                     <img src="./images/avatar.png" alt="avatar.png" />
+                  </div>
+                  <div class="layui-form-item">
+                     <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
+                        <input type="password"
+                               required
+                               lay-verify="required"
+                               id="lockPassword"
+                               name="lock_password"
+                               style="border-radius: 0;border:0;height: 44px"
+                               placeholder="默认密码123456"
+                               autocomplete="off"
+                               class="layui-input" />
+                     </div>
+                     <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+                        <button style="width: 100%;box-sizing:border-box;border-radius: 0;"
+                                type="button"
+                                lay-submit
+                                lay-filter="lockSubmit"
+                                class="layui-btn lock-btn layui-btn-lg layui-btn-normal">确定</button>
+                     </div>
+                  </div>
+               </div>
+            </td>
+         </tr>
+      </table>
+   </div>
+</div>
 <!--js逻辑-->
 <script src="lib/layui/layui.js"></script>
+<script src="js/snowflake.js?snowflake=雪花"></script>
 <script src="js/okadmin.js"></script>
 </body>
 </html>

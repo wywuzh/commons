@@ -24,8 +24,14 @@
     -webkit-transform:translate(-50%, -50%)
 }
 .ball-loader>span, .signal-loader>span {
-    background-color:#4aca85;
+    background-color: #4aca85;
     display:inline-block
+}
+.ok-loading.orange_theme .ball-loader>span, .signal-loader>span{
+    background-color: #FF4806;
+}
+.ok-loading.blue_theme .ball-loader>span, .signal-loader>span{
+    background-color: #2D8CF0;
 }
 .ball-loader>span:nth-child(1), .ball-loader.sm>span:nth-child(1), .signal-loader>span:nth-child(1), .signal-loader.sm>span:nth-child(1) {
     -webkit-animation-delay:0s;
