@@ -55,7 +55,7 @@
 		<java.version>1.8</java.version>
 
 		<json-lib.version>2.4</json-lib.version>
-		<fastjson.version>1.2.66</fastjson.version>
+		<fastjson.version>1.2.70</fastjson.version>
 		<dom4j.version>2.1.1</dom4j.version>
 
 		<commons-beanutils.version>1.9.4</commons-beanutils.version>
@@ -66,7 +66,7 @@
 		<commons-io.version>2.6</commons-io.version>
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<commons-validator.version>1.6</commons-validator.version>
-		<guava.version>28.2-jre</guava.version>
+		<guava.version>29.0-jre</guava.version>
 
 		<apache-poi.version>4.1.2</apache-poi.version>
 		<ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
@@ -78,7 +78,7 @@
 		<mybatis-generator-core.version>1.3.7</mybatis-generator-core.version>
 		<mybatis-generator-plugin.version>1.3.8</mybatis-generator-plugin.version>
 
-		<druid.version>1.1.21</druid.version>
+		<druid.version>1.1.22</druid.version>
 	</properties>
 
 	<dependencies>
