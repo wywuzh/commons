@@ -127,7 +127,6 @@ public class ExcelUtils {
         Assert.notNull(excelRequest, "excelRequest must not be null");
         Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
         Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
-        Assert.notEmpty(excelRequest.getColumnLengths(), "columnLengths must not be empty");
 
         // 检查文件名后缀是否为“.xlsx”
         boolean xssf = StringUtils.endsWithIgnoreCase(fileName, ".xlsx") ? true : false;
@@ -145,7 +144,9 @@ public class ExcelUtils {
         // 生成内容列(单元格)样式
         CellStyle cellStyle = createContentStyle(workbook);
 
-        String[] columnComments = excelRequest.getColumnTitles();
+        String[] columns = excelRequest.getColumns();
+        String[] columnTitles = excelRequest.getColumnTitles();
+        Integer[] columnLengths = excelRequest.getColumnLengths();
         List<String> requiredColumnTitles = excelRequest.getRequiredColumnTitles();
         if (CollectionUtils.isNotEmpty(requiredColumnTitles)) {
             requiredHeaderStyle = createRequiredHeaderStyle(workbook);
@@ -156,12 +157,12 @@ public class ExcelUtils {
         headerRow.setHeightInPoints(20);
 
         // 因为POI自动列宽计算的是String.length长度，在中文环境下会有问题，所以自行处理
-        int[] maxLength = new int[columnComments.length];
+        int[] maxLength = new int[columnTitles.length];
 
-        for (int j = 0; j < columnComments.length; j++) {
+        for (int j = 0; j < columnTitles.length; j++) {
             // 生成第j列 - 单元格
             Cell cell = headerRow.createCell(j);
-            String columnComment = columnComments[j];
+            String columnComment = columnTitles[j];
 
             if (CollectionUtils.isNotEmpty(requiredColumnTitles) && requiredColumnTitles.contains(columnComment)) {
                 //必填项
@@ -172,15 +173,18 @@ public class ExcelUtils {
                 cell.setCellValue(columnComment);
             }
 
-            // 设置列宽
-            maxLength[j] = stringRealLength(columnComment);
+            if (columnLengths != null && columnLengths.length > 0) {
+                maxLength[j] = columnLengths[j] * 30;
+            } else {
+                // 设置列宽
+                maxLength[j] = stringRealLength(columnComment) * 357;
+            }
         }
 
         // 冻结窗口-首行
         sheet.createFreezePane(0, 1);
 
         // 输入值
-        String[] columnNames = excelRequest.getColumns();
         if (excelRequest.getDataColl() != null) {
             Iterator<?> iterator = excelRequest.getDataColl().iterator();
             int index = 0;
@@ -194,18 +198,22 @@ public class ExcelUtils {
                 Row sheetRow = sheet.createRow(index + 1);
                 sheetRow.setHeightInPoints(20);
 
-                for (int k = 0; k < columnNames.length; k++) {
+                for (int k = 0; k < columns.length; k++) {
                     // 生成第k列 - 单元格
                     Cell cell = sheetRow.createCell(k);
-                    String columnName = columnNames[k];
+                    String columnName = columns[k];
 
                     Object realValue = getRealValue(data, columnName);
                     setCellValue(cell, realValue);
                     setCellStyle(workbook, cell, cellStyle, data, columnName);
 
-                    // 设置列宽
-                    int length = stringRealLength(realValue.toString());
-                    maxLength[k] = Math.max(length, maxLength[k]);
+                    if (columnLengths != null && columnLengths.length > 0) {
+                        maxLength[k] = columnLengths[k] * 30;
+                    } else {
+                        // 设置列宽
+                        int length = stringRealLength(realValue.toString()) * 357;
+                        maxLength[k] = Math.max(length, maxLength[k]);
+                    }
                 }
 
                 index++;
@@ -213,7 +221,7 @@ public class ExcelUtils {
         }
 
         for (int j = 0; j < maxLength.length; j++) {
-            sheet.setColumnWidth(j, maxLength[j] * 357);// 每个字符大约10像素
+            sheet.setColumnWidth(j, maxLength[j]);// 每个字符大约10像素
         }
 
         return sheet;
