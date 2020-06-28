@@ -15,6 +15,7 @@
  */
 package com.wuzh.commons.core.poi;
 
+import com.wuzh.commons.core.common.ContentType;
 import com.wuzh.commons.core.poi.excel.CellType;
 import com.wuzh.commons.core.poi.excel.ExcelCell;
 import com.wuzh.commons.core.poi.excel.ExcelRequest;
@@ -76,7 +77,8 @@ public class ExcelUtils {
         OutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(new File("D:\\data", fileName));
-            Workbook workbook = createWorkbook(excelRequest, fileName);
+            Workbook workbook = createWorkbook(fileName);
+            createSheet(workbook, excelRequest);
             workbook.write(outputStream);
             outputStream.flush();
         } catch (IOException e) {
@@ -98,19 +100,21 @@ public class ExcelUtils {
         }
     }
 
-    /**
-     * 导出数据
-     *
-     * @param request 请求信息
-     */
-    public static void exportData(HttpServletRequest request, HttpServletResponse response, ExcelRequest excelRequest, String fileName)
-            throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    public static void exportData(HttpServletRequest request, HttpServletResponse response,
+                                  String fileName, String sheetNames, String[] sheetColumnNames, String[] sheetColumnComments,
+                                  Collection<Map<String, Object>> dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        exportData(request, response, fileName, new String[]{sheetNames}, new String[][]{sheetColumnNames}, new String[][]{sheetColumnComments}, new Collection[]{dataColl});
+    }
+
+    public static void exportData(HttpServletRequest request, HttpServletResponse response,
+                                  String fileName, String[] sheetNames, String[][] sheetColumnNames, String[][] sheetColumnComments,
+                                  Collection<Map<String, Object>>[] dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         OutputStream outputStream = response.getOutputStream();
         response.reset();
         // 获取浏览器类型
-        String agent = request.getHeader("USER-AGENT").toLowerCase();
-        response.setContentType("application/vnd.ms-excel");
-        if (agent.contains("firefox")) {
+        String userAgent = request.getHeader("USER-AGENT").toLowerCase();
+        response.setContentType(ContentType.APPLICATION_POINT_OFFICE2003_XLS);
+        if (StringUtils.contains(userAgent, "firefox")) {
             response.setCharacterEncoding("utf-8");
             response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1"));
         } else {
@@ -118,24 +122,64 @@ public class ExcelUtils {
             response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
         }
 
-        Workbook workbook = createWorkbook(excelRequest, fileName);
+        Workbook workbook = createWorkbook(fileName);
+        for (int i = 0; i < sheetNames.length; i++) {
+            ExcelRequest excelRequest = new ExcelRequest();
+            excelRequest.setSheetName(sheetNames[i]);
+            excelRequest.setColumns(sheetColumnNames[i]);
+            excelRequest.setColumnTitles(sheetColumnComments[i]);
+            excelRequest.setDataColl(dataColl[i]);
+            createSheet(workbook, excelRequest);
+        }
+
         workbook.write(outputStream);
+        outputStream.flush();
         outputStream.close();
     }
 
-    public static Workbook createWorkbook(ExcelRequest excelRequest, String fileName) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Assert.notNull(excelRequest, "excelRequest must not be null");
-        Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
-        Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
+    /**
+     * 导出数据
+     *
+     * @param request      请求信息
+     * @param response     响应信息
+     * @param excelRequest 导出数据请求条件
+     * @param fileName     导出文件名，注意需要包含文件后缀
+     */
+    public static void exportData(HttpServletRequest request, HttpServletResponse response, ExcelRequest excelRequest, String fileName)
+            throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        OutputStream outputStream = response.getOutputStream();
+        response.reset();
+        // 获取浏览器类型
+        String userAgent = request.getHeader("USER-AGENT").toLowerCase();
+        response.setContentType(ContentType.APPLICATION_POINT_OFFICE2003_XLS);
+        if (StringUtils.contains(userAgent, "firefox")) {
+            response.setCharacterEncoding("UTF-8");
+            response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1"));
+        } else {
+            String codedFileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+            response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
+        }
 
+        Workbook workbook = createWorkbook(fileName);
+        createSheet(workbook, excelRequest);
+
+        workbook.write(outputStream);
+        outputStream.flush();
+        outputStream.close();
+    }
+
+    public static Workbook createWorkbook(String fileName) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // 检查文件名后缀是否为“.xlsx”
         boolean xssf = StringUtils.endsWithIgnoreCase(fileName, ".xlsx") ? true : false;
         Workbook workbook = WorkbookFactory.create(xssf);
-        createSheet(workbook, excelRequest);
         return workbook;
     }
 
     public static Sheet createSheet(Workbook workbook, ExcelRequest excelRequest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Assert.notNull(excelRequest, "excelRequest must not be null");
+        Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
+        Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
+
         Sheet sheet = workbook.createSheet(excelRequest.getSheetName() == null ? "sheet" : excelRequest.getSheetName());
 
         // 生成头部列(单元格)样式
