@@ -24,7 +24,11 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,6 +48,7 @@ import java.util.*;
  * @since JDK 1.8
  */
 public class ExcelUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ExcelUtils.class);
 
     public static final int MAX_ROW = 50000;
 
@@ -531,10 +536,68 @@ public class ExcelUtils {
     /**
      * 导入数据
      *
-     * @param request 请求信息
+     * @param inputStream 输入流
+     * @param clazz       返回结果类
      */
-    public static void importData(ExcelRequest request, InputStream inputStream) {
+    public static <T> List<T> importData(InputStream inputStream, Class<T> clazz) {
+        return importData(inputStream, clazz, null);
     }
 
+    /**
+     * 导入数据
+     *
+     * @param inputStream 输入流
+     * @param clazz       返回结果类
+     * @param columns     读取字段
+     */
+    public static <T> List<T> importData(InputStream inputStream, Class<T> clazz, String[] columns) {
+        Assert.notNull(inputStream, "inputStream must not be null");
+        Assert.notNull(clazz, "clazz must not be null");
 
+        List<T> resultList = new LinkedList<>();
+        try {
+            // 解析需要读取的字段，如果 columns 为空，就以 clazz 类中ExcelCell标记的字段为准
+            columns = transformRealColumns(clazz, columns);
+
+            // 读取内容
+            Workbook workbook = reader(inputStream);
+
+            for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+                Sheet sheet = workbook.getSheetAt(i);
+                // 检查sheet是否隐藏，如果是则不读取数据
+                if (sheet == null || StringUtils.contains(sheet.getSheetName(), "hiddenSheet")
+                        || workbook.isSheetHidden(i) || workbook.isSheetVeryHidden(i)) {
+                    continue;
+                }
+                resultList.addAll(getSheetData(sheet, columns, 1));
+            }
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
+        return resultList;
+    }
+
+    private static <T> String[] transformRealColumns(Class<T> clazz, String[] columns) {
+        if (columns != null && columns.length != 0) {
+            return columns;
+        }
+        List<String> columnList = new LinkedList<>();
+        for (Field field : FieldUtils.getAllFieldsList(clazz)) {
+            String fieldName = field.getName();
+            columnList.add(fieldName);
+        }
+        return columnList.toArray(new String[0]);
+    }
+
+    public static Workbook reader(InputStream inputStream) throws FileNotFoundException, IOException {
+        Assert.notNull(inputStream, "inputStream must not be null");
+
+        return WorkbookFactory.create(inputStream);
+    }
+
+    public static <T> List<T> getSheetData(Sheet sheet, String[] columns, int startRow) {
+        List<T> resultList = new LinkedList<>();
+        // todo 读取内容
+        return resultList;
+    }
 }
