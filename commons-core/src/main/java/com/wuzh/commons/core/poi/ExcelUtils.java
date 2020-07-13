@@ -24,9 +24,9 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -63,7 +63,7 @@ public class ExcelUtils {
         dataMap.put("brand", "BLACK by moussy");
         dataMap.put("shopNo", "BBJ101");
         dataMap.put("shopFullName", "北京三里屯太古里店MOU");
-        dataMap.put("afeeLaborAgencyExpenses", BigDecimal.ZERO);
+        dataMap.put("afeeLaborAgencyExpenses", BigDecimal.valueOf(129.99));
         dataColl.add(dataMap);
         Map<String, Object> dataMap1 = new HashMap<>();
         dataMap1.put("brand", "moussy");
@@ -72,16 +72,25 @@ public class ExcelUtils {
         dataMap1.put("afeeLaborAgencyExpenses", BigDecimal.ZERO);
         dataColl.add(dataMap1);
 
+        Map<String, String[]> columnValidation = new HashMap<>();
+        String[] brands = {"BLACK by moussy", "moussy", "Belle"};
+        columnValidation.put("品牌", brands);
+
         ExcelRequest excelRequest = new ExcelRequest();
         excelRequest.setColumns(columns);
         excelRequest.setColumnTitles(columnTitles);
         excelRequest.setColumnLengths(columnLengths);
         excelRequest.setRequiredColumnTitles(requiredColumnTitles);
         excelRequest.setDataColl(dataColl);
+        excelRequest.setColumnValidation(columnValidation);
 
         OutputStream outputStream = null;
         try {
-            outputStream = new FileOutputStream(new File("D:\\data", fileName));
+            File destFile = new File("D:\\data");
+            if (!destFile.exists()) {
+                destFile.mkdirs();
+            }
+            outputStream = new FileOutputStream(new File(destFile, fileName));
             Workbook workbook = createWorkbook(fileName);
             createSheet(workbook, excelRequest);
             workbook.write(outputStream);
@@ -185,7 +194,11 @@ public class ExcelUtils {
         Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
         Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
 
-        Sheet sheet = workbook.createSheet(excelRequest.getSheetName() == null ? "sheet" : excelRequest.getSheetName());
+        String sheetName = excelRequest.getSheetName();
+        if (StringUtils.isEmpty(sheetName)) {
+            sheetName = workbook.getNumberOfSheets() > 1 ? "sheet" + (workbook.getNumberOfSheets() + 1) : "sheet";
+        }
+        Sheet sheet = workbook.createSheet(sheetName);
 
         // 生成头部列(单元格)样式
         CellStyle headerStyle = createHeaderStyle(workbook);
@@ -208,7 +221,10 @@ public class ExcelUtils {
         // 因为POI自动列宽计算的是String.length长度，在中文环境下会有问题，所以自行处理
         int[] maxLength = new int[columnTitles.length];
 
+        Map<String, String[]> columnValidation = excelRequest.getColumnValidation();
+
         for (int j = 0; j < columnTitles.length; j++) {
+            int titleIndex = j;
             // 生成第j列 - 单元格
             Cell cell = headerRow.createCell(j);
             String columnComment = columnTitles[j];
@@ -222,11 +238,19 @@ public class ExcelUtils {
                 cell.setCellValue(columnComment);
             }
 
+            // 列宽
             if (columnLengths != null && columnLengths.length > 0) {
                 maxLength[j] = columnLengths[j] * 30;
             } else {
                 // 设置列宽
                 maxLength[j] = stringRealLength(columnComment) * 357;
+            }
+
+            // 下拉框
+            if (columnValidation != null && columnValidation.containsKey(columnComment)) {
+                String[] columnValidationData = columnValidation.get(columnComment);
+                //设置为下拉框
+                setValidation(workbook, sheet, columnComment, columnValidationData, 1, MAX_ROW, titleIndex, titleIndex);
             }
         }
 
@@ -429,6 +453,108 @@ public class ExcelUtils {
             }
         }
         return realValue;
+    }
+
+
+    /**
+     * 设置某些列的值只能输入预制的数据,显示下拉框.
+     *
+     * @param sheet：要设置的sheet
+     * @param columnValidationData 字段下拉列表：Excel验证数据
+     * @param firstRow             开始行
+     * @param lastRow              结束行
+     * @param firstCol             开始列
+     * @param lastCol              结束列
+     * @return 设置好的sheet.
+     */
+    private static Sheet setValidation(Sheet sheet,
+                                       String[] columnValidationData,
+                                       int firstRow, int lastRow, int firstCol, int lastCol) {
+        DataValidationHelper helper = sheet.getDataValidationHelper();
+
+        DataValidationConstraint constraint = helper.createExplicitListConstraint(columnValidationData);
+
+        // 设置数据有效性加载在哪个单元格上,四个参数分别是：起始行、终止行、起始列、终止列
+        CellRangeAddressList regions = new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
+
+        DataValidation dataValidation = helper.createValidation(constraint, regions);
+
+        //处理Excel兼容性问题
+        if (dataValidation instanceof XSSFDataValidation) {
+            dataValidation.setSuppressDropDownArrow(true);
+            dataValidation.setShowErrorBox(true);
+        } else {
+            dataValidation.setSuppressDropDownArrow(false);
+        }
+        //添加到sheet中
+        sheet.addValidationData(dataValidation);
+        //返回sheet
+        return sheet;
+    }
+
+    /**
+     * 设置列的下拉值，Excel验证数据
+     *
+     * @param workbook
+     * @param sheet
+     * @param columnTitle          字段标题
+     * @param columnValidationData 字段下拉列表：Excel验证数据
+     * @param firstRow             开始行
+     * @param lastRow              结束行
+     * @param firstCol             开始列
+     * @param lastCol              结束列
+     * @return
+     */
+    private static Sheet setValidation(Workbook workbook, Sheet sheet,
+                                       String columnTitle, String[] columnValidationData,
+                                       int firstRow, int lastRow, int firstCol, int lastCol) {
+        // 当下拉列表数据少于10个时，不需要创建隐藏sheet
+        // 说明：下拉框数据量超过一定数量时，文件打不开。为了防止这一情况，这里默认设置超过10条就采用隐藏sheet的方式来设置下拉框
+        if (columnValidationData.length <= 10) {
+            return setValidation(sheet, columnValidationData, firstRow, lastRow, firstCol, lastCol);
+        }
+        // 参考地址：https://www.cnblogs.com/zouhao/p/11346243.html
+        // 创建sheet，写入枚举项
+        /*int sheets = workbook.getNumberOfSheets();
+        String prefixName = StringUtils.join(columnTitle, StaConstants.SEPARATE_UNDERLINE, sheets);
+        Sheet hideSheet = workbook.createSheet(prefixName + "_hiddenSheet");*/
+        String prefixName = columnTitle;
+        // 已经创建了隐藏sheet，直接使用原来的就行
+        Sheet hideSheet = workbook.getSheet(prefixName + "_hiddenSheet");
+        if (hideSheet != null) {
+            return sheet;
+        }
+        hideSheet = workbook.createSheet(prefixName + "_hiddenSheet");
+        for (int i = 0; i < columnValidationData.length; i++) {
+            hideSheet.createRow(i).createCell(0).setCellValue(columnValidationData[i]);
+        }
+        // 创建名称，可被其他单元格引用
+        Name categoryName = workbook.createName();
+        categoryName.setNameName(prefixName + "_hidden");
+        // 设置名称引用的公式
+        // 使用像'A1：B1'这样的相对值会导致在Microsoft Excel中使用工作簿时名称所指向的单元格的意外移动，
+        // 通常使用绝对引用，例如'$A$1:$B$1'可以避免这种情况。
+        // 参考： http://poi.apache.org/apidocs/dev/org/apache/poi/ss/usermodel/Name.html
+        categoryName.setRefersToFormula(prefixName + "_hiddenSheet!" + "$A$1:$A$" + columnValidationData.length);
+        // 获取上文名称内数据
+        DataValidationHelper helper = sheet.getDataValidationHelper();
+        DataValidationConstraint constraint = helper.createFormulaListConstraint(prefixName + "_hidden");
+        // 设置下拉框位置
+        CellRangeAddressList addressList = new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
+        DataValidation dataValidation = helper.createValidation(constraint, addressList);
+        // 处理Excel兼容性问题
+        if (dataValidation instanceof XSSFDataValidation) {
+            // 数据校验
+            dataValidation.setSuppressDropDownArrow(true);
+            dataValidation.setShowErrorBox(true);
+        } else {
+            dataValidation.setSuppressDropDownArrow(false);
+        }
+        // 作用在目标sheet上
+        sheet.addValidationData(dataValidation);
+        // 设置hiddenSheet隐藏
+        workbook.setSheetHidden(workbook.getSheetIndex(hideSheet), true);
+        return sheet;
     }
 
     /**
