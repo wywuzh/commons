@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.wuzh.commons.springboot</groupId>
 	<artifactId>commons-parent</artifactId>
-	<version>2.3.1-SNAPSHOT</version>
+	<version>2.3.2-SNAPSHOT</version>
 	<name>commons-parent</name>
 	<packaging>pom</packaging>
 	<description>项目公共组件类库</description>
@@ -42,7 +42,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.1.RELEASE</version>
+		<version>2.3.2.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
@@ -53,6 +53,8 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<java.version>1.8</java.version>
+
+		<spring-cloud.version>Hoxton.SR6</spring-cloud.version>
 
 		<json-lib.version>2.4</json-lib.version>
 		<fastjson.version>1.2.71</fastjson.version>
@@ -144,6 +146,14 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
 			<!-- JSON -->
 			<!-- json-lib是需要区分jdk版本的，pom.xml中的配置应加上<classifier>标签，如用jdk15： -->
 			<dependency>
