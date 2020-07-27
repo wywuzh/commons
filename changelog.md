@@ -1,5 +1,9 @@
 ## 更新日志
 
+### SpringBoot/V2.3.2
+1. 添加 Spring Cloud 依赖支持，版本为 `Hoxton.SR6`
+
+
 ### SpringBoot/V2.3.0
 1. 代码合并自`SpringBoot/2.2.7`分支，`2.2.7`之后的分支不再合并到`2.3.x`分支
 
