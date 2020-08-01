@@ -2,6 +2,7 @@
 
 ### SpringBoot/V2.3.2
 1. 添加 Spring Cloud 依赖支持，版本为 `Hoxton.SR6`
+2. commons-core模块：Gson、FastJson、Jackson等json工具类包路径调整&合并
 
 
 ### SpringBoot/V2.3.0

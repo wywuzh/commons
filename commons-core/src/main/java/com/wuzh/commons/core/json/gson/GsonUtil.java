@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.gson;
+package com.wuzh.commons.core.json.gson;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;

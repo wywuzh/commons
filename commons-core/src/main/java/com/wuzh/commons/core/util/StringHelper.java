@@ -15,7 +15,7 @@
  */
 package com.wuzh.commons.core.util;
 
-import com.wuzh.commons.core.gson.GsonUtil;
+import com.wuzh.commons.core.json.gson.GsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

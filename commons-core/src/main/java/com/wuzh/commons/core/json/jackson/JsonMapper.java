@@ -1,4 +1,4 @@
-package com.wuzh.commons.core.util;
+package com.wuzh.commons.core.json.jackson;
 
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.JsonNode;
