@@ -12,21 +12,19 @@
 	<!--form表单-->
 	<form class="layui-form layui-form-pane ok-form">
 		<div class="layui-form-item">
-			<label class="layui-form-label">角色名</label>
+			<label class="layui-form-label">角色名称</label>
 			<div class="layui-input-block">
-				<input type="text" name="name" placeholder="请输入角色名" autocomplete="off" class="layui-input"
-				       lay-verify="required">
+				<input type="text" name="name" placeholder="角色名称" autocomplete="off" class="layui-input" lay-verify="required">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">备注</label>
+			<label class="layui-form-label">角色备注</label>
 			<div class="layui-input-block">
-				<input type="text" name="remarks" placeholder="请输入备注" autocomplete="off" class="layui-input"
-				       lay-verify="required">
+				<input type="text" name="remarks" placeholder="角色备注" autocomplete="off" class="layui-input" lay-verify="required">
 			</div>
 		</div>
 		<div class="layui-form-item">
-			<label class="layui-form-label">权限</label>
+			<label class="layui-form-label">角色权限</label>
 			<div class="layui-input-block">
 				<div id="permissionTree"></div>
 			</div>
@@ -42,12 +40,14 @@
 <!--js逻辑-->
 <script src="../../lib/layui/layui.js"></script>
 <script type="text/javascript">
-	layui.use(["element", "form", "tree", "okLayer", "okUtils"], function () {
+	layui.use(["form", "tree", "okLayer", "okUtils"], function () {
 		let form = layui.form;
 		let tree = layui.tree;
 		let okLayer = layui.okLayer;
 		let okUtils = layui.okUtils;
+
 		okLoading.close();
+
 		let data = [{
 			"title": "根目录",
 			"spread": true,
@@ -72,7 +72,7 @@
 
 		tree.render({
 			elem: "#permissionTree",
-			// data: okUtils.mockApi.permission.list,
+			// data: okMock.permission.list,
 			data: data,
 			showCheckbox: true
 		});

@@ -9,28 +9,17 @@
 </head>
 <body class="ok-body-scroll">
 <div class="ok-body">
-	<!--面包屑导航区域-->
-	<!--<div class="ok-body-breadcrumb">
-					<span class="layui-breadcrumb">
-							<a><cite>首页</cite></a>
-							<a><cite>常用页面</cite></a>
-							<a><cite>权限列表</cite></a>
-					</span>
-			<a class="layui-btn layui-btn-sm" href="javascript:location.replace(location.href);" title="刷新">
-					<i class="layui-icon layui-icon-refresh"></i>
-			</a>
-	</div>
-	&lt;!&ndash;模糊搜索区域&ndash;&gt;
+	<!--模糊搜索区域-->
 	<div class="layui-row">
-			<form class="layui-form layui-col-md12 ok-search">
-					<input class="layui-input" placeholder="开始日期" autocomplete="off" id="startTime">
-					<input class="layui-input" placeholder="截止日期" autocomplete="off" id="endTime">
-					<input class="layui-input" placeholder="请输入权限名" autocomplete="off">
-					<button class="layui-btn" lay-submit="" lay-filter="search">
-							<i class="layui-icon layui-icon-search"></i>
-					</button>
-			</form>
-	</div>-->
+		<form class="layui-form layui-col-md12 ok-search">
+			<input class="layui-input" placeholder="权限名称" autocomplete="off">
+			<input class="layui-input" placeholder="权限标识" autocomplete="off">
+			<input class="layui-input" placeholder="权限路径" autocomplete="off">
+			<button class="layui-btn" lay-submit="" lay-filter="search">
+				<i class="layui-icon layui-icon-search"></i>
+			</button>
+		</form>
+	</div>
 	<div class="layui-row">
 		<div class="layui-col-md3">
 			<div id="permissionTree"></div>
@@ -49,7 +38,9 @@
 		let tree = layui.tree;
 		let okUtils = layui.okUtils;
 		let okMock = layui.okMock;
+
 		okLoading.close();
+
 		laydate.render({elem: '#startTime', type: "datetime"});
 		laydate.render({elem: '#endTime', type: "datetime"});
 

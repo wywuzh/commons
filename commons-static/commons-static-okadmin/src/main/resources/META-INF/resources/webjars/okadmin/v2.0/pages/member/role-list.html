@@ -14,7 +14,7 @@
 		<form class="layui-form layui-col-md12 ok-search">
 			<input class="layui-input" placeholder="开始日期" autocomplete="off" id="startTime" name="startTime">
 			<input class="layui-input" placeholder="截止日期" autocomplete="off" id="endTime" name="endTime">
-			<input class="layui-input" placeholder="请输入角色名" autocomplete="off" name="name">
+			<input class="layui-input" placeholder="角色名称" autocomplete="off" name="name">
 			<button class="layui-btn" lay-submit="" lay-filter="search">
 				<i class="layui-icon layui-icon-search"></i>
 			</button>
@@ -33,7 +33,9 @@
 		let okLayer = layui.okLayer;
 		let okUtils = layui.okUtils;
 		let okMock = layui.okMock;
+
 		okLoading.close();
+
 		laydate.render({elem: "#startTime", type: "datetime"});
 		laydate.render({elem: "#endTime", type: "datetime"});
 
@@ -46,11 +48,11 @@
 			size: "sm",
 			cols: [[
 				{type: "checkbox"},
-				{field: "id", title: "ID", width: 170, sort: true},
-				{field: "name", title: "角色名", width: 100},
-				{field: "remarks", title: "备注", width: 100},
-				{field: "createUsername", title: "创建者", width: 85},
-				{field: "status", title: "状态", width: 85, templet: "#statusTpl"},
+				{field: "id", title: "ID", sort: true, width: 200},
+				{field: "name", title: "角色名"},
+				{field: "remarks", title: "备注"},
+				{field: "createUsername", title: "创建者"},
+				{field: "status", title: "状态", templet: "#statusTpl"},
 				{field: "createTime", title: "创建时间", width: 150},
 				{title: "操作", width: 80, align: "center", templet: "#operationTpl"}
 			]],
@@ -64,7 +66,6 @@
 				where: data.field,
 				page: {curr: 1}
 			});
-			console.log("0000")
 			return false;
 		});
 
@@ -92,7 +93,7 @@
 		});
 
 		function add() {
-			okLayer.open("添加角色", "role-add.html", "90%", "90%", null, function () {
+			okLayer.open("添加角色", "role-insert.html", "90%", "90%", null, function () {
 				roleTable.reload();
 			})
 		}
@@ -112,7 +113,7 @@
 		}
 
 		function edit(id) {
-			okLayer.open("编辑角色", "role-edit.html?id=" + id, "90%", "90%", null, function () {
+			okLayer.open("编辑角色", "role-update.html?id=" + id, "90%", "90%", null, function () {
 				roleTable.reload();
 			})
 		}
