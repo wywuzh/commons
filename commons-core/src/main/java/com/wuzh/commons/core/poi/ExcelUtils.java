@@ -459,7 +459,7 @@ public class ExcelUtils {
     /**
      * 设置某些列的值只能输入预制的数据,显示下拉框.
      *
-     * @param sheet：要设置的sheet
+     * @param sheet                要设置的sheet
      * @param columnValidationData 字段下拉列表：Excel验证数据
      * @param firstRow             开始行
      * @param lastRow              结束行
@@ -475,20 +475,19 @@ public class ExcelUtils {
         DataValidationConstraint constraint = helper.createExplicitListConstraint(columnValidationData);
 
         // 设置数据有效性加载在哪个单元格上,四个参数分别是：起始行、终止行、起始列、终止列
-        CellRangeAddressList regions = new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
+        CellRangeAddressList addressList = new CellRangeAddressList(firstRow, lastRow, firstCol, lastCol);
 
-        DataValidation dataValidation = helper.createValidation(constraint, regions);
+        DataValidation dataValidation = helper.createValidation(constraint, addressList);
 
-        //处理Excel兼容性问题
+        // 处理Excel兼容性问题
         if (dataValidation instanceof XSSFDataValidation) {
             dataValidation.setSuppressDropDownArrow(true);
             dataValidation.setShowErrorBox(true);
         } else {
             dataValidation.setSuppressDropDownArrow(false);
         }
-        //添加到sheet中
+        // 作用在目标sheet上
         sheet.addValidationData(dataValidation);
-        //返回sheet
         return sheet;
     }
 
