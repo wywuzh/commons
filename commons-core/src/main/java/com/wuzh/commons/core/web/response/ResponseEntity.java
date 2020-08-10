@@ -53,6 +53,16 @@ public class ResponseEntity<T> implements Serializable {
      */
     private List<ErrorMsg> errors;
 
+    /**
+     * @since 2.3.2
+     */
+    public static final ResponseEntity<String> SUCCESS = new ResponseEntity<>(StatusCode.OK.getValue(), "请求成功");
+
+    /**
+     * @since 2.3.2
+     */
+    public static final ResponseEntity<String> FAIL = new ResponseEntity<>(StatusCode.ERROR.getValue(), "请求失败");
+
     public ResponseEntity() {
     }
 
@@ -112,6 +122,22 @@ public class ResponseEntity<T> implements Serializable {
             errors = new ArrayList<ErrorMsg>();
         }
         errors.add(new ErrorMsg(code, field, message));
+    }
+
+    /**
+     * @return 结果编码
+     * @since 2.3.2
+     */
+    public Integer getCode() {
+        return statusCode;
+    }
+
+    /**
+     * @return 返回结果消息
+     * @since 2.3.2
+     */
+    public String getMsg() {
+        return message;
     }
 
     @Override
