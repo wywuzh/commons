@@ -53,22 +53,49 @@ public class ResponseEntity<T> implements Serializable {
      */
     private List<ErrorMsg> errors;
 
-    /**
-     * @since 2.3.2
-     */
-    public static final ResponseEntity<String> SUCCESS = new ResponseEntity<>(StatusCode.OK.getValue(), "请求成功");
-
-    /**
-     * @since 2.3.2
-     */
-    public static final ResponseEntity<String> FAIL = new ResponseEntity<>(StatusCode.ERROR.getValue(), "请求失败");
-
     public ResponseEntity() {
     }
 
     public ResponseEntity(Integer statusCode, String message) {
         this.statusCode = statusCode;
         this.message = message;
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> success() {
+        return new ResponseEntity(StatusCode.OK.getValue(), "请求成功");
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> success(String message) {
+        return new ResponseEntity(StatusCode.OK.getValue(), message);
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> success(T result) {
+        ResponseEntity responseEntity = new ResponseEntity(StatusCode.OK.getValue(), "请求成功");
+        responseEntity.setResult(result);
+        return responseEntity;
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> fail() {
+        return new ResponseEntity(StatusCode.ERROR.getValue(), "请求失败");
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> fail(String message) {
+        return new ResponseEntity(StatusCode.ERROR.getValue(), message);
     }
 
     public Integer getStatusCode() {
