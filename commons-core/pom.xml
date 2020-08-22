@@ -166,16 +166,6 @@
 			<artifactId>orika-core</artifactId>
 		</dependency>
 
-		<!-- java对象和json相互转化 -->
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-core-asl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-		</dependency>
-
 		<!-- User Agent获取浏览器信息 -->
 		<dependency>
 			<groupId>eu.bitwalker</groupId>

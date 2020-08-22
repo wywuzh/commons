@@ -72,7 +72,6 @@
 
 		<apache-poi.version>4.1.2</apache-poi.version>
 		<ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
-		<org.codehaus.jackson.version>1.9.13</org.codehaus.jackson.version>
 		<UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
 
@@ -241,18 +240,6 @@
 				<groupId>ma.glasnost.orika</groupId>
 				<artifactId>orika-core</artifactId>
 				<version>${ma.glasnost.orika.version}</version>
-			</dependency>
-
-			<!-- java对象和json相互转化 -->
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-core-asl</artifactId>
-				<version>${org.codehaus.jackson.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.codehaus.jackson</groupId>
-				<artifactId>jackson-mapper-asl</artifactId>
-				<version>${org.codehaus.jackson.version}</version>
 			</dependency>
 
 			<!-- User Agent获取浏览器信息 -->

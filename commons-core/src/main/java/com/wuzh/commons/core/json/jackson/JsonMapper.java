@@ -1,14 +1,12 @@
 package com.wuzh.commons.core.json.jackson;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.apache.commons.lang3.StringUtils;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.JsonProcessingException;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
-import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
-import org.codehaus.jackson.map.util.JSONPObject;
-import org.codehaus.jackson.type.JavaType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,46 +26,54 @@ public class JsonMapper {
 
     public static JsonMapper DEFAULT_JSON_MAPPER = JsonMapper.buildNormalMapper();
 
-    private ObjectMapper mapper;
+    private ObjectMapper objectMapper;
 
-    public JsonMapper(Inclusion inclusion) {
-        mapper = new ObjectMapper();
-        //设置输出时包含属性的风格
-        mapper.setSerializationInclusion(inclusion);
-        //设置输入时忽略在JSON字符串中存在但Java对象实际没有的属性
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        //禁止使用int代表Enum的order()來反序列化Enum,非常危險
-        mapper.configure(DeserializationConfig.Feature.FAIL_ON_NUMBERS_FOR_ENUMS, true);
+    public JsonMapper() {
+        this(JsonInclude.Include.ALWAYS);
+    }
+
+    public JsonMapper(JsonInclude.Include include) {
+        objectMapper = new ObjectMapper();
+        // 对象的所有字段全部列入
+        objectMapper.setSerializationInclusion(include);
+        // 取消默认转换timestamp形式
+        objectMapper.configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, false);
+        // 忽略空Bean转json的错误
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true);
         // 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
-        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        // 忽略在json字符串中存在，但是在Java对象中不存在对应属性的情况
+        //有时JSON字符串中含有我们并不需要的字段，那么当对应的实体类中不含有该字段时，会抛出一个异常，告诉你有些字段（java 原始类型）没有在实体类中找到
+        //设置为false即不抛出异常
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
     }
 
     /**
      * 创建输出全部属性到Json字符串的Mapper.
      */
     public static JsonMapper buildNormalMapper() {
-        return new JsonMapper(Inclusion.ALWAYS);
+        return new JsonMapper(JsonInclude.Include.ALWAYS);
     }
 
     /**
      * 创建只输出非空属性到Json字符串的Mapper.
      */
     public static JsonMapper buildNonNullMapper() {
-        return new JsonMapper(Inclusion.NON_NULL);
+        return new JsonMapper(JsonInclude.Include.NON_NULL);
     }
 
     /**
      * 创建只输出初始值被改变的属性到Json字符串的Mapper.
      */
     public static JsonMapper buildNonDefaultMapper() {
-        return new JsonMapper(Inclusion.NON_DEFAULT);
+        return new JsonMapper(JsonInclude.Include.NON_DEFAULT);
     }
 
     /**
      * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper.
      */
     public static JsonMapper buildNonEmptyMapper() {
-        return new JsonMapper(Inclusion.NON_EMPTY);
+        return new JsonMapper(JsonInclude.Include.NON_EMPTY);
     }
 
     /**
@@ -76,7 +82,20 @@ public class JsonMapper {
      */
     public String toJson(Object object) {
         try {
-            return mapper.writeValueAsString(object);
+            return objectMapper.writeValueAsString(object);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    /**
+     * 如果对象为Null, 返回"null".
+     * 如果集合为空集合, 返回"[]".
+     */
+    public String toJsonFormat(Object object) {
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -97,7 +116,7 @@ public class JsonMapper {
         }
 
         try {
-            return mapper.readValue(jsonString, clazz);
+            return objectMapper.readValue(jsonString, clazz);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -119,7 +138,20 @@ public class JsonMapper {
         }
 
         try {
-            return (T) mapper.readValue(jsonString, javaType);
+            return (T) objectMapper.readValue(jsonString, javaType);
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public <T> T fromJson(String jsonString, TypeReference<T> valueTypeRef) {
+        if (StringUtils.isEmpty(jsonString)) {
+            return null;
+        }
+
+        try {
+            return (T) objectMapper.readValue(jsonString, valueTypeRef);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -137,28 +169,14 @@ public class JsonMapper {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T fromJson(JsonNode node, Class<?> parametrized, Class<?>... parameterClasses) {
+    public <T> T fromJson(JsonParser jsonParser, Class<?> parametrized, Class<?>... parameterClasses) {
         JavaType javaType = constructParametricType(parametrized, parameterClasses);
         try {
-            return (T) mapper.readValue(node, javaType);
+            return (T) objectMapper.readValue(jsonParser, javaType);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
         return null;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T pathAtRoot(String json, String path, Class<?> parametrized, Class<?>... parameterClasses) {
-        JsonNode rootNode = parseNode(json);
-        JsonNode node = rootNode.path(path);
-        return (T) fromJson(node, parametrized, parameterClasses);
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T pathAtRoot(String json, String path, Class<T> clazz) {
-        JsonNode rootNode = parseNode(json);
-        JsonNode node = rootNode.path(path);
-        return (T) fromJson(node, clazz);
     }
 
     /**
@@ -166,7 +184,7 @@ public class JsonMapper {
      * Map<String,MyBean>则调用(HashMap.class,String.class, MyBean.class)
      */
     public JavaType constructParametricType(Class<?> parametrized, Class<?>... parameterClasses) {
-        return mapper.getTypeFactory().constructParametricType(parametrized, parameterClasses);
+        return objectMapper.getTypeFactory().constructParametricType(parametrized, parameterClasses);
     }
 
     /**
@@ -175,7 +193,7 @@ public class JsonMapper {
     @SuppressWarnings("unchecked")
     public <T> T update(T object, String jsonString) {
         try {
-            return (T) mapper.readerForUpdating(object).readValue(jsonString);
+            return (T) objectMapper.readerForUpdating(object).readValue(jsonString);
         } catch (JsonProcessingException e) {
             logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
         } catch (IOException e) {
@@ -197,20 +215,20 @@ public class JsonMapper {
      * 注意本函數一定要在Mapper創建後, 所有的讀寫動作之前調用.
      */
     public void setEnumUseToString(boolean value) {
-        mapper.configure(SerializationConfig.Feature.WRITE_ENUMS_USING_TO_STRING, value);
-        mapper.configure(DeserializationConfig.Feature.READ_ENUMS_USING_TO_STRING, value);
+        objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, value);
+        objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, value);
     }
 
     /**
      * 取出Mapper做进一步的设置或使用其他序列化API.
      */
-    public ObjectMapper getMapper() {
-        return mapper;
+    public ObjectMapper getObjectMapper() {
+        return objectMapper;
     }
 
     public JsonNode parseNode(String json) {
         try {
-            return mapper.readValue(json, JsonNode.class);
+            return objectMapper.readValue(json, JsonNode.class);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
         }
@@ -224,7 +242,7 @@ public class JsonMapper {
      * @return
      */
     public static String toNormalJson(Object object) {
-        return new JsonMapper(Inclusion.ALWAYS).toJson(object);
+        return new JsonMapper(JsonInclude.Include.ALWAYS).toJson(object);
     }
 
     /**
@@ -234,7 +252,7 @@ public class JsonMapper {
      * @return
      */
     public static String toNonNullJson(Object object) {
-        return new JsonMapper(Inclusion.NON_NULL).toJson(object);
+        return new JsonMapper(JsonInclude.Include.NON_NULL).toJson(object);
     }
 
     /**
@@ -244,7 +262,7 @@ public class JsonMapper {
      * @return
      */
     public static String toNonDefaultJson(Object object) {
-        return new JsonMapper(Inclusion.NON_DEFAULT).toJson(object);
+        return new JsonMapper(JsonInclude.Include.NON_DEFAULT).toJson(object);
     }
 
     /**
@@ -254,15 +272,15 @@ public class JsonMapper {
      * @return
      */
     public static String toNonEmptyJson(Object object) {
-        return new JsonMapper(Inclusion.NON_EMPTY).toJson(object);
+        return new JsonMapper(JsonInclude.Include.NON_EMPTY).toJson(object);
     }
 
     public void setDateFormat(String dateFormat) {
-        mapper.setDateFormat(new SimpleDateFormat(dateFormat));
+        objectMapper.setDateFormat(new SimpleDateFormat(dateFormat));
     }
 
     public static String toLogJson(Object object) {
-        JsonMapper jsonMapper = new JsonMapper(Inclusion.NON_EMPTY);
+        JsonMapper jsonMapper = new JsonMapper(JsonInclude.Include.NON_EMPTY);
         jsonMapper.setDateFormat("yyyy-MM-dd HH:mm:ss");
         return jsonMapper.toJson(object);
     }
