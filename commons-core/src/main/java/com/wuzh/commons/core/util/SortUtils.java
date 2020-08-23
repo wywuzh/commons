@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 /**
- * 类ComparatorUtils的实现描述：TODO 类实现描述
+ * 类ComparatorUtils的实现描述：排序工具类
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2020-08-22 23:02:11
  * @version v2.3.2
