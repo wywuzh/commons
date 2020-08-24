@@ -46,11 +46,11 @@ layui.define(["layer"], function (exprots) {
       /**
        * 是否前后端分离
        */
-      isFrontendBackendSeparate: true,
+      isFrontendBackendSeparate: false,
       /**
        * 服务器地址
        */
-      baseUrl: "http://rap2api.taobao.org/app/mock/233041",
+      baseUrl: "",
       /**
        * 获取body的总宽度
        */
@@ -73,9 +73,9 @@ layui.define(["layer"], function (exprots) {
       },
       /**
        * ajax()函数二次封装
-       * @param url
-       * @param type
-       * @param params
+       * @param url 请求地址
+       * @param type 请求类型：get、post
+       * @param params 请求参数
        * @param load
        * @returns {*|never|{always, promise, state, then}}
        */
@@ -99,7 +99,7 @@ layui.define(["layer"], function (exprots) {
                } else {
                   // 业务异常
                   layer.msg(data.msg, {icon: 7, time: 2000});
-                  deferred.reject("okUtils.ajax warn: " + data.msg);
+                  deferred.reject(data.msg);
                }
             },
             complete: function () {
@@ -110,7 +110,7 @@ layui.define(["layer"], function (exprots) {
             error: function () {
                layer.close(loadIndex);
                layer.msg("服务器错误", {icon: 2, time: 2000});
-               deferred.reject("okUtils.ajax error: 服务器错误");
+               deferred.reject("服务器错误");
             }
          });
          return deferred.promise();
