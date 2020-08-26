@@ -3,10 +3,10 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>commons-static</artifactId>
-    <name>commons-static</name>
-    <packaging>pom</packaging>
-    <description>静态资源文件</description>
+    <artifactId>commons-static-easyui</artifactId>
+    <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
+    <description>jQuery EasyUI</description>
 
     <parent>
         <artifactId>commons-parent</artifactId>
@@ -14,11 +14,5 @@
         <version>2.3.2-SNAPSHOT</version>
     </parent>
 
-    <modules>
-        <module>commons-static-assets</module>
-        <module>commons-static-jeesite4</module>
-        <module>commons-static-okadmin</module>
-        <module>commons-static-easyui</module>
-    </modules>
 
 </project>
