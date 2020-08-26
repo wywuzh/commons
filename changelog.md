@@ -5,6 +5,9 @@
 2. commons-core模块：
   1. Gson、FastJson、Jackson等json工具类包路径调整&合并
   2. JsonMapper工具类依赖包调整，去掉 jackson 1.9.13 版本依赖。jackson工具依赖版本跟随SpringBoot中管理的版本号
+3. commons-static模块：
+  1. 新增`commons-static-easyui`子模块，jQuery EasyUI 后台模板
+  2. `commons-static-assets`子模块：添加 easyui 自定义样式
 
 
 ### SpringBoot/V2.3.0
