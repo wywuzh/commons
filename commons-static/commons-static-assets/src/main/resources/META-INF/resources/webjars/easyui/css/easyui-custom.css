@@ -1,0 +1,213 @@
+/**
+ * @author 伍章红
+ * @version v1.0.0
+ * @since jQuery-v1.11.3, jQuery-EasyUI-1.4.3
+ */
+body {font:12px/20px "微软雅黑","宋体",Arial,sans-serif,Verdana,Tahoma;padding:0;margin:0;}
+.layout-split-proxy-h {position:absolute;width:2px;background:#888;font-size:1px;cursor:e-resize;display:none;z-index:5;}
+.layout-split-north {border-bottom:5px solid #efefef;}
+.layout-split-south {border-top:5px solid #efefef;}
+.layout-split-east {border-left:0px solid #efefef;}
+.layout-split-west {border-right:0px solid #efefef;}
+a:link {text-decoration:none;}
+a:visited {text-decoration:none;}
+a:hover {text-decoration:underline;}
+a:active {text-decoration:none;}
+.cs-north {height:60px;}
+.cs-north-bg {width:100%;height:100%;background:url(../image/header_bg.png) repeat-x;}
+.cs-north-logo {height:40px;margin:15px 0px 0px 5px;display:inline-block;color:#000000;font-size:22px;font-weight:bold;text-decoration:none}
+.cs-west {width:200px;padding:0px;}
+.cs-navi-tab {padding:5px;}
+.cs-tab-menu {width:120px;}
+.cs-home-remark {padding:10px;}
+.wrapper {float:right;height:30px;margin-left:10px;}
+.ui-skin-nav {float:right;padding:0;margin-right:10px;list-style:none outside none;height:30px;}
+.ui-skin-nav .li-skinitem {float:left;font-size:12px;line-height:30px;margin-left:10px;text-align:center;}
+.ui-skin-nav .li-skinitem span {cursor:pointer;width:10px;height:10px;display:inline-block;}
+.ui-skin-nav .li-skinitem span.cs-skin-on {border:1px solid #FFFFFF;}
+.ui-skin-nav .li-skinitem span.gray {background-color:gray;}
+.ui-skin-nav .li-skinitem span.default {background-color:blue;}
+.ui-skin-nav .li-skinitem span.bootstrap {background-color:#D7EBF9;}
+.ui-skin-nav .li-skinitem span.black {background-color:black;}
+.ui-skin-nav .li-skinitem span.metro {background-color:#FFE57E;}
+
+
+/**
+ * 设置Form查询条件样式
+ */
+.dataForm {padding:10px;}
+.dataForm table.formTable {width:100%;height:100%;}
+.dataForm table.formTable th.tb-th {width:10%;text-align:right;padding:3px 0 3px 2px;}
+.dataForm table.formTable td.tb-td {width:23%;text-align:left;padding:3px 0 3px 2px;padding-top:1px;}
+.dataForm table.formTable td.btn-form {padding-top:3px;}
+
+.search-table{width: 100%;}
+.search-table th{text-align:right;height: 35px;}
+.search-table td{text-align:left;height: 35px;}
+
+.easyui-textbox,
+.easyui-validatebox,
+.easyui-datebox,
+.easyui-combobox,
+.easyui-combogrid {
+    width: 180px;
+}
+
+/**
+ * 自定义datagrid表头样式
+ * 1.文本加粗
+ * 2.背景颜色 background-color: #E0ECFF;
+ */
+.datagrid-header-row td {font-weight:bold;}
+
+
+/**
+ * 自定义datagrid-toolbar文本样式
+ */
+.datagrid-toolbar span.l-btn-text {font-size:12px;color:#333;font-family:arial,"宋体";height:100%;}
+
+
+/**
+ * 自定义 fieldset样式
+ */
+fieldset {padding:5px;margin-top:5px;border:1px solid #95B8E7;/**border:1px dashed #95B8E7 虚线*/ background:#fff;display:block;}
+fieldset legend {color:#183152;font-weight:bold;padding:3px 10px;background:#fff;display:block;border:none;}
+
+
+/**
+ * My97DatePicker input控件样式
+ */
+.My97DatePicker {
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 0px;
+    padding: 0px;
+    border-radius: 5px;
+    width: 110px;
+    height: 22px;
+}
+
+.Wdate {
+    margin: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 28px !important;
+    line-height: 28px !important;
+    border: 1px solid #D3D3D3 !important;
+    background: #fff url(../image/My97DatePicker/datePicker.png) no-repeat right !important;
+}
+
+
+/**
+ * My97DatePicker date控件样式
+ */
+.date {
+    width: 95px;
+}
+
+/**
+ * My97DatePicker time控件样式
+ */
+.time {
+    width: 95px;
+}
+
+/**
+ * My97DatePicker datetime控件样式
+ */
+.datetime {
+    width: 145px;
+}
+
+input, textarea {
+    resize: none;
+    border: 1px solid #999;
+    background-color: #FFF;
+}
+
+/**
+ * 图标字体大小
+ */
+.fa,
+.l-btn-icon {
+    font-size: 16px;
+}
+
+/**
+ * 按钮高度
+ */
+.dataForm .l-btn-text,
+.dialog-button .l-btn-text {
+    margin: 2px 6px 0 24px !important;
+    min-height: 26px !important;
+}
+
+/**
+ * 解决iframe右侧总出两个滚条方法 https://blog.csdn.net/zhlantian/article/details/70241322
+ */
+#tabs .tabs-panels>.panel>.panel-body {overflow:hidden;}
+.easyui-panel {height:32px;background:rgb(244,244,244);padding:1px;border-bottom:1px solid rgb(221,221,221);}
+.easyui-panel .easyui-linkbutton {float:left;}
+.easyui-panel .split-button {height:24px;border-left:1px solid rgb(221,221,221);border-right:1px solid white;margin:2px 1px;float:left;}
+
+input:disabled,
+input:read-only,
+textarea:read-only{
+    background-color: #ece9d8 !important;
+}
+
+/* div层禁用 */
+.disabled-click {pointer-events: none;}
+.disabled-click input[type="checkbox"]:-moz-read-only {background-color:#ece9d8 !important;}
+.disabled-click input[type="checkbox"]:read-only {background-color:#ece9d8 !important;}
+.disabled-click input[type="radio"]:-moz-read-only {background-color:#ece9d8 !important;}
+.disabled-click input[type="radio"]:read-only {background-color:#ece9d8 !important;}
+
+/* 必填字段 */
+.field-required:before {content:'*';color:red;}
+
+
+/* 选择行样式 */
+.accordion .accordion-header-selected {
+    background: #083772 none repeat scroll 0 0;
+    border-color: #3366CC #000055 #000055 #3366CC;
+}
+.tree .tree-node-selected {
+    background: #083772 none repeat scroll 0 0;
+    border-color: #3366CC #000055 #000055 #3366CC;
+    border-style: solid;
+    border-width: 1px;
+    color: white;
+    height: 22px;
+}
+.datagrid .datagrid-row-selected {
+    color: white;
+    height: 25px !important;
+    background: none 0px 0px repeat scroll rgb(8, 55, 114);
+    border-color: rgb(51, 102, 204) rgb(0, 0, 85) rgb(0, 0, 85) rgb(51, 102, 204);
+    border-style: solid;
+    border-width: 1px;
+}
+.combo-panel .combobox-item-selected{
+    background: #083772 none repeat scroll 0 0;
+    border-color: #3366CC #000055 #000055 #3366CC;
+}
+
+.progressbar-value,
+.progressbar-value .progressbar-text {
+    background: #083772 none repeat scroll 0 0;
+    border-color: #3366CC #000055 #000055 #3366CC;
+}
+
+/**
+ * datagrid内容显示不完用省略号代替
+ */
+.datagrid-cell,
+.datagrid-cell-group,
+.datagrid-header-rownumber,
+.datagrid-cell-rownumber {
+    text-overflow: ellipsis;
+}
