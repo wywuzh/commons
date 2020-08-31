@@ -28,9 +28,58 @@ var Datagrid = {
             var header2Row = dc.header2.find('tr.datagrid-header-row');
             dc.body2.find('table').append(header2Row.clone().css({"visibility": "hidden"}));
         }
+        // 底部footer行添加“合计”
+        // 注：该名称只有在设置了 “showFooter: true” 才会生效
         $('.datagrid-footer .datagrid-cell-rownumber').text('合计');
     }
 };
+
+/**
+ * 重写datagrid默认值
+ */
+$.fn.datagrid.defaults = $.extend({}, $.fn.datagrid.defaults, {
+    loadMsg: "数据加载中，请稍候……",
+    onLoadSuccess: Datagrid.loadSuccessForTitle
+});
+
+function initDatagrid(selector, options) {
+    options = options || {};
+    // 默认属性值
+    var defaultOptions = {
+        method: "post",
+        frozenColumns: [[
+            {field: 'chex', checkbox: true, resizable: true}
+        ]],
+        fitColumns: false, // 自动使列适应表格宽度以防止出现水平滚动
+        fit: true,
+        border: true,
+        striped: true, // 交替显示行背景
+        nowrap: true, // 当数据长度超出列宽时将会自动截取
+        idFiled: "id",
+        loadMsg: "数据加载中，请稍候……",
+        multiSort: true, // 是否允许多列排序
+        rownumbers: true,
+        showFooter: true,
+        singleSelect: false, // 是否只允许选择一行
+        checkOnSelect: true,
+        selectOnCheck: true,
+        pagination: true, // 在数据表格底部显示分页工具栏
+        pageNumber: 1, // 初始化分页码（页码从1开始）
+        pageSize: 20, // 初始化每页显示数据量
+        pageList: [10, 20, 50, 100, 200, 300, 400, 500], // 初始化每页记录数列表
+        onClickRow: function (index, row) { // 点击选中行事件
+        },
+        onDblClickRow: function (index, row) { // 双击选中行事件
+        },
+        onBeforeLoad: function (param) { // 在请求载入数据之前触发，如果返回false将取消载入
+        },
+        onLoadSuccess: Datagrid.loadSuccessForTitle
+    };
+    // 将options属性值合并到defaultOptions属性中
+    $.extend(defaultOptions, options);
+    var $dg = $(selector).datagrd(defaultOptions);
+    return $dg;
+}
 
 /**
  * 下拉框
@@ -133,6 +182,9 @@ var Combobox = {
     }
 };
 
+/**
+ * 重写combobox默认值
+ */
 $.fn.combobox.defaults = $.extend({}, $.fn.combobox.defaults, {
     panelHeight: "auto",
     onShowPanel: Combobox.showPanel,
