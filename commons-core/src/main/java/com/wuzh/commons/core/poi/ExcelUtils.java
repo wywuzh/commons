@@ -20,6 +20,7 @@ import com.wuzh.commons.core.poi.excel.CellType;
 import com.wuzh.commons.core.poi.excel.ExcelCell;
 import com.wuzh.commons.core.poi.excel.ExcelRequest;
 import com.wuzh.commons.core.util.DateUtil;
+import com.wuzh.commons.core.web.UserAgentUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -109,6 +110,35 @@ public class ExcelUtils {
                     outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void exportError(HttpServletRequest request, HttpServletResponse response, String fileName, String errorMsg) {
+        BufferedOutputStream outputStream = null;
+        try {
+            //获取浏览器类型
+            String agent = request.getHeader("USER-AGENT").toLowerCase();
+            response.setContentType("text/plain");
+            if (agent.contains("firefox")) {
+                response.setCharacterEncoding("utf-8");
+                response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1"));
+            } else {
+                String codedFileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+                response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
+            }
+            outputStream = new BufferedOutputStream(response.getOutputStream());
+            outputStream.write(errorMsg.getBytes("UTF-8"));
+            outputStream.flush();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage(), e);
                 }
             }
         }
