@@ -273,7 +273,7 @@ public class ExcelUtils {
                 maxLength[j] = columnLengths[j] * 30;
             } else {
                 // 设置列宽
-                maxLength[j] = stringRealLength(columnComment) * 357;
+                maxLength[j] = getRealLength(columnComment) * 357;
             }
 
             // 下拉框
@@ -314,7 +314,7 @@ public class ExcelUtils {
                         maxLength[k] = columnLengths[k] * 30;
                     } else {
                         // 设置列宽
-                        int length = stringRealLength(realValue.toString()) * 357;
+                        int length = getRealLength(realValue) * 357;
                         maxLength[k] = Math.max(length, maxLength[k]);
                     }
                 }
@@ -686,6 +686,20 @@ public class ExcelUtils {
             }
         }
         return valueLength;
+    }
+
+    /**
+     * 计算文本长度
+     *
+     * @param value 目标对象
+     * @return
+     * @since v2.3.2
+     */
+    private static int getRealLength(Object value) {
+        if (value == null) {
+            return 0;
+        }
+        return stringRealLength(value.toString());
     }
 
     /**
