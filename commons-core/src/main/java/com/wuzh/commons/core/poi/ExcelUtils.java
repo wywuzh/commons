@@ -767,6 +767,61 @@ public class ExcelUtils {
     public static <T> List<T> getSheetData(Sheet sheet, String[] columns, int startRow) {
         List<T> resultList = new LinkedList<>();
         // todo 读取内容
+        for (int i = startRow; i <= sheet.getLastRowNum(); i++) {
+            // 获取每一行的列数据
+            for (int j = 0; j < columns.length; j++) {
+//                map.put(columns[j], getCellData(row.getCell(j)));
+            }
+        }
         return resultList;
     }
+
+    /**
+     * 获取指定行的列数据
+     *
+     * @param row     工作表数据行
+     * @param columns 指定列名称集合
+     * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年10月23日 下午5:30:56
+     */
+    public static Map<String, Object> getRowData(Row row, String[] columns) {
+        Assert.notNull(row, "row must not be null");
+        Assert.notEmpty(columns, "columns must not be empty");
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        for (int i = 0; i < columns.length; i++) {
+            map.put(columns[i], getCellData(row.getCell(i)));
+        }
+        return map;
+    }
+
+    /**
+     * 获取指定的列数据
+     *
+     * @param cell 指定列（单元格）
+     * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年10月23日 下午5:29:03
+     */
+    public static Object getCellData(Cell cell) {
+        Object value = null;
+        if (null != cell) {
+            if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) {
+                value = new BigDecimal(cell.getNumericCellValue());
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.STRING) {
+                value = cell.getStringCellValue();
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.FORMULA) {
+                value = cell.getCellFormula();
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.BLANK) {
+                value = "";
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.BOOLEAN) {
+                value = cell.getBooleanCellValue();
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.ERROR) {
+                value = cell.getErrorCellValue();
+            } else {
+                value = cell.getRichStringCellValue();
+            }
+        }
+        return value;
+    }
+
 }

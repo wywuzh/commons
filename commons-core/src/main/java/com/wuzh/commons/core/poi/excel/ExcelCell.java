@@ -40,4 +40,12 @@ public @interface ExcelCell {
      */
     CellType cellType() default CellType.Undefined;
 
+    /**
+     * 列所以，从0开始
+     *
+     * @return
+     * @since v2.3.2
+     */
+    int index() default 0;
+
 }

@@ -204,7 +204,7 @@ public class UICompontents {
      * @return
      * @author 伍章红 2015年11月12日 下午10:10:52
      */
-    public static List<Map<String, Object>> transformTree(List<Tree> treeList) {
+    public static List<Map<String, Object>> transformTreeList(List<Tree> treeList) {
         List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
         for (Tree tree : treeList) {
             mapList.add(transformTree(tree));

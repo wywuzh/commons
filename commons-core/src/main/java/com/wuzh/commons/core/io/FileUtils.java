@@ -15,14 +15,7 @@
  */
 package com.wuzh.commons.core.io;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
@@ -30,7 +23,11 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 
+import com.wuzh.commons.core.common.ContentType;
 import org.springframework.util.Assert;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 类FileUtils.java的实现描述：文件工具类
@@ -43,7 +40,7 @@ public class FileUtils {
 
     /**
      * 获取文件属性信息
-     * 
+     *
      * @param file
      * @return
      * @throws IOException
@@ -56,7 +53,7 @@ public class FileUtils {
 
     /**
      * 获取文件属性信息
-     * 
+     *
      * @param path
      * @return
      * @throws IOException
@@ -98,7 +95,7 @@ public class FileUtils {
 
     /**
      * 获取文件属性信息
-     * 
+     *
      * @param uri
      * @return
      * @throws IOException
@@ -111,7 +108,7 @@ public class FileUtils {
 
     /**
      * 读取文件信息
-     * 
+     *
      * @param fileName
      * @return
      * @throws IOException
@@ -124,7 +121,7 @@ public class FileUtils {
 
     /**
      * 读取文件信息
-     * 
+     *
      * @param file
      * @return
      * @throws IOException
@@ -147,8 +144,8 @@ public class FileUtils {
 
     /**
      * 读取文件信息
-     * 
-     * @param file
+     *
+     * @param path
      * @return
      * @throws IOException
      */
@@ -160,10 +157,10 @@ public class FileUtils {
 
     /**
      * 删除文件
-     * 
-     * @author 伍章红 2016年4月7日 上午12:39:33
+     *
      * @param file
      * @return
+     * @author 伍章红 2016年4月7日 上午12:39:33
      */
     public static boolean delete(File file) {
         Assert.notNull(file, "file must not be null");
@@ -173,10 +170,10 @@ public class FileUtils {
 
     /**
      * 删除文件
-     * 
-     * @author 伍章红 2016年4月7日 上午12:39:50
+     *
      * @param fileName
      * @return
+     * @author 伍章红 2016年4月7日 上午12:39:50
      */
     public static boolean delete(String fileName) {
         Assert.notNull(fileName, "fileName must not be null");
@@ -186,10 +183,10 @@ public class FileUtils {
 
     /**
      * 删除文件
-     * 
-     * @author 伍章红 2016年4月7日 上午12:39:52
+     *
      * @param filePath
      * @return
+     * @author 伍章红 2016年4月7日 上午12:39:52
      */
     public static boolean delete(Path filePath) {
         Assert.notNull(filePath, "filePath must not be null");
@@ -199,10 +196,10 @@ public class FileUtils {
 
     /**
      * 将content内容写入到的destFile文件中
-     * 
-     * @author 伍章红 2016年4月7日 下午8:50:38
+     *
      * @param destFile
      * @param content
+     * @author 伍章红 2016年4月7日 下午8:50:38
      */
     public static void writer(File destFile, String content) {
         Assert.notNull(destFile, "destFile must not be null");
@@ -234,14 +231,44 @@ public class FileUtils {
 
     /**
      * TODO 将content内容追加到的destFile文件中
-     * 
-     * @author 伍章红 2016年4月7日 下午9:38:13
+     *
      * @param destFile
      * @param content
+     * @author 伍章红 2016年4月7日 下午9:38:13
      */
     public static void append(File destFile, String content) {
         Assert.notNull(destFile, "destFile must not be null");
         Assert.notNull(content, "content must not be null");
+    }
+
+    /**
+     * 下载文件
+     *
+     * @param response
+     * @param file
+     * @throws IOException
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月4日 下午11:08:16
+     */
+    public static void download(HttpServletResponse response, File file) throws IOException {
+        // 设置文件MIME类型
+        response.setContentType(ContentType.APPLICATION_POINT_STREAM);
+        // 设置Content-Disposition
+        response.setHeader("Content-Disposition", "attachment;filename=" + new String(file.getName().getBytes("UTF-8"), "ISO8859-1"));
+        // 设置Content-Length文件长度/大小
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+
+        // 创建一个字节输入缓冲流
+        BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        BufferedOutputStream outputStream = new BufferedOutputStream(response.getOutputStream());
+        byte[] bytes = new byte[1024];
+        int length = 0;
+        while ((length = inputStream.read(bytes)) != -1) {
+            outputStream.write(bytes, 0, length);
+        }
+
+        inputStream.close();
+        outputStream.flush();
+        outputStream.close();
     }
 
     public static void main(String[] args) {
