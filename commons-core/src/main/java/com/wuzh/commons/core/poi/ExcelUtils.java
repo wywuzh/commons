@@ -20,6 +20,7 @@ import com.wuzh.commons.core.poi.excel.CellType;
 import com.wuzh.commons.core.poi.excel.ExcelCell;
 import com.wuzh.commons.core.poi.excel.ExcelRequest;
 import com.wuzh.commons.core.util.DateUtil;
+import com.wuzh.commons.core.web.UserAgentUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -109,6 +110,35 @@ public class ExcelUtils {
                     outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void exportError(HttpServletRequest request, HttpServletResponse response, String fileName, String errorMsg) {
+        BufferedOutputStream outputStream = null;
+        try {
+            //获取浏览器类型
+            String agent = request.getHeader("USER-AGENT").toLowerCase();
+            response.setContentType("text/plain");
+            if (agent.contains("firefox")) {
+                response.setCharacterEncoding("utf-8");
+                response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1"));
+            } else {
+                String codedFileName = java.net.URLEncoder.encode(fileName, "UTF-8");
+                response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
+            }
+            outputStream = new BufferedOutputStream(response.getOutputStream());
+            outputStream.write(errorMsg.getBytes("UTF-8"));
+            outputStream.flush();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    LOGGER.error(e.getMessage(), e);
                 }
             }
         }
@@ -243,7 +273,7 @@ public class ExcelUtils {
                 maxLength[j] = columnLengths[j] * 30;
             } else {
                 // 设置列宽
-                maxLength[j] = stringRealLength(columnComment) * 357;
+                maxLength[j] = getRealLength(columnComment) * 357;
             }
 
             // 下拉框
@@ -284,7 +314,7 @@ public class ExcelUtils {
                         maxLength[k] = columnLengths[k] * 30;
                     } else {
                         // 设置列宽
-                        int length = stringRealLength(realValue.toString()) * 357;
+                        int length = getRealLength(realValue) * 357;
                         maxLength[k] = Math.max(length, maxLength[k]);
                     }
                 }
@@ -659,6 +689,20 @@ public class ExcelUtils {
     }
 
     /**
+     * 计算文本长度
+     *
+     * @param value 目标对象
+     * @return
+     * @since v2.3.2
+     */
+    private static int getRealLength(Object value) {
+        if (value == null) {
+            return 0;
+        }
+        return stringRealLength(value.toString());
+    }
+
+    /**
      * 导入数据
      *
      * @param inputStream 输入流
@@ -723,6 +767,61 @@ public class ExcelUtils {
     public static <T> List<T> getSheetData(Sheet sheet, String[] columns, int startRow) {
         List<T> resultList = new LinkedList<>();
         // todo 读取内容
+        for (int i = startRow; i <= sheet.getLastRowNum(); i++) {
+            // 获取每一行的列数据
+            for (int j = 0; j < columns.length; j++) {
+//                map.put(columns[j], getCellData(row.getCell(j)));
+            }
+        }
         return resultList;
     }
+
+    /**
+     * 获取指定行的列数据
+     *
+     * @param row     工作表数据行
+     * @param columns 指定列名称集合
+     * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年10月23日 下午5:30:56
+     */
+    public static Map<String, Object> getRowData(Row row, String[] columns) {
+        Assert.notNull(row, "row must not be null");
+        Assert.notEmpty(columns, "columns must not be empty");
+
+        Map<String, Object> map = new HashMap<String, Object>();
+        for (int i = 0; i < columns.length; i++) {
+            map.put(columns[i], getCellData(row.getCell(i)));
+        }
+        return map;
+    }
+
+    /**
+     * 获取指定的列数据
+     *
+     * @param cell 指定列（单元格）
+     * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年10月23日 下午5:29:03
+     */
+    public static Object getCellData(Cell cell) {
+        Object value = null;
+        if (null != cell) {
+            if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) {
+                value = new BigDecimal(cell.getNumericCellValue());
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.STRING) {
+                value = cell.getStringCellValue();
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.FORMULA) {
+                value = cell.getCellFormula();
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.BLANK) {
+                value = "";
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.BOOLEAN) {
+                value = cell.getBooleanCellValue();
+            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.ERROR) {
+                value = cell.getErrorCellValue();
+            } else {
+                value = cell.getRichStringCellValue();
+            }
+        }
+        return value;
+    }
+
 }
