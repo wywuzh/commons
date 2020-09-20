@@ -17,6 +17,30 @@ var Datagrid = {
         }
         return '';
     },
+    formatDate: function (value, row, index) {
+        if (value) {
+            return DateUtil.format(new (value), Pattern.PATTERN_DATE);
+        }
+        return '';
+    },
+    formatTime: function (value, row, index) {
+        if (value) {
+            return DateUtil.format(new (value), Pattern.PATTERN_TIME);
+        }
+        return '';
+    },
+    formatDateTime: function (value, row, index) {
+        if (value) {
+            return DateUtil.format(new (value), Pattern.PATTERN_DATE_TIME);
+        }
+        return '';
+    },
+    formatYearMonth: function (value, row, index) {
+        if (value) {
+            return DateUtil.format(new (value), Pattern.PATTERN_YYYY_MM);
+        }
+        return '';
+    },
     /**
      * 处理datagrid数据为空时，title类展示不全的问题
      * @param data
@@ -77,7 +101,7 @@ function initDatagrid(selector, options) {
     };
     // 将options属性值合并到defaultOptions属性中
     $.extend(defaultOptions, options);
-    var $dg = $(selector).datagrd(defaultOptions);
+    var $dg = $(selector).datagrid(defaultOptions);
     return $dg;
 }
 
