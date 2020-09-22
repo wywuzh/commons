@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.wuzh.commons.components.easyui.constant.UIConstants;
 import com.wuzh.commons.components.easyui.model.CheckboxTree;
 import com.wuzh.commons.components.easyui.model.Tree;
 import com.wuzh.commons.components.easyui.model.TreeGrid;
@@ -109,12 +110,12 @@ public class UICompontents {
     public static <R extends Serializable, P extends Serializable> Map<String, Object> transformDatagrid(PaginationObject<R, P> paginationObject) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            result.put("total", paginationObject.getRowCount());
-            result.put("rows", paginationObject.getResultList());
+            result.put(UIConstants.DEFAULT_KEY_TOTAL, paginationObject.getRowCount());
+            result.put(UIConstants.DEFAULT_KEY_ROWS, paginationObject.getResultList());
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            result.put("total", 0);
-            result.put("rows", new ArrayList());
+            result.put(UIConstants.DEFAULT_KEY_TOTAL, 0);
+            result.put(UIConstants.DEFAULT_KEY_ROWS, new ArrayList());
         }
         return result;
     }
@@ -129,12 +130,12 @@ public class UICompontents {
     public static Map<String, Object> transformDatagrid(Collection<? extends Serializable> collection) {
         Map<String, Object> result = new HashMap<String, Object>();
         try {
-            result.put("total", collection.size());
-            result.put("rows", collection);
+            result.put(UIConstants.DEFAULT_KEY_TOTAL, collection.size());
+            result.put(UIConstants.DEFAULT_KEY_ROWS, collection);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
-            result.put("total", 0);
-            result.put("rows", new ArrayList());
+            result.put(UIConstants.DEFAULT_KEY_TOTAL, 0);
+            result.put(UIConstants.DEFAULT_KEY_ROWS, new ArrayList());
         }
         return result;
     }
