@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.components.okadmin;
+package com.wuzh.commons.components.layui;
 
 import java.io.Serializable;
 import java.util.List;

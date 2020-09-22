@@ -17,7 +17,7 @@
     <modules>
         <module>commons-static-assets</module>
         <module>commons-static-jeesite4</module>
-        <module>commons-static-okadmin</module>
+        <module>commons-static-layui</module>
         <module>commons-static-easyui</module>
     </modules>
 
