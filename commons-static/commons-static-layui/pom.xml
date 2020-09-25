@@ -9,8 +9,8 @@
     <description>layui ok-admin v2.0 后台模板，一款基于Layui框架的轻量级扁平化且完全免费开源的网站后台管理系统模板。https://gitee.com/bobi1234/ok-admin</description>
 
     <parent>
-        <artifactId>commons-static</artifactId>
         <groupId>com.wuzh.commons.springboot</groupId>
+        <artifactId>commons-static</artifactId>
         <version>2.3.2-SNAPSHOT</version>
     </parent>
 
@@ -19,6 +19,11 @@
             <groupId>com.wuzh.commons.springboot</groupId>
             <artifactId>commons-core</artifactId>
             <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>layui</artifactId>
+            <version>${webjars.layui.version}</version>
         </dependency>
     </dependencies>
 
