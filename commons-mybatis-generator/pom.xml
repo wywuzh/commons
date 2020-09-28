@@ -8,9 +8,9 @@
     <description>mybatis-generator代码自动生成插件</description>
 
     <parent>
-        <artifactId>commons-parent</artifactId>
         <groupId>com.wuzh.commons.springboot</groupId>
-        <version>2.3.3-SNAPSHOT</version>
+        <artifactId>commons-parent</artifactId>
+        <version>2.3.4-SNAPSHOT</version>
     </parent>
 
     <dependencies>
