@@ -54,7 +54,8 @@ public class BasePlugin extends PluginAdapter {
     public static final String DRIVER_MySQL = "com.mysql.jdbc.Driver";
     public static final String DRIVER_MySQL6 = "com.mysql.cj.jdbc.Driver";
     public static final String DRIVER_MariaDB = "org.mariadb.jdbc.Driver";
-    public static final String DRIVER_ORACLE = "oracle.jdbc.driver.OracleDriver";
+    public static final String DRIVER_ORACLE_OLD = "oracle.jdbc.driver.OracleDriver";
+    public static final String DRIVER_ORACLE = "oracle.jdbc.OracleDriver";
     public static final String DRIVER_MICROSOFT_JDBC = "com.microsoft.jdbc.sqlserver.SQLServer";
     public static final String DRIVER_MICROSOFT_SQLSERVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
