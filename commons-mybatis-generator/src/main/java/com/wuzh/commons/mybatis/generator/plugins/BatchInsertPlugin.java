@@ -135,14 +135,21 @@ public class BatchInsertPlugin extends BasePlugin {
 
         String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
         if (DRIVER_ORACLE.equalsIgnoreCase(driverClass) || DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass)) {
-            // 生成Oracle批量新增SQL
-            // 检查是否启用merge into格式进行插入，默认为false
-            String enableMergeInto = properties.getProperty(ENABLE_MERGE_INTO);
-            if (StringUtils.isNotBlank(enableMergeInto) && StringUtils.equalsIgnoreCase(enableMergeInto, "true")) {
-                // 启用merge into格式进行插入
-                generateOracleForMergeInto(document, introspectedTable, batchInsertEle);
+            boolean hasClobOrBlob = hasClobOrBlob(introspectedTable);
+            logger.info("table={} 检查该表是否存在clob、blob类型字段 =>{}", introspectedTable.getFullyQualifiedTableNameAtRuntime(), hasClobOrBlob);
+            if (hasClobOrBlob) {
+                // 说明：当表的字段中存在clob、blog大文本类型的字段时，需要采用begin ;end;语句
+                generateOracleForBeginEnd(document, introspectedTable, batchInsertEle);
             } else {
-                generateOracle(document, introspectedTable, batchInsertEle);
+                // 生成Oracle批量新增SQL
+                // 检查是否启用merge into格式进行插入，默认为false
+                String enableMergeInto = properties.getProperty(ENABLE_MERGE_INTO);
+                if (StringUtils.isNotBlank(enableMergeInto) && StringUtils.equalsIgnoreCase(enableMergeInto, "true")) {
+                    // 启用merge into格式进行插入
+                    generateOracleForMergeInto(document, introspectedTable, batchInsertEle);
+                } else {
+                    generateOracle(document, introspectedTable, batchInsertEle);
+                }
             }
         } else {
             // 生成MySQL批量新增SQL
@@ -200,6 +207,45 @@ public class BatchInsertPlugin extends BasePlugin {
         foreachElement.addElement(new TextElement("from dual"));
 
         batchInsertEle.addElement(foreachElement);
+    }
+
+    private boolean hasClobOrBlob(IntrospectedTable introspectedTable) {
+        String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
+
+        List<IntrospectedColumn> columnList = introspectedTable.getAllColumns();
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            if (StringUtils.equalsIgnoreCase(introspectedColumn.getJdbcTypeName(), "clob")
+                    || StringUtils.equalsIgnoreCase(introspectedColumn.getJdbcTypeName(), "blob")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void generateOracleForBeginEnd(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+        batchInsertEle.addElement(new TextElement("begin"));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "list"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("separator", ";"));
+
+        foreachElement.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
+        // column构建
+        for (Element element : XmlElementGeneratorTools.generateKeys(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), true)) {
+            foreachElement.addElement(element);
+        }
+
+        // 构建虚拟表
+        foreachElement.addElement(new TextElement("values("));
+        for (Element element : XmlElementGeneratorTools.generateValues(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), "item.", false)) {
+            foreachElement.addElement(element);
+        }
+        foreachElement.addElement(new TextElement(")"));
+
+        batchInsertEle.addElement(foreachElement);
+        batchInsertEle.addElement(new TextElement(";end;"));
     }
 
     private void generateOracleForMergeInto(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
