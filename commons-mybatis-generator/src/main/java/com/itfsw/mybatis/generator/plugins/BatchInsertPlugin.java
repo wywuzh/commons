@@ -55,6 +55,7 @@ public class BatchInsertPlugin extends BasePlugin {
                 && DRIVER_MySQL6.equalsIgnoreCase(driverClass) == false
                 && DRIVER_MariaDB.equalsIgnoreCase(driverClass) == false
                 && DRIVER_ORACLE.equalsIgnoreCase(driverClass) == false
+                && DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass) == false
                 && DRIVER_MICROSOFT_JDBC.equalsIgnoreCase(driverClass) == false
                 && DRIVER_MICROSOFT_SQLSERVER.equalsIgnoreCase(driverClass) == false) {
             warnings.add("itfsw:插件" + this.getClass().getTypeName() + "插件使用前提是数据库为MySQL或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键！");
