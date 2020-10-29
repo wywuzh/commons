@@ -104,7 +104,7 @@
  * </pre>
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> ${.now?string("yyyy-MM-dd HH:mm:ss")}
- * @version v2.1.1
+ * @version v2.3.2
  * @since JDK 1.8
  */
 ]]>
@@ -128,7 +128,7 @@
  * 类${innerClass}的实现描述：TODO 类实现描述
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> ${.now?string("yyyy-MM-dd hh:mm:SS")}
- * @version v2.1.1
+ * @version v2.3.2
  * @since JDK 1.8
  */
 ]]>

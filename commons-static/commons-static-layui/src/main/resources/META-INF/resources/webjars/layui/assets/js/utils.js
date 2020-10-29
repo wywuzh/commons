@@ -1,8 +1,7 @@
-var table, form, jquery;
 layui.use(["element", "table", "form", "jquery"], function () {
-    table = layui.table;
-    form = layui.form;
-    jquery = layui.jquery;
+    var table = layui.table,
+        form = layui.form,
+        jquery = layui.jquery;
 
     // 单击行选中事件：https://www.cnblogs.com/XuYuFan/p/11733546.html
     jquery(document).on("click", ".layui-table-body table.layui-table tbody tr", function () {
@@ -79,8 +78,15 @@ function initDatatable(selector, options) {
         }
     };
 
-    // 将options属性值合并到defaultOptions属性中
-    jquery.extend(defaultOptions, options);
-    var jquerydatatable = table.render(defaultOptions);
-    return jquerydatatable;
+    var $datatable = null;
+    layui.use(["element", "table", "form", "jquery"], function () {
+        var table = layui.table,
+            form = layui.form,
+            jquery = layui.jquery;
+
+        // 将options属性值合并到defaultOptions属性中
+        jquery.extend(defaultOptions, options);
+        $datatable = table.render(defaultOptions);
+    });
+    return $datatable;
 }
