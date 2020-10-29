@@ -9,7 +9,7 @@
     <description>jQuery EasyUI</description>
 
     <parent>
-        <artifactId>commons-parent</artifactId>
+        <artifactId>commons-static</artifactId>
         <groupId>com.wuzh.commons.springboot</groupId>
         <version>2.3.2-SNAPSHOT</version>
     </parent>
