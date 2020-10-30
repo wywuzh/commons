@@ -61,6 +61,43 @@ public class ResponseEntity<T> implements Serializable {
         this.message = message;
     }
 
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> success() {
+        return new ResponseEntity(StatusCode.OK.getValue(), "请求成功");
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> success(String message) {
+        return new ResponseEntity(StatusCode.OK.getValue(), message);
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> success(T result) {
+        ResponseEntity responseEntity = new ResponseEntity(StatusCode.OK.getValue(), "请求成功");
+        responseEntity.setResult(result);
+        return responseEntity;
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> fail() {
+        return new ResponseEntity(StatusCode.ERROR.getValue(), "请求失败");
+    }
+
+    /**
+     * @since 2.3.2
+     */
+    public static <T> ResponseEntity<T> fail(String message) {
+        return new ResponseEntity(StatusCode.ERROR.getValue(), message);
+    }
+
     public Integer getStatusCode() {
         return statusCode;
     }
@@ -112,6 +149,22 @@ public class ResponseEntity<T> implements Serializable {
             errors = new ArrayList<ErrorMsg>();
         }
         errors.add(new ErrorMsg(code, field, message));
+    }
+
+    /**
+     * @return 结果编码
+     * @since 2.3.2
+     */
+    public Integer getCode() {
+        return statusCode;
+    }
+
+    /**
+     * @return 返回结果消息
+     * @since 2.3.2
+     */
+    public String getMsg() {
+        return message;
     }
 
     @Override

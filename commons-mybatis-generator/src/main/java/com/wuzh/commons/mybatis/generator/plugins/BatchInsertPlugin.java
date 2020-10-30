@@ -19,10 +19,13 @@ import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
+import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.*;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
+import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
@@ -38,7 +41,15 @@ import java.util.Properties;
 public class BatchInsertPlugin extends BasePlugin {
     public static final String METHOD_BATCH_INSERT = "batchInsert";  // 方法名
     public static final String PRO_ALLOW_MULTI_QUERIES = "allowMultiQueries";   // property allowMultiQueries
+    public static final String ENABLE_MERGE_INTO = "enableMergeInto"; // 是否启用merge into格式进行插入
+
     private boolean allowMultiQueries = false;  // 是否允许多sql提交
+    /**
+     * 是否启用merge into格式进行插入，默认为false
+     *
+     * @since 2.3.2
+     */
+    private boolean enableMergeInto = false;
 
     /**
      * {@inheritDoc}
@@ -48,12 +59,13 @@ public class BatchInsertPlugin extends BasePlugin {
 
         // 插件使用前提是数据库为MySQL、MariaDB、Oracle或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键
         String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
-        if ("com.mysql.jdbc.Driver".equalsIgnoreCase(driverClass) == false
-                && "com.mysql.cj.jdbc.Driver".equalsIgnoreCase(driverClass) == false
-                && "com.mariadb.jdbc.Driver".equalsIgnoreCase(driverClass) == false
-                && "oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass) == false
-                && "com.microsoft.jdbc.sqlserver.SQLServer".equalsIgnoreCase(driverClass) == false
-                && "com.microsoft.sqlserver.jdbc.SQLServerDriver".equalsIgnoreCase(driverClass) == false) {
+        if (DRIVER_MySQL.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MySQL6.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MariaDB.equalsIgnoreCase(driverClass) == false
+                && DRIVER_ORACLE.equalsIgnoreCase(driverClass) == false
+                && DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MICROSOFT_JDBC.equalsIgnoreCase(driverClass) == false
+                && DRIVER_MICROSOFT_SQLSERVER.equalsIgnoreCase(driverClass) == false) {
             warnings.add("itfsw:插件" + this.getClass().getTypeName() + "插件使用前提是数据库为MySQL、MariaDB、Oracle或者SQLserver，因为返回主键使用了JDBC的getGenereatedKeys方法获取主键！");
             return false;
         }
@@ -84,7 +96,7 @@ public class BatchInsertPlugin extends BasePlugin {
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         // 1. batchInsert
         FullyQualifiedJavaType listType = FullyQualifiedJavaType.getNewListInstance();
-//        listType.addTypeArgument(introspectedTable.getRules().calculateAllFieldsClass());
+        listType.addTypeArgument(introspectedTable.getRules().calculateAllFieldsClass());
         Method mBatchInsert = JavaElementGeneratorTools.generateMethod(
                 METHOD_BATCH_INSERT,
                 JavaVisibility.DEFAULT,
@@ -119,10 +131,26 @@ public class BatchInsertPlugin extends BasePlugin {
         // 使用JDBC的getGenereatedKeys方法获取主键并赋值到keyProperty设置的领域模型属性中。所以只支持MYSQL和SQLServer
         XmlElementGeneratorTools.useGeneratedKeys(batchInsertEle, introspectedTable);
 
+        Properties properties = getProperties();
+
         String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
-        if ("oracle.jdbc.driver.OracleDriver".equalsIgnoreCase(driverClass)) {
-            // 生成Oracle批量新增SQL
-            generateOracle(document, introspectedTable, batchInsertEle);
+        if (DRIVER_ORACLE.equalsIgnoreCase(driverClass) || DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass)) {
+            boolean hasClobOrBlob = hasClobOrBlob(introspectedTable);
+            logger.info("table={} 检查该表是否存在clob、blob类型字段 =>{}", introspectedTable.getFullyQualifiedTableNameAtRuntime(), hasClobOrBlob);
+            if (hasClobOrBlob) {
+                // 说明：当表的字段中存在clob、blog大文本类型的字段时，需要采用begin ;end;语句
+                generateOracleForBeginEnd(document, introspectedTable, batchInsertEle);
+            } else {
+                // 生成Oracle批量新增SQL
+                // 检查是否启用merge into格式进行插入，默认为false
+                String enableMergeInto = properties.getProperty(ENABLE_MERGE_INTO);
+                if (StringUtils.isNotBlank(enableMergeInto) && StringUtils.equalsIgnoreCase(enableMergeInto, "true")) {
+                    // 启用merge into格式进行插入
+                    generateOracleForMergeInto(document, introspectedTable, batchInsertEle);
+                } else {
+                    generateOracle(document, introspectedTable, batchInsertEle);
+                }
+            }
         } else {
             // 生成MySQL批量新增SQL
             generateMySQL(document, introspectedTable, batchInsertEle);
@@ -133,7 +161,8 @@ public class BatchInsertPlugin extends BasePlugin {
         return true;
     }
 
-    private void generateOracle(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+    @Deprecated
+    private void generateOracleForInsertAll(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
         batchInsertEle.addElement(new TextElement("insert all"));
 
         // 添加foreach节点
@@ -155,6 +184,158 @@ public class BatchInsertPlugin extends BasePlugin {
         batchInsertEle.addElement(foreachElement);
 
         batchInsertEle.addElement(new TextElement("select 1 from dual"));
+    }
+
+    private void generateOracle(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+        batchInsertEle.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
+        // column构建
+        for (Element element : XmlElementGeneratorTools.generateKeys(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), true)) {
+            batchInsertEle.addElement(element);
+        }
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "list"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("separator", "union all"));
+
+        // 构建虚拟表
+        foreachElement.addElement(new TextElement("select"));
+        for (Element element : XmlElementGeneratorTools.generateValues(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), "item.", false)) {
+            foreachElement.addElement(element);
+        }
+        foreachElement.addElement(new TextElement("from dual"));
+
+        batchInsertEle.addElement(foreachElement);
+    }
+
+    private boolean hasClobOrBlob(IntrospectedTable introspectedTable) {
+        String tableName = introspectedTable.getFullyQualifiedTableNameAtRuntime();
+
+        List<IntrospectedColumn> columnList = introspectedTable.getAllColumns();
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            if (StringUtils.equalsIgnoreCase(introspectedColumn.getJdbcTypeName(), "clob")
+                    || StringUtils.equalsIgnoreCase(introspectedColumn.getJdbcTypeName(), "blob")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void generateOracleForBeginEnd(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+        batchInsertEle.addElement(new TextElement("begin"));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "list"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("separator", ";"));
+
+        foreachElement.addElement(new TextElement("insert into " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
+        // column构建
+        for (Element element : XmlElementGeneratorTools.generateKeys(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), true)) {
+            foreachElement.addElement(element);
+        }
+
+        // 构建虚拟表
+        foreachElement.addElement(new TextElement("values("));
+        for (Element element : XmlElementGeneratorTools.generateValues(ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns()), "item.", false)) {
+            foreachElement.addElement(element);
+        }
+        foreachElement.addElement(new TextElement(")"));
+
+        batchInsertEle.addElement(foreachElement);
+        batchInsertEle.addElement(new TextElement(";end;"));
+    }
+
+    private void generateOracleForMergeInto(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {
+        batchInsertEle.addElement(new TextElement("MERGE INTO " + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " basic"));
+        batchInsertEle.addElement(new TextElement("USING ("));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "list"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("separator", "union all"));
+
+        // 构建虚拟表
+        foreachElement.addElement(new TextElement("select"));
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        List<IntrospectedColumn> columnList = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
+        final int columnTotal = columnList.size() - 1;
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item."));
+            sb.append(" AS ").append(introspectedColumn.getJavaProperty());
+
+            if (index < columnTotal) {
+                sb.append(", ");
+            }
+            if (sb.length() > 80) {
+                foreachElement.addElement(new TextElement(sb.toString()));
+                sb.setLength(0);
+            }
+            index++;
+        }
+        if (sb.length() > 0) {
+            foreachElement.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+
+        foreachElement.addElement(new TextElement("from dual"));
+
+        batchInsertEle.addElement(foreachElement);
+
+        batchInsertEle.addElement(new TextElement(") temp"));
+        batchInsertEle.addElement(new TextElement("ON (1=0)"));
+        batchInsertEle.addElement(new TextElement("WHEN NOT MATCHED THEN"));
+        batchInsertEle.addElement(new TextElement("INSERT ("));
+
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            sb.append("basic.").append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
+
+            if (index < columnTotal) {
+                sb.append(", ");
+            }
+            if (sb.length() > 80) {
+                batchInsertEle.addElement(new TextElement(sb.toString()));
+                sb.setLength(0);
+            }
+            index++;
+        }
+        if (sb.length() > 0) {
+            batchInsertEle.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+
+        batchInsertEle.addElement(new TextElement(")"));
+        batchInsertEle.addElement(new TextElement("VALUES ("));
+
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            sb.append("temp.").append(introspectedColumn.getJavaProperty());
+
+            if (index < columnTotal) {
+                sb.append(", ");
+            }
+            if (sb.length() > 80) {
+                batchInsertEle.addElement(new TextElement(sb.toString()));
+                sb.setLength(0);
+            }
+            index++;
+        }
+        if (sb.length() > 0) {
+            batchInsertEle.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+
+        batchInsertEle.addElement(new TextElement(")"));
+
     }
 
     private void generateMySQL(Document document, IntrospectedTable introspectedTable, XmlElement batchInsertEle) {

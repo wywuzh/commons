@@ -10,13 +10,8 @@
     <parent>
         <groupId>com.wuzh.commons.springboot</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>2.1.5</version>
+        <version>2.3.4-SNAPSHOT</version>
     </parent>
-
-    <properties>
-        <mybatis-spring-boot.version>2.0.1</mybatis-spring-boot.version>
-        <druid.version>1.1.17</druid.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -34,7 +29,24 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis-spring-boot.version}</version>
         </dependency>
+
+        <!-- MySQL 连接驱动依赖 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mariadb.jdbc</groupId>
+            <artifactId>mariadb-java-client</artifactId>
+        </dependency>
+
+        <!-- 数据库连接池 -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

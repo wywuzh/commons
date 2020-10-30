@@ -1,5 +1,27 @@
 ## 更新日志
 
+### SpringBoot/V2.3.2
+1. 添加 Spring Cloud 依赖支持，版本为 `Hoxton.SR6`
+2. commons-core模块：
+  1. Gson、FastJson、Jackson等json工具类包路径调整&合并
+  2. JsonMapper工具类依赖包调整，去掉 jackson 1.9.13 版本依赖。jackson工具依赖版本跟随SpringBoot中管理的版本号
+3. commons-static模块：
+  1. 新增`commons-static-easyui`子模块，jQuery EasyUI 后台模板
+  2. `commons-static-assets`子模块：添加 easyui 自定义样式
+
+
+### SpringBoot/V2.3.0
+1. 代码合并自`SpringBoot/2.2.7`分支，`2.2.7`之后的分支不再合并到`2.3.x`分支
+
+
+### SpringBoot/V2.2.0
+1. 代码合并自`SpringBoot/2.1.9`分支，`2.1.9`之后的分支不再合并到`2.2.x`分支
+2. 各个模块的依赖包都移动到`commons-parent`文件中统一管理
+3. 新增commons-static模块：
+    1. commons-static-jeesite4子模块：JeeSite4 后台模板
+    2. commons-static-okadmin子模块：ok-admin v2.0 后台模板
+
+
 ### SpringBoot/V2.1.1
 修改commons-core模块：
  1. 增加`JsonMapper`类：java对象和json相互转化。

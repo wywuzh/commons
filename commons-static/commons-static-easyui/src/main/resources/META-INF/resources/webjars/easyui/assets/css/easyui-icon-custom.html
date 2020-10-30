@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <!-- 设置字符集编码 -->
+  <meta charset="utf-8">
+  <!-- 设置IE兼容模式，通知 IE 采用其所支持的最新的模式 -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <!-- 响应式布局 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后 ！-->
+
+  <!-- 添加系统图标 -->
+  <link rel="shortcut icon" href="">
+
+  <title>jQuery-EasyUI自定义图标</title>
+
+  <meta name="Generator" content="EditPlus">
+  <meta name="Author" content="伍章红">
+  <meta name="Keywords" content="jQuery-EasyUI自定义图标">
+  <meta name="Description" content="jQuery-EasyUI自定义图标">
+
+  <!-- 让部分国产浏览器默认采用高速模式渲染页面 -->
+  <meta name="renderer" content="webkit">
+
+  <!-- 新 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <!-- 可选的Bootstrap主题文件（一般不用引入） -->
+  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+
+  <!-- 引入jQuery-easyui自定义样式文件 -->
+  <link rel="stylesheet" href="easyui-custom.css">
+  <link rel="stylesheet" href="easyui-icon-custom.css">
+
+  <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+  <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+
+  <!-- HTML5 Shim 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
+  <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
+  <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+<style type="text/css">
+  body {font-size:12px;font-family:"宋体";}
+  table.iconset {margin:1em 0px 0px 1px;border:1px solid #36C;border-spacing:0px;clear:right;border-collapse:collapse;line-height:125%;}
+  table caption {font-weight:bold;padding:10px;font-size:14px;}
+  td {padding:6px 12px;text-align:left;border:1px solid #36C;}
+  .easyui-icon {width:20px;height:20px;display:inline-block;vertical-align:middle;}
+  td span {margin-right:5px;}
+  .fontBlue {color:#00F;font-size:14px;}
+</style>
+
+</head>
+
+<body>
+
+<div class="container-fluid">
+<h2><strong>jQuery-EasyUI自定义过图标</strong></h2>
+<hr>
+<pre class="prettyprint"><strong>图标使用必须先调用easyui-icon样式，例如：</strong>
+  &lt;span class="easyui-icon icon-new"&gt;&lt;/span&gt;
+或者
+  &lt;i class="easyui-icon icon-new"&gt;&lt;/i&gt;
+
+<strong>添加自定义图标，添加如下样式：</strong>
+.icon-date{
+    background:url('../image/icon/date.gif') no-repeat center center;
+}
+</pre>
+
+<table class="iconset" border="1" cellpadding="1" cellspacing="0" width="100%">
+  <caption style="font-size:14px; text-align: center;">
+    常用图标
+  </caption>
+  <tbody>
+  <tr>
+    <td><span class="easyui-icon icon-new"></span>新增 <font class="fontBlue">icon-new</font></td>
+    <td><span class="easyui-icon icon-edit"></span>编辑 <font class="fontBlue">icon-edit</font></td>
+    <td><span class="easyui-icon icon-delete"></span>删除 <font class="fontBlue">icon-delete</font></td>
+    <td><span class="easyui-icon icon-refresh"></span>刷新 <font class="fontBlue">icon-refresh</font></td>
+    <td><span class="easyui-icon icon-save"></span>保存 <font class="fontBlue">icon-save</font></td>
+    <td><span class="easyui-icon icon-reset"></span>重置 <font class="fontBlue">icon-reset</font></td>
+    <td><span class="easyui-icon icon-help"></span>帮助 <font class="fontBlue">icon-help</font></td>
+  </tr>
+  <tr>
+    <td><span class="easyui-icon icon-info"></span>信息 <font class="fontBlue">icon-info</font></td>
+    <td><span class="easyui-icon icon-important"></span>重点 <font class="fontBlue">icon-important</font></td>
+    <td><span class="easyui-icon icon-warn"></span>警告 <font class="fontBlue">icon-warn</font></td>
+    <td><span class="easyui-icon icon-cancel"></span>取消 <font class="fontBlue">icon-cancel</font></td>
+    <td><span class="easyui-icon icon-correct"></span>正确 <font class="fontBlue">icon-correct</font></td>
+    <td><span class="easyui-icon icon-history"></span>时钟 <font class="fontBlue">icon-clock</font></td>
+    <td><span class="easyui-icon icon-setting"></span>设置 <font class="fontBlue">icon-setting</font></td>
+  </tr>
+  <tr>
+    <td><span class="easyui-icon icon-page"></span>页面 <font class="fontBlue">icon-page</font></td>
+    <td><span class="easyui-icon icon-piechart"></span>饼图 <font class="fontBlue">icon-piechart</font></td>
+    <td><span class="easyui-icon icon-linechart"></span>线图 <font class="fontBlue">icon-linechart</font></td>
+    <td><span class="easyui-icon icon-barchart"></span>柱图 <font class="fontBlue">icon-barchart</font></td>
+    <td><span class="easyui-icon icon-org"></span>机构 <font class="fontBlue">icon-org</font></td>
+    <td><span class="easyui-icon icon-database"></span>数据库 <font class="fontBlue">icon-database</font></td>
+    <td><span class="easyui-icon icon-link"></span>链接 <font class="fontBlue">icon-link</font></td>
+  </tr>
+  <tr>
+    <td><span class="easyui-icon icon-upload"></span>上传 <font class="fontBlue">icon-upload</font></td>
+    <td><span class="easyui-icon icon-date"></span>日期 <font class="fontBlue">icon-date</font></td>
+    <td><span class="easyui-icon icon-win"></span>窗口 <font class="fontBlue">icon-win</font></td>
+    <td><span class="easyui-icon icon-user"></span>用户 <font class="fontBlue">icon-user</font></td>
+    <td><span class="easyui-icon icon-complete"></span>完成 <font class="fontBlue">icon-complete</font></td>
+    <td><span class="easyui-icon icon-link"></span>链接 <font class="fontBlue">icon-link</font></td>
+    <td><span class="easyui-icon icon-history"></span>历史 <font class="fontBlue">icon-history</font></td>
+  </tr>
+  <tr>
+    <td><span class="easyui-icon icon-search"></span>搜索 <font class="fontBlue">icon-search</font></td>
+    <td><span class="easyui-icon icon-advsearch"></span>高级搜索 <font class="fontBlue">icon-advsearch</font></td>
+    <td><span class="easyui-icon icon-authorize"></span>授权 <font class="fontBlue">icon-authorize</font></td>
+    <td><span class="easyui-icon icon-unread"></span>未阅  <font class="fontBlue">icon-unread</font></td>
+    <td><span class="easyui-icon icon-readed"></span>已阅  <font class="fontBlue">icon-readed</font></td>
+    <td><span class="easyui-icon icon-print"></span>打印 <font class="fontBlue">icon-print</font></td>
+    <td><span class="easyui-icon icon-total"></span>汇总 <font class="fontBlue">icon-total</font></td>
+  </tr>
+  <tr>
+    <td><span class="easyui-icon icon-approval"></span>审批 <font class="fontBlue">icon-approval</font></td>
+    <td><span class="easyui-icon icon-submit"></span>提交、送审 <font class="fontBlue">icon-submit</font></td>
+    <td><span class="easyui-icon icon-import"></span>导入 <font class="fontBlue">icon-import</font></td>
+    <td><span class="easyui-icon icon-export"></span>导出  <font class="fontBlue">icon-export</font></td>
+    <td><span class="easyui-icon icon-reduce"></span>还原  <font class="fontBlue">icon-reduce</font></td>
+    <td><span class="easyui-icon icon-backup"></span>备份 <font class="fontBlue">icon-backup</font></td>
+    <td><span class="easyui-icon icon-download"></span>下载 <font class="fontBlue">icon-download</font></td>
+  </tr>
+  <tr>
+    <td><span class="easyui-icon icon-redo"></span>重做 <font class="fontBlue">icon-redo</font></td>
+    <td><span class="easyui-icon icon-undo"></span>撤销 <font class="fontBlue">icon-undo</font></td>
+    <td><span class="easyui-icon icon-lock"></span>锁定 <font class="fontBlue">icon-lock</font></td>
+    <td><span class="easyui-icon icon-unlock"></span>解锁  <font class="fontBlue">icon-unlock</font></td>
+    <td><span class="easyui-icon icon-downsend"></span>下达  <font class="fontBlue">icon-downsend</font></td>
+    <td><span class="easyui-icon icon-calculate"></span>计算  <font class="fontBlue">icon-calculate</font></td>
+    <td><span class="easyui-icon icon-loading"></span>loading  <font class="fontBlue">icon-loading</font></td>
+  </tr>
+</tbody>
+</table>
+
+<table class="iconset" border="1" cellpadding="1" cellspacing="0" width="100%">
+  <caption style="font-size:14px; text-align: center;">
+    文件类型图标
+  </caption>
+  <tbody><tr>
+    <td><span class="easyui-icon icon-doc"></span>Word  <font class="fontBlue">icon-doc</font></td>
+    <td><span class="easyui-icon icon-xls"></span>Excel <font class="fontBlue">icon-xls</font></td>
+    <td><span class="easyui-icon icon-ppt"></span>Powerpoint <font class="fontBlue">icon-ppt</font></td>
+    <td><span class="easyui-icon icon-zip"></span>Zip <font class="fontBlue">icon-zip</font></td>
+    <td><span class="easyui-icon icon-jpg"></span>jpg <font class="fontBlue">icon-jpg</font></td>
+    <td><span class="easyui-icon icon-pdf"></span>pdf <font class="fontBlue">icon-pdf</font></td>
+    <td>&nbsp;</td>
+  </tr>
+
+</tbody>
+</table>
+
+</div>
+</body>
+</html>

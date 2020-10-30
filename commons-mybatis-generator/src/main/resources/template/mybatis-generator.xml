@@ -3,8 +3,9 @@
         PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 <generatorConfiguration>
+    <properties resource="mybatis-generator.properties"></properties>
     <!--数据库驱动-->
-    <classPathEntry location="D:\Program Files\Apache\Maven\repository\mysql\mysql-connector-java\5.1.46\mysql-connector-java-5.1.46.jar"/>
+    <classPathEntry location="D:\Program Files\Apache\Maven\repository\mysql\mysql-connector-java\5.1.47\mysql-connector-java-5.1.47.jar"/>
 
     <context id="mysql" targetRuntime="MyBatis3">
         <property name="javaFileEncoding" value="UTF-8" />
@@ -32,40 +33,59 @@
             -->
             <property name="allowMultiQueries" value="false"/>
         </plugin>
-        
+        <!-- 自定义查询插件 -->
+        <plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin"></plugin>
+
         <commentGenerator>
+            <!-- 指定mybatis版本 -->
+            <property name="mybatisVersion" value="3.5.3"/>
             <property name="suppressDate" value="true"/>
-            <property name="suppressAllComments" value="true"/>
+            <!-- 是否去除自动生成的注释（true=是，false=否）。如果你不想生成字段注释则将值该为true，否则应该设置为false -->
+            <property name="suppressAllComments" value="false"/>
         </commentGenerator>
 
         <!--数据库链接地址账号密码-->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://127.0.0.1:3306/platform_frame" userId="root" password="admin123456"></jdbcConnection>
+        <jdbcConnection driverClass="${jdbc.driverClass}"
+                        connectionURL="${jdbc.connectionURL}"
+                        userId="${jdbc.userId}"
+                        password="${jdbc.password}">
+            <!-- 获取Oracle数据库字段注释 -->
+            <property name="remarksReporting" value="true"/>
+            <!-- 获取MySQL数据库字段注释 -->
+            <property name="useInformationSchema" value="true"/>
+        </jdbcConnection>
 
         <javaTypeResolver type="com.wuzh.commons.mybatis.generator.types.JavaTypeResolverSupport">
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
         <!--生成Model类存放位置-->
-        <javaModelGenerator targetPackage="com.wuzh.platform.frame.core.entity" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="${javaModel.targetPackage.platform}" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
         <!--生成xml映射文件存放位置-->
-        <sqlMapGenerator targetPackage="com.wuzh.platform.frame.core.mapper" targetProject="src/main/resources">
+        <sqlMapGenerator targetPackage="${sqlMap.targetPackage.platform}" targetProject="src/main/resources">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!--Mapper接口类存放位置-->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.wuzh.platform.frame.core.mapper" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${javaClient.targetPackage.platform}" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
         <!--生成对应表及类名-->
-        <table tableName="system_request_log" domainObjectName="SystemRequestLog" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
-            <columnOverride column="REQUEST_PARAMS" javaType="java.lang.String" jdbcType="VARCHAR" />
-            <columnOverride column="EXCEPTION_INFO" javaType="java.lang.String" jdbcType="VARCHAR" />
+        <table tableName="system_request_log" domainObjectName="SystemRequestLog"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <!-- Where条件语句：like。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
+            <property name="conditionsLikeColumns" value=""/>
+            <!-- Where条件语句：in。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
+            <property name="conditionsForeachInColumns" value=""/>
+            <!-- 大文本格式 -->
+            <columnOverride column="REQUEST_PARAMS" javaType="java.lang.String" jdbcType="VARCHAR"/>
+            <columnOverride column="EXCEPTION_INFO" javaType="java.lang.String" jdbcType="VARCHAR"/>
         </table>
         <table tableName="system_dict_type" domainObjectName="SystemDictType" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
