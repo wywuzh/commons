@@ -1,5 +1,9 @@
 ## 更新日志
 
+### SpringBoot/V2.3.5
+1. 添加 RabbitMQ、kafka 等分布式通信依赖支持
+
+
 ### SpringBoot/V2.3.2
 1. 添加 Spring Cloud 依赖支持，版本为 `Hoxton.SR6`
 2. commons-core模块：
