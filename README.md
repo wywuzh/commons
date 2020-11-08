@@ -5,7 +5,7 @@
 ### 依赖资源
 | 依赖资源 | 依赖版本 |
 | ------- | ------- |
-| spring-boot | 2.3.2.RELEASE |
+| spring-boot | 2.3.3.RELEASE |
 | spring | 5.2.8.RELEASE |
 | aspectj | 1.9.6 |
 | junit | 4.13 |
