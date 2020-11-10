@@ -151,7 +151,16 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>easyexcel</artifactId>
-			<version>2.2.6</version>
+		</dependency>
+
+		<!-- 二维码 zxing -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
 		</dependency>
 
 		<!-- 方便实用的annotation工具 -->
@@ -176,7 +185,6 @@
 		<dependency>
 			<groupId>jep</groupId>
 			<artifactId>jep</artifactId>
-			<version>${jep.version}</version>
 		</dependency>
 	</dependencies>
 
