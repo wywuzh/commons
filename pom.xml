@@ -87,6 +87,8 @@
 
 		<spring-amqp.version>2.2.12.RELEASE</spring-amqp.version>
 		<spring-kafka.version>2.5.7.RELEASE</spring-kafka.version>
+		<dubbo.version>2.7.8</dubbo.version>
+		<shiro.version>1.7.0</shiro.version>
 
 		<webjars.jquery.version>3.5.1</webjars.jquery.version>
 		<webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
@@ -360,6 +362,31 @@
 				<groupId>org.springframework.kafka</groupId>
 				<artifactId>spring-kafka</artifactId>
 				<version>${spring-kafka.version}</version>
+			</dependency>
+
+
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-zookeeper</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-registry-nacos</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
+
+			<!-- Apache Shiro -->
+			<dependency>
+				<groupId>org.apache.shiro</groupId>
+				<artifactId>shiro-spring</artifactId>
+				<version>${shiro.version}</version>
 			</dependency>
 
 
