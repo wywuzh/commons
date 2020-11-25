@@ -2,6 +2,7 @@
 
 ### SpringBoot/V2.3.5
 1. 添加 RabbitMQ、kafka 等分布式通信依赖支持
+2. 添加Dubbo、Shiro依赖
 
 
 ### SpringBoot/V2.3.2
