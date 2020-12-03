@@ -9,9 +9,21 @@
     <description>JeeSite4 后台模板，基于JQuery、BootStrap3、AdminLTE进行封装。https://gitee.com/thinkgem/jeesite4</description>
 
     <parent>
-        <groupId>com.wuzh.commons.springboot</groupId>
+        <groupId>com.github.wywuzh</groupId>
         <artifactId>commons-static</artifactId>
         <version>2.3.5-SNAPSHOT</version>
     </parent>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

@@ -9,7 +9,7 @@
     <description>自定义资源工具</description>
 
     <parent>
-        <groupId>com.wuzh.commons.springboot</groupId>
+        <groupId>com.github.wywuzh</groupId>
         <artifactId>commons-static</artifactId>
         <version>2.3.5-SNAPSHOT</version>
     </parent>
