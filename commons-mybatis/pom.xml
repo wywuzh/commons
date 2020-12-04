@@ -8,19 +8,19 @@
     <packaging>jar</packaging>
 
     <parent>
-        <groupId>com.wuzh.commons.springboot</groupId>
+        <groupId>com.github.wywuzh</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>2.3.3-SNAPSHOT</version>
+        <version>2.3.3.RELEASE</version>
     </parent>
 
     <dependencies>
         <dependency>
-            <groupId>com.wuzh.commons.springboot</groupId>
+            <groupId>com.github.wywuzh</groupId>
             <artifactId>commons-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.wuzh.commons.springboot</groupId>
+            <groupId>com.github.wywuzh</groupId>
             <artifactId>commons-pager</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
@@ -49,4 +49,5 @@
         </dependency>
 
     </dependencies>
+
 </project>

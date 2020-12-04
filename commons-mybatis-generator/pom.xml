@@ -9,8 +9,8 @@
 
     <parent>
         <artifactId>commons-parent</artifactId>
-        <groupId>com.wuzh.commons.springboot</groupId>
-        <version>2.3.3-SNAPSHOT</version>
+        <groupId>com.github.wywuzh</groupId>
+        <version>2.3.3.RELEASE</version>
     </parent>
 
     <dependencies>
@@ -45,6 +45,5 @@
 <!--            <version>1.6.1</version>-->
         </dependency>
     </dependencies>
-
 
 </project>
