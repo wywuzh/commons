@@ -583,6 +583,22 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.sonatype.plugins</groupId>
+					<artifactId>nexus-staging-maven-plugin</artifactId>
+					<version>1.6.8</version>
+					<extensions>true</extensions>
+					<configuration>
+						<!-- settings.xml文件中的servers中设置的ID -->
+						<serverId>oss</serverId>
+						<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+						<!--
+						可以登录OSSRH去手动点击Release也可以自己本地执行命令：mvn nexus-staging:release
+						也可以删除：mvn nexus-staging:drop
+						-->
+						<autoReleaseAfterClose>true</autoReleaseAfterClose>
+					</configuration>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -656,15 +672,19 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
 					</plugin>
+					<plugin>
+						<groupId>org.sonatype.plugins</groupId>
+						<artifactId>nexus-staging-maven-plugin</artifactId>
+					</plugin>
 				</plugins>
 			</build>
 			<distributionManagement>
 				<snapshotRepository>
-					<id>oss-snapshots</id>
+					<id>oss</id>
 					<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 				</snapshotRepository>
 				<repository>
-					<id>oss-releases</id>
+					<id>oss</id>
 					<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
 				</repository>
 			</distributionManagement>
