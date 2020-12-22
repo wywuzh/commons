@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.github.wywuzh</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>2.3.6.SNAPSHOT</version>
+        <version>2.3.7.SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -24,10 +24,10 @@
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.itfsw</groupId>-->
-<!--            <artifactId>mybatis-generator-plugin</artifactId>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>com.itfsw</groupId>-->
+        <!--            <artifactId>mybatis-generator-plugin</artifactId>-->
+        <!--        </dependency>-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.dom4j</groupId>
             <artifactId>dom4j</artifactId>
-<!--            <version>1.6.1</version>-->
+            <!--            <version>1.6.1</version>-->
         </dependency>
     </dependencies>
 
