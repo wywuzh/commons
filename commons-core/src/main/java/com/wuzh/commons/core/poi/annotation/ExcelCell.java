@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.poi.excel;
+package com.wuzh.commons.core.poi.annotation;
+
+import com.wuzh.commons.core.poi.enums.CellTypeEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -38,7 +40,7 @@ public @interface ExcelCell {
      *
      * @return
      */
-    CellType cellType() default CellType.Undefined;
+    CellTypeEnum cellType() default CellTypeEnum.Undefined;
 
     /**
      * 列所以，从0开始

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.poi.excel;
+package com.wuzh.commons.core.poi.modle;
 
 import javafx.print.PrintSides;
 

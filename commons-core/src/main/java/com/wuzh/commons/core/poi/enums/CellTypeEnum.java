@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.poi.excel;
+package com.wuzh.commons.core.poi.enums;
 
 /**
  * 类CellType的实现描述：Excel单元格列类型
@@ -22,7 +22,7 @@ package com.wuzh.commons.core.poi.excel;
  * @version v2.2.6
  * @since JDK 1.8
  */
-public enum CellType {
+public enum CellTypeEnum {
 
     Undefined,
     String,
