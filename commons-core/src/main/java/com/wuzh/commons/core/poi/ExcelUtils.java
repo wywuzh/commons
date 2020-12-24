@@ -16,13 +16,15 @@
 package com.wuzh.commons.core.poi;
 
 import com.wuzh.commons.core.common.ContentType;
-import com.wuzh.commons.core.poi.excel.CellType;
-import com.wuzh.commons.core.poi.excel.ExcelCell;
-import com.wuzh.commons.core.poi.excel.ExcelRequest;
+import com.wuzh.commons.core.poi.annotation.ExcelCell;
+import com.wuzh.commons.core.poi.enums.CellTypeEnum;
+import com.wuzh.commons.core.poi.modle.ExcelRequest;
+import com.wuzh.commons.core.reflect.ReflectUtils;
+import com.wuzh.commons.core.util.CalculationUtils;
 import com.wuzh.commons.core.util.DateUtil;
-import com.wuzh.commons.core.web.UserAgentUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -92,17 +94,17 @@ public class ExcelUtils {
                 destFile.mkdirs();
             }
             outputStream = new FileOutputStream(new File(destFile, fileName));
+
+            // 创建workbook
             Workbook workbook = createWorkbook(fileName);
-            createSheet(workbook, excelRequest);
+            // 创建sheet
+            Sheet sheet = createSheet(workbook, excelRequest);
+            // 写入内容
+            writeData(workbook, sheet, excelRequest);
+
             workbook.write(outputStream);
             outputStream.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             if (outputStream != null) {
@@ -115,6 +117,43 @@ public class ExcelUtils {
         }
     }
 
+
+    /**
+     * 将异常信息导出
+     *
+     * @param request
+     * @param response
+     * @param fileName 文件名
+     * @param e        异常信息
+     * @since 2.3.6
+     */
+    public static void exportError(HttpServletRequest request, HttpServletResponse response, String fileName, Exception e) {
+        String errorMsg = ExceptionUtils.getStackTrace(e);
+        ExcelUtils.exportError(request, response, fileName, errorMsg);
+    }
+
+    /**
+     * 将异常信息导出
+     *
+     * @param request
+     * @param response
+     * @param fileName  文件名
+     * @param throwable 异常信息
+     * @since 2.3.6
+     */
+    public static void exportError(HttpServletRequest request, HttpServletResponse response, String fileName, Throwable throwable) {
+        String errorMsg = ExceptionUtils.getStackTrace(throwable);
+        ExcelUtils.exportError(request, response, fileName, errorMsg);
+    }
+
+    /**
+     * 将异常信息导出
+     *
+     * @param request
+     * @param response
+     * @param fileName 文件名
+     * @param errorMsg 异常信息
+     */
     public static void exportError(HttpServletRequest request, HttpServletResponse response, String fileName, String errorMsg) {
         BufferedOutputStream outputStream = null;
         try {
@@ -144,15 +183,46 @@ public class ExcelUtils {
         }
     }
 
-    public static void exportData(HttpServletRequest request, HttpServletResponse response,
-                                  String fileName, String sheetNames, String[] sheetColumnNames, String[] sheetColumnComments,
-                                  Collection<Map<String, Object>> dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        exportData(request, response, fileName, new String[]{sheetNames}, new String[][]{sheetColumnNames}, new String[][]{sheetColumnComments}, new Collection[]{dataColl});
+
+    /**
+     * 导出数据
+     *
+     * @param request
+     * @param response
+     * @param fileName            文件名称
+     * @param sheetName           文件sheet名
+     * @param sheetColumnNames    列名/字段名
+     * @param sheetColumnComments 列的标题
+     * @param dataColl            请求数据
+     * @throws IOException
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public static <T> void exportData(HttpServletRequest request, HttpServletResponse response,
+                                      String fileName, String sheetName, String[] sheetColumnNames, String[] sheetColumnComments,
+                                      Collection<T> dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        exportData(request, response, fileName, new String[]{sheetName}, new String[][]{sheetColumnNames}, new String[][]{sheetColumnComments}, new Collection[]{dataColl});
     }
 
-    public static void exportData(HttpServletRequest request, HttpServletResponse response,
-                                  String fileName, String[] sheetNames, String[][] sheetColumnNames, String[][] sheetColumnComments,
-                                  Collection<Map<String, Object>>[] dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    /**
+     * 导出数据（支持导出多个sheet）
+     *
+     * @param request
+     * @param response
+     * @param fileName            文件名称
+     * @param sheetNames          文件sheet名
+     * @param sheetColumnNames    列名/字段名
+     * @param sheetColumnComments 列的标题
+     * @param dataColl            请求数据
+     * @throws IOException
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public static <T> void exportData(HttpServletRequest request, HttpServletResponse response,
+                                      String fileName, String[] sheetNames, String[][] sheetColumnNames, String[][] sheetColumnComments,
+                                      Collection<T>[] dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         OutputStream outputStream = response.getOutputStream();
         response.reset();
         // 获取浏览器类型
@@ -166,6 +236,7 @@ public class ExcelUtils {
             response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
         }
 
+        // 创建workbook
         Workbook workbook = createWorkbook(fileName);
         for (int i = 0; i < sheetNames.length; i++) {
             ExcelRequest excelRequest = new ExcelRequest();
@@ -173,7 +244,11 @@ public class ExcelUtils {
             excelRequest.setColumns(sheetColumnNames[i]);
             excelRequest.setColumnTitles(sheetColumnComments[i]);
             excelRequest.setDataColl(dataColl[i]);
-            createSheet(workbook, excelRequest);
+
+            // 创建sheet
+            Sheet sheet = createSheet(workbook, excelRequest);
+            // 写入内容
+            writeData(workbook, sheet, excelRequest);
         }
 
         workbook.write(outputStream);
@@ -186,10 +261,10 @@ public class ExcelUtils {
      *
      * @param request      请求信息
      * @param response     响应信息
-     * @param excelRequest 导出数据请求条件
      * @param fileName     导出文件名，注意需要包含文件后缀
+     * @param excelRequest 导出数据请求条件
      */
-    public static void exportData(HttpServletRequest request, HttpServletResponse response, ExcelRequest excelRequest, String fileName)
+    public static void exportData(HttpServletRequest request, HttpServletResponse response, String fileName, ExcelRequest excelRequest)
             throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         OutputStream outputStream = response.getOutputStream();
         response.reset();
@@ -204,31 +279,101 @@ public class ExcelUtils {
             response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
         }
 
+        // 创建workbook
         Workbook workbook = createWorkbook(fileName);
-        createSheet(workbook, excelRequest);
+        // 创建sheet
+        Sheet sheet = createSheet(workbook, excelRequest);
+        // 写入内容
+        writeData(workbook, sheet, excelRequest);
 
         workbook.write(outputStream);
         outputStream.flush();
         outputStream.close();
     }
 
-    public static Workbook createWorkbook(String fileName) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+    /**
+     * 创建workbook
+     *
+     * @param fileName 文件名
+     * @return
+     */
+    public static Workbook createWorkbook(String fileName) throws IOException {
         // 检查文件名后缀是否为“.xlsx”
         boolean xssf = StringUtils.endsWithIgnoreCase(fileName, ".xlsx") ? true : false;
         Workbook workbook = WorkbookFactory.create(xssf);
         return workbook;
     }
 
-    public static Sheet createSheet(Workbook workbook, ExcelRequest excelRequest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Assert.notNull(excelRequest, "excelRequest must not be null");
-        Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
-        Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
-
+    /**
+     * 创建sheet
+     *
+     * @param workbook     工作簿
+     * @param excelRequest Excel请求
+     * @return
+     * @since 2.3.6
+     */
+    public static Sheet createSheet(Workbook workbook, ExcelRequest excelRequest) {
         String sheetName = excelRequest.getSheetName();
         if (StringUtils.isEmpty(sheetName)) {
             sheetName = workbook.getNumberOfSheets() > 1 ? "sheet" + (workbook.getNumberOfSheets() + 1) : "sheet";
         }
-        Sheet sheet = workbook.createSheet(sheetName);
+        return createSheet(workbook, sheetName);
+    }
+
+    /**
+     * 创建sheet
+     *
+     * @param workbook  工作簿
+     * @param sheetName sheet名
+     * @return
+     * @since 2.3.6
+     */
+    public static Sheet createSheet(Workbook workbook, String sheetName) {
+        Sheet sheet = workbook.createSheet(sheetName == null ? "sheet" : sheetName);
+        return sheet;
+    }
+
+    /**
+     * 写入数据
+     *
+     * @param workbook            工作簿
+     * @param sheet               写入数据的目标sheet
+     * @param sheetColumnNames    列名/字段名
+     * @param sheetColumnComments 列的标题
+     * @param dataColl            请求数据
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @since 2.3.6
+     */
+    public static <T> void writeData(Workbook workbook, Sheet sheet,
+                                     String[] sheetColumnNames, String[] sheetColumnComments,
+                                     Collection<T> dataColl) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        ExcelRequest excelRequest = new ExcelRequest();
+        excelRequest.setColumns(sheetColumnNames);
+        excelRequest.setColumnTitles(sheetColumnComments);
+        excelRequest.setDataColl(dataColl);
+
+        // 写入内容
+        writeData(workbook, sheet, excelRequest);
+    }
+
+    /**
+     * 写入数据
+     *
+     * @param workbook     工作簿
+     * @param sheet        写入数据的目标sheet
+     * @param excelRequest Excel请求
+     * @return
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
+    public static Sheet writeData(Workbook workbook, Sheet sheet, ExcelRequest excelRequest)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Assert.notNull(excelRequest, "excelRequest must not be null");
+        Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
+        Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
 
         // 生成头部列(单元格)样式
         CellStyle headerStyle = createHeaderStyle(workbook);
@@ -358,20 +503,20 @@ public class ExcelUtils {
     }
 
     private static short getCellDateFormat(Workbook workbook, ExcelCell excelCell) {
-        com.wuzh.commons.core.poi.excel.CellType cellType = excelCell.cellType();
-        if (com.wuzh.commons.core.poi.excel.CellType.String.equals(cellType)) { // 字符串文本
+        CellTypeEnum cellTypeEnum = excelCell.cellType();
+        if (CellTypeEnum.String.equals(cellTypeEnum)) { // 字符串文本
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("TEXT");
-        } else if (com.wuzh.commons.core.poi.excel.CellType.Percent.equals(cellType)) { // 百分比
+        } else if (CellTypeEnum.Percent.equals(cellTypeEnum)) { // 百分比
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("0.00%");
-        } else if (com.wuzh.commons.core.poi.excel.CellType.Date.equals(cellType)) { // 日期
+        } else if (CellTypeEnum.Date.equals(cellTypeEnum)) { // 日期
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("yyyy-MM-dd");
-        } else if (com.wuzh.commons.core.poi.excel.CellType.Time.equals(cellType)) { // 日期
+        } else if (CellTypeEnum.Time.equals(cellTypeEnum)) { // 日期
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("hh:mm:ss");
-        } else if (CellType.DateTime.equals(cellType)) { // 日期
+        } else if (CellTypeEnum.DateTime.equals(cellTypeEnum)) { // 日期
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("yyyy-MM-dd hh:mm:ss");
         }
@@ -524,8 +669,8 @@ public class ExcelUtils {
     /**
      * 设置列的下拉值，Excel验证数据
      *
-     * @param workbook
-     * @param sheet
+     * @param workbook             工作簿
+     * @param sheet                目标sheet
      * @param columnTitle          字段标题
      * @param columnValidationData 字段下拉列表：Excel验证数据
      * @param firstRow             开始行
@@ -738,7 +883,7 @@ public class ExcelUtils {
                         || workbook.isSheetHidden(i) || workbook.isSheetVeryHidden(i)) {
                     continue;
                 }
-                resultList.addAll(getSheetData(sheet, columns, 1));
+                resultList.addAll(getSheetData(sheet, clazz, columns, 1));
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -764,16 +909,132 @@ public class ExcelUtils {
         return WorkbookFactory.create(inputStream);
     }
 
-    public static <T> List<T> getSheetData(Sheet sheet, String[] columns, int startRow) {
+    /**
+     * 读取模板sheet的数据
+     *
+     * @param sheet    目标sheet
+     * @param clazz    解析目标结果类
+     * @param columns  字段
+     * @param startRow 开始读取行
+     * @param <T>
+     * @return
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     */
+    public static <T> List<T> getSheetData(Sheet sheet, Class<T> clazz, String[] columns, int startRow)
+            throws Exception {
         List<T> resultList = new LinkedList<>();
         // todo 读取内容
         for (int i = startRow; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            // 获取不为空的列个数
+            if (row.getPhysicalNumberOfCells() == 0) {
+                continue; // 该行的列为空
+            }
+
+            T data = clazz.newInstance();
             // 获取每一行的列数据
             for (int j = 0; j < columns.length; j++) {
-//                map.put(columns[j], getCellData(row.getCell(j)));
+                Cell cell = row.getCell(j);
+                String fieldName = columns[j];
+                Field field = FieldUtils.getField(clazz, fieldName, true);
+
+                ReflectUtils.setValue(data, fieldName, getRealValue(row, cell, clazz, fieldName, field));
             }
+
+            resultList.add(data);
         }
         return resultList;
+    }
+
+    private static <T> Object getRealValue(Row row, Cell cell, Class<T> clazz, String fieldName, Field field) {
+        Class<?> fieldType = field.getType();
+        if (fieldType == Byte.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            return new BigDecimal(getCellData(cell).toString()).byteValue();
+        } else if (fieldType == Short.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            return new BigDecimal(getCellData(cell).toString()).shortValue();
+        } else if (fieldType == Integer.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            return new BigDecimal(getCellData(cell).toString()).intValue();
+        } else if (fieldType == Double.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            //判断是否存在 %
+            String cellValue = getCellData(cell).toString();
+            if (StringUtils.contains(cellValue, "%")) {
+                cellValue = StringUtils.replace(cellValue, "%", "");
+
+                // 需要将数值%100
+                return CalculationUtils.div(new BigDecimal(cellValue), CalculationUtils.DEFAULT_ONE_HUNDRED).doubleValue();
+            } else {
+                return new BigDecimal(cellValue).doubleValue();
+            }
+        } else if (fieldType == Float.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            return new BigDecimal(getCellData(cell).toString()).floatValue();
+        } else if (fieldType == Long.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            return new BigDecimal(getCellData(cell).toString()).longValue();
+        } else if (fieldType == Boolean.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+        } else if (fieldType == String.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            // 去掉前后空格
+            return StringUtils.strip(getCellData(cell).toString());
+        } else if (fieldType == BigDecimal.class) {
+            if (isBlank(cell)) {
+                return null;
+            }
+            String cellValue = getCellData(cell).toString();
+            if (StringUtils.contains(cellValue, "%")) {
+                cellValue = cellValue.replace("%", "").replace(",", "");
+                return CalculationUtils.div(new BigDecimal(cellValue), new BigDecimal(100), 4);
+            } else {
+                return new BigDecimal(cellValue.replace(",", ""));
+            }
+        } else if (fieldType == java.util.Date.class) {
+            if (cell == null) {
+                return null;
+            }
+            Date cellValue = null;
+            try {
+                cellValue = cell.getDateCellValue();
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+            }
+            // 日期转换优先级别：yyyy-MM-dd HH:mm:ss -> yyyy-MM-dd -> yyyy/MM/dd -> yyyy-MM
+            if (cellValue == null) {
+                cellValue = DateUtil.parse(cell.getStringCellValue(), DateUtil.PATTERN_DATE_TIME);
+            }
+            if (cellValue == null) {
+                cellValue = DateUtil.parse(cell.getStringCellValue(), DateUtil.PATTERN_DATE);
+            }
+            if (cellValue == null) {
+                cellValue = DateUtil.parse(cell.getStringCellValue(), "yyyy/MM/dd");
+            }
+            if (cellValue == null) {
+                cellValue = DateUtil.parse(cell.getStringCellValue(), DateUtil.PATTERN_YYYY_MM);
+            }
+            return cellValue;
+        }
+        return null;
     }
 
     /**
@@ -803,25 +1064,43 @@ public class ExcelUtils {
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年10月23日 下午5:29:03
      */
     public static Object getCellData(Cell cell) {
+        if (cell == null) {
+            return null;
+        }
         Object value = null;
-        if (null != cell) {
-            if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.NUMERIC) {
-                value = new BigDecimal(cell.getNumericCellValue());
-            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.STRING) {
-                value = cell.getStringCellValue();
-            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.FORMULA) {
-                value = cell.getCellFormula();
-            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.BLANK) {
-                value = "";
-            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.BOOLEAN) {
-                value = cell.getBooleanCellValue();
-            } else if (cell.getCellType() == org.apache.poi.ss.usermodel.CellType.ERROR) {
-                value = cell.getErrorCellValue();
-            } else {
-                value = cell.getRichStringCellValue();
-            }
+        if (cell.getCellType() == CellType.NUMERIC) { // 数值类型：整数、小数、日期
+            value = new BigDecimal(String.valueOf(cell.getNumericCellValue()));
+        } else if (cell.getCellType() == CellType.STRING) { // 字符串
+            value = cell.getStringCellValue();
+        } else if (cell.getCellType() == CellType.FORMULA) { // 公式
+            value = cell.getCellFormula();
+        } else if (cell.getCellType() == CellType.BLANK) { // 空单元格：没值，但有单元格样式
+            value = "";
+        } else if (cell.getCellType() == CellType.BOOLEAN) {
+            value = cell.getBooleanCellValue();
+        } else if (cell.getCellType() == CellType.ERROR) { // 错误单元格
+            value = cell.getErrorCellValue();
+        } else {
+            value = cell.getRichStringCellValue();
         }
         return value;
+    }
+
+    /**
+     * 校验单元格数据是否为空
+     *
+     * @param cell 单元格对象
+     * @return
+     * @since 2.3.6
+     */
+    private static boolean isBlank(Cell cell) {
+        Object cellValue = getCellData(cell);
+        return cellValue == null;
+//        if (!CellType.STRING.equals(cell.getCellType())) {
+//            //所有的格式都设置为 String 类型
+//            cell.setCellType(CellType.STRING);
+//        }
+//        return StringUtils.isBlank(cell.getStringCellValue());
     }
 
 }

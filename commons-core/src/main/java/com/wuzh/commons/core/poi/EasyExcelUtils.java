@@ -21,6 +21,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
+import com.wuzh.commons.core.poi.style.CustomCellWriteHandler;
 import com.wuzh.commons.core.reflect.ReflectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.FillPatternType;
