@@ -41,6 +41,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.*;
 
 /**
@@ -1069,7 +1070,11 @@ public class ExcelUtils {
         }
         Object value = null;
         if (cell.getCellType() == CellType.NUMERIC) { // 数值类型：整数、小数、日期
-            value = new BigDecimal(String.valueOf(cell.getNumericCellValue()));
+            // 解决自动加".0"的数字
+            String format = NumberFormat.getInstance().format(cell.getNumericCellValue());
+            // 逗号去掉
+            format = StringUtils.replace(format, ",", "");
+            value = new BigDecimal(format);
         } else if (cell.getCellType() == CellType.STRING) { // 字符串
             value = cell.getStringCellValue();
         } else if (cell.getCellType() == CellType.FORMULA) { // 公式
