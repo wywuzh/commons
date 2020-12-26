@@ -88,7 +88,6 @@
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <druid.version>1.2.4</druid.version>
 
-        <spring-amqp.version>2.3.1</spring-amqp.version>
         <spring-kafka.version>2.6.3</spring-kafka.version>
         <dubbo.version>2.7.8</dubbo.version>
         <shiro.version>1.7.0</shiro.version>
@@ -371,11 +370,6 @@
 
 
             <!-- 分布式消息通信 -->
-            <dependency>
-                <groupId>org.springframework.amqp</groupId>
-                <artifactId>spring-rabbit</artifactId>
-                <version>${spring-amqp.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
