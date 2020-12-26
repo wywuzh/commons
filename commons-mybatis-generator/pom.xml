@@ -14,6 +14,17 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>com.github.wywuzh</groupId>
+            <artifactId>commons-core</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.wywuzh</groupId>
+            <artifactId>commons-pager</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
         <!-- Spring Boot Mybatis 依赖 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -24,24 +35,31 @@
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.itfsw</groupId>-->
-<!--            <artifactId>mybatis-generator-plugin</artifactId>-->
-<!--        </dependency>-->
+        <!--<dependency>
+            <groupId>com.itfsw</groupId>
+            <artifactId>mybatis-generator-plugin</artifactId>
+        </dependency>-->
+        <!-- mybatis-generator 代码自动生成插件 -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <scope>provided</scope>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-generator</artifactId>
+            <version>${mybatis-plus.version}</version>
         </dependency>
-        <!-- 模板引擎 -->
+
+        <!-- freemarker模板引擎 -->
         <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
-        <!-- xml 解析 -->
+
+        <!-- springfox自动生成API文档 -->
         <dependency>
-            <groupId>org.dom4j</groupId>
-            <artifactId>dom4j</artifactId>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
         </dependency>
     </dependencies>
 

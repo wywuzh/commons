@@ -79,6 +79,7 @@
         <mapstruct.version>1.4.1.Final</mapstruct.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
+        <springfox-swagger.version>2.10.5</springfox-swagger.version>
         <apollo-client.version>1.7.0</apollo-client.version>
 
         <mybatis-spring-boot.version>2.1.3</mybatis-spring-boot.version>
@@ -88,7 +89,6 @@
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <druid.version>1.2.4</druid.version>
 
-        <spring-amqp.version>2.2.13.RELEASE</spring-amqp.version>
         <spring-kafka.version>2.5.10.RELEASE</spring-kafka.version>
         <dubbo.version>2.7.8</dubbo.version>
         <shiro.version>1.7.0</shiro.version>
@@ -320,6 +320,18 @@
                 <version>${jep.version}</version>
             </dependency>
 
+            <!-- springfox自动生成API文档 -->
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger-ui</artifactId>
+                <version>${springfox-swagger.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${springfox-swagger.version}</version>
+            </dependency>
+
 
             <!-- 配置中心 -->
             <dependency>
@@ -371,11 +383,6 @@
 
 
             <!-- 分布式消息通信 -->
-            <dependency>
-                <groupId>org.springframework.amqp</groupId>
-                <artifactId>spring-rabbit</artifactId>
-                <version>${spring-amqp.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.springframework.kafka</groupId>
                 <artifactId>spring-kafka</artifactId>
