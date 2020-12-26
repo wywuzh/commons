@@ -1,5 +1,10 @@
 ## 更新日志
 
+### SpringBoot/V2.3.6
+commons-mybatis-generator模块：
+  1. 添加DeleteByPKPlugin插件：根据主键删除数据插件，支持自定义方法名，支持物理删除和逻辑删除两种方式的sql
+
+
 ### SpringBoot/V2.3.5
 1. 添加 RabbitMQ、kafka 等分布式通信依赖支持
 2. 添加Dubbo、Shiro依赖
