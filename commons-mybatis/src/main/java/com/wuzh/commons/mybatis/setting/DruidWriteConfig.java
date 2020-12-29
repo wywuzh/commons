@@ -26,6 +26,7 @@ import java.io.Serializable;
  * @version v2.2.0
  * @since JDK 1.8
  */
+@Deprecated
 @ConfigurationProperties(prefix = "spring.datasource.write")
 public class DruidWriteConfig implements Serializable {
     private static final long serialVersionUID = 725541160295369129L;

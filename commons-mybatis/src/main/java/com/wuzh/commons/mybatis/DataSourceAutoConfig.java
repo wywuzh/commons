@@ -15,15 +15,9 @@
  */
 package com.wuzh.commons.mybatis;
 
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import javax.sql.DataSource;
 
 /**
  * 类DataSourceAutoConfig的实现描述：多数据源配置
@@ -34,12 +28,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
-@Import({MyBatisConfig.class})
+@Import({MyBatisConfig.class, TransactionConfiguration.class})
 public class DataSourceAutoConfig {
-
-    @Bean
-    public PlatformTransactionManager transactionManager(@Qualifier("dataSource") DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
 
 }

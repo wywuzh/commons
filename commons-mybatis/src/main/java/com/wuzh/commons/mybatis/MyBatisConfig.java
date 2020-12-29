@@ -15,23 +15,25 @@
  */
 package com.wuzh.commons.mybatis;
 
-import com.alibaba.druid.pool.DruidDataSource;
+import com.wuzh.commons.mybatis.datasource.DruidDataSourceConfig;
 import com.wuzh.commons.mybatis.setting.DruidReadConfig;
 import com.wuzh.commons.mybatis.setting.DruidWriteConfig;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScannerRegistrar;
+import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,13 +46,20 @@ import java.util.Map;
  */
 @Configuration
 @EnableConfigurationProperties({DruidWriteConfig.class, DruidReadConfig.class})
+@Import({DruidDataSourceConfig.class})
 public class MyBatisConfig {
     private final Logger logger = LoggerFactory.getLogger(MyBatisConfig.class);
 
     /**
-     * mapper文件存放路径
+     * MAPPER映射器文件存放路径
      */
     private final String MAPPER_LOCATION = "classpath:com/wuzh/**/*.xml";
+    /**
+     * MAPPER接口文件存放路径
+     *
+     * @since v2.3.6
+     */
+    private final String MAPPER_PACKAGE = "com.wuzh.**.mapper";
     /**
      * 配置文件信息
      */
@@ -59,71 +68,6 @@ public class MyBatisConfig {
      * 实体类所在包
      */
     private final String TYPE_ALIASES_PACKAGE = "com.wuzh.**.entity";
-
-    @Primary
-    @Bean(name = "writeDataSource", initMethod = "init", destroyMethod = "close")
-    public DataSource writeDataSource(DruidWriteConfig druidWriteConfig) {
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(druidWriteConfig.getDriverClassName());
-        dataSource.setUrl(druidWriteConfig.getUrl());
-        dataSource.setUsername(druidWriteConfig.getUsername());
-        dataSource.setPassword(druidWriteConfig.getPassword());
-
-        dataSource.setInitialSize(druidWriteConfig.getInitialSize());
-        dataSource.setMinIdle(druidWriteConfig.getMinIdle());
-        dataSource.setMaxActive(druidWriteConfig.getMaxActive());
-        // 配置获取连接等待超时的时间
-        dataSource.setMaxWait(druidWriteConfig.getMaxWait());
-        dataSource.setValidationQuery(druidWriteConfig.getValidationQuery());
-        dataSource.setTestWhileIdle(druidWriteConfig.getTestWhileIdle());
-        dataSource.setTestOnBorrow(druidWriteConfig.getTestOnBorrow());
-        dataSource.setTestOnReturn(druidWriteConfig.getTestOnReturn());
-        // 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-        dataSource.setTimeBetweenEvictionRunsMillis(druidWriteConfig.getTimeBetweenEvictionRunsMillis());
-        // 配置一个连接在池中最小生存的时间，单位是毫秒
-        dataSource.setMinEvictableIdleTimeMillis(druidWriteConfig.getMinEvictableIdleTimeMillis());
-        dataSource.setPoolPreparedStatements(druidWriteConfig.getPoolPreparedStatements());
-        dataSource.setMaxOpenPreparedStatements(druidWriteConfig.getMaxOpenPreparedStatements());
-        try {
-            // 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-            dataSource.setFilters(druidWriteConfig.getFilters());
-        } catch (SQLException e) {
-            logger.error("druid configuration initialization filter", e);
-        }
-        return dataSource;
-    }
-
-    @Bean(name = "readDataSource", initMethod = "init", destroyMethod = "close")
-    public DataSource readDataSource(DruidReadConfig druidReadConfig) {
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setDriverClassName(druidReadConfig.getDriverClassName());
-        dataSource.setUrl(druidReadConfig.getUrl());
-        dataSource.setUsername(druidReadConfig.getUsername());
-        dataSource.setPassword(druidReadConfig.getPassword());
-
-        dataSource.setInitialSize(druidReadConfig.getInitialSize());
-        dataSource.setMinIdle(druidReadConfig.getMinIdle());
-        dataSource.setMaxActive(druidReadConfig.getMaxActive());
-        // 配置获取连接等待超时的时间
-        dataSource.setMaxWait(druidReadConfig.getMaxWait());
-        dataSource.setValidationQuery(druidReadConfig.getValidationQuery());
-        dataSource.setTestWhileIdle(druidReadConfig.getTestWhileIdle());
-        dataSource.setTestOnBorrow(druidReadConfig.getTestOnBorrow());
-        dataSource.setTestOnReturn(druidReadConfig.getTestOnReturn());
-        // 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
-        dataSource.setTimeBetweenEvictionRunsMillis(druidReadConfig.getTimeBetweenEvictionRunsMillis());
-        // 配置一个连接在池中最小生存的时间，单位是毫秒
-        dataSource.setMinEvictableIdleTimeMillis(druidReadConfig.getMinEvictableIdleTimeMillis());
-        dataSource.setPoolPreparedStatements(druidReadConfig.getPoolPreparedStatements());
-        dataSource.setMaxOpenPreparedStatements(druidReadConfig.getMaxOpenPreparedStatements());
-        try {
-            // 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-            dataSource.setFilters(druidReadConfig.getFilters());
-        } catch (SQLException e) {
-            logger.error("druid configuration initialization filter", e);
-        }
-        return dataSource;
-    }
 
     @Bean(name = "dataSource")
     public DataSource dataSource(@Qualifier("writeDataSource") DataSource writeDataSource,
@@ -157,6 +101,16 @@ public class MyBatisConfig {
     @Bean
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean({MapperScannerRegistrar.class, MapperScannerConfigurer.class})
+    public MapperScannerConfigurer mapperScannerConfigurer() {
+        // v2.3.6：扫描Mapper接口文件，在未配置 @MapperScan 和MapperScannerConfigurer的情况下，启用该配置
+        MapperScannerConfigurer configurer = new MapperScannerConfigurer();
+        configurer.setBasePackage(MAPPER_PACKAGE);
+        configurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
+        return configurer;
     }
 
 }
