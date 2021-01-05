@@ -34,6 +34,30 @@ import java.util.List;
 
 /**
  * 类SelectByParamsPlugin的实现描述：自定义select查询插件
+ * <pre class="code">
+ * <strong>enableLogicDelete使用方式</strong>：
+ * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在
+ *     &lt;plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin"&gt;
+ *         &lt;!-- 表是否开启物理删除 --&gt;
+ *         &lt;property name="enableLogicDelete" value="true"/&gt;
+ *         &lt;!-- 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件 --&gt;
+ *         &lt;property name="excludeDeletedSql" value="is_delete = 0"/&gt;
+ *     &lt;/plugin&gt;
+ * 2. 若需要对某张表单独定制，可在该table下配置进行覆盖
+ *     &lt;table tableName="goods_brand" domainObjectName="GoodsBrand"
+ *                enableUpdateByExample="false" enableDeleteByExample="false"
+ *                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"&gt;
+ *         &lt;!-- 表是否开启物理删除 --&gt;
+ *         &lt;property name="enableLogicDelete" value="true"/&gt;
+ *         &lt;!-- 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件 --&gt;
+ *         &lt;property name="excludeDeletedSql" value="is_delete = 0"/&gt;
+ *     &lt;/table&gt;
+ *
+ * <strong>conditionsLikeColumns使用方式</strong>：
+ *
+ * <strong>conditionsForeachInColumns使用方式</strong>：
+ *
+ * </pre>
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/25 21:48
  * @version v2.1.1
@@ -42,17 +66,17 @@ import java.util.List;
 public class SelectByParamsPlugin extends BasePlugin {
 
     /**
-     * 表是否开启物理删除
+     * 表是否开启逻辑删除
      *
      * @since 2.3.6
      */
-    public static final String ENABLE_PHYSICAL_DELETE = "enablePhysicalDelete";
+    public static final String ENABLE_LOGIC_DELETE = "enableLogicDelete";
     /**
-     * 物理删除字段。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件。
+     * 逻辑删除字段。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件。
      *
      * @since 2.3.6
      */
-    public static final String PHYSICAL_DELETE_FIELD = "physicalDeleteField";
+    public static final String LOGIC_DELETE_FIELD = "logicDeleteField";
     /**
      * 排除数据sql，即剔除已删除数据的sql
      *
@@ -60,17 +84,17 @@ public class SelectByParamsPlugin extends BasePlugin {
      */
     public static final String EXCLUDE_DELETED_SQL = "excludeDeletedSql";
     /**
-     * 表是否开启物理删除，默认为true
+     * 表是否开启逻辑删除，默认为true
      *
      * @since 2.3.6
      */
-    private boolean enablePhysicalDelete = true;
+    private boolean enableLogicDelete = true;
     /**
-     * 物理删除字段默认值
+     * 逻辑删除字段默认值
      *
      * @since 2.3.6
      */
-    private String physicalDeleteField = "is_delete";
+    private String logicDeleteField = "is_delete";
     /**
      * 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
      *
@@ -110,15 +134,15 @@ public class SelectByParamsPlugin extends BasePlugin {
         super.initialized(introspectedTable);
 
         // v2.3.6
-        // 表是否开启物理删除，默认为true
-        String enablePhysicalDelete = super.getProperties().getProperty(ENABLE_PHYSICAL_DELETE);
-        if (StringUtils.isNotBlank(enablePhysicalDelete)) {
-            this.enablePhysicalDelete = Boolean.valueOf(enablePhysicalDelete);
+        // 表是否开启逻辑删除，默认为true
+        String enableLogicDelete = super.getProperties().getProperty(ENABLE_LOGIC_DELETE);
+        if (StringUtils.isNotBlank(enableLogicDelete)) {
+            this.enableLogicDelete = Boolean.valueOf(enableLogicDelete);
         }
-        // 物理删除字段
-        String physicalDeleteField = super.getProperties().getProperty(PHYSICAL_DELETE_FIELD);
-        if (StringUtils.isNotBlank(enablePhysicalDelete)) {
-            this.physicalDeleteField = physicalDeleteField;
+        // 逻辑删除字段
+        String logicDeleteField = super.getProperties().getProperty(LOGIC_DELETE_FIELD);
+        if (StringUtils.isNotBlank(enableLogicDelete)) {
+            this.logicDeleteField = logicDeleteField;
         }
         // 排除数据sql，即剔除已删除数据的sql
         String excludeDeletedSql = super.getProperties().getProperty(EXCLUDE_DELETED_SQL);
@@ -128,19 +152,19 @@ public class SelectByParamsPlugin extends BasePlugin {
     }
 
     /**
-     * 表是否开启物理删除，默认为true
+     * 表是否开启逻辑删除，默认为true
      *
      * @param tableConfiguration table配置
      * @return
      * @since 2.3.6
      */
-    private boolean enablePhysicalDelete(TableConfiguration tableConfiguration) {
+    private boolean enableLogicDelete(TableConfiguration tableConfiguration) {
         // 如果在<table>中有配置，以该配置为准，否则读取全局配置
-        String enablePhysicalDelete = tableConfiguration.getProperty(ENABLE_PHYSICAL_DELETE);
-        if (StringUtils.isNotBlank(enablePhysicalDelete)) {
-            return Boolean.valueOf(enablePhysicalDelete);
+        String enableLogicDelete = tableConfiguration.getProperty(ENABLE_LOGIC_DELETE);
+        if (StringUtils.isNotBlank(enableLogicDelete)) {
+            return Boolean.valueOf(enableLogicDelete);
         }
-        return this.enablePhysicalDelete;
+        return this.enableLogicDelete;
     }
 
     /**
@@ -352,12 +376,12 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @since 2.3.6
      */
     private Element getSelectWhereElement(IntrospectedTable introspectedTable) {
-        // 表是否开启物理删除，默认为true
-        boolean enablePhysicalDelete = enablePhysicalDelete(introspectedTable.getTableConfiguration());
+        // 表是否开启逻辑删除，默认为true
+        boolean enableLogicDelete = enableLogicDelete(introspectedTable.getTableConfiguration());
         // 排除数据sql，即剔除已删除数据的sql
         String excludeDeletedSql = excludeDeletedSql(introspectedTable.getTableConfiguration());
-        if (!enablePhysicalDelete || StringUtils.isBlank(excludeDeletedSql)) {
-            return null;
+        if (!enableLogicDelete || StringUtils.isBlank(excludeDeletedSql)) {
+            return null; // 没有开启逻辑删除，或者排除数据sql为空
         }
 
         // 去掉前后空格
@@ -386,8 +410,16 @@ public class SelectByParamsPlugin extends BasePlugin {
         XmlElement ifElement = new XmlElement("if");
         ifElement.addAttribute(new Attribute("test", "map != null"));
 
-        // 获取到table中的所有column
-        addElementForAppendConditions(introspectedTable, ifElement);
+        if (getSelectWhereElement(introspectedTable) != null) {
+            // 获取到table中的所有column
+            addElementForAppendConditions(introspectedTable, ifElement);
+        } else {
+            // 创建where
+            XmlElement whereElement = new XmlElement("where");
+            // 获取到table中的所有column
+            addElementForAppendConditions(introspectedTable, whereElement);
+            ifElement.addElement(whereElement);
+        }
 
         conditionsElement.addElement(ifElement);
         return conditionsElement;
