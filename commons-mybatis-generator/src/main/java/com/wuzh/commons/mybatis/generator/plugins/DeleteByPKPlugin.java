@@ -32,6 +32,33 @@ import org.mybatis.generator.config.TableConfiguration;
 
 /**
  * 类DeleteByPKPlugin的实现描述：根据主键删除数据
+ * <pre class="code">
+ * 使用方式：
+ * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在
+ *     &lt;plugin type="com.wuzh.commons.mybatis.generator.plugins.DeleteByPKPlugin"&gt;
+ *         &lt;!-- 方法名，默认：deleteByIds。 --&gt;
+ *         &lt;property name="methodName" value="deleteByIds"/&gt;
+ *         &lt;!-- 表是否开启逻辑删除，默认为true。如果传入值为false，表示该表使用的是物理删除，生成的sql为delete删除语句，logicDeleteField、logicDeletedFlag两个参数值将没有意义。 --&gt;
+ *         &lt;property name="enableLogicDelete" value="true"/&gt;
+ *         &lt;!-- 逻辑删除字段，默认值：is_delete --&gt;
+ *         &lt;property name="logicDeleteField" value="is_delete"/&gt;
+ *         &lt;!-- 逻辑删除标识，默认为1 --&gt;
+ *         &lt;property name="logicDeletedFlag" value="1"/&gt;
+ *     &lt;/plugin&gt;
+ * 2. 若需要对某张表单独定制，可在该table下配置进行覆盖
+ *     &lt;table tableName="goods_brand" domainObjectName="GoodsBrand"
+ *                enableUpdateByExample="false" enableDeleteByExample="false"
+ *                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"&gt;
+ *         &lt;!-- 方法名，默认：deleteByIds。 --&gt;
+ *         &lt;property name="methodName" value="deleteByIds"/&gt;
+ *         &lt;!-- 表是否开启逻辑删除，默认为true。如果传入值为false，表示该表使用的是物理删除，生成的sql为delete删除语句，logicDeleteField、logicDeletedFlag两个参数值将没有意义。 --&gt;
+ *         &lt;property name="enableLogicDelete" value="true"/&gt;
+ *         &lt;!-- 逻辑删除字段，默认值：is_delete --&gt;
+ *         &lt;property name="logicDeleteField" value="is_delete"/&gt;
+ *         &lt;!-- 逻辑删除标识，默认为1 --&gt;
+ *         &lt;property name="logicDeletedFlag" value="1"/&gt;
+ *     &lt;/table&gt;
+ * </pre>
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2020-12-25 21:38:17
  * @version v2.3.6
