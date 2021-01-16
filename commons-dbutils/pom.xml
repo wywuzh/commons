@@ -30,7 +30,7 @@
         <dependency>
             <groupId>commons-dbutils</groupId>
             <artifactId>commons-dbutils</artifactId>
-            <version>${apache-commons-dbutils.version}</version>
+            <version>${commons-dbutils.version}</version>
         </dependency>
     </dependencies>
 
