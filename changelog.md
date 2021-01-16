@@ -1,8 +1,9 @@
 ## 更新日志
 
 ### SpringBoot/V2.3.6
-commons-mybatis-generator模块：
+1. commons-mybatis-generator模块：
   1. 添加DeleteByPKPlugin插件：根据主键删除数据插件，支持自定义方法名，支持物理删除和逻辑删除两种方式的sql
+2. 新增commons-dbutils模块：基于Apache commons-dbutils进行二次封装处理的JDBC工具类库
 
 
 ### SpringBoot/V2.3.5

@@ -74,4 +74,10 @@ public class DataBase {
         return metaData.getUserName();
     }
 
+    public void close() throws SQLException {
+        if (this.connection != null) {
+            connection.close();
+        }
+    }
+
 }

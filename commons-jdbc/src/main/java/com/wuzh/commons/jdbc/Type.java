@@ -21,7 +21,9 @@ package com.wuzh.commons.jdbc;
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2017年1月8日 下午11:06:06
  * @version v1.0.0
  * @since JDK 1.7
+ * @deprecated 废弃，请使用 {@link com.wuzh.commons.core.sql.Type} 类
  */
+@Deprecated
 public enum Type {
     MySQL("MySQL"), Oracle("Oracle"), UNKNOW("");
 

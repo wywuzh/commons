@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2017 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,20 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.sql;
+package com.wuzh.commons.dbutils;
 
 /**
- * 类Type的实现描述：数据库类型
+ * 类Type.java的实现描述：数据库类型
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-06 15:54:49
- * @version v2.3.6
- * @since JDK 1.8
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2017年1月8日 下午11:06:06
+ * @version v1.0.0
+ * @since JDK 1.7
+ * @deprecated 废弃，请使用 {@link com.wuzh.commons.core.sql.Type} 类
  */
+@Deprecated
 public enum Type {
-    MySQL("MySQL"),
-    Oracle("Oracle"),
-    UNKNOW(""),
-    ;
+    MySQL("MySQL"), Oracle("Oracle"), UNKNOW("");
 
     private String name;
 
