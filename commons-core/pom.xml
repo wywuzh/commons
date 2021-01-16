@@ -115,6 +115,16 @@
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
         </dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>${commons-net.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>${jsch.version}</version>
+		</dependency>
         <!-- Import Apache plugins dependency END -->
 
         <dependency>

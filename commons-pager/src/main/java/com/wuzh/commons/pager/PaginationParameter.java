@@ -13,6 +13,8 @@
  */
 package com.wuzh.commons.pager;
 
+import org.springframework.util.CollectionUtils;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -66,4 +68,21 @@ public class PaginationParameter<P extends Serializable> extends PageImpl implem
         this.sorts = sorts;
     }
 
+    /**
+     * 生成排序sql
+     *
+     * @return 排序sql
+     * @since v2.3.7
+     */
+    public String generateOrderSql() {
+        List<Sort> sorts = this.getSorts();
+        if (CollectionUtils.isEmpty(sorts)) {
+            return "";
+        }
+        StringBuilder orderSql = new StringBuilder(" order by ");
+        for (Sort sort : sorts) {
+            orderSql.append(sort.getOrder()).append(" ").append(sort.getOrder().getValue());
+        }
+        return orderSql.toString();
+    }
 }
