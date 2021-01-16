@@ -15,13 +15,12 @@
  */
 package com.wuzh.commons.dbutils;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import javax.sql.DataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  * 类JdbcUtils.java的实现描述：JDBC工具
@@ -42,18 +41,18 @@ public final class JdbcUtils {
     private static boolean autoCommit = false;
 
     public static DataSource getDataSource() {
-        return dataSource;
+        return JdbcUtils.dataSource;
     }
 
-    public void setDataSource(DataSource dataSource) {
+    public static void setDataSource(DataSource dataSource) {
         JdbcUtils.dataSource = dataSource;
     }
 
     public static boolean isAutoCommit() {
-        return autoCommit;
+        return JdbcUtils.autoCommit;
     }
 
-    public void setAutoCommit(boolean autoCommit) {
+    public static void setAutoCommit(boolean autoCommit) {
         JdbcUtils.autoCommit = autoCommit;
     }
 
@@ -62,7 +61,7 @@ public final class JdbcUtils {
         if (null == connection) {
             logger.info("从数据源中获取数据库连接");
             // 从数据源中获取数据库连接
-            connection = dataSource.getConnection();
+            connection = getDataSource().getConnection();
             // 设置事物是否自动提交
             connection.setAutoCommit(isAutoCommit());
             // 将数据库连接绑定到当前线程中
@@ -73,7 +72,7 @@ public final class JdbcUtils {
 
     /**
      * 开启事物
-     * 
+     *
      * @throws SQLException
      */
     @Deprecated
@@ -85,7 +84,7 @@ public final class JdbcUtils {
 
     /**
      * 事物回滚
-     * 
+     *
      * @throws SQLException
      */
     public static void rollback() throws SQLException {
@@ -110,7 +109,7 @@ public final class JdbcUtils {
 
     /**
      * 事物回滚并关闭<code>Connection</code>
-     * 
+     *
      * @throws SQLException
      */
     public static void rollbackAndClose() throws SQLException {
@@ -136,7 +135,7 @@ public final class JdbcUtils {
 
     /**
      * 事物提交
-     * 
+     *
      * @throws SQLException
      */
     public static void commit() throws SQLException {
@@ -161,7 +160,7 @@ public final class JdbcUtils {
 
     /**
      * 事物提交并关闭<code>Connection</code>
-     * 
+     *
      * @throws SQLException
      */
     public static void commitAndClose() throws SQLException {
@@ -187,7 +186,7 @@ public final class JdbcUtils {
 
     /**
      * 关闭<code>Connection</code>
-     * 
+     *
      * @throws SQLException
      */
     public static void close() throws SQLException {
