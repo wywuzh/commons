@@ -44,10 +44,6 @@ if (!Object.assign) {
         "okSweetAlert2": "okmodules/okSweetAlert2",
         "okHoliday": "okmodules/okHoliday",
         "okLayx": "okmodules/okLayx",
-        "AjaxRequest": "commons/AjaxRequest",
-        "Amount": "commons/Amount",
-        "Component": "commons/Component",
-        "Cookie": "commons/Cookie",
     };
     var modulePath = Object.assign({
         layer: "modules/layer",
