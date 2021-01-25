@@ -29,7 +29,10 @@ public class Constants {
      */
     public static final String DEFAULT_PASSWORD = "123456";
 
-    public static final String SHORTCUT_ICON = "";
+    /**
+     * 文件默认路径
+     */
+    public static final String DEFAULT_FILE_PATH = "/data/temp/files";
 
     /**
      * 文件上传默认保存路径
@@ -54,17 +57,25 @@ public class Constants {
      */
     public static final String SEPARATE_COMMA = ",";
     /**
-     * 分隔符：下划线
-     */
-    public static final String SEPARATE_UNDERLINE = "_";
-    /**
      * 分隔符：分号
      */
     public static final String SEPARATE_SEMICOLON = ";";
     /**
+     * 分割符：冒号
+     */
+    public static final String SEPARATE_COLON = ":";
+    /**
+     * 分隔符：下划线
+     */
+    public static final String SEPARATE_UNDERLINE = "_";
+    /**
      * 分隔符：斜杠
      */
     public static final String SEPARATE_SLASH = "/";
+    /**
+     * 分隔符：反斜杠
+     */
+    public static final String SEPARATE_BACKSLASH = "\\";
     /**
      * 分隔符：横杆
      */
