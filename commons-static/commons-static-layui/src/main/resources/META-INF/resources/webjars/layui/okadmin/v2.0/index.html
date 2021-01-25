@@ -6,11 +6,12 @@
    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
    <meta name="keywords" content="ok-admin v2.0,ok-admin网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
    <meta name="description" content="ok-admin v2.0，顾名思义，很赞的后台模版，它是一款基于Layui框架的轻量级扁平化且完全免费开源的网站后台管理系统模板，适合中小型CMS后台系统。">
-   <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon"/>
-   <link rel="stylesheet" href="css/okadmin.css">
-   <link rel="stylesheet" href="lib/loading/okLoading.css"/>
+   <link rel="shortcut icon" href="./images/favicon.ico" type="image/x-icon"/>
+   <link rel="stylesheet" href="./css/okadmin.css">
+   <link rel="stylesheet" href="./lib/loading/okLoading.css"/>
+   <script type="text/javascript" src="./js/polyfill.min.js"></script>
    <script type="text/javascript" src="./js/okconfig.js"></script>
-   <script type="text/javascript" src="lib/loading/okLoading.js"></script>
+   <script type="text/javascript" src="./lib/loading/okLoading.js"></script>
 </head>
 <body class="layui-layout-body">
 <!-- 更换主体 Eg:orange_theme|blue_theme -->
@@ -159,13 +160,13 @@
 <!-- 锁屏 -->
 <div class="lock-screen">
    <div class="lock-bg">
-      <img class="active lock-gradual" src="./images/wallpaper/9f28afe0e71b3ba8778e307bea2f006K.jpg" alt="" />
-      <img class="lock-gradual" src="./images/wallpaper/9f28afe0e71b3ba8778e307bea2f006d.jpg" alt="" />
-      <img class="lock-gradual" src="./images/wallpaper/29bce2d5cf30fc96866dcb5e287661ea.jpg" alt="" />
-      <img class="lock-gradual" src="./images/wallpaper/b4b55f8ec6b2763a737a2d6e1c50b71e.jpg" alt="" />
-      <img class="lock-gradual" src="./images/wallpaper/b8df65c6452dcf8b0302b8bfce9e7ec9.jpg" alt="" />
-      <img class="lock-gradual" src="./images/wallpaper/b390e4c33b7d656f09dc7fd155759a4f.jpg" alt="" />
-      <img class="lock-gradual" src="./images/wallpaper/3fded2e777723f145a4773dfdb68a9e3.jpg" alt="" />
+      <img class="active lock-gradual" src="./images/wallpaper/9f28afe0e71b3ba8778e307bea2f006K.jpg" alt=""/>
+      <img class="lock-gradual" src="./images/wallpaper/9f28afe0e71b3ba8778e307bea2f006d.jpg" alt=""/>
+      <img class="lock-gradual" src="./images/wallpaper/29bce2d5cf30fc96866dcb5e287661ea.jpg" alt=""/>
+      <img class="lock-gradual" src="./images/wallpaper/b4b55f8ec6b2763a737a2d6e1c50b71e.jpg" alt=""/>
+      <img class="lock-gradual" src="./images/wallpaper/b8df65c6452dcf8b0302b8bfce9e7ec9.jpg" alt=""/>
+      <img class="lock-gradual" src="./images/wallpaper/b390e4c33b7d656f09dc7fd155759a4f.jpg" alt=""/>
+      <img class="lock-gradual" src="./images/wallpaper/3fded2e777723f145a4773dfdb68a9e3.jpg" alt=""/>
    </div>
    <div class="lock-content">
       <!--雪花-->
@@ -187,7 +188,7 @@
             <td>
                <div class="layui-form lock-form">
                   <div class="lock-head">
-                     <img src="./images/avatar.png" alt="avatar.png" />
+                     <img src="./images/avatar.png" alt="avatar.png"/>
                   </div>
                   <div class="layui-form-item">
                      <div class="layui-col-xs8 layui-col-sm8 layui-col-md8">
@@ -199,14 +200,15 @@
                                style="border-radius: 0;border:0;height: 44px"
                                placeholder="默认密码123456"
                                autocomplete="off"
-                               class="layui-input" />
+                               class="layui-input"/>
                      </div>
                      <div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
                         <button style="width: 100%;box-sizing:border-box;border-radius: 0;"
                                 type="button"
                                 lay-submit
                                 lay-filter="lockSubmit"
-                                class="layui-btn lock-btn layui-btn-lg layui-btn-normal">确定</button>
+                                class="layui-btn lock-btn layui-btn-lg layui-btn-normal">确定
+                        </button>
                      </div>
                   </div>
                </div>
@@ -216,8 +218,8 @@
    </div>
 </div>
 <!--js逻辑-->
-<script src="lib/layui/layui.js"></script>
-<script src="js/snowflake.js?snowflake=雪花"></script>
-<script src="js/okadmin.js"></script>
+<script src="./lib/layui/layui.js"></script>
+<script src="./js/snowflake.js?snowflake=雪花"></script>
+<script src="./js/okadmin.js"></script>
 </body>
 </html>
