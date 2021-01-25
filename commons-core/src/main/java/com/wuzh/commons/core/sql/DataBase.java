@@ -36,6 +36,9 @@ public class DataBase {
     private DatabaseMetaData metaData;
     private Product product;
 
+    public DataBase() {
+    }
+
     public DataBase(Connection connection) {
         this.connection = connection;
         try {

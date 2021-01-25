@@ -41,6 +41,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -56,67 +57,10 @@ public class ExcelUtils {
 
     public static final int MAX_ROW = 50000;
 
-    public static void main(String[] args) {
-        String[] columns = {"brand", "shopNo", "shopFullName", "afeeLaborAgencyExpenses"};
-        String[] columnTitles = {"品牌", "店铺编码", "店铺全称", "A劳务中介费"};
-        Integer[] columnLengths = {100, 125, 287, 150};
-        List<String> requiredColumnTitles = Arrays.asList("品牌", "店铺编码", "店铺全称");
-        String fileName = "统计基础表.xlsx";
-        List<Map<String, Object>> dataColl = new LinkedList<>();
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("brand", "BLACK by moussy");
-        dataMap.put("shopNo", "BBJ101");
-        dataMap.put("shopFullName", "北京三里屯太古里店MOU");
-        dataMap.put("afeeLaborAgencyExpenses", BigDecimal.valueOf(129.99));
-        dataColl.add(dataMap);
-        Map<String, Object> dataMap1 = new HashMap<>();
-        dataMap1.put("brand", "moussy");
-        dataMap1.put("shopNo", "BBJ101");
-        dataMap1.put("shopFullName", "北京三里屯太古里店MOU");
-        dataMap1.put("afeeLaborAgencyExpenses", BigDecimal.ZERO);
-        dataColl.add(dataMap1);
-
-        Map<String, String[]> columnValidation = new HashMap<>();
-        String[] brands = {"BLACK by moussy", "moussy", "Belle"};
-        columnValidation.put("品牌", brands);
-
-        ExcelRequest excelRequest = new ExcelRequest();
-        excelRequest.setColumns(columns);
-        excelRequest.setColumnTitles(columnTitles);
-        excelRequest.setColumnLengths(columnLengths);
-        excelRequest.setRequiredColumnTitles(requiredColumnTitles);
-        excelRequest.setDataColl(dataColl);
-        excelRequest.setColumnValidation(columnValidation);
-
-        OutputStream outputStream = null;
-        try {
-            File destFile = new File("D:\\data");
-            if (!destFile.exists()) {
-                destFile.mkdirs();
-            }
-            outputStream = new FileOutputStream(new File(destFile, fileName));
-
-            // 创建workbook
-            Workbook workbook = createWorkbook(fileName);
-            // 创建sheet
-            Sheet sheet = createSheet(workbook, excelRequest);
-            // 写入内容
-            writeData(workbook, sheet, excelRequest);
-
-            workbook.write(outputStream);
-            outputStream.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+    /**
+     * 解析Cell列公式
+     */
+    private static ThreadLocal<FormulaEvaluator> FORMULA_EVALUATOR_LOCAL = new ThreadLocal<>();
 
 
     /**
@@ -854,7 +798,7 @@ public class ExcelUtils {
      * @param inputStream 输入流
      * @param clazz       返回结果类
      */
-    public static <T> List<T> importData(InputStream inputStream, Class<T> clazz) {
+    public static <T> List<T> importData(InputStream inputStream, Class<T> clazz) throws Exception {
         return importData(inputStream, clazz, null);
     }
 
@@ -865,7 +809,7 @@ public class ExcelUtils {
      * @param clazz       返回结果类
      * @param columns     读取字段
      */
-    public static <T> List<T> importData(InputStream inputStream, Class<T> clazz, String[] columns) {
+    public static <T> List<T> importData(InputStream inputStream, Class<T> clazz, String[] columns) throws Exception {
         Assert.notNull(inputStream, "inputStream must not be null");
         Assert.notNull(clazz, "clazz must not be null");
 
@@ -884,10 +828,11 @@ public class ExcelUtils {
                         || workbook.isSheetHidden(i) || workbook.isSheetVeryHidden(i)) {
                     continue;
                 }
-                resultList.addAll(getSheetData(sheet, clazz, columns, 1));
+                resultList.addAll(getSheetData(workbook, sheet, clazz, columns, 1));
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
+            throw e;
         }
         return resultList;
     }
@@ -913,6 +858,7 @@ public class ExcelUtils {
     /**
      * 读取模板sheet的数据
      *
+     * @param workbook 工作簿
      * @param sheet    目标sheet
      * @param clazz    解析目标结果类
      * @param columns  字段
@@ -922,30 +868,74 @@ public class ExcelUtils {
      * @throws IllegalAccessException
      * @throws InstantiationException
      */
-    public static <T> List<T> getSheetData(Sheet sheet, Class<T> clazz, String[] columns, int startRow)
+    public static <T> List<T> getSheetData(Workbook workbook, Sheet sheet, Class<T> clazz, String[] columns, int startRow)
             throws Exception {
         List<T> resultList = new LinkedList<>();
-        // todo 读取内容
-        for (int i = startRow; i <= sheet.getLastRowNum(); i++) {
-            Row row = sheet.getRow(i);
-            // 获取不为空的列个数
-            if (row.getPhysicalNumberOfCells() == 0) {
-                continue; // 该行的列为空
+
+        try {
+            // 解析Cell列公式
+            FormulaEvaluator formulaEvaluator = workbook.getCreationHelper().createFormulaEvaluator();
+            FORMULA_EVALUATOR_LOCAL.set(formulaEvaluator);
+
+            // 读取内容
+            for (int r = startRow; r <= sheet.getLastRowNum(); r++) {
+                Row row = sheet.getRow(r);
+                // 获取不为空的列个数
+                if (row.getPhysicalNumberOfCells() == 0) {
+                    continue; // 该行的列为空
+                }
+
+                T data = clazz.newInstance();
+                // 获取每一行的列数据
+                for (int c = 0; c < columns.length; c++) {
+                    Cell cell = row.getCell(c);
+                    String fieldName = columns[c];
+                    try {
+                        Field field = FieldUtils.getField(clazz, fieldName, true);
+
+                        ReflectUtils.setValue(data, fieldName, getRealValue(row, cell, clazz, fieldName, field));
+                    } catch (Exception e) {
+                        String errorMsg = MessageFormat.format("Excel文件中[{0}]Sheet的第{1}行第{2}列数据[{3}]导入错误，请检查！",
+                                sheet.getSheetName(), (r + 1), getExcelColumnLabel(cell.getColumnIndex()), cell);
+                        LOGGER.error("{}:", errorMsg, e);
+                        throw new IOException(errorMsg, e);
+                    }
+                }
+
+                resultList.add(data);
             }
-
-            T data = clazz.newInstance();
-            // 获取每一行的列数据
-            for (int j = 0; j < columns.length; j++) {
-                Cell cell = row.getCell(j);
-                String fieldName = columns[j];
-                Field field = FieldUtils.getField(clazz, fieldName, true);
-
-                ReflectUtils.setValue(data, fieldName, getRealValue(row, cell, clazz, fieldName, field));
-            }
-
-            resultList.add(data);
+        } finally {
+            FORMULA_EVALUATOR_LOCAL.remove();
         }
         return resultList;
+    }
+
+    /**
+     * 通过列索引获取Excel其对应列的字母
+     *
+     * @param cellIndex 列索引，从0开始
+     * @return
+     */
+    private static String getExcelColumnLabel(int cellIndex) {
+        String cellIndexName = "";
+        int baseCol = 65 + cellIndex;
+        if (baseCol > 90) {
+            // 十位位置
+            int i2 = 0;
+            if ((baseCol - 90) / 26 > 0) {
+                i2 = 65 + ((baseCol - 90 - 1) / 26);
+            } else {
+                i2 = 65;
+            }
+            // 个位位置
+            int i1 = ((baseCol - 90 - 1) % 26);
+            i1 = 65 + i1;
+
+            cellIndexName = String.valueOf((char) i2) + String.valueOf((char) i1);
+        } else {
+            cellIndexName = String.valueOf((char) baseCol);
+        }
+        return cellIndexName;
     }
 
     private static <T> Object getRealValue(Row row, Cell cell, Class<T> clazz, String fieldName, Field field) {
@@ -1078,7 +1068,12 @@ public class ExcelUtils {
         } else if (cell.getCellType() == CellType.STRING) { // 字符串
             value = cell.getStringCellValue();
         } else if (cell.getCellType() == CellType.FORMULA) { // 公式
-            value = cell.getCellFormula();
+            CellValue cellValue = FORMULA_EVALUATOR_LOCAL.get().evaluate(cell);
+            // 解决自动加".0"的数字
+            String format = NumberFormat.getInstance().format(cellValue.getNumberValue());
+            // 逗号去掉
+            format = StringUtils.replace(format, ",", "");
+            value = new BigDecimal(format);
         } else if (cell.getCellType() == CellType.BLANK) { // 空单元格：没值，但有单元格样式
             value = "";
         } else if (cell.getCellType() == CellType.BOOLEAN) {
