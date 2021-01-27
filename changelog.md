@@ -1,4 +1,7 @@
 ## 更新日志
+### SpringBoot/v2.3.8
+1. 新增commons-dingtalk模块：提供钉钉API接口调用
+
 
 ### SpringBoot/V2.3.6
 1. commons-mybatis-generator模块：

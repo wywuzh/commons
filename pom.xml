@@ -17,6 +17,7 @@
         <module>commons-mybatis-generator</module>
         <module>commons-mybatis</module>
         <module>commons-static</module>
+        <module>commons-dingtalk</module>
     </modules>
 
     <developers>
