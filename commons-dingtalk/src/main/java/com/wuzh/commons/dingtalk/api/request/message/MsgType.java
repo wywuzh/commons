@@ -13,25 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.api;
-
-import com.wuzh.commons.dingtalk.api.config.ApiConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.wuzh.commons.dingtalk.api.request.message;
 
 /**
- * 类BaseAPI的实现描述：API基类，提供一些通用方法
+ * 类MsgType的实现描述：消息类型
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-27 23:02:07
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 17:49:13
  * @version v2.3.8
  * @since JDK 1.8
  */
-public abstract class BaseAPI {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+public enum MsgType {
+    text("text"), // 文本
+    image("image"), // 图片
+    voice("voice"), // 语音
+    file("file"), // 文件
+    link("link"), // 链接
+    oa("oa"), // oa
+    markdown("markdown"), // markdown
+    action_card("action_card"), // 卡片
+    ;
 
-    private final ApiConfig apiConfig;
+    private String type;
 
-    public BaseAPI(ApiConfig apiConfig) {
-        this.apiConfig = apiConfig;
+    MsgType(String type) {
+        this.type = type;
+    }
+
+    public String getType() {
+        return type;
     }
 }

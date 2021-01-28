@@ -13,25 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.api;
-
-import com.wuzh.commons.dingtalk.api.config.ApiConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package com.wuzh.commons.dingtalk.api.config;
 
 /**
- * 类BaseAPI的实现描述：API基类，提供一些通用方法
+ * 类ApiConfig的实现描述：TODO 类实现描述
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-27 23:02:07
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:46:49
  * @version v2.3.8
  * @since JDK 1.8
  */
-public abstract class BaseAPI {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
-
-    private final ApiConfig apiConfig;
-
-    public BaseAPI(ApiConfig apiConfig) {
-        this.apiConfig = apiConfig;
-    }
+public class ApiConfig {
 }
