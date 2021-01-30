@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.response.contacts;
+package com.wuzh.commons.dingtalk.response.contacts.userget;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -33,7 +33,7 @@ public class UserCreate implements Serializable {
     /**
      * 员工的userid
      */
-    @SerializedName("userid")
+    @SerializedName(value = "userid")
     private String userId;
 
 }

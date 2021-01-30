@@ -15,7 +15,7 @@
  */
 package com.wuzh.commons.dingtalk.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,12 +40,12 @@ public class AccessTokenResponse extends BaseResponse {
      * 3. 不能频繁调用gettoken接口，否则会受到频率拦截。
      * </pre>
      */
-    @JsonProperty("access_token")
+    @SerializedName(value = "access_token")
     private String accessToken;
     /**
      * access_token的过期时间，单位秒
      */
-    @JsonProperty("expires_in")
+    @SerializedName(value = "expires_in")
     private Integer expiresIn;
 
 }

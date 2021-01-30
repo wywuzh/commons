@@ -15,12 +15,13 @@
  */
 package com.wuzh.commons.dingtalk.api;
 
+import com.google.gson.reflect.TypeToken;
 import com.wuzh.commons.core.http.HttpClientUtils;
 import com.wuzh.commons.core.http.ResponseMessage;
-import com.wuzh.commons.core.json.jackson.JsonMapper;
+import com.wuzh.commons.core.json.gson.GsonUtil;
 import com.wuzh.commons.dingtalk.constants.URLContent;
-import com.wuzh.commons.dingtalk.response.AccessTokenResponse;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
+import com.wuzh.commons.dingtalk.response.AccessTokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 import org.springframework.util.Assert;
@@ -57,7 +58,9 @@ public class TokenAPI {
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");
         }
-        AccessTokenResponse tokenResponse = JsonMapper.buildNormalMapper().fromJson(responseMessage.getResult(), AccessTokenResponse.class);
+        // AccessTokenResponse中的嵌套子类未超过两级，可以通过jackson、fastjson、JSON等工具类进行解析；当操作时就需要改用gson工具类进行解析，否则可能解析json失败
+        AccessTokenResponse tokenResponse = GsonUtil.parse(responseMessage.getResult(), new TypeToken<AccessTokenResponse>() {
+        }.getType());
         return tokenResponse;
     }
 

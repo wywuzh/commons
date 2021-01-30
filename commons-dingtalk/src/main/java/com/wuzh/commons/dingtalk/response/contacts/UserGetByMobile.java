@@ -33,7 +33,7 @@ public class UserGetByMobile implements Serializable {
     /**
      * 员工的userid
      */
-    @SerializedName("userid")
+    @SerializedName(value = "userid")
     private String userId;
 
 }

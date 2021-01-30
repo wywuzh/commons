@@ -13,33 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.response.contacts;
+package com.wuzh.commons.dingtalk.response.contacts.userget;
 
 import com.google.gson.annotations.SerializedName;
-import com.wuzh.commons.dingtalk.response.BaseResponse;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
 
 /**
- * 类ContactsResponse的实现描述：通讯录管理-返回基类
+ * 类DeptOrder的实现描述：员工在对应的部门中的排序
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 21:18:52
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 22:02:47
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class ContactsResponse<T> extends BaseResponse {
+public class DeptOrder implements Serializable {
 
     /**
-     * 请求ID
+     * 部门ID
      */
-    @SerializedName(value = "request_id")
-    private String requestId;
+    @SerializedName(value = "dept_id")
+    private Long deptId;
     /**
-     * 结果
+     * 员工在部门中的排序
      */
-    @SerializedName(value = "result")
-    private T result;
+    @SerializedName(value = "order")
+    private Long order;
 
 }

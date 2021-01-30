@@ -1,6 +1,6 @@
 package com.wuzh.commons.dingtalk.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 /**
@@ -16,12 +16,12 @@ public abstract class BaseResponse {
     /**
      * 返回码
      */
-    @JsonProperty("errcode")
+    @SerializedName(value = "errcode")
     private Integer errCode;
     /**
      * 返回码描述
      */
-    @JsonProperty("errmsg")
+    @SerializedName(value = "errmsg")
     private String errMsg;
 
 }

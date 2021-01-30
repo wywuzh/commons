@@ -33,13 +33,13 @@ public class UserGetByUnionId implements Serializable {
     /**
      * 联系类型：0=企业内部员工, 1=企业外部联系人
      */
-    @SerializedName("contact_type")
+    @SerializedName(value = "contact_type")
     private String contactType;
 
     /**
      * 员工的userid
      */
-    @SerializedName("userid")
+    @SerializedName(value = "userid")
     private String userId;
 
 }

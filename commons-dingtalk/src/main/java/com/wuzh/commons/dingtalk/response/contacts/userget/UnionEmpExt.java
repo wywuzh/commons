@@ -13,33 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.response.contacts;
+package com.wuzh.commons.dingtalk.response.contacts.userget;
 
 import com.google.gson.annotations.SerializedName;
-import com.wuzh.commons.dingtalk.response.BaseResponse;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
- * 类ContactsResponse的实现描述：通讯录管理-返回基类
+ * 类UnionEmpExt的实现描述：当用户来自于关联组织时的关联信息
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 21:18:52
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 23:35:30
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class ContactsResponse<T> extends BaseResponse {
+public class UnionEmpExt implements Serializable {
 
     /**
-     * 请求ID
+     * 员工的userid
      */
-    @SerializedName(value = "request_id")
-    private String requestId;
+    @SerializedName(value = "userid")
+    private String userId;
     /**
-     * 结果
+     * 关联映射关系
      */
-    @SerializedName(value = "result")
-    private T result;
-
+    @SerializedName(value = "union_emp_map_list")
+    private List<UnionEmpMapVo> unionEmpMapList;
+    /**
+     * 当前用户所属的组织的企业corpid
+     */
+    @SerializedName(value = "corp_id")
+    private String corp_id;
 }

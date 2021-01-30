@@ -58,6 +58,7 @@ public class UserV2API extends BaseAPI {
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");
         }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
         ContactsResponse<UserGet> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<UserGet>>() {
         }.getType());
         return response;
@@ -78,7 +79,6 @@ public class UserV2API extends BaseAPI {
         }
         ContactsResponse<UserGetByMobile> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<UserGetByMobile>>() {
         }.getType());
-//        ContactsResponse<UserGetByMobile> response = JsonMapper.buildNormalMapper().fromJson(responseMessage.getResult(), ContactsResponse.class, UserGetByMobile.class);
         return response;
     }
 
@@ -102,7 +102,6 @@ public class UserV2API extends BaseAPI {
         }
         ContactsResponse<UserGetByUnionId> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<UserGetByUnionId>>() {
         }.getType());
-//        ContactsResponse<UserGetByUnionId> response = JsonMapper.buildNormalMapper().fromJson(responseMessage.getResult(), ContactsResponse.class, UserGetByUnionId.class);
         return response;
     }
 

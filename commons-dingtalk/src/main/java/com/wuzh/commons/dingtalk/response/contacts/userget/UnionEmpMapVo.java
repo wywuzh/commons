@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.response.contacts;
+package com.wuzh.commons.dingtalk.response.contacts.userget;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
@@ -21,24 +21,23 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 类DeptOrder的实现描述：员工在对应的部门中的排序
+ * 类UnionEmpMapVo的实现描述：关联映射关系
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 22:02:47
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 23:36:32
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class DeptOrder implements Serializable {
+public class UnionEmpMapVo implements Serializable {
 
     /**
-     * 部门ID
+     * 关联分支组织中的员工userid
      */
-    @SerializedName("dept_id")
-    private Long dept_id;
+    @SerializedName(value = "userid")
+    private String userId;
     /**
-     * 员工在部门中的排序
+     * 关联分支组织的企业corpid
      */
-    @SerializedName("order")
-    private Long order;
-
+    @SerializedName(value = "corp_id")
+    private String corp_id;
 }
