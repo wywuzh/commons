@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.api.response;
+package com.wuzh.commons.dingtalk.response.contacts;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
- * 类AccessTokenResponse的实现描述：TODO 类实现描述
+ * 类DeptOrder的实现描述：员工在对应的部门中的排序
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:40:20
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 22:02:47
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class AccessTokenResponse extends BaseResponse {
+public class DeptOrder implements Serializable {
 
     /**
-     * 生成的access_token
+     * 部门ID
      */
-    @JsonProperty("access_token")
-    private String accessToken;
+    @SerializedName("dept_id")
+    private Long dept_id;
     /**
-     * access_token的过期时间，单位秒
+     * 员工在部门中的排序
      */
-    @JsonProperty("expires_in")
-    private String expiresIn;
+    @SerializedName("order")
+    private Long order;
 
 }

@@ -15,9 +15,14 @@
  */
 package com.wuzh.commons.dingtalk.api;
 
-import com.wuzh.commons.dingtalk.api.config.ApiConfig;
+import com.wuzh.commons.core.http.HttpClientUtils;
+import com.wuzh.commons.core.http.ResponseMessage;
+import com.wuzh.commons.dingtalk.config.ApiConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
+import java.util.Map;
 
 /**
  * 类BaseAPI的实现描述：API基类，提供一些通用方法
@@ -29,9 +34,24 @@ import org.slf4j.LoggerFactory;
 public abstract class BaseAPI {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final ApiConfig apiConfig;
+    protected final ApiConfig apiConfig;
 
     public BaseAPI(ApiConfig apiConfig) {
         this.apiConfig = apiConfig;
     }
+
+    protected ResponseMessage doGet(String url, Map<String, String> queryParams) {
+        Assert.notNull(url, "url must not be null");
+
+        String getUrl = url.replace("#", apiConfig.getAccessToken());
+        return HttpClientUtils.doGet(getUrl, queryParams);
+    }
+
+    protected ResponseMessage doPost(String url, Map<String, String> requestParams) {
+        Assert.notNull(url, "url must not be null");
+
+        String getUrl = url.replace("#", apiConfig.getAccessToken());
+        return HttpClientUtils.doPost(getUrl, requestParams);
+    }
+
 }

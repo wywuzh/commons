@@ -1,4 +1,4 @@
-package com.wuzh.commons.dingtalk.api.response;
+package com.wuzh.commons.dingtalk.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;

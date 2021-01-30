@@ -13,36 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.api.request;
+package com.wuzh.commons.dingtalk.api;
 
-import com.wuzh.commons.core.web.request.BaseRequest;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.apache.commons.lang3.builder.ToStringBuilder;
+import com.wuzh.commons.dingtalk.config.ApiConfig;
+import org.junit.Before;
 
 /**
- * 类GetTokenRequest的实现描述：TODO 类实现描述
+ * 类AbstractTest的实现描述：TODO 类实现描述
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:41:14
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 21:28:06
  * @version v2.3.8
  * @since JDK 1.8
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-public class GetTokenRequest extends BaseRequest {
-    private static final long serialVersionUID = 8844322137430327841L;
+public abstract class AbstractTest {
 
+    protected ApiConfig apiConfig;
+
+    final String AGENT_ID = "1087695954";
     /**
      * 应用的唯一标识key
      */
-    private String appkey;
+    final String APP_KEY = "dingziruwslmoflj5cyc";
     /**
      * 应用的密钥
      */
-    private String appsecret;
+    final String APP_SECRET = "UOrFnv0IqZJf2XJobif7_jblEgF0Kn2S4-013sTfil9o7yhg59g_DynyUtdFlGCD";
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
+    @Before
+    public void init() {
+        apiConfig = new ApiConfig(AGENT_ID, APP_KEY, APP_SECRET);
     }
+
 }

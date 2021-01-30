@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.api.config;
+package com.wuzh.commons.dingtalk.enums;
 
 /**
- * 类ApiConfig的实现描述：TODO 类实现描述
+ * 类ErrorCode的实现描述：TODO 类实现描述
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:46:49
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:40:20
  * @version v2.3.8
  * @since JDK 1.8
  */
-public class ApiConfig {
+public enum ErrorCode {
 }

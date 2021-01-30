@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.api.request.message;
+package com.wuzh.commons.dingtalk.request.message;
 
 import lombok.Data;
 

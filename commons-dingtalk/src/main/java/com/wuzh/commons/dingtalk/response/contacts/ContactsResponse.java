@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.api.request.message;
+package com.wuzh.commons.dingtalk.response.contacts;
+
+import com.google.gson.annotations.SerializedName;
+import com.wuzh.commons.dingtalk.response.BaseResponse;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 类MsgType的实现描述：消息类型
+ * 类ContactsResponse的实现描述：通讯录管理-返回基类
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 17:49:13
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 21:18:52
  * @version v2.3.8
  * @since JDK 1.8
  */
-public enum MsgType {
-    text("text"), // 文本
-    image("image"), // 图片
-    voice("voice"), // 语音
-    file("file"), // 文件
-    link("link"), // 链接
-    oa("oa"), // oa
-    markdown("markdown"), // markdown
-    action_card("action_card"), // 卡片
-    ;
+@Data
+@EqualsAndHashCode(callSuper = false)
+public class ContactsResponse<T> extends BaseResponse {
 
-    private String type;
+    /**
+     * 请求ID
+     */
+    @SerializedName("request_id")
+    private String requestId;
+    /**
+     * 结果
+     */
+    @SerializedName("result")
+    private T result;
 
-    MsgType(String type) {
-        this.type = type;
-    }
-
-    public String getType() {
-        return type;
-    }
 }
