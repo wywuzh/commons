@@ -26,95 +26,95 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * 类DepartmentAPITest的实现描述：部门管理2.0
+ * 类DeptV2APITest的实现描述：部门管理2.0
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-31 15:06:19
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Slf4j
-public class DepartmentAPITest extends AbstractTest {
+public class DeptV2APITest extends AbstractTest {
 
     @Test
     public void create() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
 
         // 创建部门 deptId=457162465
         DepartmentCreateRequest request = new DepartmentCreateRequest();
         request.setName("mall");
         request.setParentId(1L);
-        ContactsResponse<DeptCreate> response = departmentAPI.create(request);
+        ContactsResponse<DeptCreate> response = deptV2API.create(request);
         log.info("创建部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
     public void update() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
 
         // 更新部门 deptId=457162465
         DepartmentUpdateRequest request = new DepartmentUpdateRequest();
         request.setDeptId(457162465L);
         request.setName("电商中心");
-        ContactsResponse<DeptCreate> response = departmentAPI.update(request);
+        ContactsResponse<DeptCreate> response = deptV2API.update(request);
         log.info("更新部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
     public void delete() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
 
         // 删除部门 deptId=457162465
         Long deptId = 457162465L;
-        ContactsResponse response = departmentAPI.delete(deptId);
+        ContactsResponse response = deptV2API.delete(deptId);
         log.info("删除部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
     public void get() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
 
         // 获取部门详情 deptId=457162465
         Long deptId = 457162465L;
-        ContactsResponse<DeptGet> response = departmentAPI.get(deptId);
+        ContactsResponse<DeptGet> response = deptV2API.get(deptId);
         log.info("获取部门详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
     public void listSubId() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
 
         // 获取子部门ID列表 deptId=457162465
         Long deptId = 457162465L;
-        ContactsResponse<DeptListSubId> response = departmentAPI.listSubId(deptId);
+        ContactsResponse<DeptListSubId> response = deptV2API.listSubId(deptId);
         log.info("获取子部门ID列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
     public void listParentByUser() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
 
         // 获取指定用户的所有父部门列表 deptId=457162465
         String userid = "103559512720455311";
-        ContactsResponse<DeptListParentByUser> response = departmentAPI.listParentByUser(userid);
+        ContactsResponse<DeptListParentByUser> response = deptV2API.listParentByUser(userid);
         log.info("获取指定用户的所有父部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
     public void listParentByDept() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
 
         // 获取部门详情 deptId=457162465
         Long deptId = 457162465L;
-        ContactsResponse<DeptListParentByDeptId> response = departmentAPI.listParentByDept(deptId);
+        ContactsResponse<DeptListParentByDeptId> response = deptV2API.listParentByDept(deptId);
         log.info("获取指定部门的所有父部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
     public void listSub() {
-        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+        DeptV2API deptV2API = new DeptV2API(apiConfig);
         // 获取部门列表
         Long deptId = 1L; // deptId=457359137, name=商品
-        ContactsResponse<List<DeptBase>> response = departmentAPI.listSub(deptId);
+        ContactsResponse<List<DeptBase>> response = deptV2API.listSub(deptId);
         log.info("获取部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 

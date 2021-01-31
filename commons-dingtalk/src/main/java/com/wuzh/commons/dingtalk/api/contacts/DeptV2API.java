@@ -34,16 +34,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 类DepartmentAPI的实现描述：部门管理2.0
+ * 类DeptV2API的实现描述：部门管理2.0
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-31 14:58:28
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Slf4j
-public class DepartmentAPI extends BaseAPI {
+public class DeptV2API extends BaseAPI {
 
-    public DepartmentAPI(ApiConfig apiConfig) {
+    public DeptV2API(ApiConfig apiConfig) {
         super(apiConfig);
     }
 
