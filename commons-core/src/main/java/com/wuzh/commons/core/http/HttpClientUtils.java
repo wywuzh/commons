@@ -15,6 +15,7 @@
  */
 package com.wuzh.commons.core.http;
 
+import com.wuzh.commons.core.json.gson.GsonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -34,6 +35,7 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -335,6 +337,42 @@ public class HttpClientUtils {
             }
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, charset);
             httpPost.setEntity(entity);
+        }
+
+        // header参数
+        if (null != header && header.size() > 0) {
+            Header[] headers = new Header[header.size()];
+            int index = 0;
+            for (String key : header.keySet()) {
+                headers[index] = new BasicHeader(key, header.get(key));
+                index++;
+            }
+            httpPost.setHeaders(headers);
+        }
+        return doRequest(httpPost);
+    }
+
+    /**
+     * POST请求数据
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数
+     * @param header  header参数
+     * @param charset 字符集
+     * @return
+     * @since v2.3.8
+     */
+    public static ResponseMessage doPost(String uri, Object param, Map<String, String> header,
+                                         Charset charset) {
+        Assert.notNull(uri, "uri must not be null");
+        Assert.notNull(charset, "charset must not be null");
+
+        HttpPost httpPost = new HttpPost(uri);
+
+        // 请求参数
+        if (null != param) {
+            String json = GsonUtil.format(param);
+            httpPost.setEntity(new StringEntity(json, charset));
         }
 
         // header参数

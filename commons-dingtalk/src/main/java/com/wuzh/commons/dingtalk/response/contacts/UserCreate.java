@@ -13,14 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.enums;
+package com.wuzh.commons.dingtalk.response.contacts;
+
+import com.google.gson.annotations.SerializedName;
+import lombok.Data;
+
+import java.io.Serializable;
 
 /**
- * 类ErrorCode的实现描述：错误码
+ * 类UserCreate的实现描述：创建用户
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:40:20
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-31 14:34:23
  * @version v2.3.8
  * @since JDK 1.8
  */
-public enum ErrorCode {
+@Data
+public class UserCreate implements Serializable {
+
+    /**
+     * 员工的userid
+     */
+    @SerializedName(value = "userid")
+    private String userId;
+
 }

@@ -16,7 +16,7 @@
 package com.wuzh.commons.dingtalk.constants;
 
 /**
- * 类URLContent的实现描述：TODO 类实现描述
+ * 类URLContent的实现描述：钉钉URL地址
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 11:56:21
  * @version v2.3.8
@@ -38,14 +38,23 @@ public class URLContent {
     /**
      * 用户管理2.0：根据userid获取用户详情
      */
-    public static final String URL_USER_V2_GET = BASE_API_URL + "/topapi/v2/user/get?access_token=#";
+    public static final String URL_V2_USER_CREATE = BASE_API_URL + "/topapi/v2/user/create?access_token=#ACCESS_TOKEN";
+    /**
+     * 用户管理2.0：根据userid获取用户详情
+     */
+    public static final String URL_V2_USER_GET = BASE_API_URL + "/topapi/v2/user/get?access_token=#ACCESS_TOKEN";
     /**
      * 用户管理2.0：根据手机号获取用户信息
      */
-    public static final String URL_USER_V2_GET_BY_MOBILE = BASE_API_URL + "/topapi/v2/user/getbymobile?access_token=#";
+    public static final String URL_V2_USER_GETBYMOBILE = BASE_API_URL + "/topapi/v2/user/getbymobile?access_token=#ACCESS_TOKEN";
     /**
      * 用户管理2.0：根据unionid获取用户userid
      */
-    public static final String URL_USER_V2_GET_BY_UNIONID = BASE_API_URL + "/topapi/user/getbyunionid?access_token=#";
+    public static final String URL_V2_USER_GETBYUNIONID = BASE_API_URL + "/topapi/user/getbyunionid?access_token=#ACCESS_TOKEN";
+
+    /**
+     * 部门管理2.0：获取部门列表
+     */
+    public static final String URL_V2_DEPARTMENT_LISTSUB = BASE_API_URL + "/topapi/v2/department/listsub?access_token=#ACCESS_TOKEN";
 
 }

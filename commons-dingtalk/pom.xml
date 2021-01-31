@@ -20,6 +20,12 @@
             <artifactId>commons-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+            <version>${alibaba-dingtalk-service-sdk.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

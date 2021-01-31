@@ -17,10 +17,12 @@ package com.wuzh.commons.dingtalk.api.contacts;
 
 import com.wuzh.commons.core.json.jackson.JsonMapper;
 import com.wuzh.commons.dingtalk.api.AbstractTest;
+import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
 import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
 import com.wuzh.commons.dingtalk.response.contacts.UserGet;
 import com.wuzh.commons.dingtalk.response.contacts.UserGetByMobile;
 import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionId;
+import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -63,6 +65,19 @@ public class UserV2APITest extends AbstractTest {
 ////        }
 ////        ContactsResponse<UserGet> response = JsonMapper.buildNonNullMapper().fromJson(result, clazz, classes);
 //    }
+
+    @Test
+    public void create() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+
+        // 创建用户 userid=103559512720455311
+        UserCreateRequest request = new UserCreateRequest();
+        request.setMobile("18576689629");
+        request.setName("伍章红");
+        request.setDeptIdList("457359137");
+        ContactsResponse<UserCreate> response = userV2API.create(request);
+        log.info("创建用户：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
 
     @Test
     public void get() {

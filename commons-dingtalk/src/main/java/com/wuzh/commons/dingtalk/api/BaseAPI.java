@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
+import java.nio.charset.Charset;
 import java.util.Map;
 
 /**
@@ -43,15 +44,22 @@ public abstract class BaseAPI {
     protected ResponseMessage doGet(String url, Map<String, String> queryParams) {
         Assert.notNull(url, "url must not be null");
 
-        String getUrl = url.replace("#", apiConfig.getAccessToken());
+        String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
         return HttpClientUtils.doGet(getUrl, queryParams);
     }
 
     protected ResponseMessage doPost(String url, Map<String, String> requestParams) {
         Assert.notNull(url, "url must not be null");
 
-        String getUrl = url.replace("#", apiConfig.getAccessToken());
+        String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
         return HttpClientUtils.doPost(getUrl, requestParams);
+    }
+
+    protected ResponseMessage doPost(String url, Object requestParams) {
+        Assert.notNull(url, "url must not be null");
+
+        String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
+        return HttpClientUtils.doPost(getUrl, requestParams, null, Charset.forName("UTF-8"));
     }
 
 }

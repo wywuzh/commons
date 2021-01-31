@@ -18,12 +18,16 @@ package com.wuzh.commons.dingtalk.api.contacts;
 import com.google.gson.reflect.TypeToken;
 import com.wuzh.commons.core.http.ResponseMessage;
 import com.wuzh.commons.core.json.gson.GsonUtil;
-import com.wuzh.commons.core.json.jackson.JsonMapper;
 import com.wuzh.commons.dingtalk.api.BaseAPI;
 import com.wuzh.commons.dingtalk.config.ApiConfig;
 import com.wuzh.commons.dingtalk.constants.URLContent;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
-import com.wuzh.commons.dingtalk.response.contacts.*;
+import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
+import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
+import com.wuzh.commons.dingtalk.response.contacts.UserGet;
+import com.wuzh.commons.dingtalk.response.contacts.UserGetByMobile;
+import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionId;
+import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 
@@ -45,6 +49,24 @@ public class UserV2API extends BaseAPI {
     }
 
     /**
+     * 创建用户
+     *
+     * @param request 请求
+     * @return
+     */
+    public ContactsResponse<UserCreate> create(UserCreateRequest request) {
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_CREATE, request);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<UserCreate> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<UserCreate>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
      * 根据userid获取用户详情
      *
      * @param userId 用户的userid
@@ -53,7 +75,7 @@ public class UserV2API extends BaseAPI {
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("userid", userId);
         requestParams.put("language", "zh_CN");
-        ResponseMessage responseMessage = doPost(URLContent.URL_USER_V2_GET, requestParams);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GET, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");
@@ -72,7 +94,7 @@ public class UserV2API extends BaseAPI {
     public ContactsResponse<UserGetByMobile> getByMobile(String mobile) {
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("mobile", mobile);
-        ResponseMessage responseMessage = doPost(URLContent.URL_USER_V2_GET_BY_MOBILE, requestParams);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GETBYMOBILE, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");
@@ -95,7 +117,7 @@ public class UserV2API extends BaseAPI {
     public ContactsResponse<UserGetByUnionId> getByUnionID(String unionID) {
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("unionid", unionID);
-        ResponseMessage responseMessage = doPost(URLContent.URL_USER_V2_GET_BY_UNIONID, requestParams);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GETBYUNIONID, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");

@@ -13,14 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.enums;
+package com.wuzh.commons.dingtalk;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 类ErrorCode的实现描述：错误码
+ * 类DingtalkProperties的实现描述：钉钉应用属性信息
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:40:20
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-31 13:18:13
  * @version v2.3.8
  * @since JDK 1.8
  */
-public enum ErrorCode {
+@Data
+@ConfigurationProperties(prefix = "dingtalk")
+public class DingtalkProperties {
+
+    /**
+     * 应用的agentId
+     */
+    private String agentId;
+    /**
+     * 应用的唯一标识key
+     */
+    private String appKey;
+    /**
+     * 应用的密钥
+     */
+    private String appSecret;
+
 }
