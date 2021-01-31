@@ -190,7 +190,7 @@ public class DeptV2API extends BaseAPI {
 
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("dept_id", deptId);
-        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_LISTPARENTBYUSER, requestParams);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_LISTPARENTBYDEPT, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");

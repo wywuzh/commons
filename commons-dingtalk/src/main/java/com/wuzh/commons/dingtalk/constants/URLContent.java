@@ -85,4 +85,10 @@ public class URLContent {
      */
     public static final String URL_V2_DEPARTMENT_LISTSUB = BASE_API_URL + "/topapi/v2/department/listsub?access_token=#ACCESS_TOKEN";
 
+
+    /**
+     * 消息通知：发送工作通知
+     */
+    public static final String URL_MESSAGE_CORPCONVERSATION_ASYNCSEND_V2 = BASE_API_URL + "/topapi/message/corpconversation/asyncsend_v2?access_token=#ACCESS_TOKEN";
+
 }

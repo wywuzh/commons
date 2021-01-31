@@ -15,6 +15,7 @@
  */
 package com.wuzh.commons.dingtalk.request.message;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -22,24 +23,48 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 类AsyncsendV2Body的实现描述：TODO 类实现描述
+ * 类AsyncsendV2Body的实现描述：发送工作通知请求
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:40:20
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class AsyncsendV2Body implements Serializable {
+public class AsyncsendV2Request implements Serializable {
     private static final long serialVersionUID = -5900398987563654895L;
 
+    /**
+     * 发送消息时使用的微应用的AgentID
+     */
+    @SerializedName(value = "agent_id")
     private String agent_id;
+    /**
+     * 接收者的userid列表，最大用户列表长度100
+     */
+    @SerializedName(value = "userid_list")
     private String userid_list;
+    /**
+     * 接收者的部门id列表，最大列表长度20。接收者是部门ID时，包括子部门下的所有用户
+     */
+    @SerializedName(value = "dept_id_list")
     private String dept_id_list;
-    private boolean to_all_user = false;
+    /**
+     * 是否发送给企业全部用户。
+     * 说明：当设置为false时必须指定userid_list或dept_id_list其中一个参数的值。
+     */
+    @SerializedName(value = "to_all_user")
+    private Boolean to_all_user;
+    /**
+     * 消息类型
+     */
     private MsgType msgType = MsgType.text;
-    private String msg;
+    /**
+     * 发送消息时使用的微应用的AgentID
+     */
+    @SerializedName(value = "msg")
+    private Map<String, Object> msg;
 
-    public Object buildMsg() {
+    public Map<String, Object> getMsg() {
         Map<String, Object> msg = new HashMap<>();
         msg.put("msgtype", msgType.getType());
 
@@ -82,10 +107,4 @@ public class AsyncsendV2Body implements Serializable {
         return msg;
     }
 
-    private Map<String, Object> buildMsgForText() {
-        Map<String, Object> msg = new HashMap<>();
-
-        msg.put("text", null);
-        return msg;
-    }
 }
