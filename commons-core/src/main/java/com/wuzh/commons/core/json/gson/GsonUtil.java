@@ -212,7 +212,7 @@ public class GsonUtil {
      * @throws JsonSyntaxException
      */
     public static JsonObject fromObject(String json) throws JsonSyntaxException {
-        JsonElement jsonElement = new JsonParser().parse(json);
+        JsonElement jsonElement = JsonParser.parseString(json);
         if (jsonElement.isJsonObject()) {
             return jsonElement.getAsJsonObject();
         } else {
@@ -228,7 +228,7 @@ public class GsonUtil {
      * @throws JsonSyntaxException
      */
     public static JsonArray fromArray(String json) throws JsonSyntaxException {
-        JsonElement jsonElement = new JsonParser().parse(json);
+        JsonElement jsonElement = JsonParser.parseString(json);
         if (jsonElement.isJsonArray()) {
             return jsonElement.getAsJsonArray();
         } else {
@@ -250,7 +250,7 @@ public class GsonUtil {
         System.out.println(json2);
 
         String jsonObject = "1234";
-        JsonElement parse = new JsonParser().parse(jsonObject);
+        JsonElement parse = JsonParser.parseString(jsonObject);
         if (parse.isJsonObject()) {
             System.out.println(parse.getAsJsonObject());
         }

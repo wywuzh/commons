@@ -61,14 +61,19 @@ import java.util.Map;
 
 /**
  * 类HttpUtil.java的实现描述：HTTP、HTTPS调用工具类
- * 
+ *
+ * <pre>
+ * 参考网址：
+ * 1. https://jingyan.baidu.com/article/154b46317353d228ca8f4112.html
+ * </pre>
+ *
  * <pre>
  * 1）GET：GET操作是安全的。所谓安全是指不管进行多少次操作，资源的状态都不会改变。
  * 2）POST：POST操作既不是安全的，也不是幂等的，比如常见的POST重复加载问题：当我们多次发出同样的POST请求后，其结果是创建出了若干的资源。
  * 3）PUT：PUT操作是幂等的。所谓幂等是指不管进行多少次操作，结果都一样。
  * 4）DELETE：DELETE操作是幂等的。所谓幂等是指不管进行多少次操作，结果都一样。
  * </pre>
- * 
+ *
  * <pre>
  * <strong>使用场合：</strong>
  *  POST    /uri      创建
@@ -86,13 +91,11 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年4月25日 下午2:17:14
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数。格式param1=value1&amp;param2=value2&amp;param3=value3
+     *
+     * @param uri   请求URI地址
+     * @param param 请求参数。格式param1=value1&amp;param2=value2&amp;param3=value3
      * @return
+     * @author wywuzh 2016年4月25日 下午2:17:14
      */
     public static ResponseMessage doGet(String uri, String param) {
         Assert.notNull(uri, "uri must not be null");
@@ -102,13 +105,11 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年4月25日 下午2:37:27
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
+     *
+     * @param uri   请求URI地址
+     * @param param 请求参数
      * @return
+     * @author wywuzh 2016年4月25日 下午2:37:27
      */
     public static ResponseMessage doGet(String uri, Map<String, String> param) {
         Assert.notNull(uri, "uri must not be null");
@@ -127,15 +128,12 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年5月23日 下午5:47:07
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
-     * @param header
-     *            请求参数（header）
+     *
+     * @param uri    请求URI地址
+     * @param param  请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
+     * @param header 请求参数（header）
      * @return
+     * @author wywuzh 2016年5月23日 下午5:47:07
      */
     public static ResponseMessage doGet(String uri, String param, Map<String, String> header) {
         Assert.notNull(uri, "uri must not be null");
@@ -145,15 +143,12 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年5月23日 下午5:47:15
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数（urlParam）
-     * @param header
-     *            请求参数（header）
+     *
+     * @param uri    请求URI地址
+     * @param param  请求参数（urlParam）
+     * @param header 请求参数（header）
      * @return
+     * @author wywuzh 2016年5月23日 下午5:47:15
      */
     public static ResponseMessage doGet(String uri, Map<String, String> param, Map<String, String> header) {
         Assert.notNull(uri, "uri must not be null");
@@ -163,15 +158,12 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年4月25日 下午2:23:07
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数,格式param1=value1&amp;param2=value2&amp;param3=value3
-     * @param charset
-     *            字符集
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数,格式param1=value1&amp;param2=value2&amp;param3=value3
+     * @param charset 字符集
      * @return
+     * @author wywuzh 2016年4月25日 下午2:23:07
      */
     public static ResponseMessage doGet(String uri, String param, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
@@ -182,15 +174,12 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年4月25日 下午2:39:19
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param charset
-     *            字符集
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数
+     * @param charset 字符集
      * @return
+     * @author wywuzh 2016年4月25日 下午2:39:19
      */
     public static ResponseMessage doGet(String uri, Map<String, String> param, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
@@ -210,17 +199,13 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年5月23日 下午5:46:29
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
-     * @param header
-     *            请求参数（header）
-     * @param charset
-     *            字符集
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
+     * @param header  请求参数（header）
+     * @param charset 字符集
      * @return
+     * @author wywuzh 2016年5月23日 下午5:46:29
      */
     public static ResponseMessage doGet(String uri, String param, Map<String, String> header, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
@@ -255,20 +240,16 @@ public class HttpClientUtils {
 
     /**
      * GET请求数据
-     * 
-     * @author wywuzh 2016年5月23日 下午5:47:21
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数（urlParam）
-     * @param header
-     *            请求参数（header）
-     * @param charset
-     *            字符集
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数（urlParam）
+     * @param header  请求参数（header）
+     * @param charset 字符集
      * @return
+     * @author wywuzh 2016年5月23日 下午5:47:21
      */
     public static ResponseMessage doGet(String uri, Map<String, String> param, Map<String, String> header,
-            Charset charset) {
+                                        Charset charset) {
         Assert.notNull(uri, "uri must not be null");
         Assert.notNull(charset, "charset must not be null");
 
@@ -286,13 +267,11 @@ public class HttpClientUtils {
 
     /**
      * POST请求数据
-     * 
-     * @author wywuzh 2016年4月26日 下午5:15:22
-     * @param uri
-     *            请求URI地址
-     * @param params
-     *            请求参数
+     *
+     * @param uri    请求URI地址
+     * @param params 请求参数
      * @return
+     * @author wywuzh 2016年4月26日 下午5:15:22
      */
     public static ResponseMessage doPost(String uri, Map<String, String> params) {
         Assert.notNull(uri, "uri must not be null");
@@ -302,14 +281,12 @@ public class HttpClientUtils {
 
     /**
      * POST请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:58:00
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
+     *
+     * @param uri    请求URI地址
+     * @param param  请求参数
      * @param header
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:58:00
      */
     public static ResponseMessage doPost(String uri, Map<String, String> param, Map<String, String> header) {
         Assert.notNull(uri, "uri must not be null");
@@ -319,14 +296,12 @@ public class HttpClientUtils {
 
     /**
      * POST请求数据
-     * 
-     * @author wywuzh 2016年4月25日 下午2:41:10
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数
      * @param charset
      * @return
+     * @author wywuzh 2016年4月25日 下午2:41:10
      */
     public static ResponseMessage doPost(String uri, Map<String, String> param, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
@@ -337,19 +312,16 @@ public class HttpClientUtils {
 
     /**
      * POST请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:57:56
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param header
-     *            header参数
-     * @param charset
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数
+     * @param header  header参数
+     * @param charset 字符集
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:57:56
      */
     public static ResponseMessage doPost(String uri, Map<String, String> param, Map<String, String> header,
-            Charset charset) {
+                                         Charset charset) {
         Assert.notNull(uri, "uri must not be null");
         Assert.notNull(charset, "charset must not be null");
 
@@ -380,13 +352,11 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author wywuzh 2016年4月26日 下午6:04:49
-     * @param uri
-     *            请求URI地址
-     * @param params
-     *            请求参数
+     *
+     * @param uri    请求URI地址
+     * @param params 请求参数
      * @return
+     * @author wywuzh 2016年4月26日 下午6:04:49
      */
     public static ResponseMessage doPut(String uri, Map<String, String> params) {
         Assert.notNull(uri, "uri must not be null");
@@ -396,15 +366,12 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:32:48
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param header
-     *            header参数
+     *
+     * @param uri    请求URI地址
+     * @param param  请求参数
+     * @param header header参数
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:32:48
      */
     public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header) {
         Assert.notNull(uri, "uri must not be null");
@@ -414,15 +381,12 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:50
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param fileList
-     *            附件列表
+     *
+     * @param uri      请求URI地址
+     * @param param    请求参数
+     * @param fileList 附件列表
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:50
      */
     public static ResponseMessage doPut(String uri, Map<String, String> param, List<File> fileList) {
         Assert.notNull(uri, "uri must not be null");
@@ -432,20 +396,16 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:34
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param header
-     *            header参数
-     * @param fileList
-     *            附件列表
+     *
+     * @param uri      请求URI地址
+     * @param param    请求参数
+     * @param header   header参数
+     * @param fileList 附件列表
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:34
      */
     public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header,
-            List<File> fileList) {
+                                        List<File> fileList) {
         Assert.notNull(uri, "uri must not be null");
 
         return doPut(uri, param, header, fileList, Charset.defaultCharset());
@@ -453,13 +413,11 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author wywuzh 2016年4月26日 下午5:38:20
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
+     *
+     * @param uri   请求URI地址
+     * @param param 请求参数
      * @return
+     * @author wywuzh 2016年4月26日 下午5:38:20
      */
     public static ResponseMessage doPut(String uri, Map<String, String> param, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
@@ -470,19 +428,16 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:15
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param header
-     *            header参数
-     * @param charset
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数
+     * @param header  header参数
+     * @param charset 字符集
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:15
      */
     public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header,
-            Charset charset) {
+                                        Charset charset) {
         Assert.notNull(uri, "uri must not be null");
         Assert.notNull(charset, "charset must not be null");
 
@@ -491,16 +446,13 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:18
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param fileList
-     *            附件列表
-     * @param charset
+     *
+     * @param uri      请求URI地址
+     * @param param    请求参数
+     * @param fileList 附件列表
+     * @param charset  字符集
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:18
      */
     public static ResponseMessage doPut(String uri, Map<String, String> param, List<File> fileList, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
@@ -511,21 +463,17 @@ public class HttpClientUtils {
 
     /**
      * PUT请求数据
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:14:04
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
-     * @param header
-     *            header参数
-     * @param fileList
-     *            附件列表
-     * @param charset
+     *
+     * @param uri      请求URI地址
+     * @param param    请求参数
+     * @param header   header参数
+     * @param fileList 附件列表
+     * @param charset  字符集
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:14:04
      */
     public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header,
-            List<File> fileList, Charset charset) {
+                                        List<File> fileList, Charset charset) {
         Assert.notNull(uri, "uri must note be null");
         Assert.notNull(charset, "charset must not be null");
 
@@ -562,13 +510,11 @@ public class HttpClientUtils {
 
     /**
      * DELETE请求数据
-     * 
-     * @author wywuzh 2016年4月26日 下午6:06:47
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
+     *
+     * @param uri   请求URI地址
+     * @param param 请求参数
      * @return
+     * @author wywuzh 2016年4月26日 下午6:06:47
      */
     public static String doDelete(String uri, String param) {
         Assert.notNull(uri, "uri must not be null");
@@ -578,14 +524,12 @@ public class HttpClientUtils {
 
     /**
      * DELETE请求数据
-     * 
-     * @author wywuzh 2016年4月26日 下午6:07:06
-     * @param uri
-     *            请求URI地址
-     * @param param
-     *            请求参数
+     *
+     * @param uri     请求URI地址
+     * @param param   请求参数
      * @param charset
      * @return
+     * @author wywuzh 2016年4月26日 下午6:07:06
      */
     public static String doDelete(String uri, String param, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
@@ -619,27 +563,40 @@ public class HttpClientUtils {
         return result;
     }
 
+
+    /**
+     * 私密连接工厂（单例）
+     *
+     * @since v2.3.8
+     */
+    private volatile static ConnectionSocketFactory connectionSocketFactory;
+
     private static ConnectionSocketFactory getConnectionSocketFactory() {
-        try {
-            SSLContext sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, new TrustManager[] {
-                    new TrustManager()
-            }, null);
-            return new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
-        } catch (NoSuchAlgorithmException e) {
-            logger.error("NoSuchAlgorithmException", e);
-        } catch (KeyManagementException e) {
-            logger.error("KeyManagementException", e);
+        if (connectionSocketFactory == null) {
+            synchronized (HttpClientUtils.class) {
+                if (connectionSocketFactory == null) {
+                    try {
+                        SSLContext sslContext = SSLContext.getInstance("TLS");
+                        sslContext.init(null, new TrustManager[]{new TrustManager()}, null);
+
+                        connectionSocketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+                    } catch (NoSuchAlgorithmException e) {
+                        logger.error("NoSuchAlgorithmException", e);
+                    } catch (KeyManagementException e) {
+                        logger.error("KeyManagementException", e);
+                    }
+                }
+            }
         }
-        return null;
+        return connectionSocketFactory;
     }
 
     /**
      * 处理用户请求
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月12日 下午3:29:04
+     *
      * @param request
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月12日 下午3:29:04
      */
     public static ResponseMessage doRequest(HttpUriRequest request) {
         if (null == request) {
@@ -650,19 +607,28 @@ public class HttpClientUtils {
         }
 
         // 设置全局的标准cookie策略
-        RequestConfig config = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT)
+        RequestConfig config = RequestConfig.custom()
+                .setCookieSpec(CookieSpecs.STANDARD_STRICT)
                 .setExpectContinueEnabled(true)
                 .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
-                .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
-                .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
-
-        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
+                .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
+                .setConnectTimeout(30 * 1000)
+                .setSocketTimeout(30 * 1000)
+                .setConnectionRequestTimeout(30 * 1000)
+                .build();
+        // 创建可用Scheme
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
-                .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
+                .register(Scheme.HTTPS.name(), getConnectionSocketFactory())
+                .build();
+        // 创建ConnectionManager
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
                 socketFactoryRegistry);
-        CloseableHttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(config).build();
+        // 设置可关闭的httpclient
+        CloseableHttpClient httpClient = HttpClientBuilder.create()
+                .setConnectionManager(connectionManager)
+                .setDefaultRequestConfig(config)
+                .build();
 
         ResponseMessage responseMessage = null;
         try {
@@ -691,10 +657,10 @@ public class HttpClientUtils {
 
     /**
      * 处理用户请求
-     * 
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月11日 上午11:17:59
+     *
      * @param request
      * @param callBack
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月11日 上午11:17:59
      */
     public static void doRequest(HttpUriRequest request, ResponseCallBack callBack) {
         if (null == request) {
@@ -705,19 +671,28 @@ public class HttpClientUtils {
         }
 
         // 设置全局的标准cookie策略
-        RequestConfig config = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT)
+        RequestConfig config = RequestConfig.custom()
+                .setCookieSpec(CookieSpecs.STANDARD_STRICT)
                 .setExpectContinueEnabled(true)
                 .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
-                .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
-                .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
-
-        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create()
+                .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
+                .setConnectTimeout(30 * 1000)
+                .setSocketTimeout(30 * 1000)
+                .setConnectionRequestTimeout(30 * 1000)
+                .build();
+        // 创建可用Scheme
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
                 .register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
-                .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
+                .register(Scheme.HTTPS.name(), getConnectionSocketFactory())
+                .build();
+        // 创建ConnectionManager
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
                 socketFactoryRegistry);
-        CloseableHttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(config).build();
+        // 设置可关闭的httpclient
+        CloseableHttpClient httpClient = HttpClientBuilder.create()
+                .setConnectionManager(connectionManager)
+                .setDefaultRequestConfig(config)
+                .build();
 
         try {
             // 发起用户请求
@@ -751,6 +726,4 @@ public class HttpClientUtils {
         }
     }
 
-    public static void main(String[] args) {
-    }
 }
