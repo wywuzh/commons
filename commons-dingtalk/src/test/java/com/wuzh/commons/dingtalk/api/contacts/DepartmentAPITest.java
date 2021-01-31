@@ -17,8 +17,9 @@ package com.wuzh.commons.dingtalk.api.contacts;
 
 import com.wuzh.commons.core.json.jackson.JsonMapper;
 import com.wuzh.commons.dingtalk.api.AbstractTest;
-import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
-import com.wuzh.commons.dingtalk.response.contacts.DeptBase;
+import com.wuzh.commons.dingtalk.request.contacts.DepartmentCreateRequest;
+import com.wuzh.commons.dingtalk.request.contacts.DepartmentUpdateRequest;
+import com.wuzh.commons.dingtalk.response.contacts.*;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -35,10 +36,84 @@ import java.util.List;
 public class DepartmentAPITest extends AbstractTest {
 
     @Test
+    public void create() {
+        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+
+        // 创建部门 deptId=457162465
+        DepartmentCreateRequest request = new DepartmentCreateRequest();
+        request.setName("mall");
+        request.setParentId(1L);
+        ContactsResponse<DeptCreate> response = departmentAPI.create(request);
+        log.info("创建部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
+    public void update() {
+        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+
+        // 更新部门 deptId=457162465
+        DepartmentUpdateRequest request = new DepartmentUpdateRequest();
+        request.setDeptId(457162465L);
+        request.setName("电商中心");
+        ContactsResponse<DeptCreate> response = departmentAPI.update(request);
+        log.info("更新部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
+    public void delete() {
+        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+
+        // 删除部门 deptId=457162465
+        Long deptId = 457162465L;
+        ContactsResponse response = departmentAPI.delete(deptId);
+        log.info("删除部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
+    public void get() {
+        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+
+        // 获取部门详情 deptId=457162465
+        Long deptId = 457162465L;
+        ContactsResponse<DeptGet> response = departmentAPI.get(deptId);
+        log.info("获取部门详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
+    public void listSubId() {
+        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+
+        // 获取子部门ID列表 deptId=457162465
+        Long deptId = 457162465L;
+        ContactsResponse<DeptListSubId> response = departmentAPI.listSubId(deptId);
+        log.info("获取子部门ID列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
+    public void listParentByUser() {
+        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+
+        // 获取指定用户的所有父部门列表 deptId=457162465
+        String userid = "103559512720455311";
+        ContactsResponse<DeptListParentByUser> response = departmentAPI.listParentByUser(userid);
+        log.info("获取指定用户的所有父部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
+    public void listParentByDept() {
+        DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
+
+        // 获取部门详情 deptId=457162465
+        Long deptId = 457162465L;
+        ContactsResponse<DeptListParentByDeptId> response = departmentAPI.listParentByDept(deptId);
+        log.info("获取指定部门的所有父部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
     public void listSub() {
         DepartmentAPI departmentAPI = new DepartmentAPI(apiConfig);
         // 获取部门列表
-        String deptId = "1"; // deptId=457359137, name=商品
+        Long deptId = 1L; // deptId=457359137, name=商品
         ContactsResponse<List<DeptBase>> response = departmentAPI.listSub(deptId);
         log.info("获取部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }

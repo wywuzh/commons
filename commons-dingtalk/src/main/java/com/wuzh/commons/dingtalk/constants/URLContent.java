@@ -36,7 +36,7 @@ public class URLContent {
 
 
     /**
-     * 用户管理2.0：根据userid获取用户详情
+     * 用户管理2.0：创建用户
      */
     public static final String URL_V2_USER_CREATE = BASE_API_URL + "/topapi/v2/user/create?access_token=#ACCESS_TOKEN";
     /**
@@ -52,6 +52,34 @@ public class URLContent {
      */
     public static final String URL_V2_USER_GETBYUNIONID = BASE_API_URL + "/topapi/user/getbyunionid?access_token=#ACCESS_TOKEN";
 
+    /**
+     * 部门管理2.0：创建部门
+     */
+    public static final String URL_V2_DEPARTMENT_CREATE = BASE_API_URL + "/topapi/v2/department/create?access_token=#ACCESS_TOKEN";
+    /**
+     * 部门管理2.0：更新部门
+     */
+    public static final String URL_V2_DEPARTMENT_UPDATE = BASE_API_URL + "/topapi/v2/department/update?access_token=#ACCESS_TOKEN";
+    /**
+     * 部门管理2.0：删除部门
+     */
+    public static final String URL_V2_DEPARTMENT_DELETE = BASE_API_URL + "/topapi/v2/department/delete?access_token=#ACCESS_TOKEN";
+    /**
+     * 部门管理2.0：获取部门详情
+     */
+    public static final String URL_V2_DEPARTMENT_GET = BASE_API_URL + "/topapi/v2/department/get?access_token=#ACCESS_TOKEN";
+    /**
+     * 部门管理2.0：获取子部门ID列表
+     */
+    public static final String URL_V2_DEPARTMENT_LISTSUBID = BASE_API_URL + "/topapi/v2/department/listsubid?access_token=#ACCESS_TOKEN";
+    /**
+     * 部门管理2.0：获取指定用户的所有父部门列表
+     */
+    public static final String URL_V2_DEPARTMENT_LISTPARENTBYUSER = BASE_API_URL + "/topapi/v2/department/listparentbyuser?access_token=#ACCESS_TOKEN";
+    /**
+     * 部门管理2.0：获取指定部门的所有父部门列表
+     */
+    public static final String URL_V2_DEPARTMENT_LISTPARENTBYDEPT = BASE_API_URL + "/topapi/v2/department/listparentbydept?access_token=#ACCESS_TOKEN";
     /**
      * 部门管理2.0：获取部门列表
      */

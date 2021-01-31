@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 类UserCreateRequest的实现描述：TODO 类实现描述
+ * 类UserCreateRequest的实现描述：创建用户请求
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-31 13:47:02
  * @version v2.3.8

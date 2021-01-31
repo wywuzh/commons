@@ -22,10 +22,12 @@ import com.wuzh.commons.dingtalk.api.BaseAPI;
 import com.wuzh.commons.dingtalk.config.ApiConfig;
 import com.wuzh.commons.dingtalk.constants.URLContent;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
-import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
-import com.wuzh.commons.dingtalk.response.contacts.DeptBase;
+import com.wuzh.commons.dingtalk.request.contacts.DepartmentCreateRequest;
+import com.wuzh.commons.dingtalk.request.contacts.DepartmentUpdateRequest;
+import com.wuzh.commons.dingtalk.response.contacts.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,13 +48,169 @@ public class DepartmentAPI extends BaseAPI {
     }
 
     /**
-     * 获取部门列表
+     * 创建部门
+     *
+     * @param request 请求
+     * @return
+     */
+    public ContactsResponse<DeptCreate> create(DepartmentCreateRequest request) {
+        Assert.notNull(request, "request must not be null");
+        Assert.notNull(request.getName(), "request name must not be null");
+        Assert.notNull(request.getParentId(), "request parentId must not be null");
+
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_CREATE, request);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<DeptCreate> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<DeptCreate>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 更新部门
+     *
+     * @param request 请求
+     * @return
+     */
+    public ContactsResponse<DeptCreate> update(DepartmentUpdateRequest request) {
+        Assert.notNull(request, "request must not be null");
+        Assert.notNull(request.getDeptId(), "request deptId must not be null");
+
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_UPDATE, request);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<DeptCreate> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<DeptCreate>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 删除部门
      *
      * @param deptId 部门id
      * @return
      */
-    public ContactsResponse<List<DeptBase>> listSub(String deptId) {
+    public ContactsResponse delete(Long deptId) {
+        Assert.notNull(deptId, "deptId must not be null");
+
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("dept_id", deptId);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_DELETE, requestParams);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 获取部门详情
+     *
+     * @param deptId 部门id
+     * @return
+     */
+    public ContactsResponse<DeptGet> get(Long deptId) {
+        Assert.notNull(deptId, "deptId must not be null");
+
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("dept_id", deptId);
+        requestParams.put("language", "zh_CN");
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_GET, requestParams);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<DeptGet> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<DeptGet>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 获取子部门ID列表
+     *
+     * @param deptId 父部门ID，根部门传1
+     * @return
+     */
+    public ContactsResponse<DeptListSubId> listSubId(Long deptId) {
+        Assert.notNull(deptId, "deptId must not be null");
+
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("dept_id", deptId);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_LISTSUBID, requestParams);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<DeptListSubId> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<DeptListSubId>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 获取指定用户的所有父部门列表
+     *
+     * @param userid 用户id
+     * @return
+     */
+    public ContactsResponse<DeptListParentByUser> listParentByUser(String userid) {
+        Assert.notNull(userid, "userid must not be null");
+
         Map<String, String> requestParams = new HashMap<>();
+        requestParams.put("userid", userid);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_LISTPARENTBYUSER, requestParams);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<DeptListParentByUser> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<DeptListParentByUser>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 获取指定部门的所有父部门列表
+     *
+     * @param deptId 要查询的部门的ID
+     * @return
+     */
+    public ContactsResponse<DeptListParentByDeptId> listParentByDept(Long deptId) {
+        Assert.notNull(deptId, "deptId must not be null");
+
+        Map<String, Object> requestParams = new HashMap<>();
+        requestParams.put("dept_id", deptId);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_LISTPARENTBYUSER, requestParams);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<DeptListParentByDeptId> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<DeptListParentByDeptId>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 获取部门列表
+     *
+     * @param deptId 父部门ID。如果不传，默认部门为根部门，根部门ID为1。只支持查询下一级子部门，不支持查询多级子部门
+     * @return
+     */
+    public ContactsResponse<List<DeptBase>> listSub(Long deptId) {
+        Assert.notNull(deptId, "deptId must not be null");
+
+        Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("dept_id", deptId);
         requestParams.put("language", "zh_CN");
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_LISTSUB, requestParams);

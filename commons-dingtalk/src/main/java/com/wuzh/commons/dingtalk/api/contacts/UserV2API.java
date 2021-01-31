@@ -30,6 +30,7 @@ import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionId;
 import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +56,9 @@ public class UserV2API extends BaseAPI {
      * @return
      */
     public ContactsResponse<UserCreate> create(UserCreateRequest request) {
+        Assert.notNull(request, "request must not be null");
+        Assert.notNull(request.getName(), "request name must not be null");
+
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_CREATE, request);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
@@ -72,6 +76,8 @@ public class UserV2API extends BaseAPI {
      * @param userId 用户的userid
      */
     public ContactsResponse<UserGet> get(String userId) {
+        Assert.notNull(userId, "userId must not be null");
+
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("userid", userId);
         requestParams.put("language", "zh_CN");
@@ -92,6 +98,8 @@ public class UserV2API extends BaseAPI {
      * @param mobile 用户的手机号
      */
     public ContactsResponse<UserGetByMobile> getByMobile(String mobile) {
+        Assert.notNull(mobile, "mobile must not be null");
+
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("mobile", mobile);
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GETBYMOBILE, requestParams);
@@ -115,6 +123,8 @@ public class UserV2API extends BaseAPI {
      * @param unionID 员工在当前开发者企业账号范围内的唯一标识，系统生成，不会改变
      */
     public ContactsResponse<UserGetByUnionId> getByUnionID(String unionID) {
+        Assert.notNull(unionID, "unionID must not be null");
+
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("unionid", unionID);
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GETBYUNIONID, requestParams);
