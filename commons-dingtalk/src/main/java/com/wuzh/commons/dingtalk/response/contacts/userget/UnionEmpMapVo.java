@@ -35,10 +35,10 @@ public class UnionEmpMapVo implements Serializable {
      * 关联分支组织中的员工userid
      */
     @SerializedName(value = "userid")
-    private String userId;
+    private String userid;
     /**
      * 关联分支组织的企业corpid
      */
     @SerializedName(value = "corp_id")
-    private String corp_id;
+    private String corpId;
 }

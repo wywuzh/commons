@@ -35,6 +35,6 @@ public class UserGetByMobile implements Serializable {
      * 员工的userid
      */
     @SerializedName(value = "userid")
-    private String userId;
+    private String userid;
 
 }

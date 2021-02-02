@@ -23,7 +23,7 @@ import com.wuzh.commons.dingtalk.response.BaseResponse;
 import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
 import com.wuzh.commons.dingtalk.response.contacts.UserGet;
 import com.wuzh.commons.dingtalk.response.contacts.UserGetByMobile;
-import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionId;
+import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionid;
 import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -121,7 +121,7 @@ public class UserV2APITest extends AbstractTest {
 
         // 根据unionid获取用户userid
         String unionID = "VKxwWW2JCj2V3oBOcwiiDLAiEiE";
-        ContactsResponse<UserGetByUnionId> getByUnionId = userV2API.getByUnionID(unionID);
+        ContactsResponse<UserGetByUnionid> getByUnionId = userV2API.getByUnionid(unionID);
         log.info("根据unionid获取用户userid：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(getByUnionId));
     }
 

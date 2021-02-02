@@ -24,11 +24,10 @@ import com.wuzh.commons.dingtalk.constants.URLContent;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
 import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserUpdateRequest;
-import com.wuzh.commons.dingtalk.response.BaseResponse;
 import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
 import com.wuzh.commons.dingtalk.response.contacts.UserGet;
 import com.wuzh.commons.dingtalk.response.contacts.UserGetByMobile;
-import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionId;
+import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionid;
 import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
@@ -94,15 +93,37 @@ public class UserV2API extends BaseAPI {
     }
 
     /**
-     * 根据userid获取用户详情
+     * 更新用户信息
      *
-     * @param userId 用户的userid
+     * @param userid 用户的userid
+     * @return
      */
-    public ContactsResponse<UserGet> get(String userId) {
-        Assert.notNull(userId, "userId must not be null");
+    public ContactsResponse delete(String userid) {
+        Assert.notNull(userid, "userid must not be null");
 
         Map<String, String> requestParams = new HashMap<>();
-        requestParams.put("userid", userId);
+        requestParams.put("userid", userid);
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_DELETE, requestParams);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 根据userid获取用户详情
+     *
+     * @param userid 用户的userid
+     */
+    public ContactsResponse<UserGet> get(String userid) {
+        Assert.notNull(userid, "userid must not be null");
+
+        Map<String, String> requestParams = new HashMap<>();
+        requestParams.put("userid", userid);
         requestParams.put("language", "zh_CN");
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GET, requestParams);
         log.info("返回结果：{}", responseMessage);
@@ -143,19 +164,19 @@ public class UserV2API extends BaseAPI {
      * 2. 在同一个开发者企业账号下，unionid是唯一且不变的，例如同一个服务商开发的多个应用，或者是扫码登录等场景的多个App账号。
      * </pre>
      *
-     * @param unionID 员工在当前开发者企业账号范围内的唯一标识，系统生成，不会改变
+     * @param unionid 员工在当前开发者企业账号范围内的唯一标识，系统生成，不会改变
      */
-    public ContactsResponse<UserGetByUnionId> getByUnionID(String unionID) {
-        Assert.notNull(unionID, "unionID must not be null");
+    public ContactsResponse<UserGetByUnionid> getByUnionid(String unionid) {
+        Assert.notNull(unionid, "unionid must not be null");
 
         Map<String, String> requestParams = new HashMap<>();
-        requestParams.put("unionid", unionID);
+        requestParams.put("unionid", unionid);
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GETBYUNIONID, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");
         }
-        ContactsResponse<UserGetByUnionId> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<UserGetByUnionId>>() {
+        ContactsResponse<UserGetByUnionid> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<UserGetByUnionid>>() {
         }.getType());
         return response;
     }

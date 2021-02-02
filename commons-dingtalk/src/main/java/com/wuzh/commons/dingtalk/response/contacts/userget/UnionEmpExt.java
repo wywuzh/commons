@@ -36,7 +36,7 @@ public class UnionEmpExt implements Serializable {
      * 员工的userid
      */
     @SerializedName(value = "userid")
-    private String userId;
+    private String userid;
     /**
      * 关联映射关系
      */

@@ -28,7 +28,7 @@ import java.io.Serializable;
  * @since JDK 1.8
  */
 @Data
-public class UserGetByUnionId implements Serializable {
+public class UserGetByUnionid implements Serializable {
     private static final long serialVersionUID = -7942331814511039517L;
 
     /**
@@ -41,6 +41,6 @@ public class UserGetByUnionId implements Serializable {
      * 员工的userid
      */
     @SerializedName(value = "userid")
-    private String userId;
+    private String userid;
 
 }

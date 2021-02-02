@@ -36,5 +36,5 @@ public class DeptListSubId implements Serializable {
      * 子部门列表
      */
     @SerializedName(value = "dept_id_list")
-    private List<Long> dept_id_list;
+    private List<Long> deptIdList;
 }

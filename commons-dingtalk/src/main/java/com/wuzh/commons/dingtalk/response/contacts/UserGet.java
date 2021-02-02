@@ -39,12 +39,12 @@ public class UserGet implements Serializable {
      * 员工的userid
      */
     @SerializedName(value = "userid")
-    private String userId;
+    private String userid;
     /**
      * 员工在当前开发者企业账号范围内的唯一标识
      */
     @SerializedName(value = "unionid")
-    private String unionId;
+    private String unionid;
     /**
      * 员工名称
      */
