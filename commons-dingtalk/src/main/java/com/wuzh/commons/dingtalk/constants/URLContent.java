@@ -40,6 +40,10 @@ public class URLContent {
      */
     public static final String URL_V2_USER_CREATE = BASE_API_URL + "/topapi/v2/user/create?access_token=#ACCESS_TOKEN";
     /**
+     * 用户管理2.0：更新用户信息
+     */
+    public static final String URL_V2_USER_UPDATE = BASE_API_URL + "/topapi/v2/user/update?access_token=#ACCESS_TOKEN";
+    /**
      * 用户管理2.0：根据userid获取用户详情
      */
     public static final String URL_V2_USER_GET = BASE_API_URL + "/topapi/v2/user/get?access_token=#ACCESS_TOKEN";

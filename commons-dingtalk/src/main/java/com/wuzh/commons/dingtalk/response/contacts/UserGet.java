@@ -33,6 +33,7 @@ import java.util.List;
  */
 @Data
 public class UserGet implements Serializable {
+    private static final long serialVersionUID = -6114043198179249811L;
 
     /**
      * 员工的userid

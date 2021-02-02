@@ -16,9 +16,9 @@
 package com.wuzh.commons.dingtalk.request.contacts;
 
 import com.google.gson.annotations.SerializedName;
+import com.wuzh.commons.core.web.request.BaseRequest;
 import lombok.Data;
-
-import java.io.Serializable;
+import lombok.EqualsAndHashCode;
 
 /**
  * 类DepartmentCreateRequest的实现描述：创建部门
@@ -28,7 +28,9 @@ import java.io.Serializable;
  * @since JDK 1.8
  */
 @Data
-public class DepartmentCreateRequest implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class DepartmentCreateRequest extends BaseRequest {
+    private static final long serialVersionUID = -2375225304011096869L;
 
     /**
      * 部门ID

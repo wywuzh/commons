@@ -30,6 +30,7 @@ import java.util.List;
  */
 @Data
 public class UnionEmpExt implements Serializable {
+    private static final long serialVersionUID = 4638842738336975141L;
 
     /**
      * 员工的userid

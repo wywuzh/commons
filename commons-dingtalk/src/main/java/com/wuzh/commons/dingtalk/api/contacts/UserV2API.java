@@ -23,6 +23,8 @@ import com.wuzh.commons.dingtalk.config.ApiConfig;
 import com.wuzh.commons.dingtalk.constants.URLContent;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
 import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
+import com.wuzh.commons.dingtalk.request.contacts.UserUpdateRequest;
+import com.wuzh.commons.dingtalk.response.BaseResponse;
 import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
 import com.wuzh.commons.dingtalk.response.contacts.UserGet;
 import com.wuzh.commons.dingtalk.response.contacts.UserGetByMobile;
@@ -66,6 +68,27 @@ public class UserV2API extends BaseAPI {
         }
         // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
         ContactsResponse<UserCreate> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<UserCreate>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 更新用户信息
+     *
+     * @param request 请求
+     * @return
+     */
+    public ContactsResponse update(UserUpdateRequest request) {
+        Assert.notNull(request, "request must not be null");
+        Assert.notNull(request.getUserid(), "request userid must not be null");
+
+        ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_UPDATE, request);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse>() {
         }.getType());
         return response;
     }

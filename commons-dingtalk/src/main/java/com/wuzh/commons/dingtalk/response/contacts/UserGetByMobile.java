@@ -29,6 +29,7 @@ import java.io.Serializable;
  */
 @Data
 public class UserGetByMobile implements Serializable {
+    private static final long serialVersionUID = -2409453649718773300L;
 
     /**
      * 员工的userid

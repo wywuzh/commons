@@ -30,6 +30,7 @@ import java.util.List;
  */
 @Data
 public class DeptGet implements Serializable {
+    private static final long serialVersionUID = 6988603116659725985L;
 
     /**
      * 部门ID

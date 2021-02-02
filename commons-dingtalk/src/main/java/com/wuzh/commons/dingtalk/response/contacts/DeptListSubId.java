@@ -30,6 +30,7 @@ import java.util.List;
  */
 @Data
 public class DeptListSubId implements Serializable {
+    private static final long serialVersionUID = -789678474360999293L;
 
     /**
      * 子部门列表

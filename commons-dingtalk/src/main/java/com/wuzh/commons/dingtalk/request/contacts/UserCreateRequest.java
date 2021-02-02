@@ -31,6 +31,7 @@ import java.util.Map;
  */
 @Data
 public class UserCreateRequest implements Serializable {
+    private static final long serialVersionUID = -7026751142196405998L;
 
     /**
      * 员工唯一标识ID（不可修改），企业内必须唯一。长度为1~64个字符，如果不传，将自动生成一个userid

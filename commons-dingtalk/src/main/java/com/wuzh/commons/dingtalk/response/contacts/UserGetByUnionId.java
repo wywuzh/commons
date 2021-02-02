@@ -29,6 +29,7 @@ import java.io.Serializable;
  */
 @Data
 public class UserGetByUnionId implements Serializable {
+    private static final long serialVersionUID = -7942331814511039517L;
 
     /**
      * 联系类型：0=企业内部员工, 1=企业外部联系人

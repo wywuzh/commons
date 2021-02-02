@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class AccessTokenResponse extends BaseResponse {
+    private static final long serialVersionUID = -8122654296338669728L;
 
     /**
      * 生成的access_token

@@ -13,33 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.response.contacts.userget;
+package com.wuzh.commons.dingtalk.request.contacts;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 
-import java.io.Serializable;
-
 /**
- * 类DeptOrder的实现描述：员工在对应的部门中的排序
+ * 类UserUpdateRequest的实现描述：更新用户信息请求
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 22:02:47
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-02-02 22:02:08
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class DeptOrder implements Serializable {
-    private static final long serialVersionUID = -7729347308791220351L;
+public class UserUpdateRequest extends UserCreateRequest {
+    private static final long serialVersionUID = 5738700162274534575L;
 
     /**
-     * 部门ID
+     * 通讯录语言：
+     * zh_CN：中文
+     * en_US：英文
      */
-    @SerializedName(value = "dept_id")
-    private Long deptId;
-    /**
-     * 员工在部门中的排序
-     */
-    @SerializedName(value = "order")
-    private Long order;
+    @SerializedName(value = "language")
+    private String language;
 
 }

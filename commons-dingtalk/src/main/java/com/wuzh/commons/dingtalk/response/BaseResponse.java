@@ -11,7 +11,8 @@ import lombok.Data;
  * @since JDK 1.8
  */
 @Data
-public abstract class BaseResponse {
+public class BaseResponse extends com.wuzh.commons.core.web.response.BaseResponse {
+    private static final long serialVersionUID = -7123803560551710336L;
 
     /**
      * 返回码

@@ -29,6 +29,7 @@ import java.io.Serializable;
  */
 @Data
 public class UnionEmpMapVo implements Serializable {
+    private static final long serialVersionUID = 5624368789296658808L;
 
     /**
      * 关联分支组织中的员工userid

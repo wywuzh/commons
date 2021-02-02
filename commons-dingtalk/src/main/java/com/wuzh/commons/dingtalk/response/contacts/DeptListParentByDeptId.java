@@ -30,6 +30,7 @@ import java.util.List;
  */
 @Data
 public class DeptListParentByDeptId implements Serializable {
+    private static final long serialVersionUID = 1682777190923721551L;
 
     /**
      * 该部门的所有父部门ID列表

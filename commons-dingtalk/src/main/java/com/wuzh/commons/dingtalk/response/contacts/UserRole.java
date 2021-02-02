@@ -29,6 +29,7 @@ import java.io.Serializable;
  */
 @Data
 public class UserRole implements Serializable {
+    private static final long serialVersionUID = -1813026990096327864L;
 
     /**
      * 角色ID

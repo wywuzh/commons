@@ -28,8 +28,9 @@ import lombok.EqualsAndHashCode;
  * @since JDK 1.8
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode(callSuper = true)
 public class ContactsResponse<T> extends BaseResponse {
+    private static final long serialVersionUID = 1353956884950909981L;
 
     /**
      * 请求ID

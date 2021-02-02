@@ -29,6 +29,7 @@ import java.io.Serializable;
  */
 @Data
 public class UserCreate implements Serializable {
+    private static final long serialVersionUID = 855847129511082117L;
 
     /**
      * 员工的userid

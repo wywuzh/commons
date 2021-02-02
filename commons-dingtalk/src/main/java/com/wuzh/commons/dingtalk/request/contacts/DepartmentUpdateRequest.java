@@ -29,6 +29,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class DepartmentUpdateRequest extends DepartmentCreateRequest {
+    private static final long serialVersionUID = -1151758676410204159L;
 
     /**
      * 通讯录语言：

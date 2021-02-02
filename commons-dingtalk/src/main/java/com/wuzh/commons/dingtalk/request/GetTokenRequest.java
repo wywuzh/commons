@@ -21,7 +21,7 @@ import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
- * 类GetTokenRequest的实现描述：TODO 类实现描述
+ * 类GetTokenRequest的实现描述：获取凭证
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-28 12:41:14
  * @version v2.3.8

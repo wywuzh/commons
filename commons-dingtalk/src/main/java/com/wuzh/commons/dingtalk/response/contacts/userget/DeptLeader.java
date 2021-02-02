@@ -29,6 +29,7 @@ import java.io.Serializable;
  */
 @Data
 public class DeptLeader implements Serializable {
+    private static final long serialVersionUID = 2434639785386751509L;
 
     /**
      * 部门ID
