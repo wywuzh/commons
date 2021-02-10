@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.request.contacts;
+package com.wuzh.commons.dingtalk.response;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 类UserUpdateRequest的实现描述：更新用户信息请求
+ * 类JsapiTicketResponse的实现描述：jsapi_ticket
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-02-02 22:02:08
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-02-10 14:35:53
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UserUpdateRequest extends UserCreateRequest {
-    private static final long serialVersionUID = 5738700162274534575L;
+public class JsapiTicketResponse extends BaseResponse {
+    private static final long serialVersionUID = 7791718016337166504L;
 
     /**
-     * 通讯录语言：
-     * zh_CN：中文
-     * en_US：英文
+     * 生成的临时jsapi_ticket
      */
-    @SerializedName(value = "language")
-    private String language;
-
+    @SerializedName(value = "ticket")
+    private String ticket;
+    /**
+     * ticket过期时间，单位秒
+     */
+    @SerializedName(value = "expires_in")
+    private Integer expiresIn;
 }

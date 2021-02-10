@@ -33,6 +33,22 @@ public class URLContent {
      * 获取凭证：获取企业内部应用的access_token
      */
     public static final String URL_GET_TOKKEN = BASE_API_URL + "/gettoken";
+    /**
+     * 获取凭证：获取第三方企业应用的access_token
+     */
+    public static final String URL_SERVICE_GET_CORP_TOKEN = BASE_API_URL + "/service/get_corp_token";
+    /**
+     * 获取凭证：获取第三方企业应用的suite_ticket
+     */
+    public static final String URL_SERVICE_GET_SUITE_TOKEN = BASE_API_URL + "/service/get_suite_token";
+    /**
+     * 获取凭证：获取jsapi_ticket
+     */
+    public static final String URL_GET_JSAPI_TICKET = BASE_API_URL + "/get_jsapi_ticket";
+    /**
+     * 获取凭证：获取微应用后台免登的access_token
+     */
+    public static final String URL_SSO_GETTOKKEN = BASE_API_URL + "/sso/gettoken";
 
 
     /**

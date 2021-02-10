@@ -13,30 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.dingtalk.request.contacts;
+package com.wuzh.commons.dingtalk.response;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 类UserUpdateRequest的实现描述：更新用户信息请求
+ * 类SuiteAccessTokenResponse的实现描述：第三方企业应用的凭证
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-02-02 22:02:08
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-02-10 13:22:40
  * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UserUpdateRequest extends UserCreateRequest {
-    private static final long serialVersionUID = 5738700162274534575L;
+public class SuiteAccessTokenResponse extends BaseResponse {
+    private static final long serialVersionUID = -4364817866794670941L;
 
     /**
-     * 通讯录语言：
-     * zh_CN：中文
-     * en_US：英文
+     * 应用套件的凭证
      */
-    @SerializedName(value = "language")
-    private String language;
-
+    @SerializedName(value = "suite_access_token")
+    private String suiteAccessToken;
+    /**
+     * 应用套件凭证的过期时间，单位秒
+     * <p>
+     * 说明：suite_access_token有效期为7200秒，过期之前建议服务端做定时器主动更新，而不是依赖钉钉的定时推送。
+     */
+    @SerializedName(value = "expires_in")
+    private Integer expiresIn;
 }

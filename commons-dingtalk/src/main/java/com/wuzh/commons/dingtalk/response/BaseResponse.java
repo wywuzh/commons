@@ -2,6 +2,7 @@ package com.wuzh.commons.dingtalk.response;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 类BaseResponse的实现描述：响应基类
@@ -11,6 +12,7 @@ import lombok.Data;
  * @since JDK 1.8
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 public class BaseResponse extends com.wuzh.commons.core.web.response.BaseResponse {
     private static final long serialVersionUID = -7123803560551710336L;
 

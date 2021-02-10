@@ -19,7 +19,7 @@ import com.wuzh.commons.dingtalk.config.ApiConfig;
 import org.junit.Before;
 
 /**
- * 类AbstractTest的实现描述：TODO 类实现描述
+ * 类AbstractTest的实现描述：测试基类
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 21:28:06
  * @version v2.3.8
