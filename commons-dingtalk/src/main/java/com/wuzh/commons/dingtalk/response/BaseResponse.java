@@ -27,4 +27,8 @@ public class BaseResponse extends com.wuzh.commons.core.web.response.BaseRespons
     @SerializedName(value = "errmsg")
     private String errMsg;
 
+    @SerializedName(value = "sub_code")
+    private String subCode;
+    @SerializedName(value = "sub_msg")
+    private String subMsg;
 }

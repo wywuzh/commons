@@ -18,12 +18,10 @@ package com.wuzh.commons.dingtalk.api.contacts;
 import com.wuzh.commons.core.json.jackson.JsonMapper;
 import com.wuzh.commons.dingtalk.api.AbstractTest;
 import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
+import com.wuzh.commons.dingtalk.request.contacts.UserListsimpleRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserUpdateRequest;
 import com.wuzh.commons.dingtalk.response.BaseResponse;
-import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
-import com.wuzh.commons.dingtalk.response.contacts.UserGet;
-import com.wuzh.commons.dingtalk.response.contacts.UserGetByMobile;
-import com.wuzh.commons.dingtalk.response.contacts.UserGetByUnionid;
+import com.wuzh.commons.dingtalk.response.contacts.*;
 import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -103,6 +101,28 @@ public class UserV2APITest extends AbstractTest {
         String userid = "manager8283"; // userid=manager8283
         ContactsResponse<UserGet> get = userV2API.get(userid);
         log.info("根据userid获取用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(get));
+    }
+
+    @Test
+    public void listSimple() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+        UserListsimpleRequest request = new UserListsimpleRequest();
+        // 部门ID，根部门ID为1
+        request.setDeptId(1L);
+        // 分页查询的游标，最开始传0
+        request.setCursor(0L);
+        request.setSize(20L);
+
+        ContactsResponse<PageResult<ListUserSimple>> response = userV2API.listSimple(request);
+        log.info("获取部门用户基础信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
+
+    @Test
+    public void listId() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+        Long deptId = 1L;
+        ContactsResponse<ListUserByDept> listId = userV2API.listId(deptId);
+        log.info("获取部门用户userid列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(listId));
     }
 
     @Test
