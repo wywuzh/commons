@@ -17,6 +17,7 @@ package com.wuzh.commons.dingtalk.api.contacts;
 
 import com.wuzh.commons.core.json.jackson.JsonMapper;
 import com.wuzh.commons.dingtalk.api.AbstractTest;
+import com.wuzh.commons.dingtalk.enums.Language;
 import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserListsimpleRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserUpdateRequest;
@@ -99,7 +100,7 @@ public class UserV2APITest extends AbstractTest {
         UserV2API userV2API = new UserV2API(apiConfig);
         // 根据userid获取用户详情
         String userid = "manager8283"; // userid=manager8283
-        ContactsResponse<UserGet> get = userV2API.get(userid);
+        ContactsResponse<UserGet> get = userV2API.get(userid, Language.zh_CN);
         log.info("根据userid获取用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(get));
     }
 

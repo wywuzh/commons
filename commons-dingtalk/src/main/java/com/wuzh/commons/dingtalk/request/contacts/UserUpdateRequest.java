@@ -16,6 +16,7 @@
 package com.wuzh.commons.dingtalk.request.contacts;
 
 import com.google.gson.annotations.SerializedName;
+import com.wuzh.commons.dingtalk.enums.Language;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -37,6 +38,6 @@ public class UserUpdateRequest extends UserCreateRequest {
      * en_US：英文
      */
     @SerializedName(value = "language")
-    private String language;
+    private String language = Language.zh_CN.getLang();
 
 }

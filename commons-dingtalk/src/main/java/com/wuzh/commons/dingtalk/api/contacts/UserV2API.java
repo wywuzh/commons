@@ -21,6 +21,7 @@ import com.wuzh.commons.core.json.gson.GsonUtil;
 import com.wuzh.commons.dingtalk.api.BaseAPI;
 import com.wuzh.commons.dingtalk.config.ApiConfig;
 import com.wuzh.commons.dingtalk.constants.URLContent;
+import com.wuzh.commons.dingtalk.enums.Language;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
 import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserListsimpleRequest;
@@ -33,6 +34,7 @@ import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 类UserV2API的实现描述：用户管理2.0
@@ -115,14 +117,18 @@ public class UserV2API extends BaseAPI {
     /**
      * 根据userid获取用户详情
      *
-     * @param userid 用户的userid
+     * @param userid   用户的userid
+     * @param language 通讯录语言，传入为空时默认为“zh_CN”
      */
-    public ContactsResponse<UserGet> get(String userid) {
+    public ContactsResponse<UserGet> get(String userid, Language language) {
         Assert.notNull(userid, "userid must not be null");
+        // 通讯录语言
+        language = Optional.ofNullable(language).orElse(Language.zh_CN);
 
         Map<String, String> requestParams = new HashMap<>();
         requestParams.put("userid", userid);
         requestParams.put("language", "zh_CN");
+        requestParams.put("language", language.getLang());
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_USER_GET, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {

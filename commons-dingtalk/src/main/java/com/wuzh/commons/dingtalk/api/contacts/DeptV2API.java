@@ -21,6 +21,7 @@ import com.wuzh.commons.core.json.gson.GsonUtil;
 import com.wuzh.commons.dingtalk.api.BaseAPI;
 import com.wuzh.commons.dingtalk.config.ApiConfig;
 import com.wuzh.commons.dingtalk.constants.URLContent;
+import com.wuzh.commons.dingtalk.enums.Language;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
 import com.wuzh.commons.dingtalk.request.contacts.DepartmentCreateRequest;
 import com.wuzh.commons.dingtalk.request.contacts.DepartmentUpdateRequest;
@@ -32,6 +33,7 @@ import org.springframework.util.Assert;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * 类DeptV2API的实现描述：部门管理2.0
@@ -115,15 +117,18 @@ public class DeptV2API extends BaseAPI {
     /**
      * 获取部门详情
      *
-     * @param deptId 部门id
+     * @param deptId   部门id
+     * @param language 通讯录语言，传入为空时默认为“zh_CN”
      * @return
      */
-    public ContactsResponse<DeptGet> get(Long deptId) {
+    public ContactsResponse<DeptGet> get(Long deptId, Language language) {
         Assert.notNull(deptId, "deptId must not be null");
+        // 通讯录语言
+        language = Optional.ofNullable(language).orElse(Language.zh_CN);
 
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("dept_id", deptId);
-        requestParams.put("language", "zh_CN");
+        requestParams.put("language", language.getLang());
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_GET, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
@@ -204,15 +209,18 @@ public class DeptV2API extends BaseAPI {
     /**
      * 获取部门列表
      *
-     * @param deptId 父部门ID。如果不传，默认部门为根部门，根部门ID为1。只支持查询下一级子部门，不支持查询多级子部门
+     * @param deptId   父部门ID。如果不传，默认部门为根部门，根部门ID为1。只支持查询下一级子部门，不支持查询多级子部门
+     * @param language 通讯录语言，传入为空时默认为“zh_CN”
      * @return
      */
-    public ContactsResponse<List<DeptBase>> listSub(Long deptId) {
+    public ContactsResponse<List<DeptBase>> listSub(Long deptId, Language language) {
         Assert.notNull(deptId, "deptId must not be null");
+        // 通讯录语言
+        language = Optional.ofNullable(language).orElse(Language.zh_CN);
 
         Map<String, Object> requestParams = new HashMap<>();
         requestParams.put("dept_id", deptId);
-        requestParams.put("language", "zh_CN");
+        requestParams.put("language", language.getLang());
         ResponseMessage responseMessage = doPost(URLContent.URL_V2_DEPARTMENT_LISTSUB, requestParams);
         log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {

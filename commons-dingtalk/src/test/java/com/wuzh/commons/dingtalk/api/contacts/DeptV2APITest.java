@@ -17,6 +17,7 @@ package com.wuzh.commons.dingtalk.api.contacts;
 
 import com.wuzh.commons.core.json.jackson.JsonMapper;
 import com.wuzh.commons.dingtalk.api.AbstractTest;
+import com.wuzh.commons.dingtalk.enums.Language;
 import com.wuzh.commons.dingtalk.request.contacts.DepartmentCreateRequest;
 import com.wuzh.commons.dingtalk.request.contacts.DepartmentUpdateRequest;
 import com.wuzh.commons.dingtalk.response.contacts.*;
@@ -75,7 +76,7 @@ public class DeptV2APITest extends AbstractTest {
 
         // 获取部门详情 deptId=457162465
         Long deptId = 457162465L;
-        ContactsResponse<DeptGet> response = deptV2API.get(deptId);
+        ContactsResponse<DeptGet> response = deptV2API.get(deptId, Language.zh_CN);
         log.info("获取部门详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
@@ -114,7 +115,7 @@ public class DeptV2APITest extends AbstractTest {
         DeptV2API deptV2API = new DeptV2API(apiConfig);
         // 获取部门列表
         Long deptId = 1L; // deptId=457359137, name=商品
-        ContactsResponse<List<DeptBase>> response = deptV2API.listSub(deptId);
+        ContactsResponse<List<DeptBase>> response = deptV2API.listSub(deptId, Language.zh_CN);
         log.info("获取部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
