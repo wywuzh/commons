@@ -17,6 +17,7 @@
         <module>commons-mybatis-generator</module>
         <module>commons-mybatis</module>
         <module>commons-static</module>
+        <module>commons-dingtalk</module>
     </modules>
 
     <developers>
@@ -96,6 +97,8 @@
         <spring-kafka.version>2.6.3</spring-kafka.version>
         <dubbo.version>2.7.8</dubbo.version>
         <shiro.version>1.7.0</shiro.version>
+
+        <alibaba-dingtalk-service-sdk.version>1.0.1</alibaba-dingtalk-service-sdk.version>
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
         <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
@@ -452,6 +455,14 @@
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-cas</artifactId>
                 <version>${shiro.version}</version>
+            </dependency>
+
+
+            <!-- Alibaba Dingtalk -->
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>alibaba-dingtalk-service-sdk</artifactId>
+                <version>${alibaba-dingtalk-service-sdk.version}</version>
             </dependency>
 
 
