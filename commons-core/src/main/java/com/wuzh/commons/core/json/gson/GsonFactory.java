@@ -162,14 +162,14 @@ public class GsonFactory {
     }
 
     public static JsonElement getJsonElement(String json) throws JsonSyntaxException {
-        return new JsonParser().parse(json);
+        return JsonParser.parseString(json);
     }
 
     public static JsonElement getJsonElement(Reader json) throws JsonIOException, JsonSyntaxException {
-        return new JsonParser().parse(json);
+        return JsonParser.parseReader(json);
     }
 
     public static JsonElement getJsonElement(JsonReader json) throws JsonIOException, JsonSyntaxException {
-        return new JsonParser().parse(json);
+        return JsonParser.parseReader(json);
     }
 }
