@@ -26,13 +26,6 @@
             <artifactId>alibaba-dingtalk-service-sdk</artifactId>
             <version>${alibaba-dingtalk-service-sdk.version}</version>
         </dependency>
-        <!-- 分布式消息通信 -->
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>${spring-kafka.version}</version>
-        </dependency>
-
     </dependencies>
 
 </project>
