@@ -26,6 +26,8 @@ import sun.awt.OSInfo;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +47,15 @@ import java.util.List;
  */
 @Slf4j
 public class SqlldrUtils {
+
+    /**
+     * 文件后缀：控制文件
+     */
+    public static final String DEFAULT_CONTROL_FILE_SUFFIX = ".ctl";
+    /**
+     * 文件后缀：数据文件
+     */
+    public static final String DEFAULT_DATA_FILE_SUFFIX = ".csv";
 
     /*---------------------------------------- 创建ctl控制器文件 >>> Start ----------------------------------------*/
 
@@ -117,51 +128,137 @@ public class SqlldrUtils {
 
     /*---------------------------------------- 向csv文件写入数据 >>> Start ----------------------------------------*/
 
-    public static <T> File writeCsvFile(File folderPath, String csvFileName, String fieldName, List<T> list) throws IOException, IllegalAccessException {
+    public static <T> File writeDataFile(File folderPath, String dataFileName, String fieldName, List<T> list) throws IOException, IllegalAccessException {
         String[] fieldNameArr = StringUtils.split(fieldName, Constants.SEPARATE_COMMA);
-        return writeCsvFile(folderPath, csvFileName, fieldNameArr, list);
+        return writeDataFile(folderPath, dataFileName, fieldNameArr, list);
     }
 
-    public static <T> File writeCsvFile(File folderPath, String csvFileName, String[] fieldNameArr, List<T> list) throws IOException, IllegalAccessException {
-        if (!StringUtils.endsWithIgnoreCase(csvFileName, ".csv")) {
-            csvFileName = StringUtils.join(csvFileName, ".csv");
+    public static <T> File writeDataFile(File folderPath, String dataFileName, String[] fieldNameArr, List<T> list) throws IOException, IllegalAccessException {
+        if (StringUtils.indexOf(dataFileName, Constants.SEPARATE_SPOT) <= 0) {
+            dataFileName = StringUtils.join(dataFileName, DEFAULT_DATA_FILE_SUFFIX);
         }
         // 删除历史文件
-        File csvFile = new File(folderPath, csvFileName);
+        File csvFile = new File(folderPath, dataFileName);
         if (csvFile.exists()) {
-            csvFile.delete();
+            FileUtils.forceDelete(csvFile);
         }
-        return writeCsvFile(csvFile, fieldNameArr, list);
+        return writeDataFile(csvFile, fieldNameArr, list);
     }
 
-    public static <T> File writeCsvFile(File csvFile, String[] fieldNameArr, List<T> list) throws IOException, IllegalAccessException {
-        // 字段值
-        for (T item : list) {
-            String[] fieldValueArr = new String[fieldNameArr.length];
-            for (int i = 0; i < fieldNameArr.length; i++) {
-                String fieldName = fieldNameArr[i];
-                Field field = FieldUtils.getDeclaredField(item.getClass(), fieldName, true);
-                if (field == null) {
-                    continue;
-                }
-                Object value = ReflectUtils.getValue(item, fieldName);
-                if (value == null) {
-                    fieldValueArr[i] = null;
-                    continue;
-                }
-                if (field.getType() == Date.class) {
-                    value = DateUtil.format((Date) value, DateUtil.PATTERN_DATE_TIME);
-                } else if (field.getType() == java.sql.Date.class) {
-                    value = DateUtil.format((Date) value, DateUtil.PATTERN_DATE);
-                } else if (field.getType() == java.sql.Time.class) {
-                    value = DateUtil.format((Date) value, DateUtil.PATTERN_TIME);
-                }
+    public static <T> File writeDataFile(File dataFile, String[] fieldNameArr, List<T> list) throws IOException, IllegalAccessException {
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dataFile, true), Charset.forName("UTF-8")));
 
-                fieldValueArr[i] = value.toString();
+            // 字段值
+            for (T item : list) {
+                StringBuilder content = new StringBuilder();
+                content.append(appendContent(fieldNameArr, item));
+                content.append("\n");
+                bufferedWriter.write(content.toString());
             }
-            FileUtils.writeStringToFile(csvFile, StringUtils.join(fieldValueArr, Constants.SEPARATE_COMMA) + "\n", "UTF-8", true);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
         }
-        return csvFile;
+        return dataFile;
+    }
+
+    public static <T> String appendContent(String[] fieldNameArr, T item) throws IllegalAccessException {
+        StringBuilder content = new StringBuilder();
+        for (int i = 0; i < fieldNameArr.length; i++) {
+            String fieldName = fieldNameArr[i];
+            Field field = FieldUtils.getDeclaredField(item.getClass(), fieldName, true);
+            if (field == null) {
+                field = FieldUtils.getField(item.getClass(), fieldName, true);
+            }
+            if (field == null) {
+                continue;
+            }
+            if (i > 0) {
+                content.append(Constants.SEPARATE_COMMA);
+            }
+            Object value = ReflectUtils.getValue(item, fieldName);
+            if (value == null) {
+                continue;
+            }
+            if (field.getType() == String.class) {
+                value = StringUtils.join("\"", String.valueOf(value), "\"");
+            } else if (field.getType() == java.util.Date.class) {
+                value = StringUtils.join("\"", DateUtil.format((Date) value, DateUtil.PATTERN_DATE_TIME), "\"");
+            } else if (field.getType() == java.sql.Date.class) {
+                value = StringUtils.join("\"", DateUtil.format((Date) value, DateUtil.PATTERN_TIME), "\"");
+            } else if (field.getType() == java.sql.Time.class) {
+                value = StringUtils.join("\"", DateUtil.format((Date) value, DateUtil.PATTERN_TIME), "\"");
+            } else if (field.getType() == BigDecimal.class
+                    || field.getType() == Double.class
+                    || field.getType() == Float.class) {
+                value = StringUtils.join("\"", String.valueOf(value), "\"");
+            } else {
+                value = StringUtils.join("\"", String.valueOf(value), "\"");
+            }
+
+            content.append(value);
+        }
+        return content.toString();
+    }
+
+    public static <T> File writeDataFile(File dataFile, List<String> list) throws IOException, IllegalAccessException {
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dataFile, true), Charset.forName("UTF-8")));
+
+            // 字段值
+            for (String item : list) {
+                String content = item + "\n";
+                bufferedWriter.write(content);
+            }
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+        return dataFile;
+    }
+
+    public static <T> File writeDataFile(File dataFile, String content, boolean append) throws IOException, IllegalAccessException {
+        BufferedWriter bufferedWriter = null;
+        try {
+            bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dataFile, append), Charset.forName("UTF-8")));
+
+            // 字段值
+            bufferedWriter.write(content);
+            bufferedWriter.flush();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (bufferedWriter != null) {
+                try {
+                    bufferedWriter.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
+        return dataFile;
     }
 
     /*---------------------------------------- 向csv文件写入数据 <<< End ----------------------------------------*/
