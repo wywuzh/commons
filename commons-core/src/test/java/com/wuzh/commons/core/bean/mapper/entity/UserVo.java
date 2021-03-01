@@ -13,21 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.poi.entity;
+package com.wuzh.commons.core.bean.mapper.entity;
 
 import lombok.Data;
 
 import java.util.Date;
 
 /**
- * 类User的实现描述：用户
+ * 类UserVo的实现描述：TODO 类实现描述
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-25 18:38:12
- * @version v2.3.7
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-03-01 21:33:07
+ * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class User {
+public class UserVo {
 
     /**
      * 用户名
@@ -36,7 +36,7 @@ public class User {
     /**
      * 昵称
      */
-    private String nick;
+    private String nickname;
     /**
      * 邮箱
      */
@@ -53,5 +53,9 @@ public class User {
      * 出生日期
      */
     private Date birthdate;
+    /**
+     * 出生日期
+     */
+    private String birthdateFormat;
 
 }
