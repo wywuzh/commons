@@ -15,6 +15,9 @@
  */
 package com.wuzh.commons.dingtalk;
 
+import com.wuzh.commons.dingtalk.api.contacts.DeptV2API;
+import com.wuzh.commons.dingtalk.api.contacts.UserV2API;
+import com.wuzh.commons.dingtalk.api.message.CorpconversationAPI;
 import com.wuzh.commons.dingtalk.config.ApiConfig;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -36,6 +39,23 @@ public class DingtalkAutoConfiguration {
     @ConditionalOnMissingBean
     public ApiConfig apiConfig(DingtalkProperties properties) {
         return new ApiConfig(properties.getAgentId(), properties.getAppKey(), properties.getAppSecret());
+    }
+
+    // contacts beans
+    @Bean
+    public UserV2API userV2API(ApiConfig apiConfig) {
+        return new UserV2API(apiConfig);
+    }
+
+    @Bean
+    public DeptV2API deptV2API(ApiConfig apiConfig) {
+        return new DeptV2API(apiConfig);
+    }
+
+    // message beans
+    @Bean
+    public CorpconversationAPI corpconversationAPI(ApiConfig apiConfig) {
+        return new CorpconversationAPI(apiConfig);
     }
 
 }
