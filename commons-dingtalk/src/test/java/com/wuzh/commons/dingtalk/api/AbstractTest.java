@@ -29,15 +29,15 @@ public abstract class AbstractTest {
 
     protected ApiConfig apiConfig;
 
-    final String AGENT_ID = "1087695954";
+    protected final String AGENT_ID = "1087695954";
     /**
      * 应用的唯一标识key
      */
-    final String APP_KEY = "dingziruwslmoflj5cyc";
+    protected final String APP_KEY = "dingziruwslmoflj5cyc";
     /**
      * 应用的密钥
      */
-    final String APP_SECRET = "UOrFnv0IqZJf2XJobif7_jblEgF0Kn2S4-013sTfil9o7yhg59g_DynyUtdFlGCD";
+    protected final String APP_SECRET = "UOrFnv0IqZJf2XJobif7_jblEgF0Kn2S4-013sTfil9o7yhg59g_DynyUtdFlGCD";
 
     @Before
     public void init() {
