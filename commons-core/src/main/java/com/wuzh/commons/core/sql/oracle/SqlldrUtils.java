@@ -192,7 +192,13 @@ public class SqlldrUtils {
                 continue;
             }
             if (field.getType() == String.class) {
-                value = StringUtils.join("\"", String.valueOf(value), "\"");
+                value = String.valueOf(value)
+                        .replaceAll("\"", "“")
+                        .replaceAll("'", "‘")
+                        .replaceAll(",", "，")
+                        .replaceAll("\n", "char(10)") // ascii码换行
+                        .replaceAll("\r", "char(13)"); // ascii码回车
+                value = StringUtils.join("\"", value, "\"");
             } else if (field.getType() == java.util.Date.class) {
                 value = StringUtils.join("\"", DateUtil.format((Date) value, DateUtil.PATTERN_DATE_TIME), "\"");
             } else if (field.getType() == java.sql.Date.class) {
