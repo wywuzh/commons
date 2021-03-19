@@ -63,7 +63,7 @@ public class MyBatisConfig {
     /**
      * 配置文件信息
      */
-    private final String CONFIG_LOCATION = "classpath:mybatis-config.xml";
+    private final String CONFIG_LOCATION = "/META-INF/mybatis-config.xml";
     /**
      * 实体类所在包
      */
