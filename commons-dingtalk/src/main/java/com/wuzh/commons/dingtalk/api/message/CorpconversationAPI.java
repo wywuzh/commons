@@ -24,7 +24,9 @@ import com.wuzh.commons.dingtalk.constants.URLContent;
 import com.wuzh.commons.dingtalk.exception.DingtalkException;
 import com.wuzh.commons.dingtalk.request.message.AsyncsendV2Request;
 import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
+import com.wuzh.commons.dingtalk.response.contacts.ListUserByDept;
 import com.wuzh.commons.dingtalk.response.contacts.UserGetByMobile;
+import com.wuzh.commons.dingtalk.response.message.AsyncsendV2Response;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpStatus;
 
@@ -50,11 +52,15 @@ public class CorpconversationAPI extends BaseAPI {
      *
      * @param request 请求
      */
-    public void asyncsendV2(AsyncsendV2Request request) {
+    public AsyncsendV2Response asyncsendV2(AsyncsendV2Request request) {
         ResponseMessage responseMessage = doPost(URLContent.URL_MESSAGE_CORPCONVERSATION_ASYNCSEND_V2, request);
-        log.info("返回结果：{}", responseMessage);
         if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            log.warn("请求调用失败，请检查URL是否正确！{}", responseMessage);
             throw new DingtalkException("请求调用失败，请检查URL是否正确！");
         }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        AsyncsendV2Response response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<AsyncsendV2Response>() {
+        }.getType());
+        return response;
     }
 }

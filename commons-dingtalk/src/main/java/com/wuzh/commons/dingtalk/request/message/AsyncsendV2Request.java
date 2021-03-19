@@ -37,74 +37,27 @@ public class AsyncsendV2Request implements Serializable {
      * 发送消息时使用的微应用的AgentID
      */
     @SerializedName(value = "agent_id")
-    private String agent_id;
+    private String agentId;
     /**
      * 接收者的userid列表，最大用户列表长度100
      */
     @SerializedName(value = "userid_list")
-    private String userid_list;
+    private String useridList;
     /**
      * 接收者的部门id列表，最大列表长度20。接收者是部门ID时，包括子部门下的所有用户
      */
     @SerializedName(value = "dept_id_list")
-    private String dept_id_list;
+    private String deptIdList;
     /**
      * 是否发送给企业全部用户。
      * 说明：当设置为false时必须指定userid_list或dept_id_list其中一个参数的值。
      */
     @SerializedName(value = "to_all_user")
-    private Boolean to_all_user;
+    private Boolean toAllUser;
     /**
-     * 消息类型
-     */
-    private MsgType msgType = MsgType.text;
-    /**
-     * 发送消息时使用的微应用的AgentID
+     * 消息内容，最长不超过2048个字节
      */
     @SerializedName(value = "msg")
-    private Map<String, Object> msg;
-
-    public Map<String, Object> getMsg() {
-        Map<String, Object> msg = new HashMap<>();
-        msg.put("msgtype", msgType.getType());
-
-        Map<String, Object> content = new HashMap<>();
-        switch (msgType) {
-            case text: // 文本
-                content.put("content", msg);
-                break;
-            case image: // 图片
-                // 媒体文件mediaid。
-                //可以通过上传媒体文件接口获取。建议宽600像素 x 400像素，宽高比3 : 2
-                content.put("media_id", msg);
-                break;
-            case voice: // 语音
-                //媒体文件ID。
-                //可以通过上传媒体文件接口获取。建议宽600像素 x 400像素，宽高比3 : 2
-                content.put("media_id", msg);
-                content.put("duration", msg);
-                break;
-            case file: // 文件
-                content.put("media_id", msg);
-                break;
-            case link: // 链接
-                content.put("media_id", msg);
-                break;
-            case oa: // oa
-                content.put("media_id", msg);
-                break;
-            case markdown: // markdown
-                content.put("media_id", msg);
-                break;
-            case action_card: // 卡片
-                content.put("media_id", msg);
-                break;
-            default:
-                break;
-        }
-
-        msg.put(msgType.getType(), content);
-        return msg;
-    }
+    private Msg msg;
 
 }

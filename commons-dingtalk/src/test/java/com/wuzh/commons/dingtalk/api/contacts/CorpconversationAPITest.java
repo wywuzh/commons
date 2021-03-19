@@ -15,13 +15,9 @@
  */
 package com.wuzh.commons.dingtalk.api.contacts;
 
-import com.wuzh.commons.core.json.jackson.JsonMapper;
 import com.wuzh.commons.dingtalk.api.AbstractTest;
 import com.wuzh.commons.dingtalk.api.message.CorpconversationAPI;
-import com.wuzh.commons.dingtalk.request.contacts.DepartmentCreateRequest;
 import com.wuzh.commons.dingtalk.request.message.AsyncsendV2Request;
-import com.wuzh.commons.dingtalk.response.contacts.ContactsResponse;
-import com.wuzh.commons.dingtalk.response.contacts.DeptCreate;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
@@ -40,7 +36,7 @@ public class CorpconversationAPITest extends AbstractTest {
         CorpconversationAPI deptV2API = new CorpconversationAPI(apiConfig);
 
         AsyncsendV2Request request = new AsyncsendV2Request();
-        request.setAgent_id(AGENT_ID);
+        request.setAgentId(AGENT_ID);
 
         // 创建部门 deptId=457162465
 //        DepartmentCreateRequest request = new DepartmentCreateRequest();
