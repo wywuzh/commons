@@ -76,6 +76,10 @@ public class URLContent {
      */
     public static final String URL_USER_LISTID = BASE_API_URL + "/topapi/user/listid?access_token=#ACCESS_TOKEN";
     /**
+     * 用户管理2.0：获取部门用户详情
+     */
+    public static final String URL_V2_USER_LIST = BASE_API_URL + "/topapi/v2/user/list?access_token=#ACCESS_TOKEN";
+    /**
      * 用户管理2.0：根据手机号获取用户信息
      */
     public static final String URL_V2_USER_GETBYMOBILE = BASE_API_URL + "/topapi/v2/user/getbymobile?access_token=#ACCESS_TOKEN";

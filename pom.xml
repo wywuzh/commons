@@ -101,6 +101,7 @@
         <shiro.version>1.7.1</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>1.0.1</alibaba-dingtalk-service-sdk.version>
+        <taobao-sdk-java-auto.version>1479188381469-20210409</taobao-sdk-java-auto.version>
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
         <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
@@ -116,6 +117,7 @@
         <webjars.font-awesome.version>5.15.1</webjars.font-awesome.version>
         <webjars.layui.version>2.5.6</webjars.layui.version>
         <webjars.AdminLTE.version>3.0.5</webjars.AdminLTE.version>
+        <editor.md.version>1.5.0</editor.md.version>
     </properties>
 
     <dependencies>
@@ -466,6 +468,11 @@
                 <artifactId>alibaba-dingtalk-service-sdk</artifactId>
                 <version>${alibaba-dingtalk-service-sdk.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>taobao-sdk-java-auto</artifactId>
+                <version>${taobao-sdk-java-auto.version}</version>
+            </dependency>
 
 
             <!-- 静态资源jar -->
@@ -550,6 +557,12 @@
                 <groupId>org.webjars</groupId>
                 <artifactId>AdminLTE</artifactId>
                 <version>${webjars.AdminLTE.version}</version>
+            </dependency>
+            <!-- markdown -->
+            <dependency>
+                <groupId>org.webjars.npm</groupId>
+                <artifactId>editor.md</artifactId>
+                <version>${editor.md.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
