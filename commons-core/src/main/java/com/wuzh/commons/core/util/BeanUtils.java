@@ -15,6 +15,8 @@
  */
 package com.wuzh.commons.core.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -26,7 +28,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * 类BeanUtils的实现描述：TODO 类实现描述
+ * 类BeanUtils的实现描述：Bean工具转换类
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/27 11:09
  * @version v3.0.0
@@ -61,12 +63,9 @@ public class BeanUtils {
         BeanInfo beanInfo = Introspector.getBeanInfo(clazz);
         T obj = clazz.newInstance();
         PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-        int len = propertyDescriptors.length;
-        String propertyName = "";
-        PropertyDescriptor descriptor = null;
-        for (int i = 0; i < len; i++) {
-            descriptor = propertyDescriptors[i];
-            propertyName = descriptor.getName();
+        for (int i = 0; i < propertyDescriptors.length; i++) {
+            PropertyDescriptor descriptor = propertyDescriptors[i];
+            String propertyName = descriptor.getName();
             if (map.containsKey(propertyName)) {
                 Object value = map.get(propertyName);
                 Object[] args = new Object[1];
@@ -88,24 +87,20 @@ public class BeanUtils {
      * @throws InvocationTargetException
      */
     public static Map<String, Object> convertBeanToMap(Object bean) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
-        Class type = bean.getClass();
         Map<String, Object> returnMap = new HashMap<String, Object>();
-        BeanInfo beanInfo = Introspector.getBeanInfo(type);
+        BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
         PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-        PropertyDescriptor descriptor = null;
-        int len = propertyDescriptors.length;
-        String propertyName = "";
-        for (int i = 0; i < len; i++) {
-            descriptor = propertyDescriptors[i];
-            propertyName = descriptor.getName();
-            if (!propertyName.equals("class")) {
-                Method readMethod = descriptor.getReadMethod();
-                Object result = readMethod.invoke(bean, new Object[0]);
-                if (result != null) {
-                    returnMap.put(propertyName, result);
-                } else {
-                    returnMap.put(propertyName, null);
-                }
+        for (PropertyDescriptor descriptor : propertyDescriptors) {
+            String propertyName = descriptor.getName();
+            if (StringUtils.equalsIgnoreCase(propertyName, "class")) {
+                continue;
+            }
+            Method readMethod = descriptor.getReadMethod();
+            Object result = readMethod.invoke(bean, new Object[0]);
+            if (result != null) {
+                returnMap.put(propertyName, result);
+            } else {
+                returnMap.put(propertyName, null);
             }
         }
         return returnMap;

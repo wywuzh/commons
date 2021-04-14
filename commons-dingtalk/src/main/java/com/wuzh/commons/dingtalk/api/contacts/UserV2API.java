@@ -26,6 +26,7 @@ import com.wuzh.commons.dingtalk.exception.DingtalkException;
 import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserListsimpleRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserUpdateRequest;
+import com.wuzh.commons.dingtalk.request.contacts.V2UserListRequest;
 import com.wuzh.commons.dingtalk.response.contacts.*;
 import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
 import lombok.extern.slf4j.Slf4j;
@@ -180,6 +181,28 @@ public class UserV2API extends BaseAPI {
         }
         // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
         ContactsResponse<ListUserByDept> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<ListUserByDept>>() {
+        }.getType());
+        return response;
+    }
+
+    /**
+     * 获取部门用户详情
+     *
+     * @param request 请求条件
+     */
+    public ContactsResponse<PageResult<ListUserSimple>> v2UserList(V2UserListRequest request) {
+        Assert.notNull(request, "request must not be null");
+        Assert.notNull(request.getDeptId(), "request deptId must not be null");
+        Assert.notNull(request.getCursor(), "request cursor must not be null");
+        Assert.notNull(request.getSize(), "request size must not be null");
+
+        ResponseMessage responseMessage = doPost(URLContent.URL_USER_LISTSIMPLE, request);
+        log.info("返回结果：{}", responseMessage);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        ContactsResponse<PageResult<ListUserSimple>> response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<ContactsResponse<PageResult<ListUserSimple>>>() {
         }.getType());
         return response;
     }

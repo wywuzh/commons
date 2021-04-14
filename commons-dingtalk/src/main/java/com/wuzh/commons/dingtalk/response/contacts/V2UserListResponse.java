@@ -13,45 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.poi.entity;
+package com.wuzh.commons.dingtalk.response.contacts;
 
+import com.google.gson.annotations.SerializedName;
+import com.wuzh.commons.dingtalk.response.BaseResponse;
 import lombok.Data;
 
-import java.util.Date;
-
 /**
- * 类User的实现描述：用户
+ * 类V2UserListResponse的实现描述：TODO 类实现描述
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-25 18:38:12
- * @version v2.3.7
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-03-12 10:00:32
+ * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class User {
+public class V2UserListResponse extends BaseResponse {
+    private static final long serialVersionUID = 75304106390344877L;
 
     /**
-     * 用户名
+     * 是否还有更多的数据
      */
-    private String username;
+    @SerializedName(value = "has_more")
+    private Long nextCursor;
     /**
-     * 昵称
+     * 下一次分页的游标，如果has_more为false，表示没有更多的分页数据
      */
-    private String nick;
-    /**
-     * 邮箱
-     */
-    private String email;
-    /**
-     * 手机号
-     */
-    private String mobile;
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 出生日期
-     */
-    private Date birthdate;
-
+    @SerializedName(value = "next_cursor")
+    private Boolean hasMore;
 }

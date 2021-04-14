@@ -13,45 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.poi.entity;
+package com.wuzh.commons.dingtalk.response.message;
 
+import com.google.gson.annotations.SerializedName;
 import lombok.Data;
-
-import java.util.Date;
+import lombok.EqualsAndHashCode;
 
 /**
- * 类User的实现描述：用户
+ * 类AsyncsendV2Response的实现描述：发送工作通知响应结果
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-25 18:38:12
- * @version v2.3.7
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-03-19 09:51:04
+ * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class User {
+@EqualsAndHashCode(callSuper = true)
+public class AsyncsendV2Response extends MessageResponse {
+    private static final long serialVersionUID = 8787270197031658182L;
 
     /**
-     * 用户名
+     * 创建的异步发送任务ID
      */
-    private String username;
-    /**
-     * 昵称
-     */
-    private String nick;
-    /**
-     * 邮箱
-     */
-    private String email;
-    /**
-     * 手机号
-     */
-    private String mobile;
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 出生日期
-     */
-    private Date birthdate;
-
+    @SerializedName(value = "task_id")
+    private String taskId;
 }

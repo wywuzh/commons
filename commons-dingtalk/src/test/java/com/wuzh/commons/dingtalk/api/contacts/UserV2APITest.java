@@ -21,6 +21,7 @@ import com.wuzh.commons.dingtalk.enums.Language;
 import com.wuzh.commons.dingtalk.request.contacts.UserCreateRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserListsimpleRequest;
 import com.wuzh.commons.dingtalk.request.contacts.UserUpdateRequest;
+import com.wuzh.commons.dingtalk.request.contacts.V2UserListRequest;
 import com.wuzh.commons.dingtalk.response.BaseResponse;
 import com.wuzh.commons.dingtalk.response.contacts.*;
 import com.wuzh.commons.dingtalk.response.contacts.userget.UserCreate;
@@ -124,6 +125,20 @@ public class UserV2APITest extends AbstractTest {
         Long deptId = 1L;
         ContactsResponse<ListUserByDept> listId = userV2API.listId(deptId);
         log.info("获取部门用户userid列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(listId));
+    }
+
+    @Test
+    public void v2UserList() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+        V2UserListRequest request = new V2UserListRequest();
+        // 部门ID，根部门ID为1
+        request.setDeptId(1L);
+        // 分页查询的游标，最开始传0
+        request.setCursor(0L);
+        request.setSize(20L);
+
+        ContactsResponse<PageResult<ListUserSimple>> response = userV2API.v2UserList(request);
+        log.info("获取部门用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
