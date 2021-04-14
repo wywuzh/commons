@@ -99,6 +99,7 @@
         <shiro.version>1.7.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>1.0.1</alibaba-dingtalk-service-sdk.version>
+        <taobao-sdk-java-auto.version>1479188381469-20210409</taobao-sdk-java-auto.version>
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
         <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
@@ -464,6 +465,11 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>alibaba-dingtalk-service-sdk</artifactId>
                 <version>${alibaba-dingtalk-service-sdk.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.aliyun</groupId>
+                <artifactId>taobao-sdk-java-auto</artifactId>
+                <version>${taobao-sdk-java-auto.version}</version>
             </dependency>
 
 
