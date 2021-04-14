@@ -13,45 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.poi.entity;
+package com.wuzh.commons.dingtalk.response.message;
 
+import com.google.gson.annotations.SerializedName;
+import com.wuzh.commons.dingtalk.response.BaseResponse;
 import lombok.Data;
-
-import java.util.Date;
+import lombok.EqualsAndHashCode;
 
 /**
- * 类User的实现描述：用户
+ * 类MessageResponse的实现描述：消息
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-25 18:38:12
- * @version v2.3.7
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-03-19 09:48:22
+ * @version v2.3.8
  * @since JDK 1.8
  */
 @Data
-public class User {
+@EqualsAndHashCode(callSuper = true)
+public class MessageResponse<T> extends BaseResponse {
+    private static final long serialVersionUID = -1100277101788085318L;
 
     /**
-     * 用户名
+     * 请求ID
      */
-    private String username;
-    /**
-     * 昵称
-     */
-    private String nick;
-    /**
-     * 邮箱
-     */
-    private String email;
-    /**
-     * 手机号
-     */
-    private String mobile;
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 出生日期
-     */
-    private Date birthdate;
-
+    @SerializedName(value = "request_id")
+    private String requestId;
 }

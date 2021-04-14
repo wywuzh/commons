@@ -57,6 +57,12 @@ public class Constants {
      */
     public static final String SEPARATE_COMMA = ",";
     /**
+     * 分隔符：英文点
+     *
+     * @since v2.3.8
+     */
+    public static final String SEPARATE_SPOT = ".";
+    /**
      * 分隔符：分号
      */
     public static final String SEPARATE_SEMICOLON = ";";
@@ -88,6 +94,13 @@ public class Constants {
      * 分隔符：双竖
      */
     public static final String SEPARATE_DOUBLE_VERTICAL = "||";
+
+    /**
+     * 星号
+     *
+     * @since v2.3.8
+     */
+    public static final String ASTERISK = "*";
 
     /**
      * 等于-中文

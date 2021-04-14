@@ -239,8 +239,8 @@ public class DeleteByPKPlugin extends BasePlugin {
         IntrospectedColumn updateTime = introspectedTable.getColumn("UPDATE_TIME");
 
         deleteByEle.addElement(new TextElement("UPDATE " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        deleteByEle.addElement(new TextElement("set " + logicDeleteField(tableConfiguration) + " = " + logicDeletedFlag(tableConfiguration)));
-        deleteByEle.addElement(new TextElement(MyBatis3FormattingUtilities.getAliasedEscapedColumnName(updateUser) + " = " + MyBatis3FormattingUtilities.getParameterClause(updateUser)));
+        deleteByEle.addElement(new TextElement("set " + logicDeleteField(tableConfiguration) + " = " + logicDeletedFlag(tableConfiguration) + ","));
+        deleteByEle.addElement(new TextElement(MyBatis3FormattingUtilities.getAliasedEscapedColumnName(updateUser) + " = " + MyBatis3FormattingUtilities.getParameterClause(updateUser) + ","));
         deleteByEle.addElement(new TextElement(MyBatis3FormattingUtilities.getAliasedEscapedColumnName(updateTime) + " = " + MyBatis3FormattingUtilities.getParameterClause(updateTime)));
         deleteByEle.addElement(new TextElement("WHERE ID in"));
 
