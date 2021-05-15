@@ -101,7 +101,11 @@ public class GsonUtil {
      */
     public static String format(Object bean) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(bean);
     }
@@ -116,7 +120,11 @@ public class GsonUtil {
      */
     public static String format(Object bean, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(bean, type);
     }
@@ -130,7 +138,11 @@ public class GsonUtil {
      */
     public static String format(List<?> beanList) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(beanList);
     }
@@ -145,7 +157,11 @@ public class GsonUtil {
      */
     public static String format(List<?> beanList, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(beanList, type);
     }
@@ -160,7 +176,11 @@ public class GsonUtil {
      */
     public static <T> T parse(String json, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
 
         T t = null;
@@ -188,7 +208,11 @@ public class GsonUtil {
      */
     public static <T> T parse(JsonElement json, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
 
         T t = null;
