@@ -44,6 +44,7 @@ if (!Object.assign) {
         "okSweetAlert2": "okmodules/okSweetAlert2",
         "okHoliday": "okmodules/okHoliday",
         "okLayx": "okmodules/okLayx",
+        "jqprint": "okmodules/jqprint",
         "AjaxRequest": "commons/AjaxRequest",
         "Amount": "commons/Amount",
         "Component": "commons/Component",

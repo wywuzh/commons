@@ -105,6 +105,7 @@
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
         <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
+        <webjars.jquery-mobile.version>1.4.5</webjars.jquery-mobile.version>
         <webjars.jquery-form.version>4.2.2</webjars.jquery-form.version>
         <webjars.bootstrap.version>3.4.1</webjars.bootstrap.version>
         <webjars.bootstrap-datepicker.version>1.9.0</webjars.bootstrap-datepicker.version>
@@ -485,6 +486,11 @@
                 <groupId>org.webjars</groupId>
                 <artifactId>jquery-ui</artifactId>
                 <version>${webjars.jquery-ui.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
+                <artifactId>jquery-mobile</artifactId>
+                <version>${webjars.jquery-mobile.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.webjars</groupId>

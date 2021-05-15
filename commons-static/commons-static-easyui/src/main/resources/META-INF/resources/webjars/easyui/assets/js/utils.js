@@ -3,6 +3,10 @@
  * @author 伍章红 2020-08-25
  * @requires jQuery, jQuery-EasyUI
  */
+
+/**
+ * easyui datagrid组件工具
+ */
 var Datagrid = {
     /**
      * 显示内容
@@ -20,6 +24,8 @@ var Datagrid = {
     /**
      * 日期格式化
      * @param value 日期数值，毫秒值
+     * @param row 行
+     * @param index 索引
      */
     formatDate: function (value, row, index) {
         if (value) {
@@ -30,6 +36,8 @@ var Datagrid = {
     /**
      * 时间格式化
      * @param value 时间数值，毫秒值
+     * @param row 行
+     * @param index 索引
      */
     formatTime: function (value, row, index) {
         if (value) {
@@ -40,6 +48,8 @@ var Datagrid = {
     /**
      * 日期时间格式化
      * @param value 日期时间数值，毫秒值
+     * @param row 行
+     * @param index 索引
      */
     formatDateTime: function (value, row, index) {
         if (value) {
@@ -50,6 +60,8 @@ var Datagrid = {
     /**
      * 年月格式化
      * @param value 年月数值，毫秒值
+     * @param row 行
+     * @param index 索引
      */
     formatYearMonth: function (value, row, index) {
         if (value) {
@@ -60,12 +72,27 @@ var Datagrid = {
     /**
      * 将数值格式化成金额
      * @param value 金额数值
+     * @param row 行
+     * @param index 索引
+     * @requires jquery.number.js
      */
     formatAmount: function (value, row, index) {
         if (value == null || value == '' || value == undefined) {
             value = 0;
         }
         return $.number(value, 2);
+    },
+    /**
+     * 将数值格式化成率，保留4位小数
+     * @param value 率值
+     * @returns {null|jQuery}
+     * @requires jquery.number.js
+     */
+    formatRate: function (value) {
+        if (value == null || value == undefined) {
+            return null;
+        }
+        return $.number(value, 4);
     },
     /**
      * 处理datagrid数据为空时，title类展示不全的问题
@@ -88,13 +115,30 @@ var Datagrid = {
  * 重写datagrid默认值
  */
 $.fn.datagrid.defaults = $.extend({}, $.fn.datagrid.defaults, {
-    frozenColumns: [[
-        {field: 'chex', checkbox: true, resizable: true}
-    ]],
+    async: false, // 是否异步请求，默认为true
+    border: true,
+    striped: true, // 交替显示行背景
+    nowrap: true, // 当数据长度超出列宽时将会自动截取
+    idFiled: "id",
     loadMsg: "数据加载中，请稍候……",
+    multiSort: true, // 是否允许多列排序
+    rownumbers: true,
+    showFooter: true,
+    singleSelect: false, // 是否只允许选择一行
+    checkOnSelect: true,
+    selectOnCheck: true,
+    pagination: true, // 在数据表格底部显示分页工具栏
+    pageNumber: 1, // 初始化分页码（页码从1开始）
+    pageSize: 20, // 初始化每页显示数据量
+    pageList: [10, 20, 50, 100, 200, 300, 400, 500], // 初始化每页记录数列表
     onLoadSuccess: Datagrid.loadSuccessForTitle
 });
 
+/**
+ * 初始化datagrid组件
+ * @param selector 选择器，必填
+ * @param options datagrid组件参数，可选
+ */
 function initDatagrid(selector, options) {
     options = options || {};
     // 默认属性值
@@ -105,6 +149,7 @@ function initDatagrid(selector, options) {
         ]],
         fitColumns: false, // 自动使列适应表格宽度以防止出现水平滚动
         fit: true,
+        async: false, // 是否异步请求，默认为true
         border: true,
         striped: true, // 交替显示行背景
         nowrap: true, // 当数据长度超出列宽时将会自动截取
@@ -113,26 +158,20 @@ function initDatagrid(selector, options) {
         multiSort: true, // 是否允许多列排序
         rownumbers: true,
         showFooter: true,
-        singleSelect: false, // 是否只允许选择一行
+        singleSelect: false, // 是否只允许选择一行，默认可多选
         checkOnSelect: true,
         selectOnCheck: true,
         pagination: true, // 在数据表格底部显示分页工具栏
         pageNumber: 1, // 初始化分页码（页码从1开始）
         pageSize: 20, // 初始化每页显示数据量
         pageList: [10, 20, 50, 100, 200, 300, 400, 500], // 初始化每页记录数列表
-        onClickRow: function (index, row) { // 点击选中行事件
-        },
-        onDblClickRow: function (index, row) { // 双击选中行事件
-        },
-        onBeforeLoad: function (param) { // 在请求载入数据之前触发，如果返回false将取消载入
-        },
         onLoadSuccess: Datagrid.loadSuccessForTitle
     };
     // 将options属性值合并到defaultOptions属性中
     $.extend(defaultOptions, options);
-    var $dg = $(selector).datagrid(defaultOptions);
-    return $dg;
+    $(selector).datagrid(defaultOptions);
 }
+
 
 /**
  * 下拉框
@@ -455,6 +494,267 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
 }
 
 /**
+ * 下拉框展示弹窗事件
+ */
+function showPanelCombobox() {
+    var data = $(this).combobox('getData');
+    // 下拉框数据长度小于10条时，高度自适应，大于10条时最高200，防止高度占满整个屏幕
+    if (data.length < 10) {
+        $(this).combobox('panel').height("auto");
+    } else {
+        $(this).combobox('panel').height(200);
+    }
+    // 重新选中值，防止多次打开窗口时，之前选中的值失效
+    var selected = $(this).combobox('getValues');
+    // 重新加载数据
+    $(this).combobox('loadData', data);
+    if (selected) {
+        $(this).combobox('setValues', selected);
+    }
+}
+
+/**
+ * 下拉框展示弹窗事件（单选）
+ */
+function hidePanelComboboxForSingle() {
+    var _options = $(this).combobox('options');
+    var _data = $(this).combobox('getData');
+    /* 下拉框所有选项 */
+    var _value = $(this).combobox('getValue');
+    /* 用户输入的值 */
+    var _b = false;
+    /* 标识是否在下拉列表中找到了用户输入的字符 */
+    for (var i = 0; i < _data.length; i++) {
+        if (_data[i][_options.valueField] == _value) {
+            _b = true;
+            break;
+        }
+    }
+    if (!_b) {
+        $(this).combobox('setValue', '');
+        return false;
+    }
+    return true;
+}
+
+/**
+ * 下拉框展示弹窗事件（多选）
+ */
+function hidePanelComboboxForMultiple() {
+    var _options = $(this).combobox('options');
+    var _data = $(this).combobox('getData');
+    // 下拉框选择项
+    var values = $(this).combobox('getValues');
+    if (values.length > 0) {
+        var array = [];
+        if (values[0].indexOf(",") == -1) {
+            $.each(values, function (index, element) {
+                for (var i = 0; i < _data.length; i++) {
+                    if (_data[i][_options.valueField] == element) {
+                        array.push(element);
+                    }
+                }
+            });
+        } else {
+            // 解决开头或者中间存在逗号导致多选下拉出现异常的问题
+            // 去掉第一个逗号
+            // var text = values[0].replace(",", "");
+            // 使用正则，将多个相邻的逗号替换成一个逗号，相当于Java的replaceAll
+            var reg = new RegExp(",", "g");
+            var text = values[0].replace(reg, ",");
+            // 分割文本值
+            text = text.split(",");
+            $.each(text, function (index, element) {
+                if (element != null && element != '' && element != undefined) {
+                    for (var i = 0; i < _data.length; i++) {
+                        // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
+                        if (_data[i][_options.textField] == element) {
+                            array.push(_data[i][_options.valueField]);
+                        }
+                    }
+                }
+            });
+        }
+        $(this).combobox('setValues', array);
+    } else {
+        $(this).combobox('setValues', '');
+    }
+    return true;
+}
+
+
+/**
+ * combogrid组件默认值
+ */
+$.fn.combogrid.defaults = $.extend({}, $.fn.combogrid.defaults, {
+    method: "post",
+    mode: 'remote',
+    fitColumns: true, // 自动使列适应表格宽度以防止出现水平滚动
+    fit: true,
+    async: false, // 是否异步请求，默认为true
+    border: true,
+    striped: true, // 交替显示行背景
+    nowrap: true, // 当数据长度超出列宽时将会自动截取
+    loadMsg: "数据加载中，请稍候……",
+    multiSort: true, // 是否允许多列排序
+    rownumbers: true,
+    singleSelect: true, // 是否只允许选择一行，默认单选
+    checkOnSelect: true,
+    selectOnCheck: true,
+    multiple: false, // 是否支持多选，默认为单选
+    onHidePanel: hidePanelCombogridForSingle,
+});
+
+/**
+ * 初始化combogrid组件
+ * @param selector 选择器，必填
+ * @param options combogrid组件参数，可选
+ */
+function initCombogrid(selector, options) {
+    options = options || {};
+    // 默认属性值
+    var defaultOptions = {
+        method: "post",
+        queryParams: {
+            q: '' // 控件模糊匹配请求条件
+        },
+        idField: "id",
+        textField: 'text',
+        mode: 'remote',
+        fitColumns: true, // 自动使列适应表格宽度以防止出现水平滚动
+        fit: true,
+        async: false, // 是否异步请求，默认为true
+        border: true,
+        striped: true, // 交替显示行背景
+        nowrap: true, // 当数据长度超出列宽时将会自动截取
+        loadMsg: "数据加载中，请稍候……",
+        multiSort: true, // 是否允许多列排序
+        rownumbers: true,
+        singleSelect: true, // 是否只允许选择一行，默认单选
+        checkOnSelect: true,
+        selectOnCheck: true,
+        multiple: false, // 是否支持多选，默认为单选
+        panelWidth: 470,
+        panelHeight: 230,
+        readonly: false,
+        autoRowHeight: false,
+        showFooter: true,
+        pagination: true, // 在数据表格底部显示分页工具栏
+        pageNumber: 1, // 初始化分页码（页码从1开始）
+        pageSize: 20, // 初始化每页显示数据量
+        pageList: [10, 20, 50, 100, 200, 300, 400, 500], // 初始化每页记录数列表
+        onHidePanel: hidePanelCombogridForSingle,
+    };
+    // 将options属性值合并到defaultOptions属性中
+    $.extend(defaultOptions, options);
+    $(selector).combogrid(defaultOptions);
+}
+
+/**
+ * combogrid控件隐藏事件：单选
+ * @returns {boolean}
+ */
+function hidePanelCombogridForSingle() {
+    var grid = $(this).combogrid("grid");
+    var data = grid.datagrid("getData");
+    var _options = $(this).combogrid('options');
+    var length = (data.rows ? data.rows.length : 0);
+    if (length <= 0) {
+        $(this).combogrid('setValue', '');
+        $(this).combogrid(_options);
+        return false;
+    } else {
+        var isFound = false;
+        var inputVal = $(this).combogrid("getValue");  //当前combogrid的值
+        /* 标识是否在下拉列表中找到了用户输入的字符 */
+        for (var i = 0; i < length; i++) {
+            if (data.rows[i][_options.idField] == inputVal) {
+                isFound = true;
+                break;
+            }
+        }
+        if (!isFound) {
+            $(this).combogrid('setValue', '');
+            $(this).combogrid(_options);
+            return false;
+        }
+    }
+    return true;
+}
+
+/**
+ * combogrid控件隐藏事件：多选
+ * @returns {boolean}
+ */
+function hidePanelCombogridForMultiple() {
+    var grid = $(this).combogrid("grid");
+    var _data = grid.datagrid("getData");
+    var _options = $(this).combogrid('options');
+    var length = (_data.rows ? _data.rows.length : 0);
+    if (length <= 0) {
+        $(this).combogrid('setValues', '');
+        $(this).combogrid(_options);
+        return false;
+    } else {
+        var values = $(this).combogrid('getValues');
+        if (values.length > 0) {
+            var array = [];
+            if (values[0].indexOf(",") == -1) {
+                $.each(values, function (index, element) {
+                    for (var i = 0; i < _data.rows.length; i++) {
+                        if (_data.rows[i][_options.idField] == element) {
+                            array.push(element);
+                        }
+                    }
+                });
+            } else {
+                // 解决开头或者中间存在逗号导致多选下拉出现异常的问题
+                // 去掉第一个逗号
+                var text = values[0].replace(",", "");
+                // 使用正则，将多个相邻的逗号替换成一个逗号，相当于Java的replaceAll
+                var reg = new RegExp(",", "g");
+                text = text.replace(reg, ",");
+                // 分割文本值
+                text = text.split(",");
+                $.each(text, function (index, element) {
+                    for (var i = 0; i < _data.rows.length; i++) {
+                        // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
+                        if (_data.rows[i][_options.textField] == element) {
+                            array.push(_data.rows[i][_options.idField]);
+                        }
+                    }
+                });
+            }
+            $(this).combogrid('setValues', array);
+        } else {
+            var array = [];
+            var text = $(this).combogrid('getText');
+            if (text != null && text != '' && text != undefined) {
+                // 解决开头或者中间存在逗号导致多选下拉出现异常的问题
+                // 去掉第一个逗号
+                text = text.replace(",", "");
+                // 使用正则，将多个相邻的逗号替换成一个逗号，相当于Java的replaceAll
+                var reg = new RegExp(",", "g");
+                text = text.replace(reg, ",");
+                // 分割文本值
+                text = text.split(",");
+                $.each(text, function (index, element) {
+                    for (var i = 0; i < _data.rows.length; i++) {
+                        // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
+                        if (_data.rows[i][_options.textField] == element) {
+                            array.push(_data.rows[i][_options.idField]);
+                        }
+                    }
+                });
+            }
+            $(this).combogrid('setValues', array);
+        }
+    }
+    return true;
+}
+
+
+/**
  * tab页操作
  */
 var Tabs = {
@@ -718,6 +1018,20 @@ var UIComponent = {
             // 父div禁用
             $this.parent().addClass('disabled-click');
         });
+    },
+    getDictLabel: function (dictListJson, value, defaultValue, valueField, textField) {
+        // valueField、textField两个参数字段配置为空时，设置默认值
+        valueField = valueField || 'id';
+        textField = textField || 'text';
+
+        var result = [];
+        for (var i = 0; i < dictListJson.length; i++) {
+            var row = dictListJson[i];
+            if (("," + value + ",").indexOf("," + row[valueField] + ",") != -1) {
+                result.push(row[textField]);
+            }
+        }
+        return result.length > 0 ? result.join(",") : defaultValue;
     }
 };
 

@@ -19,7 +19,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 类ComboGrid的实现描述：TODO 类实现描述
+ * 类ComboGrid的实现描述：下拉表格
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2018/12/27 22:18
  * @version v2.1.1
