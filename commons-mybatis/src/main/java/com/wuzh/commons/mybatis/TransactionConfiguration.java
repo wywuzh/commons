@@ -16,6 +16,7 @@
 package com.wuzh.commons.mybatis;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -33,6 +34,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableTransactionManagement
+@ConditionalOnMissingBean(PlatformTransactionManager.class)
 public class TransactionConfiguration implements TransactionManagementConfigurer {
 
     @Autowired

@@ -70,6 +70,7 @@ public class MyBatisConfig {
     private final String TYPE_ALIASES_PACKAGE = "com.wuzh.**.entity";
 
     @Bean(name = "dataSource")
+    @ConditionalOnMissingBean
     public DataSource dataSource(@Qualifier("writeDataSource") DataSource writeDataSource,
                                  @Qualifier("readDataSource") DataSource readDataSource) {
         Map<Object, Object> dataSourceMap = new HashMap<>();
@@ -83,6 +84,7 @@ public class MyBatisConfig {
     }
 
     @Bean(name = "sqlSessionFactory")
+    @ConditionalOnMissingBean
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource)
             throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
@@ -99,6 +101,7 @@ public class MyBatisConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
