@@ -118,7 +118,10 @@
         <webjars.font-awesome.version>5.15.1</webjars.font-awesome.version>
         <webjars.layui.version>2.5.6</webjars.layui.version>
         <webjars.AdminLTE.version>3.0.5</webjars.AdminLTE.version>
-        <editor.md.version>1.5.0</editor.md.version>
+        <webjars.editor.md.version>1.5.0</webjars.editor.md.version>
+        <webjars.vue.version>2.6.12</webjars.vue.version>
+        <webjars.vue-i18n.version>8.15.5</webjars.vue-i18n.version>
+        <webjars.vue-router.version>3.4.9</webjars.vue-router.version>
     </properties>
 
     <dependencies>
@@ -568,7 +571,7 @@
             <dependency>
                 <groupId>org.webjars.npm</groupId>
                 <artifactId>editor.md</artifactId>
-                <version>${editor.md.version}</version>
+                <version>${webjars.editor.md.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
