@@ -2,7 +2,8 @@
 ### SpringBoot/v2.3.8
 1. 新增commons-dingtalk模块：提供钉钉API接口调用
 2. 考虑jeesite4代码新版本版权原因，前端界面不再使用jeesite4的模板，删除commons-static模块下的commons-static-jeesite4子模块
-
+3. commons-static模块：
+  1. 新增`commons-static-vue`子模块
 
 ### SpringBoot/V2.3.6
 1. commons-mybatis-generator模块：
