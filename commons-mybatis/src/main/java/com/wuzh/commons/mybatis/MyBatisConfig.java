@@ -15,12 +15,14 @@
  */
 package com.wuzh.commons.mybatis;
 
+import com.wuzh.commons.mybatis.constants.DataSourceConstants;
 import com.wuzh.commons.mybatis.datasource.DruidDataSourceConfig;
 import com.wuzh.commons.mybatis.setting.DruidReadConfig;
 import com.wuzh.commons.mybatis.setting.DruidWriteConfig;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.annotation.MapperScannerRegistrar;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.slf4j.Logger;
@@ -45,6 +47,7 @@ import java.util.Map;
  * @since JDK 1.8
  */
 @Configuration
+@MapperScan(basePackages = "cn.wuzh.**.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 @EnableConfigurationProperties({DruidWriteConfig.class, DruidReadConfig.class})
 @Import({DruidDataSourceConfig.class})
 public class MyBatisConfig {
@@ -73,13 +76,13 @@ public class MyBatisConfig {
     @ConditionalOnMissingBean
     public DataSource dataSource(@Qualifier("writeDataSource") DataSource writeDataSource,
                                  @Qualifier("readDataSource") DataSource readDataSource) {
-        Map<Object, Object> dataSourceMap = new HashMap<>();
-        dataSourceMap.put("writeDataSource", writeDataSource);
-        dataSourceMap.put("readDataSource", readDataSource);
+        Map<Object, Object> targetDataSources = new HashMap<>();
+        targetDataSources.put(DataSourceConstants.BEAN_NAME_WRITE, writeDataSource);
+        targetDataSources.put(DataSourceConstants.BEAN_NAME_READ, readDataSource);
 
         RoutingDataSource routingDataSource = new RoutingDataSource();
         routingDataSource.setDefaultTargetDataSource(writeDataSource);
-        routingDataSource.setTargetDataSources(dataSourceMap);
+        routingDataSource.setTargetDataSources(targetDataSources);
         return routingDataSource;
     }
 
@@ -88,6 +91,7 @@ public class MyBatisConfig {
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource)
             throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
+        // 设置数据源
         sessionFactory.setDataSource(dataSource);
 
         PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
