@@ -15,9 +15,10 @@
  */
 package com.wuzh.commons.mybatis;
 
+import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 类DataSourceAutoConfig的实现描述：多数据源配置
@@ -27,8 +28,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @since JDK 1.8
  */
 @Configuration
-@EnableTransactionManagement(proxyTargetClass = true)
 @Import({MyBatisConfig.class, TransactionConfiguration.class})
-public class DataSourceAutoConfig {
+@AutoConfigureBefore(MybatisAutoConfiguration.class)
+public class MyBatisAutoConfig {
 
 }

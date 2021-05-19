@@ -17,8 +17,6 @@ package com.wuzh.commons.mybatis;
 
 import com.wuzh.commons.mybatis.constants.DataSourceConstants;
 import com.wuzh.commons.mybatis.datasource.DruidDataSourceConfig;
-import com.wuzh.commons.mybatis.setting.DruidReadConfig;
-import com.wuzh.commons.mybatis.setting.DruidWriteConfig;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -29,10 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
@@ -48,7 +46,6 @@ import java.util.Map;
  */
 @Configuration
 @MapperScan(basePackages = "cn.wuzh.**.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
-@EnableConfigurationProperties({DruidWriteConfig.class, DruidReadConfig.class})
 @Import({DruidDataSourceConfig.class})
 public class MyBatisConfig {
     private final Logger logger = LoggerFactory.getLogger(MyBatisConfig.class);
@@ -56,7 +53,7 @@ public class MyBatisConfig {
     /**
      * MAPPER映射器文件存放路径
      */
-    private final String MAPPER_LOCATION = "classpath:com/wuzh/**/*.xml";
+    private final String MAPPER_LOCATION = "classpath:com/wuzh/**/mapper/**/*.xml";
     /**
      * MAPPER接口文件存放路径
      *
@@ -72,10 +69,11 @@ public class MyBatisConfig {
      */
     private final String TYPE_ALIASES_PACKAGE = "com.wuzh.**.entity";
 
-    @Bean(name = "dataSource")
+    @Primary
+    @Bean
     @ConditionalOnMissingBean
-    public DataSource dataSource(@Qualifier("writeDataSource") DataSource writeDataSource,
-                                 @Qualifier("readDataSource") DataSource readDataSource) {
+    public DataSource dataSource(@Qualifier(DataSourceConstants.BEAN_NAME_WRITE) DataSource writeDataSource,
+                                 @Qualifier(DataSourceConstants.BEAN_NAME_READ) DataSource readDataSource) {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceConstants.BEAN_NAME_WRITE, writeDataSource);
         targetDataSources.put(DataSourceConstants.BEAN_NAME_READ, readDataSource);
@@ -86,13 +84,12 @@ public class MyBatisConfig {
         return routingDataSource;
     }
 
-    @Bean(name = "sqlSessionFactory")
+    @Bean
     @ConditionalOnMissingBean
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource)
-            throws Exception {
+    public SqlSessionFactory sqlSessionFactory(RoutingDataSource routingDataSource) throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         // 设置数据源
-        sessionFactory.setDataSource(dataSource);
+        sessionFactory.setDataSource(routingDataSource);
 
         PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         // 设置mapper文件目录
@@ -112,11 +109,11 @@ public class MyBatisConfig {
 
     @Bean
     @ConditionalOnMissingBean({MapperScannerRegistrar.class, MapperScannerConfigurer.class})
-    public MapperScannerConfigurer mapperScannerConfigurer() {
+    public MapperScannerConfigurer mapperScannerConfigurer(SqlSessionFactory sqlSessionFactory) {
         // v2.3.6：扫描Mapper接口文件，在未配置 @MapperScan 和MapperScannerConfigurer的情况下，启用该配置
         MapperScannerConfigurer configurer = new MapperScannerConfigurer();
         configurer.setBasePackage(MAPPER_PACKAGE);
-        configurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
+        configurer.setSqlSessionFactoryBeanName(sqlSessionFactory.getClass().getName());
         return configurer;
     }
 
