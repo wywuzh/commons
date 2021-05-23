@@ -38,7 +38,6 @@ import javax.sql.DataSource;
 @ConditionalOnClass(DruidDataSource.class)
 public class DruidDataSourceConfig {
 
-    @Primary
     @Bean(name = DataSourceConstants.BEAN_NAME_WRITE, initMethod = "init", destroyMethod = "close")
     @ConfigurationProperties(DataSourceConstants.PROPERTIES_PREFIX_WRITE)
     @ConditionalOnMissingBean(name = DataSourceConstants.BEAN_NAME_WRITE)

@@ -44,5 +44,4 @@ public class TransactionConfiguration implements TransactionManagementConfigurer
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new DataSourceTransactionManager(dataSource);
     }
-
 }
