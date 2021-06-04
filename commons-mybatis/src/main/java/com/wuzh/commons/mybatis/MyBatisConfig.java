@@ -30,7 +30,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 import javax.sql.DataSource;
@@ -45,7 +44,6 @@ import java.util.Map;
  * @since JDK 1.8
  */
 @Configuration
-@MapperScan(basePackages = "cn.wuzh.**.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 @Import({DruidDataSourceConfig.class})
 public class MyBatisConfig {
     private final Logger logger = LoggerFactory.getLogger(MyBatisConfig.class);
@@ -69,11 +67,9 @@ public class MyBatisConfig {
      */
     private final String TYPE_ALIASES_PACKAGE = "com.wuzh.**.entity";
 
-    @Primary
-    @Bean
-    @ConditionalOnMissingBean
-    public DataSource dataSource(@Qualifier(DataSourceConstants.BEAN_NAME_WRITE) DataSource writeDataSource,
-                                 @Qualifier(DataSourceConstants.BEAN_NAME_READ) DataSource readDataSource) {
+    @Bean(name = "dataSource")
+    public DataSource dataSource(@Qualifier("writeDataSource") DataSource writeDataSource,
+                                 @Qualifier("readDataSource") DataSource readDataSource) {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceConstants.BEAN_NAME_WRITE, writeDataSource);
         targetDataSources.put(DataSourceConstants.BEAN_NAME_READ, readDataSource);
@@ -84,12 +80,12 @@ public class MyBatisConfig {
         return routingDataSource;
     }
 
-    @Bean
-    @ConditionalOnMissingBean
-    public SqlSessionFactory sqlSessionFactory(RoutingDataSource routingDataSource) throws Exception {
+    @Bean(name = "sqlSessionFactory")
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource)
+            throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         // 设置数据源
-        sessionFactory.setDataSource(routingDataSource);
+        sessionFactory.setDataSource(dataSource);
 
         PathMatchingResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         // 设置mapper文件目录
@@ -102,18 +98,17 @@ public class MyBatisConfig {
     }
 
     @Bean
-    @ConditionalOnMissingBean
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
     @Bean
     @ConditionalOnMissingBean({MapperScannerRegistrar.class, MapperScannerConfigurer.class})
-    public MapperScannerConfigurer mapperScannerConfigurer(SqlSessionFactory sqlSessionFactory) {
+    public MapperScannerConfigurer mapperScannerConfigurer() {
         // v2.3.6：扫描Mapper接口文件，在未配置 @MapperScan 和MapperScannerConfigurer的情况下，启用该配置
         MapperScannerConfigurer configurer = new MapperScannerConfigurer();
         configurer.setBasePackage(MAPPER_PACKAGE);
-        configurer.setSqlSessionFactoryBeanName(sqlSessionFactory.getClass().getName());
+        configurer.setSqlSessionFactoryBeanName("sqlSessionFactory");
         return configurer;
     }
 
