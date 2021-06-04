@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.wywuzh</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>2.4.2.SNAPSHOT</version>
+    <version>2.4.2.RELEASE</version>
     <name>commons-parent</name>
     <packaging>pom</packaging>
     <description>项目公共组件类库</description>
@@ -16,8 +16,8 @@
         <module>commons-dbutils</module>
         <module>commons-mybatis-generator</module>
         <module>commons-mybatis</module>
-        <module>commons-static</module>
         <module>commons-dingtalk</module>
+        <module>commons-static</module>
     </modules>
 
     <developers>
