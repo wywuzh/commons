@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>commons-static-vue</artifactId>
+    <name>${project.artifactId}</name>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>com.github.wywuzh</groupId>
+        <artifactId>commons-static</artifactId>
+        <version>2.3.9.RELEASE</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>vue</artifactId>
+            <version>${webjars.vue.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>vue-i18n</artifactId>
+            <version>${webjars.vue-i18n.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>vue-router</artifactId>
+            <version>${webjars.vue-router.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

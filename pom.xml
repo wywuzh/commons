@@ -16,8 +16,8 @@
         <module>commons-dbutils</module>
         <module>commons-mybatis-generator</module>
         <module>commons-mybatis</module>
-        <module>commons-static</module>
         <module>commons-dingtalk</module>
+        <module>commons-static</module>
     </modules>
 
     <developers>
@@ -105,6 +105,7 @@
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
         <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
+        <webjars.jquery-mobile.version>1.4.5</webjars.jquery-mobile.version>
         <webjars.jquery-form.version>4.2.2</webjars.jquery-form.version>
         <webjars.bootstrap.version>3.4.1</webjars.bootstrap.version>
         <webjars.bootstrap-datepicker.version>1.9.0</webjars.bootstrap-datepicker.version>
@@ -117,7 +118,10 @@
         <webjars.font-awesome.version>5.15.1</webjars.font-awesome.version>
         <webjars.layui.version>2.5.6</webjars.layui.version>
         <webjars.AdminLTE.version>3.0.5</webjars.AdminLTE.version>
-        <editor.md.version>1.5.0</editor.md.version>
+        <webjars.editor.md.version>1.5.0</webjars.editor.md.version>
+        <webjars.vue.version>2.6.12</webjars.vue.version>
+        <webjars.vue-i18n.version>8.15.5</webjars.vue-i18n.version>
+        <webjars.vue-router.version>3.4.9</webjars.vue-router.version>
     </properties>
 
     <dependencies>
@@ -488,6 +492,11 @@
             </dependency>
             <dependency>
                 <groupId>org.webjars</groupId>
+                <artifactId>jquery-mobile</artifactId>
+                <version>${webjars.jquery-mobile.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.webjars</groupId>
                 <artifactId>jquery-form</artifactId>
                 <version>${webjars.jquery-form.version}</version>
             </dependency>
@@ -562,7 +571,7 @@
             <dependency>
                 <groupId>org.webjars.npm</groupId>
                 <artifactId>editor.md</artifactId>
-                <version>${editor.md.version}</version>
+                <version>${webjars.editor.md.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
