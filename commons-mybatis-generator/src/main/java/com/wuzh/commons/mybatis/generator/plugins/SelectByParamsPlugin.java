@@ -19,6 +19,7 @@ import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
+import com.wuzh.commons.core.util.StringHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -29,7 +30,7 @@ import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.TableConfiguration;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -54,8 +55,28 @@ import java.util.List;
  *     &lt;/table&gt;
  *
  * <strong>conditionsLikeColumns使用方式</strong>：
+ *     &lt;table tableName="goods_brand" domainObjectName="GoodsBrand"
+ *                enableUpdateByExample="false" enableDeleteByExample="false"
+ *                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"&gt;
+ *         &lt;!-- Like模糊查询 --&gt;
+ *         &lt;property name="conditionsLikeColumns" value=""/&gt;
+ *     &lt;/table&gt;
  *
  * <strong>conditionsForeachInColumns使用方式</strong>：
+ *     &lt;table tableName="goods_brand" domainObjectName="GoodsBrand"
+ *                enableUpdateByExample="false" enableDeleteByExample="false"
+ *                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"&gt;
+ *         &lt;!-- Foreach in查询 --&gt;
+ *         &lt;property name="conditionsForeachInColumns" value=""/&gt;
+ *     &lt;/table&gt;
+ *
+ * <strong>conditionsNotInColumns使用方式</strong>：
+ *     &lt;table tableName="goods_brand" domainObjectName="GoodsBrand"
+ *                enableUpdateByExample="false" enableDeleteByExample="false"
+ *                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"&gt;
+ *         &lt;!-- not in查询 --&gt;
+ *         &lt;property name="conditionsNotInColumns" value=""/&gt;
+ *     &lt;/table&gt;
  *
  * </pre>
  *
@@ -128,6 +149,12 @@ public class SelectByParamsPlugin extends BasePlugin {
      * Foreach in查询
      */
     public static final String CONDITIONS_FOREACH_IN_COLUMNS = "conditionsForeachInColumns";
+    /**
+     * Not in查询
+     *
+     * @since v2.4.5
+     */
+    public static final String CONDITIONS_NOT_IN_COLUMNS = "conditionsNotInColumns";
 
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
@@ -189,7 +216,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      *
      * @param interfaze
      * @param topLevelClass
-     * @param introspectedTable
+     * @param introspectedTable table表信息
      * @return
      */
     @Override
@@ -253,7 +280,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
      *
      * @param document
-     * @param introspectedTable
+     * @param introspectedTable table表信息
      * @return
      */
     @Override
@@ -371,7 +398,7 @@ public class SelectByParamsPlugin extends BasePlugin {
     /**
      * 获取查询条件
      *
-     * @param introspectedTable
+     * @param introspectedTable table表信息
      * @return
      * @since 2.3.6
      */
@@ -396,7 +423,7 @@ public class SelectByParamsPlugin extends BasePlugin {
     /**
      * 生成Where查询条件
      *
-     * @param introspectedTable
+     * @param introspectedTable table表信息
      * @return
      * @since 2.3.6
      */
@@ -428,7 +455,7 @@ public class SelectByParamsPlugin extends BasePlugin {
     /**
      * 生成Where查询条件
      *
-     * @param introspectedTable
+     * @param introspectedTable table表信息
      * @return
      */
     @Deprecated
@@ -456,8 +483,8 @@ public class SelectByParamsPlugin extends BasePlugin {
     /**
      * appendConditions查询条件中添加if节点
      *
-     * @param introspectedTable
-     * @param rootElement
+     * @param introspectedTable table表信息
+     * @param rootElement       父节点
      * @since 2.3.6
      */
     private void addElementForAppendConditions(IntrospectedTable introspectedTable, XmlElement rootElement) {
@@ -467,6 +494,8 @@ public class SelectByParamsPlugin extends BasePlugin {
         List<String> conditionsLikeColumns = getConditionsLikeColumns(tableConfiguration);
         // 开启Foreach in查询
         List<String> conditionsForeachInColumns = getConditionsForeachInColumns(tableConfiguration);
+        // not in查询字段
+        List<String> conditionsNotInColumns = getConditionsNotInColumns(tableConfiguration);
 
         List<IntrospectedColumn> introspectedColumnList = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
         for (int i = 0; i < introspectedColumnList.size(); i++) {
@@ -529,6 +558,14 @@ public class SelectByParamsPlugin extends BasePlugin {
             if (conditionsForeachInColumns != null && conditionsForeachInColumns.size() > 0 &&
                     conditionsForeachInColumns.contains(columnName)) {
                 addElementForIn(rootElement, introspectedColumn, columnName, javaProperty + "s");
+            }
+
+            // 添加 not in 查询支持
+            if (conditionsNotInColumns != null && conditionsNotInColumns.size() > 0 &&
+                    conditionsNotInColumns.contains(columnName)) {
+                // 封装 not in 字段，eg：notInIds
+                String fieldName = StringUtils.join("map.", "notIn", StringHelper.firstCharToUpperCase(introspectedColumn.getJavaProperty()), "s");
+                addElementForNotIn(rootElement, introspectedColumn, columnName, fieldName);
             }
         }
     }
@@ -606,13 +643,38 @@ public class SelectByParamsPlugin extends BasePlugin {
     }
 
     /**
+     * @param whereElement
+     * @param columnName   表字段名
+     * @param javaProperty Java字段名
+     */
+    private void addElementForNotIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+        // 第二步：添加map中key的空判断
+        XmlElement mapKeyIfElement = new XmlElement("if");
+        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + ".size &gt; 0"));
+        mapKeyIfElement.addElement(new TextElement("and " + columnName + " not in"));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", javaProperty));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("open", "("));
+        foreachElement.addAttribute(new Attribute("close", ")"));
+        foreachElement.addAttribute(new Attribute("separator", ","));
+        foreachElement.addElement(new TextElement("#{item}"));
+
+        mapKeyIfElement.addElement(foreachElement);
+
+        whereElement.addElement(mapKeyIfElement);
+    }
+
+    /**
      * 开启Like模糊查询
      *
      * @param tableConfiguration
      * @return
      */
     private List<String> getConditionsLikeColumns(TableConfiguration tableConfiguration) {
-        List<String> resultList = new ArrayList<>(0);
+        List<String> resultList = new LinkedList<>();
 
         String conditionsLikeColumns = tableConfiguration.getProperty(CONDITIONS_LIKE_COLUMNS);
         if (StringUtils.isNotBlank(conditionsLikeColumns)) {
@@ -637,13 +699,39 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      */
     private List<String> getConditionsForeachInColumns(TableConfiguration tableConfiguration) {
-        List<String> resultList = new ArrayList<>(0);
+        List<String> resultList = new LinkedList<>();
 
         String conditionsForeachInColumns = tableConfiguration.getProperty(CONDITIONS_FOREACH_IN_COLUMNS);
         if (StringUtils.isNotBlank(conditionsForeachInColumns)) {
             // conditionsForeachInColumns 兼容全角和半角的逗号分隔符
             conditionsForeachInColumns = StringUtils.replace(conditionsForeachInColumns, "，", ",");
             String[] dataArr = StringUtils.split(conditionsForeachInColumns, ",");
+            for (String str : dataArr) {
+                str = str.trim();
+                if (str == null || "".equals(str)) {
+                    continue;
+                }
+                resultList.add(str);
+            }
+        }
+        return resultList;
+    }
+
+    /**
+     * not in查询字段
+     *
+     * @param tableConfiguration
+     * @return
+     * @since v2.4.5
+     */
+    private List<String> getConditionsNotInColumns(TableConfiguration tableConfiguration) {
+        List<String> resultList = new LinkedList<>();
+
+        String conditionsNotInColumns = tableConfiguration.getProperty(CONDITIONS_NOT_IN_COLUMNS);
+        if (StringUtils.isNotBlank(conditionsNotInColumns)) {
+            // conditionsNotInColumns 兼容全角和半角的逗号分隔符
+            conditionsNotInColumns = StringUtils.replace(conditionsNotInColumns, "，", ",");
+            String[] dataArr = StringUtils.split(conditionsNotInColumns, ",");
             for (String str : dataArr) {
                 str = str.trim();
                 if (str == null || "".equals(str)) {
