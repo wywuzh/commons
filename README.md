@@ -3,13 +3,22 @@
 
 
 ### 依赖资源
-| 依赖资源 | 依赖版本 |
-| ------- | ------- |
-| spring-boot | 2.3.6.RELEASE |
-| spring | 5.2.11.RELEASE |
-| aspectj | 1.9.6 |
-| junit | 4.13.1 |
-| mockito | 3.3.3 |
-| mybatis | 3.5.5 |
-| mybatis-spring | 2.0.5 |
-| mybatis-spring-boot | 2.1.3 |
+
+#### SpringBoot/v2.4.x
+* spring-boot：2.4.x
+* spring-cloud：2020.0.x
+* spring-kafka：2.6.x
+* mybatis-spring-boot：2.1.4
+* mybatis：3.5.6
+* mybatis-spring：2.0.6
+* mybatis-spring-boot：2.1.4
+
+
+#### SpringBoot/v2.3.x
+* spring-boot：2.3.x.RELEASE
+* spring-cloud：Hoxton
+* spring-kafka：2.5.x.RELEASE
+* mybatis：3.5.5
+* mybatis-spring：2.0.5
+* mybatis-spring-boot：2.1.3
+

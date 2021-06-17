@@ -96,7 +96,7 @@
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <druid.version>1.2.6</druid.version>
 
-        <spring-kafka.version>2.7.1</spring-kafka.version>
+        <spring-kafka.version>2.6.8</spring-kafka.version>
         <dubbo.version>2.7.11</dubbo.version>
         <shiro.version>1.7.1</shiro.version>
 
