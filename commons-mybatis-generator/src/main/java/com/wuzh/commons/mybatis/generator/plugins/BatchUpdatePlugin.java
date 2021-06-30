@@ -18,6 +18,7 @@ package com.wuzh.commons.mybatis.generator.plugins;
 import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import org.apache.ibatis.type.JdbcType;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.*;
@@ -148,26 +149,30 @@ public class BatchUpdatePlugin extends BasePlugin {
         XmlElement dynamicElement = new XmlElement("set"); //$NON-NLS-1$
         foreachElement.addElement(dynamicElement);
 
-        StringBuilder sb = new StringBuilder();
-        for (IntrospectedColumn introspectedColumn : ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns())) {
-            sb.setLength(0);
-            sb.append(introspectedColumn.getJavaProperty());
-            sb.append(" != null"); //$NON-NLS-1$
-            XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$
-            isNotNullElement.addAttribute(new Attribute("test", sb.toString())); //$NON-NLS-1$
-            dynamicElement.addElement(isNotNullElement);
+        List<IntrospectedColumn> introspectedColumnList = ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns());
+        for (int i = 0; i < introspectedColumnList.size(); i++) {
+            IntrospectedColumn introspectedColumn = introspectedColumnList.get(i);
+            // 第二步：添加map中key的空判断
+            XmlElement mapKeyIfElement = new XmlElement("if");
+            // 获取Java字段名
+            String javaProperty = introspectedColumn.getJavaProperty("item.");
+            // 获取字段类型
+            int columnJdbcType = introspectedColumn.getJdbcType();
+            mapKeyIfElement.addAttribute(this.getIfAttribute(javaProperty, columnJdbcType));
 
-            sb.setLength(0);
-            sb.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
-            sb.append(" = "); //$NON-NLS-1$
-            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
-            sb.append(',');
-
-            isNotNullElement.addElement(new TextElement(sb.toString()));
+            // 添加column字段查询条件SQL（这里默认给表的所有字段添加and条件）
+            String columnName = MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn);
+            if (i >= 1) {
+                mapKeyIfElement.addElement(new TextElement(columnName + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item.") + ","));
+            } else {
+                mapKeyIfElement.addElement(new TextElement(columnName + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item.") + ","));
+            }
+            dynamicElement.addElement(mapKeyIfElement);
         }
 
         // update where
         boolean and = false;
+        StringBuilder sb = new StringBuilder();
         for (IntrospectedColumn introspectedColumn : introspectedTable.getPrimaryKeyColumns()) {
             sb.setLength(0);
             if (and) {
@@ -179,7 +184,7 @@ public class BatchUpdatePlugin extends BasePlugin {
 
             sb.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
             sb.append(" = "); //$NON-NLS-1$
-            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
+            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item."));
             foreachElement.addElement(new TextElement(sb.toString()));
         }
 
@@ -200,26 +205,30 @@ public class BatchUpdatePlugin extends BasePlugin {
         XmlElement dynamicElement = new XmlElement("set"); //$NON-NLS-1$
         foreachElement.addElement(dynamicElement);
 
-        StringBuilder sb = new StringBuilder();
-        for (IntrospectedColumn introspectedColumn : ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns())) {
-            sb.setLength(0);
-            sb.append(introspectedColumn.getJavaProperty());
-            sb.append(" != null"); //$NON-NLS-1$
-            XmlElement isNotNullElement = new XmlElement("if"); //$NON-NLS-1$
-            isNotNullElement.addAttribute(new Attribute("test", sb.toString())); //$NON-NLS-1$
-            dynamicElement.addElement(isNotNullElement);
+        List<IntrospectedColumn> introspectedColumnList = ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns());
+        for (int i = 0; i < introspectedColumnList.size(); i++) {
+            IntrospectedColumn introspectedColumn = introspectedColumnList.get(i);
+            // 第二步：添加map中key的空判断
+            XmlElement mapKeyIfElement = new XmlElement("if");
+            // 获取Java字段名
+            String javaProperty = introspectedColumn.getJavaProperty("item.");
+            // 获取字段类型
+            int columnJdbcType = introspectedColumn.getJdbcType();
+            mapKeyIfElement.addAttribute(this.getIfAttribute(javaProperty, columnJdbcType));
 
-            sb.setLength(0);
-            sb.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
-            sb.append(" = "); //$NON-NLS-1$
-            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
-            sb.append(',');
-
-            isNotNullElement.addElement(new TextElement(sb.toString()));
+            // 添加column字段查询条件SQL（这里默认给表的所有字段添加and条件）
+            String columnName = MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn);
+            if (i >= 1) {
+                mapKeyIfElement.addElement(new TextElement(columnName + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item.") + ","));
+            } else {
+                mapKeyIfElement.addElement(new TextElement(columnName + " = " + MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item.") + ","));
+            }
+            dynamicElement.addElement(mapKeyIfElement);
         }
 
         // update where
         boolean and = false;
+        StringBuilder sb = new StringBuilder();
         for (IntrospectedColumn introspectedColumn : introspectedTable.getPrimaryKeyColumns()) {
             sb.setLength(0);
             if (and) {
@@ -231,12 +240,56 @@ public class BatchUpdatePlugin extends BasePlugin {
 
             sb.append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
             sb.append(" = "); //$NON-NLS-1$
-            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn));
+            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item."));
             foreachElement.addElement(new TextElement(sb.toString()));
         }
 
         batchUpdateEle.addElement(foreachElement);
 
+    }
+
+    /**
+     * 获取 if 标签上的test属性
+     *
+     * @param javaProperty   Java属性名
+     * @param columnJdbcType 数据库字段类型
+     * @return
+     */
+    private Attribute getIfAttribute(String javaProperty, int columnJdbcType) {
+        Attribute ifAttribute = null;
+
+        JdbcType jdbcType = JdbcType.forCode(columnJdbcType);
+        if (JdbcType.CHAR.equals(jdbcType) ||
+                JdbcType.VARCHAR.equals(jdbcType) ||
+                JdbcType.LONGVARCHAR.equals(jdbcType) ||
+
+                JdbcType.BINARY.equals(jdbcType) ||
+                JdbcType.VARBINARY.equals(jdbcType) ||
+                JdbcType.LONGVARBINARY.equals(jdbcType) ||
+
+                JdbcType.BLOB.equals(jdbcType) ||
+                JdbcType.CLOB.equals(jdbcType) ||
+
+                JdbcType.NVARCHAR.equals(jdbcType) ||
+                JdbcType.NCHAR.equals(jdbcType) ||
+                JdbcType.NCLOB.equals(jdbcType) ||
+                JdbcType.LONGNVARCHAR.equals(jdbcType)) {
+            ifAttribute = new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")");
+        } else if (JdbcType.BIT.equals(jdbcType) ||
+                JdbcType.TINYINT.equals(jdbcType) ||
+                JdbcType.SMALLINT.equals(jdbcType) ||
+                JdbcType.INTEGER.equals(jdbcType) ||
+                JdbcType.BIGINT.equals(jdbcType) ||
+                JdbcType.FLOAT.equals(jdbcType) ||
+                JdbcType.REAL.equals(jdbcType) ||
+                JdbcType.DOUBLE.equals(jdbcType) ||
+                JdbcType.NUMERIC.equals(jdbcType) ||
+                JdbcType.DECIMAL.equals(jdbcType)) {
+            ifAttribute = new Attribute("test", javaProperty + " != null");
+        } else {
+            ifAttribute = new Attribute("test", javaProperty + " != null");
+        }
+        return ifAttribute;
     }
 
 }
