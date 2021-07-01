@@ -95,6 +95,8 @@
         <druid.version>1.2.6</druid.version>
 
         <spring-kafka.version>2.6.7</spring-kafka.version>
+        <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
+        <curator_version>4.0.1</curator_version>
         <dubbo.version>2.7.11</dubbo.version>
         <shiro.version>1.7.1</shiro.version>
 
@@ -424,6 +426,40 @@
             </dependency>
 
 
+            <!-- 注：在SpringBoot 2.4+ 版本中，Dubbo引入的curator 4.0.1版本被替换成了5.1.0版本，这样会导致Dubbo服务在以zookeeper为注册中心时启动失败，这里需要手动替换成与dubbo-dependencies-bom中一样的版本 -->
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>${curator_version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>zookeeper</artifactId>
+                        <groupId>org.apache.zookeeper</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-x-discovery</artifactId>
+                <version>${curator_version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>zookeeper</artifactId>
+                        <groupId>org.apache.zookeeper</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator_version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>zookeeper</artifactId>
+                        <groupId>org.apache.zookeeper</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
