@@ -35,7 +35,7 @@ import java.util.Properties;
  * 类BatchInsertPlugin的实现描述：itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/26 18:49
- * @version v3.0.0
+ * @version v2.1.1
  * @since JDK 1.8
  */
 public class BatchInsertPlugin extends BasePlugin {
