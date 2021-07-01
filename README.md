@@ -4,6 +4,15 @@
 
 ### 依赖资源
 
+#### SpringBoot/v2.5.x
+* spring-boot：2.5.x
+* spring-cloud：2020.0.x
+* spring-kafka：2.7.x
+* mybatis：3.5.7
+* mybatis-spring：2.0.6
+* mybatis-spring-boot：2.2.0
+
+
 #### SpringBoot/v2.4.x
 * spring-boot：2.4.x
 * spring-cloud：2020.0.x
