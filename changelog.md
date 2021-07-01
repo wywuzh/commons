@@ -1,4 +1,11 @@
 ## 更新日志
+### SpringBoot/v2.4.5
+1. commons-mybatis-generator模块：
+  1. 新增BatchUpdatePlugin插件：支持MySQL、Oracle数据库表的批量更新sql生成
+  2. SelectByParamsPlugin插件调整：添加 not in 查询支持
+
+
+
 ### SpringBoot/v2.3.8
 1. 新增commons-dingtalk模块：提供钉钉API接口调用
 2. 考虑jeesite4代码新版本版权原因，前端界面不再使用jeesite4的模板，删除commons-static模块下的commons-static-jeesite4子模块
