@@ -18,6 +18,7 @@ package com.wuzh.commons.mybatis.generator.plugins;
 import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -28,6 +29,7 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
@@ -35,6 +37,21 @@ import java.util.Properties;
 
 /**
  * 类BatchUpdatePlugin的实现描述：批量更新SQL插件
+ * <pre class="code">
+ * <strong>enableMergeInto使用方式</strong>：
+ * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在
+ *     &lt;plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin"&gt;
+ *         &lt;!-- 是否启用merge into格式进行更新，默认为false --&gt;
+ *         &lt;property name="enableMergeInto" value="true"/&gt;
+ *     &lt;/plugin&gt;
+ * 2. 若需要对某张表单独定制，可在该table下配置进行覆盖
+ *     &lt;table tableName="goods_brand" domainObjectName="GoodsBrand"
+ *                enableUpdateByExample="false" enableDeleteByExample="false"
+ *                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"&gt;
+ *         &lt;!-- 是否启用merge into格式进行更新，默认为false --&gt;
+ *         &lt;property name="enableMergeInto" value="true"/&gt;
+ *     &lt;/table&gt;
+ * </pre>
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-06-30 13:45:06
  * @version v2.4.5
@@ -44,8 +61,39 @@ import java.util.Properties;
 public class BatchUpdatePlugin extends BasePlugin {
     public static final String METHOD_BATCH_UPDATE = "batchUpdate";  // 方法名
     public static final String PRO_ALLOW_MULTI_QUERIES = "allowMultiQueries";   // property allowMultiQueries
+    public static final String ENABLE_MERGE_INTO = "enableMergeInto"; // 是否启用merge into格式进行更新
 
     private boolean allowMultiQueries = false;  // 是否允许多sql提交
+    /**
+     * 是否启用merge into格式进行更新，默认为false
+     */
+    private boolean enableMergeInto = false;
+
+    @Override
+    public void initialized(IntrospectedTable introspectedTable) {
+        super.initialized(introspectedTable);
+
+        // 是否启用merge into格式进行更新，默认为false
+        String enableMergeInto = super.getProperties().getProperty(ENABLE_MERGE_INTO);
+        if (StringUtils.isNotBlank(enableMergeInto)) {
+            this.enableMergeInto = Boolean.valueOf(enableMergeInto);
+        }
+    }
+
+    /**
+     * 检查是否启用merge into
+     *
+     * @param tableConfiguration table配置
+     * @return
+     */
+    private boolean enableMergeInto(TableConfiguration tableConfiguration) {
+        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
+        String enableMergeInto = tableConfiguration.getProperty(ENABLE_MERGE_INTO);
+        if (StringUtils.isNotBlank(enableMergeInto)) {
+            return Boolean.valueOf(enableMergeInto);
+        }
+        return this.enableMergeInto;
+    }
 
     @Override
     public boolean validate(List<String> warnings) {
@@ -121,10 +169,18 @@ public class BatchUpdatePlugin extends BasePlugin {
 
         String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
         if (DRIVER_ORACLE.equalsIgnoreCase(driverClass) || DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass)) {
-            // 生成Oracle批量新增SQL
-            generateOracle(document, introspectedTable, batchUpdateEle);
+//            // 生成Oracle批量更新SQL
+//            generateOracle(document, introspectedTable, batchUpdateEle);
+            // 生成Oracle批量更新SQL
+            // 检查是否启用merge into格式进行更新，默认为false
+            if (enableMergeInto(introspectedTable.getTableConfiguration())) {
+                // 启用merge into格式进行插入
+                generateOracleForMergeInto(document, introspectedTable, batchUpdateEle);
+            } else {
+                generateOracle(document, introspectedTable, batchUpdateEle);
+            }
         } else {
-            // 生成MySQL批量新增SQL
+            // 生成MySQL批量更新SQL
             generateMySQL(document, introspectedTable, batchUpdateEle);
         }
 
@@ -189,6 +245,139 @@ public class BatchUpdatePlugin extends BasePlugin {
         }
 
         batchUpdateEle.addElement(foreachElement);
+
+    }
+
+    private void generateOracleForMergeInto(Document document, IntrospectedTable introspectedTable, XmlElement batchUpdateEle) {
+        batchUpdateEle.addElement(new TextElement("MERGE INTO " + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " basic"));
+        batchUpdateEle.addElement(new TextElement("USING ("));
+
+        // 添加foreach节点
+        XmlElement foreachElement = new XmlElement("foreach");
+        foreachElement.addAttribute(new Attribute("collection", "list"));
+        foreachElement.addAttribute(new Attribute("item", "item"));
+        foreachElement.addAttribute(new Attribute("separator", "union all"));
+
+        // 构建虚拟表
+        foreachElement.addElement(new TextElement("select"));
+        StringBuilder sb = new StringBuilder();
+        int index = 0;
+        List<IntrospectedColumn> columnList = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
+        final int columnTotal = columnList.size() - 1;
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            sb.append(MyBatis3FormattingUtilities.getParameterClause(introspectedColumn, "item."));
+            sb.append(" AS ").append(introspectedColumn.getJavaProperty());
+
+            if (index < columnTotal) {
+                sb.append(", ");
+            }
+            if (sb.length() > 80) {
+                foreachElement.addElement(new TextElement(sb.toString()));
+                sb.setLength(0);
+            }
+            index++;
+        }
+        if (sb.length() > 0) {
+            foreachElement.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+
+        foreachElement.addElement(new TextElement("from dual"));
+
+        batchUpdateEle.addElement(foreachElement);
+
+        batchUpdateEle.addElement(new TextElement(") temp"));
+        batchUpdateEle.addElement(new TextElement("ON ( basic.id=temp.id )"));
+
+        // 1、条件匹配时按照更新处理
+        batchUpdateEle.addElement(new TextElement("WHEN MATCHED THEN"));
+        batchUpdateEle.addElement(new TextElement("update set"));
+
+        List<IntrospectedColumn> introspectedColumnList = ListUtilities.removeGeneratedAlwaysColumns(introspectedTable.getNonPrimaryKeyColumns());
+        for (IntrospectedColumn introspectedColumn : introspectedColumnList) {
+            sb.append("basic.").append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn))
+                    .append(" = ").append(introspectedColumn.getJavaProperty("temp."));
+            if (index < introspectedColumnList.size() - 1) {
+                sb.append(", ");
+            }
+            batchUpdateEle.addElement(new TextElement(sb.toString()));
+            sb.setLength(0);
+            index++;
+        }
+        if (sb.length() > 0) {
+            foreachElement.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+        // update where
+        boolean and = false;
+        for (IntrospectedColumn introspectedColumn : introspectedTable.getPrimaryKeyColumns()) {
+            sb.setLength(0);
+            if (and) {
+                sb.append("  and "); //$NON-NLS-1$
+            } else {
+                sb.append("where "); //$NON-NLS-1$
+                and = true;
+            }
+
+            sb.append("basic.").append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn))
+                    .append(" = ").append(introspectedColumn.getJavaProperty("temp."));
+            batchUpdateEle.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+
+
+        // 2、条件不匹配时按照新增处理
+        batchUpdateEle.addElement(new TextElement("WHEN NOT MATCHED THEN"));
+        batchUpdateEle.addElement(new TextElement("INSERT ("));
+
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            sb.append("basic.").append(MyBatis3FormattingUtilities.getEscapedColumnName(introspectedColumn));
+
+            if (index < columnTotal) {
+                sb.append(", ");
+            }
+            if (sb.length() > 80) {
+                batchUpdateEle.addElement(new TextElement(sb.toString()));
+                sb.setLength(0);
+            }
+            index++;
+        }
+        if (sb.length() > 0) {
+            batchUpdateEle.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+
+        batchUpdateEle.addElement(new TextElement(")"));
+        batchUpdateEle.addElement(new TextElement("VALUES ("));
+
+        for (IntrospectedColumn introspectedColumn : columnList) {
+            sb.append("temp.").append(introspectedColumn.getJavaProperty());
+
+            if (index < columnTotal) {
+                sb.append(", ");
+            }
+            if (sb.length() > 80) {
+                batchUpdateEle.addElement(new TextElement(sb.toString()));
+                sb.setLength(0);
+            }
+            index++;
+        }
+        if (sb.length() > 0) {
+            batchUpdateEle.addElement(new TextElement(sb.toString()));
+        }
+        // 重置
+        sb.setLength(0);
+        index = 0;
+
+        batchUpdateEle.addElement(new TextElement(")"));
 
     }
 
