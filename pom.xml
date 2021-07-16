@@ -428,15 +428,22 @@
             </dependency>
 
 
-            <!-- 注：在SpringBoot 2.4+ 版本中，Dubbo引入的curator 4.0.1版本被替换成了5.1.0版本，这样会导致Dubbo服务在以zookeeper为注册中心时启动失败，这里需要手动替换成与dubbo-dependencies-bom中一样的版本 -->
+            <!-- 注意事项：
+            1. 在SpringBoot 2.4+ 版本中，Dubbo引入的curator 4.0.1版本被替换成了5.1.0版本，这样会导致Dubbo服务在以zookeeper为注册中心时启动失败，这里需要手动替换成与dubbo-dependencies-bom中一样的版本
+            2. 取消curator、zookeeper依赖包对slf4j-log4j12日志的强依赖，避免log4j2和logback同时引入导致包冲突
+            -->
             <dependency>
                 <groupId>org.apache.curator</groupId>
                 <artifactId>curator-framework</artifactId>
                 <version>${curator_version}</version>
                 <exclusions>
                     <exclusion>
-                        <artifactId>zookeeper</artifactId>
                         <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -446,8 +453,12 @@
                 <version>${curator_version}</version>
                 <exclusions>
                     <exclusion>
-                        <artifactId>zookeeper</artifactId>
                         <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -457,8 +468,12 @@
                 <version>${curator_version}</version>
                 <exclusions>
                     <exclusion>
-                        <artifactId>zookeeper</artifactId>
                         <groupId>org.apache.zookeeper</groupId>
+                        <artifactId>zookeeper</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -471,6 +486,12 @@
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-registry-zookeeper</artifactId>
                 <version>${dubbo.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
