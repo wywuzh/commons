@@ -333,16 +333,31 @@ public class ExcelUtils {
         if (CollectionUtils.isNotEmpty(requiredColumnTitles)) {
             requiredHeaderStyle = createRequiredHeaderStyle(workbook);
         }
+        // 行高
+        final float height = -1;
 
-        // 创建第一行（表头）
-        Row headerRow = sheet.createRow(0);
-        headerRow.setHeightInPoints(20);
+        // 数据开始行
+        int firstRowNumber = 1;
+        if (StringUtils.isNotBlank(excelRequest.getTips())) {
+            firstRowNumber = 2;
+            Row tipsRow = sheet.createRow(0);
+            tipsRow.setHeightInPoints(height);
+            // 第一行添加提示信息
+            Cell cell = tipsRow.createCell(0);
+            cell.setCellValue(excelRequest.getTips());
+            cell.setCellStyle(createHeaderStyleForTips(workbook));
+        }
 
         // 因为POI自动列宽计算的是String.length长度，在中文环境下会有问题，所以自行处理
         int[] maxLength = new int[columnTitles.length];
 
         Map<String, String[]> columnValidation = excelRequest.getColumnValidation();
 
+        // 标题行
+        Row headerRow = sheet.createRow(firstRowNumber - 1);
+        headerRow.setHeightInPoints(height);
+
+        // 创建表头行
         for (int j = 0; j < columnTitles.length; j++) {
             int titleIndex = j;
             // 生成第j列 - 单元格
@@ -368,19 +383,28 @@ public class ExcelUtils {
 
             // 下拉框
             if (columnValidation != null && columnValidation.containsKey(columnComment)) {
+                // 注意：org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint.XSSFDataValidationConstraint(java.lang.String[])要求传入的数组不能为空，这里在入口进行控制
                 String[] columnValidationData = columnValidation.get(columnComment);
+                if (columnValidationData == null || columnValidationData.length == 0) {
+                    continue;
+                }
                 //设置为下拉框
                 setValidation(workbook, sheet, columnComment, columnValidationData, 1, MAX_ROW, titleIndex, titleIndex);
+
+                // 默认该列为为文本格式
+                CellStyle cellStyleForText = createCellStyle(workbook);
+                cellStyleForText.setDataFormat(getCellDateFormat(workbook, CellTypeEnum.String));
+                sheet.setDefaultColumnStyle(titleIndex, cellStyleForText);
             }
         }
 
         // 冻结窗口-首行
-        sheet.createFreezePane(0, 1);
+        sheet.createFreezePane(0, firstRowNumber);
 
         // 输入值
         if (excelRequest.getDataColl() != null) {
             Iterator<?> iterator = excelRequest.getDataColl().iterator();
-            int index = 0;
+            int index = firstRowNumber;
             while (iterator.hasNext()) {
                 Object data = iterator.next();
                 if (data == null) {
@@ -388,8 +412,8 @@ public class ExcelUtils {
                 }
 
                 // 创建行，从第二行开始
-                Row sheetRow = sheet.createRow(index + 1);
-                sheetRow.setHeightInPoints(20);
+                Row sheetRow = sheet.createRow(index);
+                sheetRow.setHeightInPoints(height);
 
                 for (int k = 0; k < columns.length; k++) {
                     // 生成第k列 - 单元格
@@ -440,15 +464,14 @@ public class ExcelUtils {
         if (excelCell == null) {
             return -1;
         }
-        Short dataFormat = getCellDateFormat(workbook, excelCell);
+        Short dataFormat = getCellDateFormat(workbook, excelCell.cellType());
         if (dataFormat != null) {
             return dataFormat;
         }
         return -1;
     }
 
-    private static short getCellDateFormat(Workbook workbook, ExcelCell excelCell) {
-        CellTypeEnum cellTypeEnum = excelCell.cellType();
+    private static short getCellDateFormat(Workbook workbook, CellTypeEnum cellTypeEnum) {
         if (CellTypeEnum.String.equals(cellTypeEnum)) { // 字符串文本
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("TEXT");
@@ -458,10 +481,10 @@ public class ExcelUtils {
         } else if (CellTypeEnum.Date.equals(cellTypeEnum)) { // 日期
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("yyyy-MM-dd");
-        } else if (CellTypeEnum.Time.equals(cellTypeEnum)) { // 日期
+        } else if (CellTypeEnum.Time.equals(cellTypeEnum)) { // 时间
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("hh:mm:ss");
-        } else if (CellTypeEnum.DateTime.equals(cellTypeEnum)) { // 日期
+        } else if (CellTypeEnum.DateTime.equals(cellTypeEnum)) { // 日期时间
             DataFormat dataFormat = workbook.createDataFormat();
             return dataFormat.getFormat("yyyy-MM-dd hh:mm:ss");
         }
@@ -581,15 +604,27 @@ public class ExcelUtils {
      *
      * @param sheet                要设置的sheet
      * @param columnValidationData 字段下拉列表：Excel验证数据
-     * @param firstRow             开始行
-     * @param lastRow              结束行
-     * @param firstCol             开始列
-     * @param lastCol              结束列
+     * @param firstRow             开始行，从1开始
+     * @param lastRow              结束行，不能小于开始行
+     * @param firstCol             开始列，从0开始
+     * @param lastCol              结束列，不能小于开始列
      * @return 设置好的sheet.
      */
-    private static Sheet setValidation(Sheet sheet,
-                                       String[] columnValidationData,
-                                       int firstRow, int lastRow, int firstCol, int lastCol) {
+    private static Sheet setSmallValidation(Sheet sheet,
+                                            String[] columnValidationData,
+                                            int firstRow, int lastRow, int firstCol, int lastCol) {
+        if (firstRow < 1) {
+            throw new IllegalArgumentException("firstRow must not less 1");
+        }
+        if (lastRow < firstRow) {
+            throw new IllegalArgumentException("lastRow must not less firstRow");
+        }
+        if (firstCol < 0) {
+            throw new IllegalArgumentException("firstCol must not less 0");
+        }
+        if (lastCol < firstCol) {
+            throw new IllegalArgumentException("lastCol must not less firstCol");
+        }
         DataValidationHelper helper = sheet.getDataValidationHelper();
 
         DataValidationConstraint constraint = helper.createExplicitListConstraint(columnValidationData);
@@ -618,19 +653,31 @@ public class ExcelUtils {
      * @param sheet                目标sheet
      * @param columnTitle          字段标题
      * @param columnValidationData 字段下拉列表：Excel验证数据
-     * @param firstRow             开始行
-     * @param lastRow              结束行
-     * @param firstCol             开始列
-     * @param lastCol              结束列
+     * @param firstRow             开始行，从1开始
+     * @param lastRow              结束行，不能小于开始行
+     * @param firstCol             开始列，从0开始
+     * @param lastCol              结束列，不能小于开始列
      * @return
      */
     private static Sheet setValidation(Workbook workbook, Sheet sheet,
                                        String columnTitle, String[] columnValidationData,
                                        int firstRow, int lastRow, int firstCol, int lastCol) {
+        if (firstRow < 1) {
+            throw new IllegalArgumentException("firstRow must not less 1");
+        }
+        if (lastRow < firstRow) {
+            throw new IllegalArgumentException("lastRow must not less firstRow");
+        }
+        if (firstCol < 0) {
+            throw new IllegalArgumentException("firstCol must not less 0");
+        }
+        if (lastCol < firstCol) {
+            throw new IllegalArgumentException("lastCol must not less firstCol");
+        }
         // 当下拉列表数据少于10个时，不需要创建隐藏sheet
         // 说明：下拉框数据量超过一定数量时，文件打不开。为了防止这一情况，这里默认设置超过10条就采用隐藏sheet的方式来设置下拉框
         if (columnValidationData.length <= 10) {
-            return setValidation(sheet, columnValidationData, firstRow, lastRow, firstCol, lastCol);
+            return setSmallValidation(sheet, columnValidationData, firstRow, lastRow, firstCol, lastCol);
         }
         // 参考地址：https://www.cnblogs.com/zouhao/p/11346243.html
         // 创建sheet，写入枚举项
@@ -685,11 +732,35 @@ public class ExcelUtils {
      */
     private static CellStyle createHeaderStyle(Workbook workbook) {
         CellStyle cellStyle = createCellStyle(workbook);
+
+        // 设置字体
         Font font = workbook.createFont();
         // 文本加粗
         font.setBold(true);
-//        font.setFontName("宋体");
-//        font.setFontHeightInPoints((short) 12);
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 12);
+        cellStyle.setFont(font);
+        return cellStyle;
+    }
+
+    /**
+     * 设置表头列(单元格)样式：表头提示信息
+     *
+     * @param workbook 工作簿对象
+     * @return
+     */
+    public static CellStyle createHeaderStyleForTips(Workbook workbook) {
+        CellStyle cellStyle = workbook.createCellStyle();
+        // 内容左对齐 、垂直居中
+        cellStyle.setAlignment(HorizontalAlignment.LEFT);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        // 设置字体
+        Font font = workbook.createFont();
+        font.setColor(Font.COLOR_RED);
+        font.setBold(true);
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 12);
         cellStyle.setFont(font);
         return cellStyle;
     }
@@ -703,18 +774,20 @@ public class ExcelUtils {
      */
     private static CellStyle createRequiredHeaderStyle(Workbook workbook) {
         CellStyle cellStyle = createCellStyle(workbook);
+
+        // 设置字体
         Font font = workbook.createFont();
         font.setColor(Font.COLOR_RED);
         // 文本加粗
         font.setBold(true);
-//        font.setFontName("宋体");
-//        font.setFontHeightInPoints((short) 12);
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 12);
         cellStyle.setFont(font);
         return cellStyle;
     }
 
     /**
-     * 设置表头列(单元格)样式 - 红色提示
+     * 设置内容列(单元格)样式
      *
      * @param workbook 工作簿对象
      * @return
@@ -722,10 +795,12 @@ public class ExcelUtils {
      */
     private static CellStyle createContentStyle(Workbook workbook) {
         CellStyle cellStyle = createCellStyle(workbook);
+
+        // 设置字体
         Font font = workbook.createFont();
         font.setColor(Font.COLOR_NORMAL);
-//        font.setFontName("宋体");
-//        font.setFontHeightInPoints((short) 11);
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 11);
         cellStyle.setFont(font);
         return cellStyle;
     }
@@ -739,6 +814,7 @@ public class ExcelUtils {
      */
     private static CellStyle createCellStyle(Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
+        // 内容居中对齐 、垂直居中
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
 //        cellStyle.setBorderTop(BorderStyle.THIN);

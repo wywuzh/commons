@@ -43,7 +43,7 @@ public @interface ExcelCell {
     CellTypeEnum cellType() default CellTypeEnum.Undefined;
 
     /**
-     * 列所以，从0开始
+     * 列索引，从0开始
      *
      * @return
      * @since v2.3.2

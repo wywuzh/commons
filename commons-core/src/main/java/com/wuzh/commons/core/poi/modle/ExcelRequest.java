@@ -59,6 +59,12 @@ public class ExcelRequest implements Serializable {
      * 请求数据
      */
     private Collection<?> dataColl;
+    /**
+     * 提示信息。注意：该信息不为空时，会占据第一行，标题行会变为第二行
+     *
+     * @since v2.4.8
+     */
+    private String tips;
 
     public ExcelRequest() {
     }
@@ -117,5 +123,13 @@ public class ExcelRequest implements Serializable {
 
     public void setDataColl(Collection<?> dataColl) {
         this.dataColl = dataColl;
+    }
+
+    public String getTips() {
+        return tips;
+    }
+
+    public void setTips(String tips) {
+        this.tips = tips;
     }
 }
