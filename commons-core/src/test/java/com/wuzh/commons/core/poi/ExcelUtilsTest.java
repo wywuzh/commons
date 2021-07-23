@@ -53,8 +53,8 @@ public class ExcelUtilsTest {
         dataColl.add(user);
 
         Map<String, String[]> columnValidation = new HashMap<>();
-        String[] brands = {"男", "女", "未知"};
-        columnValidation.put("性别", brands);
+        String[] genders = {"男", "女", "未知"};
+        columnValidation.put("性别", genders);
 
         ExcelRequest excelRequest = new ExcelRequest();
         excelRequest.setColumns(columns);
@@ -63,6 +63,7 @@ public class ExcelUtilsTest {
         excelRequest.setRequiredColumnTitles(requiredColumnTitles);
         excelRequest.setDataColl(dataColl);
         excelRequest.setColumnValidation(columnValidation);
+        excelRequest.setTips("注：用户信息不能删除！");
 
         OutputStream outputStream = null;
         try {
