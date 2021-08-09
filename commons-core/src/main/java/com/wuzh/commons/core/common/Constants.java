@@ -53,9 +53,15 @@ public class Constants {
     public static final String METHOD_DELETE = "DELETE"; // 删除
 
     /**
-     * 分隔符：逗号
+     * 分隔符：英文逗号
      */
     public static final String SEPARATE_COMMA = ",";
+    /**
+     * 分隔符：中文逗号
+     *
+     * @since v2.4.8
+     */
+    public static final String SEPARATE_COMMA_ZH = "，";
     /**
      * 分隔符：英文点
      *
@@ -154,7 +160,14 @@ public class Constants {
     /**
      * 页面排序条件
      *
+     * @since v2.4.8
+     */
+    public static final String PARAMETER_SORT_LIST = "sorts";
+    /**
+     * 页面排序条件
+     *
      * @since v2.3.3
+     * @deprecated 废弃，请使用 {@link #PARAMETER_SORT_LIST} 字段
      */
     public static final String SORT_CONDITIONS = "sortConditions";
 
