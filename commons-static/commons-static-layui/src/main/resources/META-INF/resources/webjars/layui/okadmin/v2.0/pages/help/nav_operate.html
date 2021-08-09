@@ -18,12 +18,40 @@
    </blockquote>
    <blockquote class="layui-elem-quote layui-quote-nm">
       <p>特别注意：添加导航的同时必须要遵守指定的写法</p>
-      <p>1.必须指定一个html元素</p>
-      <p>2.此元素的属性必须有data-url和lay-id</p>
-      <p>3.data-url属性表示指定的页面且必须是网站的绝对路径</p>
-      <p>4.lay-id属性，请不要以数字开头，推荐以字母开头，长度不限</p>
-      <p>5.当lay-id重复时，那么则只会打开一个，后者只会定位到当前选项卡</p>
+      <p>1.此元素的属性必须有data-url和lay-id</p>
+      <p>2.data-url属性表示指定的页面且必须是网站的绝对路径</p>
+      <p>3.lay-id属性，请不要以数字开头，推荐以字母开头，长度不限</p>
+      <p>4.当lay-id重复时，那么则只会打开一个，后者只会定位到当前选项卡</p>
    </blockquote>
+
+   <table class="layui-table">
+      <colgroup>
+          <col>
+          <col>
+          <col>
+      </colgroup>
+      <thead>
+      <tr>
+          <th>参数</th>
+          <th>类型</th>
+          <th>描述</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+          <td>data-url</td>
+          <td>String</td>
+          <td>视图路径</td>
+      </tr>
+      <tr>
+          <td>lay-id</td>
+          <td>String</td>
+          <td>视图唯一id,尽量以字母开头,当lay-id重复时，那么则只会打开一个，后者只会定位到当前选项卡</td>
+      </tr>
+      </tbody>
+  </table>
+
+
    <pre lay-title="JavaScript">
    layui.use(function(){
       var okTab = parent.objOkTab;//获取父级的okTab;layui.okTab()不推荐这样获取
@@ -31,6 +59,7 @@
       okTab.tabAdd(page);
    })
    </pre>
+
    <div class="layui-card">
       <button class="layui-btn" id="addNav1">
          <i class="layui-icon">&#xe61f;</i>新的选项卡1

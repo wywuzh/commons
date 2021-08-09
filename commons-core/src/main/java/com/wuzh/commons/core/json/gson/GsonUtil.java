@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,13 +95,17 @@ public class GsonUtil {
     /**
      * 将Bean对象转换为JSON
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:41
      * @param bean 实现Serializable接口的Bean对象
      * @return JSON格式字符串
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:41
      */
     public static String format(Object bean) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(bean);
     }
@@ -109,14 +113,18 @@ public class GsonUtil {
     /**
      * 将Bean对象转换为json
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:17:39
      * @param bean 实现Serializable接口的Bean对象
      * @param type Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
      * @return JSON格式字符串
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:17:39
      */
     public static String format(Object bean, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(bean, type);
     }
@@ -124,13 +132,17 @@ public class GsonUtil {
     /**
      * 将Bean对象集合转换为json
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:45
      * @param beanList Bean对象集合
      * @return JSON格式字符串
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:45
      */
     public static String format(List<?> beanList) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(beanList);
     }
@@ -138,14 +150,18 @@ public class GsonUtil {
     /**
      * 将Bean对象集合转换为json
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:21:55
      * @param beanList Bean对象集合
      * @param type     Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
      * @return JSON格式字符串
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:21:55
      */
     public static String format(List<?> beanList, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
         return gson.toJson(beanList, type);
     }
@@ -153,14 +169,18 @@ public class GsonUtil {
     /**
      * 将json转换为对象
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
      * @param json 需要转换的json数据
      * @param type 需要转换的数据类型
      * @return 转换成功的Bean对象
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
      */
     public static <T> T parse(String json, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
 
         T t = null;
@@ -169,8 +189,11 @@ public class GsonUtil {
             jsonReader.setLenient(true);
             t = gson.fromJson(jsonReader, type);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
+            throw e;
         }
         return t;
     }
@@ -178,22 +201,29 @@ public class GsonUtil {
     /**
      * 将json转换为对象
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
      * @param json 需要转换的json数据
      * @param type 需要转换的数据类型
      * @return 转换成功的Bean对象
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
      */
     public static <T> T parse(JsonElement json, Type type) {
         if (gson == null) {
-            gson = create();
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    create();
+                }
+            }
         }
 
         T t = null;
         try {
             t = gson.fromJson(json, type);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
+            throw e;
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
+            throw e;
         }
         return t;
     }
@@ -206,7 +236,7 @@ public class GsonUtil {
      * @throws JsonSyntaxException
      */
     public static JsonObject fromObject(String json) throws JsonSyntaxException {
-        JsonElement jsonElement = new JsonParser().parse(json);
+        JsonElement jsonElement = JsonParser.parseString(json);
         if (jsonElement.isJsonObject()) {
             return jsonElement.getAsJsonObject();
         } else {
@@ -222,7 +252,7 @@ public class GsonUtil {
      * @throws JsonSyntaxException
      */
     public static JsonArray fromArray(String json) throws JsonSyntaxException {
-        JsonElement jsonElement = new JsonParser().parse(json);
+        JsonElement jsonElement = JsonParser.parseString(json);
         if (jsonElement.isJsonArray()) {
             return jsonElement.getAsJsonArray();
         } else {
@@ -244,7 +274,7 @@ public class GsonUtil {
         System.out.println(json2);
 
         String jsonObject = "1234";
-        JsonElement parse = new JsonParser().parse(jsonObject);
+        JsonElement parse = JsonParser.parseString(jsonObject);
         if (parse.isJsonObject()) {
             System.out.println(parse.getAsJsonObject());
         }

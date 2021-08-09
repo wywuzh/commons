@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,22 @@ package com.wuzh.commons.core.poi;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.style.WriteCellStyle;
+import com.alibaba.excel.write.metadata.style.WriteFont;
+import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
+import com.wuzh.commons.core.poi.style.CustomCellWriteHandler;
 import com.wuzh.commons.core.reflect.ReflectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * 类EasyExcelUtils的实现描述：Alibaba EasyExcel工具类
@@ -46,8 +53,57 @@ public class EasyExcelUtils {
         return EasyExcelFactory.write(destFile).build();
     }
 
-    public static <T> void writer(ExcelWriter excelWriter, String sheetName, List<T> list, String[] columns, String[] columnTitles) {
-        WriteSheet writeSheet = EasyExcelFactory.writerSheet(sheetName).build();
+    public static ExcelWriter createExcelWriter(File destFile, String templateFile) {
+        return EasyExcelFactory.write(destFile).withTemplate(templateFile).build();
+    }
+
+    public static ExcelWriter createExcelWriter(File destFile, File templateFile) {
+        return EasyExcelFactory.write(destFile).withTemplate(templateFile).build();
+    }
+
+    public static ExcelWriter createExcelWriter(File destFile, InputStream templateInputStream) {
+        return EasyExcelFactory.write(destFile).withTemplate(templateInputStream).build();
+    }
+
+    public static <T> WriteSheet createWriteSheet(String sheetName, String[] columnTitles, Integer[] columnLengths) {
+        // 头的策略
+        WriteCellStyle headWriteCellStyle = new WriteCellStyle();
+        // 不显示背景颜色
+        headWriteCellStyle.setFillPatternType(FillPatternType.NO_FILL);
+        // 内容水平居中 、垂直居中
+        headWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        headWriteCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        //内容超过宽度是否换行
+        headWriteCellStyle.setWrapped(false);
+        headWriteCellStyle.setLocked(true);
+        WriteFont headWriteFont = new WriteFont();
+        headWriteFont.setFontHeightInPoints((short) 12);
+        headWriteFont.setColor(IndexedColors.BLACK.index);
+        headWriteFont.setFontName("宋体");
+        headWriteFont.setBold(true);
+        headWriteCellStyle.setWriteFont(headWriteFont);
+
+        // 内容的策略
+        WriteCellStyle contentWriteCellStyle = new WriteCellStyle();
+        // 不显示背景颜色
+        contentWriteCellStyle.setFillPatternType(FillPatternType.NO_FILL);
+        // 内容水平居中 、垂直居中
+        contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        contentWriteCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        WriteFont contentWriteFont = new WriteFont();
+        contentWriteFont.setFontHeightInPoints((short) 12);
+        contentWriteFont.setColor(IndexedColors.BLACK.index);
+        contentWriteFont.setFontName("宋体");
+        contentWriteCellStyle.setWriteFont(contentWriteFont);
+
+        // 这个策略是 头是头的样式 内容是内容的样式 其他的策略可以自己实现
+        HorizontalCellStyleStrategy horizontalCellStyleStrategy =
+                new HorizontalCellStyleStrategy(headWriteCellStyle, contentWriteCellStyle);
+
+        WriteSheet writeSheet = EasyExcelFactory.writerSheet(sheetName)
+                .registerWriteHandler(new CustomCellWriteHandler(columnLengths))
+                .registerWriteHandler(horizontalCellStyleStrategy)
+                .build();
 
         // 设置表头
         List<List<String>> head = new LinkedList<>();
@@ -55,27 +111,64 @@ public class EasyExcelUtils {
             head.add(Collections.singletonList(columnTitle));
         }
         writeSheet.setHead(head);
+        writeSheet.setIncludeColumnFiledNames(Arrays.asList(columnTitles));
 
-        // 设置字段值
+        return writeSheet;
+    }
+
+    /**
+     * 写入数据
+     *
+     * @param excelWriter
+     * @param writeSheet
+     * @param list
+     * @param columns
+     * @param <T>
+     */
+    public static <T> void writeData(ExcelWriter excelWriter, WriteSheet writeSheet, List<T> list, String[] columns) {
         List<List<Object>> data = new LinkedList<>();
         for (T item : list) {
-            List<Object> objects = new LinkedList<>();
+            List<Object> row = new LinkedList<>();
             if (item instanceof Map) {
                 for (String column : columns) {
-                    objects.add(((Map) item).get(column));
+                    row.add(((Map) item).get(column));
                 }
             } else {
                 for (String column : columns) {
                     try {
-                        objects.add(ReflectUtils.getValue(item, column));
+                        Object value = ReflectUtils.getValue(item, column);
+                        row.add(value);
                     } catch (IllegalAccessException e) {
                         LOGGER.error(e.getMessage(), e);
                     }
                 }
             }
-            data.add(objects);
+            data.add(row);
         }
         excelWriter.write(data, writeSheet);
+    }
+
+    public static <T> void writer(String fileName, List<T> list, String[] columns, String[] columnTitles) {
+        EasyExcelUtils.writer(fileName, "sheet", list, columns, columnTitles, null);
+    }
+
+    public static <T> void writer(String fileName, String sheetName, List<T> list, String[] columns, String[] columnTitles, Integer[] columnLengths) {
+        if (StringUtils.isBlank(sheetName)) {
+            sheetName = "sheet";
+        }
+        if (columnLengths == null) {
+            columnLengths = new Integer[columnTitles.length];
+            for (int j = 0; j < columnTitles.length; j++) {
+                String columnComment = columnTitles[j];
+                columnLengths[j] = columnComment.length() * 357;
+            }
+        }
+
+        ExcelWriter excelWriter = EasyExcelUtils.createExcelWriter(fileName);
+
+        WriteSheet writeSheet = EasyExcelUtils.createWriteSheet(sheetName, columnTitles, columnLengths);
+
+        EasyExcelUtils.writeData(excelWriter, writeSheet, list, columns);
     }
 
 }

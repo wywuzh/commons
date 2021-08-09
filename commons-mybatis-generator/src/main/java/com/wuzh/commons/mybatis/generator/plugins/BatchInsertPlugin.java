@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2019 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import org.mybatis.generator.api.dom.java.*;
 import org.mybatis.generator.api.dom.xml.*;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
+import org.mybatis.generator.config.TableConfiguration;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.util.List;
@@ -33,9 +34,24 @@ import java.util.Properties;
 
 /**
  * 类BatchInsertPlugin的实现描述：itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖
+ * <pre class="code">
+ * <strong>enableMergeInto使用方式</strong>：
+ * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在
+ *     &lt;plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin"&gt;
+ *         &lt;!-- 是否启用merge into格式进行插入，默认为false --&gt;
+ *         &lt;property name="enableMergeInto" value="true"/&gt;
+ *     &lt;/plugin&gt;
+ * 2. 若需要对某张表单独定制，可在该table下配置进行覆盖
+ *     &lt;table tableName="goods_brand" domainObjectName="GoodsBrand"
+ *                enableUpdateByExample="false" enableDeleteByExample="false"
+ *                enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"&gt;
+ *         &lt;!-- 是否启用merge into格式进行插入，默认为false --&gt;
+ *         &lt;property name="enableMergeInto" value="true"/&gt;
+ *     &lt;/table&gt;
+ * </pre>
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019/1/26 18:49
- * @version v3.0.0
+ * @version v2.1.1
  * @since JDK 1.8
  */
 public class BatchInsertPlugin extends BasePlugin {
@@ -50,6 +66,33 @@ public class BatchInsertPlugin extends BasePlugin {
      * @since 2.3.2
      */
     private boolean enableMergeInto = false;
+
+    @Override
+    public void initialized(IntrospectedTable introspectedTable) {
+        super.initialized(introspectedTable);
+
+        // 是否启用merge into格式进行插入，默认为false
+        String enableMergeInto = super.getProperties().getProperty(ENABLE_MERGE_INTO);
+        if (StringUtils.isNotBlank(enableMergeInto)) {
+            this.enableMergeInto = Boolean.valueOf(enableMergeInto);
+        }
+    }
+
+    /**
+     * 检查是否启用merge into
+     *
+     * @param tableConfiguration table配置
+     * @return
+     * @since v2.4.5
+     */
+    private boolean enableMergeInto(TableConfiguration tableConfiguration) {
+        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
+        String enableMergeInto = tableConfiguration.getProperty(ENABLE_MERGE_INTO);
+        if (StringUtils.isNotBlank(enableMergeInto)) {
+            return Boolean.valueOf(enableMergeInto);
+        }
+        return this.enableMergeInto;
+    }
 
     /**
      * {@inheritDoc}
@@ -143,8 +186,7 @@ public class BatchInsertPlugin extends BasePlugin {
             } else {
                 // 生成Oracle批量新增SQL
                 // 检查是否启用merge into格式进行插入，默认为false
-                String enableMergeInto = properties.getProperty(ENABLE_MERGE_INTO);
-                if (StringUtils.isNotBlank(enableMergeInto) && StringUtils.equalsIgnoreCase(enableMergeInto, "true")) {
+                if (enableMergeInto(introspectedTable.getTableConfiguration())) {
                     // 启用merge into格式进行插入
                     generateOracleForMergeInto(document, introspectedTable, batchInsertEle);
                 } else {

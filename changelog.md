@@ -1,4 +1,28 @@
 ## 更新日志
+### SpringBoot/v2.4.5
+1. commons-mybatis-generator模块：
+  1. 新增BatchUpdatePlugin插件：支持MySQL、Oracle数据库表的批量更新sql生成
+  2. SelectByParamsPlugin插件调整：添加 not in 查询支持
+
+
+
+### SpringBoot/v2.3.8
+1. 新增commons-dingtalk模块：提供钉钉API接口调用
+2. 考虑jeesite4代码新版本版权原因，前端界面不再使用jeesite4的模板，删除commons-static模块下的commons-static-jeesite4子模块
+3. commons-static模块：
+  1. 新增`commons-static-vue`子模块
+
+### SpringBoot/V2.3.6
+1. commons-mybatis-generator模块：
+  1. 添加DeleteByPKPlugin插件：根据主键删除数据插件，支持自定义方法名，支持物理删除和逻辑删除两种方式的sql
+2. 新增commons-dbutils模块：基于Apache commons-dbutils进行二次封装处理的JDBC工具类库
+
+
+### SpringBoot/V2.3.5
+1. 添加 RabbitMQ、kafka 等分布式通信依赖支持
+2. 添加Dubbo、Shiro依赖
+3. 调整groupId，Maven打包发版接入sonatype
+
 
 ### SpringBoot/V2.3.2
 1. 添加 Spring Cloud 依赖支持，版本为 `Hoxton.SR6`

@@ -25,7 +25,9 @@ import java.sql.SQLException;
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2017年1月8日 下午4:07:58
  * @version v1.0.0
  * @since JDK 1.7
+ * @deprecated 废弃，请使用 {@link com.wuzh.commons.core.sql.DataBase} 类
  */
+@Deprecated
 public class DataBase {
 
     private Connection connection;

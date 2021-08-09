@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,10 @@ public class Constants {
      */
     public static final String DEFAULT_PASSWORD = "123456";
 
-    public static final String SHORTCUT_ICON = "";
+    /**
+     * 文件默认路径
+     */
+    public static final String DEFAULT_FILE_PATH = "/data/temp/files";
 
     /**
      * 文件上传默认保存路径
@@ -50,21 +53,41 @@ public class Constants {
     public static final String METHOD_DELETE = "DELETE"; // 删除
 
     /**
-     * 分隔符：逗号
+     * 分隔符：英文逗号
      */
     public static final String SEPARATE_COMMA = ",";
     /**
-     * 分隔符：下划线
+     * 分隔符：中文逗号
+     *
+     * @since v2.4.8
      */
-    public static final String SEPARATE_UNDERLINE = "_";
+    public static final String SEPARATE_COMMA_ZH = "，";
+    /**
+     * 分隔符：英文点
+     *
+     * @since v2.3.8
+     */
+    public static final String SEPARATE_SPOT = ".";
     /**
      * 分隔符：分号
      */
     public static final String SEPARATE_SEMICOLON = ";";
     /**
+     * 分割符：冒号
+     */
+    public static final String SEPARATE_COLON = ":";
+    /**
+     * 分隔符：下划线
+     */
+    public static final String SEPARATE_UNDERLINE = "_";
+    /**
      * 分隔符：斜杠
      */
     public static final String SEPARATE_SLASH = "/";
+    /**
+     * 分隔符：反斜杠
+     */
+    public static final String SEPARATE_BACKSLASH = "\\";
     /**
      * 分隔符：横杆
      */
@@ -77,6 +100,13 @@ public class Constants {
      * 分隔符：双竖
      */
     public static final String SEPARATE_DOUBLE_VERTICAL = "||";
+
+    /**
+     * 星号
+     *
+     * @since v2.3.8
+     */
+    public static final String ASTERISK = "*";
 
     /**
      * 等于-中文
@@ -130,7 +160,14 @@ public class Constants {
     /**
      * 页面排序条件
      *
+     * @since v2.4.8
+     */
+    public static final String PARAMETER_SORT_LIST = "sorts";
+    /**
+     * 页面排序条件
+     *
      * @since v2.3.3
+     * @deprecated 废弃，请使用 {@link #PARAMETER_SORT_LIST} 字段
      */
     public static final String SORT_CONDITIONS = "sortConditions";
 

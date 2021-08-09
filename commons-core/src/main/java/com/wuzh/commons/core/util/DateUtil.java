@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,18 @@
  */
 package com.wuzh.commons.core.util;
 
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.commons.lang.StringUtils;
-
 /**
  * 类DateUtil.java的实现描述：时间工具类
- * 
+ *
  * <pre>
  * 时间工具类中包含的方法：
  * 1）format：将传入的java.util.Date类型的时间转换为字符串数据，支持pattern格式定制
@@ -37,12 +39,13 @@ import org.apache.commons.lang.StringUtils;
  * 8）getFirstQuarter：获取传入时间所在季度的第一天，返回java.util.Date类型数据
  * 9）getLastQuarter：获取传入时间所在季度的最后一天，返回java.util.Date类型数据
  * </pre>
- * 
+ *
  * @author <a href="mailto:wywuzh@163.com">wuzh</a> 2014-4-24 下午1:57:39
  * @version 1.0.0
  * @since JDK 1.6.0_20
  */
 public class DateUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DateUtil.class);
 
     public static final String PATTERN_YYYY = "yyyy";
     public static final String PATTERN_YYYY_MM = "yyyy-MM";
@@ -74,13 +77,13 @@ public class DateUtil {
 
     /**
      * 获取SimpleDateFormat实例
-     * 
+     *
      * <pre>
      *  创建SimpleDateFormat实例，pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
-     *  
+     *
      *  DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtil类对象中永远只有一个SimpleDateFormat实例
      * </pre>
-     * 
+     *
      * @return SimpleDateFormat实例
      */
     public static SimpleDateFormat getInstance() {
@@ -89,13 +92,13 @@ public class DateUtil {
 
     /**
      * 获取pattern格式的SimpleDateFormat实例
-     * 
+     *
      * <pre>
      * 根据传入的pattern格式创建SimpleDateFormat实例，如果传入pattern参数为空，则pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
-     * 
+     *
      * DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtil类对象中永远只有一个SimpleDateFormat实例
      * </pre>
-     * 
+     *
      * @param pattern
      * @return
      */
@@ -107,7 +110,7 @@ public class DateUtil {
 
     /**
      * 将传入时间格式化成一个字符串，默认采用“yyyy-MM-dd HH:mm:ss”格式
-     * 
+     *
      * @param date
      * @return 返回“yyyy-MM-dd HH:mm:ss”格式字符串，如果传入时间为空，返回null
      */
@@ -121,12 +124,12 @@ public class DateUtil {
 
     /**
      * 将传入时间格式化成一个字符串
-     * 
+     *
      * <pre>
      *  返回pattern格式字符串，如果pattern格式传入为空，默认采用“yyyy-MM-dd HH:mm:ss”格式；
      *  如果传入时间为空，返回null
      * </pre>
-     * 
+     *
      * @param date
      * @param pattern
      * @return 返回“yyyy-MM-dd HH:mm:ss”格式字符串，如果传入时间为空，返回null
@@ -141,11 +144,11 @@ public class DateUtil {
 
     /**
      * 将传入的时间字符串解析成java.util.Date时间格式
-     * 
+     *
      * <pre>
      * 如果传入一个空时间字符串，则返回空对象
      * </pre>
-     * 
+     *
      * @param parseDate
      * @return
      */
@@ -155,7 +158,7 @@ public class DateUtil {
             try {
                 date = getInstance().parse(parseDate);
             } catch (ParseException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             }
         }
 
@@ -164,11 +167,11 @@ public class DateUtil {
 
     /**
      * 将传入的时间字符串解析成java.util.Date时间格式
-     * 
+     *
      * <pre>
      * 如果传入一个空时间字符串，则返回空对象
      * </pre>
-     * 
+     *
      * @param parseDate
      * @param pattern
      * @return
@@ -179,7 +182,7 @@ public class DateUtil {
             try {
                 date = getInstance(pattern).parse(parseDate);
             } catch (ParseException e) {
-                e.printStackTrace();
+                LOGGER.error(e.getMessage(), e);
             }
         }
         return date;
@@ -187,19 +190,16 @@ public class DateUtil {
 
     /**
      * 根据时间类型添加num值
-     * 
+     *
      * <pre>
      *  如：addNumWithType方法中传入的type类型为Calendar.YEAR，num为2，则表示在date时间上加两年得到的时间；
      *      num为-2，则表示在date时间上减去两年得到的时间。
      *  type类型为Calendar.YEAR、Calendar.MONTH、Calendar.DATE等
      * </pre>
-     * 
-     * @param date
-     *            时间
-     * @param fieldType
-     *            时间类型
-     * @param num
-     *            添加值
+     *
+     * @param date      时间
+     * @param fieldType 时间类型
+     * @param num       添加值
      * @return
      */
     public static Date addNumWithType(Date date, int fieldType, int num) {
@@ -214,7 +214,7 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的开始时间
-     * 
+     *
      * @param daily
      * @return
      */
@@ -233,9 +233,8 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的开始时间
-     * 
-     * @param daily
-     *            yyyy-MM-dd格式
+     *
+     * @param daily yyyy-MM-dd格式
      * @return
      */
     public static Date getFirstDaily(String daily) {
@@ -248,9 +247,8 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的开始时间
-     * 
-     * @param daily
-     *            yyyy-MM-dd格式
+     *
+     * @param daily yyyy-MM-dd格式
      * @return 如果传入参数值为空，返回0
      */
     public static long getFirstDailyTime(String daily) {
@@ -263,7 +261,7 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的开始时间
-     * 
+     *
      * @param daily
      * @return 如果传入参数值为空，返回0
      */
@@ -277,7 +275,7 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的结束时间
-     * 
+     *
      * @param daily
      * @return
      */
@@ -299,9 +297,8 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的结束时间
-     * 
-     * @param daily
-     *            yyyy-MM-dd格式
+     *
+     * @param daily yyyy-MM-dd格式
      * @return
      */
     public static Date getLastDaily(String daily) {
@@ -314,9 +311,8 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的结束时间
-     * 
-     * @param daily
-     *            yyyy-MM-dd格式
+     *
+     * @param daily yyyy-MM-dd格式
      * @return 如果传入参数值为空，返回0
      */
     public static long getLastDailyTime(String daily) {
@@ -330,7 +326,7 @@ public class DateUtil {
 
     /**
      * 获取传入日期当天的结束时间
-     * 
+     *
      * @param daily
      * @return
      */
@@ -341,7 +337,7 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的开始时间
-     * 
+     *
      * @param monthly
      * @return 如果传入参数值为空，返回空
      */
@@ -361,9 +357,8 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的开始时间
-     * 
-     * @param monthly
-     *            yyyy-MM格式
+     *
+     * @param monthly yyyy-MM格式
      * @return 如果传入参数值为空，返回空
      */
     public static Date getFirstMonthly(String monthly) {
@@ -375,9 +370,8 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的开始时间
-     * 
-     * @param monthly
-     *            yyyy-MM格式
+     *
+     * @param monthly yyyy-MM格式
      * @return 如果传入参数值为空，返回0
      */
     public static long getFirstMonthlyTime(String monthly) {
@@ -391,7 +385,7 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的开始时间
-     * 
+     *
      * @param monthly
      * @return 如果传入参数值为空，返回0
      */
@@ -402,7 +396,7 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的结束时间
-     * 
+     *
      * @param monthly
      * @return 如果传入参数值为空，返回null
      */
@@ -424,9 +418,8 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的结束时间
-     * 
-     * @param monthly
-     *            yyyy-MM格式
+     *
+     * @param monthly yyyy-MM格式
      * @return 如果传入参数值为空，返回null
      */
     public static Date getLastMonthly(String monthly) {
@@ -439,9 +432,8 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的结束时间
-     * 
-     * @param monthly
-     *            yyyy-MM格式
+     *
+     * @param monthly yyyy-MM格式
      * @return 如果传入参数值为空，返回0
      */
     public static long getLastMonthlyTime(String monthly) {
@@ -455,9 +447,8 @@ public class DateUtil {
 
     /**
      * 获取传入月当月的结束时间
-     * 
-     * @param monthly
-     *            yyyy-MM格式
+     *
+     * @param monthly yyyy-MM格式
      * @return 如果传入参数值为空，返回0
      */
     public static long getLastMonthlyTime(Date monthly) {
@@ -467,7 +458,7 @@ public class DateUtil {
 
     /**
      * 获取传入时间所在季度的第一天
-     * 
+     *
      * @param date
      * @return 传入时间所在季度的第一天
      */
@@ -500,7 +491,7 @@ public class DateUtil {
 
     /**
      * 获取传入时间所在季度的第一天
-     * 
+     *
      * @param date
      * @return 如果传入参数值为空，返回0
      */
@@ -512,7 +503,7 @@ public class DateUtil {
 
     /**
      * 获取传入时间所在季度的最后一天
-     * 
+     *
      * @param date
      * @return 传入时间所在季度的最后一天
      */
@@ -546,7 +537,7 @@ public class DateUtil {
 
     /**
      * 获取传入时间所在季度的第一天
-     * 
+     *
      * @param date
      * @return 如果传入参数值为空，返回0
      */

@@ -1,4 +1,6 @@
 /*
+ * Copyright 2015-2021 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,6 +14,8 @@
  * limitations under the License.
  */
 package com.wuzh.commons.pager;
+
+import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.List;
@@ -66,4 +70,21 @@ public class PaginationParameter<P extends Serializable> extends PageImpl implem
         this.sorts = sorts;
     }
 
+    /**
+     * 生成排序sql
+     *
+     * @return 排序sql
+     * @since v2.3.7
+     */
+    public String generateOrderSql() {
+        List<Sort> sorts = this.getSorts();
+        if (CollectionUtils.isEmpty(sorts)) {
+            return "";
+        }
+        StringBuilder orderSql = new StringBuilder(" order by ");
+        for (Sort sort : sorts) {
+            orderSql.append(sort.getOrder()).append(" ").append(sort.getOrder().getValue());
+        }
+        return orderSql.toString();
+    }
 }

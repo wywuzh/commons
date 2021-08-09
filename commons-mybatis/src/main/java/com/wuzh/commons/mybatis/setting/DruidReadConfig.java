@@ -26,6 +26,7 @@ import java.io.Serializable;
  * @version v2.2.0
  * @since JDK 1.8
  */
+@Deprecated
 @ConfigurationProperties(prefix = "spring.datasource.read")
 public class DruidReadConfig implements Serializable {
     private static final long serialVersionUID = -5795638410994863873L;

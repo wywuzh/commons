@@ -26,10 +26,10 @@ public interface ResponseCallBack {
 
     /**
      * 响应回调方法
-     * 
+     *
+     * @param statusCode 返回码
+     * @param resultJson 返回结果
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月11日 上午10:58:18
-     * @param statusCode
-     * @param resultJson
      */
     public void response(int statusCode, String resultJson);
 }
