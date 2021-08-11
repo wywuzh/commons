@@ -217,44 +217,61 @@ var Combobox = {
         return true;
     },
     hidePanelForMultiple: function () {
+        // 下拉框选择项
+        var selected = $(this).combobox('getValues');
+        if (selected.length == 0) {
+            $(this).combobox('clear');
+            return false;
+        }
+
         var _options = $(this).combobox('options');
         var _data = $(this).combobox('getData');
-        // 下拉框选择项
-        var values = $(this).combobox('getValues');
-        if (values.length > 0) {
-            var array = [];
-            if (values[0].indexOf(",") == -1) {
-                $.each(values, function (index, element) {
-                    for (var i = 0; i < _data.length; i++) {
-                        if (_data[i][_options.valueField] == element) {
-                            array.push(element);
-                        }
+
+        var array = [];
+        if (selected[0].indexOf(",") == -1) {
+            for (var index = 0; index < selected.length; index++) {
+                var element = selected[index];
+                if ($.inArray(element, array) > -1) {
+                    continue;
+                }
+                for (var i = 0; i < _data.length; i++) {
+                    // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
+                    if (_data[i][_options.valueField] == element) {
+                        array.push(element);
                     }
-                });
-            } else {
-                // 解决开头或者中间存在逗号导致多选下拉出现异常的问题
-                // 去掉第一个逗号
-                // var text = values[0].replace(",", "");
-                // 使用正则，将多个相邻的逗号替换成一个逗号，相当于Java的replaceAll
-                var reg = new RegExp(",", "g");
-                var text = values[0].replace(reg, ",");
-                // 分割文本值
-                text = text.split(",");
-                $.each(text, function (index, element) {
-                    if (element != null && element != '' && element != undefined) {
-                        for (var i = 0; i < _data.length; i++) {
-                            // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
-                            if (_data[i][_options.textField] == element) {
-                                array.push(_data[i][_options.valueField]);
-                            }
-                        }
-                    }
-                });
+                }
             }
-            $(this).combobox('setValues', array);
         } else {
-            $(this).combobox('setValues', '');
+            // 解决开头或者中间存在逗号导致多选下拉出现异常的问题
+            // 去掉第一个逗号
+            // var text = values[0].replace(",", "");
+            // 使用正则，将多个相邻的逗号替换成一个逗号，相当于Java的replaceAll
+            var reg = new RegExp(",", "g");
+            var text = selected[0].replace(reg, ",");
+            // 分割文本值
+            text = text.split(",");
+            for (var index = 0; index < text.length; index++) {
+                var element = text[index];
+                if (element == null || element == '' || element == undefined) {
+                    continue;
+                }
+                if ($.inArray(element, array) > -1) {
+                    continue;
+                }
+                for (var i = 0; i < _data.length; i++) {
+                    // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
+                    if (_data[i][_options.textField] == element) {
+                        array.push(_data[i][_options.valueField]);
+                    }
+                }
+            }
         }
+        // 删除“所有”下拉项，该下拉项不能选中
+        if ($.inArray("", array) > -1) {
+            array.splice($.inArray("", array), 1);
+        }
+
+        $(this).combobox('setValues', array);
         return true;
     },
     /**
@@ -324,24 +341,27 @@ function initCombobox(selector, data, valueField, textField, onHidePanel, onLoad
 /**
  * 初始化combobox控件
  * <b>注：要使用initComboboxForCheck的“所有”多选功能，那么valueField、textField这两个入参不能传同一个值，否则会导致“所有”功能失效</b>
- * <p>
+ * <pre>
  * 使用valueField、textField这两个参数值如果相同：
- * <code>initComboboxForCheck("#searchForm #ncBrandUnitCodes", data, "id", "id", hidePanelForMultiple);</code>
+ * <code>initComboboxForCheck("#searchForm #isEnables", data, "id", "id", hidePanelForMultiple);</code>
  * <p>
  * 可以通过重新构建如下数组来实现：
  * var ncBrandUnitCodes = [];
  $.each(data, function (index, element) {
 ncBrandUnitCodes.push({id: element.id, text: element.id});
 });
- initComboboxForCheck("#searchForm #ncBrandUnitCodes", ncBrandUnitCodes, "id", "text", hidePanelForMultiple);
- * <p>
- * 参考自 https://www.jianshu.com/p/1e2e393171d8
+ initComboboxForCheck("#searchForm #isEnables", ncBrandUnitCodes, "id", "text", hidePanelForMultiple);
+ * </pre>
+ * 参考网址：
+ * 1. https://www.jianshu.com/p/1e2e393171d8
+ * 2. https://www.cnblogs.com/wgl0126/p/9230686.html
  *
  * @param selector 选择器，必填
  * @param data 数据，必填
- * @param valueField 必填
- * @param textField 必填
- * @param onHidePanel
+ * @param valueField 选填，传入为空时默认："id"
+ * @param textField 选填，传入为空时默认："text"
+ * @param onHidePanel 下拉面板隐藏事件
+ * @deprecated
  */
 function initComboboxForCheck(selector, data, valueField, textField, onHidePanel, onLoadSuccess) {
     // 如果传入的“data”为空，则转到 initCombobox 函数上
@@ -366,12 +386,13 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
         data: itemData,
         valueField: valueField,
         textField: textField,
+        multiple: true,
         panelHeight: "auto",
-        onHidePanel: onHidePanel || Combobox.hidePanelForMultiple,
+        onHidePanel: onHidePanel || hidePanelComboboxForMultiple,
         formatter: function (row) { // formatter方法就是实现了在每个下拉选项前面增加checkbox框的方法
             var opts = $(this).combobox('options');
             // 注意：这里的input复选框和span文字不能用<label></label>标签包裹，否则用户在点击节点时会触发两次onSelect调用事件，导致勾选功能失效
-            return '<input type="checkbox" class="combobox-checkbox">&nbsp;<span>' + row[opts.textField] + '</span>';
+            return '<input type="checkbox" class="combobox-checkbox" style="margin:0 0px;vertical-align: -2px" id="' + row[opts.valueField] + '">&nbsp;<span>' + row[opts.textField] + '</span>';
         },
         onLoadSuccess: function () {
             $(selector).combobox('clear'); //清空
@@ -381,9 +402,14 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
             }
         },
         onShowPanel: function () { // 当下拉面板显示的时候触发
+            var opts = $(this).combobox('options');
             // 说明：处理下拉面板展示时，复选框无法勾选的功能
-            var data = $(selector).combobox('getData');
-            var ids = $(selector).combobox('getValues');
+            var data = $(this).combobox('getData');
+            var ids = $(this).combobox('getValues');
+            // 删除“所有”下拉项，该下拉项不能选中
+            if ($.inArray("", ids) > -1) {
+                ids.splice($.inArray("", ids), 1);
+            }
 
             // 下拉框数据长度小于10条时，高度自适应，大于10条时最高200，防止高度占满整个屏幕
             if (data.length < 10) {
@@ -393,101 +419,124 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
             }
 
             // “所有”节点id
-            var allDomId = '';
+            var allDomEl = null;
             for (var i = 0; i < data.length; i++) {
-                var itemText = $('#' + data[i].domId + ' span').text();
+                var itemValue = data[i][opts.valueField];
+                var itemText = data[i][opts.textField];
                 if (itemText == '所有' || itemText === '所有') {
-                    allDomId = data[i].domId;
+                    allDomEl = opts.finder.getEl(this, itemValue);
                     continue;
                 }
                 // 检查该列是否已经选中，对复选框进行勾选/取消处理
-                if ($.inArray(data[i][valueField], ids) > -1) {
-                    $('#' + data[i].domId + ' input[type="checkbox"]').prop("checked", true);
+                if ($.inArray(itemValue, ids) > -1) {
+                    var el = opts.finder.getEl(this, itemValue);
+                    el.find('input.combobox-checkbox')._propAttr('checked', true);
                 } else {
-                    $('#' + data[i].domId + ' input[type="checkbox"]').prop("checked", false);
+                    var el = opts.finder.getEl(this, itemValue);
+                    el.find('input.combobox-checkbox')._propAttr('checked', false);
                 }
             }
             if (ids.length >= (data.length - 1)) {
-                $('#' + allDomId + ' input[type="checkbox"]').prop("checked", true);
+                allDomEl.find('input.combobox-checkbox')._propAttr('checked', true);
             } else {
-                $('#' + allDomId + ' input[type="checkbox"]').prop("checked", false);
+                allDomEl.find('input.combobox-checkbox')._propAttr('checked', false);
             }
-            $(selector).combobox('setValues', ids); // combobox全选
+            $(this).combobox('clear');
+            $(this).combobox('setValues', ids); // combobox全选
         },
         onSelect: function (row) { // 选中一个选项时调用
             var opts = $(this).combobox('options');
-            var valueField = opts.valueField;
-            var textField = opts.textField;
+
+            var valueField = opts.valueField,
+                textField = opts.textField;
+            var rowValue = row[valueField],
+                rowText = row[textField];
             // “所有”节点id
-            var allDomId = '';
+            var allEl = null;
 
             var data = $(selector).combobox('getData');
             var checkTotal = 0;
             for (var i = 0; i < data.length; i++) {
-                var itemText = $('#' + data[i].domId + ' span').text();
+                var itemValue = data[i][valueField];
+                var itemText = data[i][textField];
                 if (itemText == '所有' || itemText === '所有') {
-                    allDomId = data[i].domId;
+                    allEl = opts.finder.getEl(this, itemValue);
                     continue;
                 }
-                if ($('#' + data[i].domId + ' input[type="checkbox"]').prop("checked")) {
+                var el = opts.finder.getEl(this, itemValue);
+                var propAttr = el.find('input.combobox-checkbox')._propAttr('checked');
+                if (propAttr) {
                     checkTotal++;
                 }
             }
-            //当点击“所有”时，则勾中/取消所有的选项
-            if (row[textField] === "所有") {
-                // 检查第一个复选框“所有”是否已经勾选，如果已经勾选，那么本次就是取消勾选事件，执行清空所有选项逻辑
-                // 说明：第一行数据为“所有”，id值为空，在调用combobox控件的setValues方法时是无法设置上值的，因此在取消选中时也无法触发onUnselect事件，因此这里通过判断已经勾选的条数来决定本次是全选还是清空
 
-                // 说明：复选框“所有”的勾选无法触发combobox控件的onselect/onUnselect事件，因此这里采用判断已经勾选的数据行来决定是全选还是清空
+            if (row[textField] === '所有') {
+                // 检查第一个复选框“所有”是否已经勾选，如果已经勾选，那么本次就是取消勾选事件，执行清空所有选项逻辑
+                // 说明：第一行数据为“所有”，id值为空，在调用combobox控件的setValues方法时是无法设置上值的，因此这里通过判断已经勾选的条数来决定本次是全选还是清空
+
                 if (checkTotal >= (data.length - 1)) {
                     for (var i = 0; i < data.length; i++) {
-                        $('#' + data[i].domId + ' input[type="checkbox"]').prop("checked", false);
+                        var itemValue = data[i][valueField];
+                        var el = opts.finder.getEl(this, itemValue);
+                        el.find('input.combobox-checkbox')._propAttr('checked', false);
                     }
                     $(selector).combobox('clear'); // 清空选中项
+                    $(selector).combobox('setValues', []); // 取消所有下拉项
                 } else {
                     var list = [];
                     for (var i = 0; i < data.length; i++) {
-                        $('#' + data[i].domId + ' input[type="checkbox"]').prop("checked", true);
-                        if (data[i][valueField] != null && data[i][valueField] != '' && data[i][valueField] != undefined) {
-                            list.push(data[i][valueField]);
+                        var itemValue = data[i][valueField];
+                        if (itemValue != null && itemValue != '' && itemValue != undefined) {
+                            list.push(itemValue);
                         }
+
+                        var el = opts.finder.getEl(this, itemValue);
+                        el.find('input.combobox-checkbox')._propAttr('checked', true);
                     }
-                    $(selector).combobox('setValues', list); // combobox全选
+                    // 1. 清除下拉列表框的值
+                    $(this).combobox('clear');
+                    // 2. 选中下拉项，此处会将“所有”下拉项选中去掉
+                    $(this).combobox('setValues', list);
                 }
             } else {
                 //设置选中选项所对应的复选框为选中状态
-                $('#' + row.domId + ' input[type="checkbox"]').prop("checked", true);
+                var el = opts.finder.getEl(this, rowValue);
+                el.find('input.combobox-checkbox')._propAttr('checked', true);
                 // “所有”选项
                 // 需要加上本次选择的值，所以这里要+1
                 if ((checkTotal + 1) >= (data.length - 1)) {
-                    $('#' + allDomId + ' input[type="checkbox"]').prop("checked", true);
+                    allEl.find('input.combobox-checkbox')._propAttr('checked', true);
                 } else {
-                    $('#' + allDomId + ' input[type="checkbox"]').prop("checked", false);
+                    allEl.find('input.combobox-checkbox')._propAttr('checked', false);
                 }
             }
         },
         onUnselect: function (row) { // 取消选中一个选项时调用
+            var opts = $(this).combobox('options');
             var data = $(selector).combobox('getData');
+            // var el = opts.finder.getEl(this, row[opts.valueField]);
+            // el.find('input.combobox-checkbox')._propAttr('checked', true);
+
+            var valueField = opts.valueField;
+            var textField = opts.textField;
             // 当取消全选勾中时，则取消所有的勾选
             if (row[textField] === "所有") {
                 for (var i = 0; i < data.length; i++) {
-                    $('#' + data[i].domId + ' input[type="checkbox"]').prop("checked", false);
+                    var el = opts.finder.getEl(this, data[i][opts.valueField]);
+                    el.find('input.combobox-checkbox')._propAttr('checked', false);
                 }
-                $(selector).combobox('clear');//清空选中项
+                $(this).combobox('clear');//清空选中项
+                $(this).combobox('setValues', []); // 重新复制选中项
             } else {
-                // 下面是实现全选状态下取消任何一项，则取消勾选所有
-
-                //设置选中选项所对应的复选框为非选中状态
-                $('#' + row.domId + ' input[type="checkbox"]').prop("checked", false);
-                var selectedList = $(selector).combobox('getValues');
+                // 设置选中选项所对应的复选框为非选中状态
+                var el = opts.finder.getEl(this, row[valueField]);
+                el.find('input.combobox-checkbox')._propAttr('checked', false);
                 // 如果“所有”是选中状态,则将其取消选中
                 if (data[0][valueField] == "" || data[0][valueField] === "") {
                     // 将“所有”选项移出数组，并且将该项的复选框设为非选中
-                    // selectedList.splice(0, 1);
-                    $('#' + data[0].domId + ' input[type="checkbox"]').prop("checked", false);
+                    var el = opts.finder.getEl(this, data[0][valueField]);
+                    el.find('input.combobox-checkbox')._propAttr('checked', false);
                 }
-                $(selector).combobox('clear');//清空
-                $(selector).combobox('setValues', selectedList); // 重新复制选中项
             }
         }
     });
@@ -541,44 +590,61 @@ function hidePanelComboboxForSingle() {
  * 下拉框展示弹窗事件（多选）
  */
 function hidePanelComboboxForMultiple() {
+    // 下拉框选择项
+    var selected = $(this).combobox('getValues');
+    if (selected.length == 0) {
+        $(this).combobox('clear');
+        return false;
+    }
+
     var _options = $(this).combobox('options');
     var _data = $(this).combobox('getData');
-    // 下拉框选择项
-    var values = $(this).combobox('getValues');
-    if (values.length > 0) {
-        var array = [];
-        if (values[0].indexOf(",") == -1) {
-            $.each(values, function (index, element) {
-                for (var i = 0; i < _data.length; i++) {
-                    if (_data[i][_options.valueField] == element) {
-                        array.push(element);
-                    }
+
+    var array = [];
+    if (selected[0].indexOf(",") == -1) {
+        for (var index = 0; index < selected.length; index++) {
+            var element = selected[index];
+            if ($.inArray(element, array) > -1) {
+                continue;
+            }
+            for (var i = 0; i < _data.length; i++) {
+                // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
+                if (_data[i][_options.valueField] == element) {
+                    array.push(element);
                 }
-            });
-        } else {
-            // 解决开头或者中间存在逗号导致多选下拉出现异常的问题
-            // 去掉第一个逗号
-            // var text = values[0].replace(",", "");
-            // 使用正则，将多个相邻的逗号替换成一个逗号，相当于Java的replaceAll
-            var reg = new RegExp(",", "g");
-            var text = values[0].replace(reg, ",");
-            // 分割文本值
-            text = text.split(",");
-            $.each(text, function (index, element) {
-                if (element != null && element != '' && element != undefined) {
-                    for (var i = 0; i < _data.length; i++) {
-                        // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
-                        if (_data[i][_options.textField] == element) {
-                            array.push(_data[i][_options.valueField]);
-                        }
-                    }
-                }
-            });
+            }
         }
-        $(this).combobox('setValues', array);
     } else {
-        $(this).combobox('setValues', '');
+        // 解决开头或者中间存在逗号导致多选下拉出现异常的问题
+        // 去掉第一个逗号
+        // var text = values[0].replace(",", "");
+        // 使用正则，将多个相邻的逗号替换成一个逗号，相当于Java的replaceAll
+        var reg = new RegExp(",", "g");
+        var text = selected[0].replace(reg, ",");
+        // 分割文本值
+        text = text.split(",");
+        for (var index = 0; index < text.length; index++) {
+            var element = text[index];
+            if (element == null || element == '' || element == undefined) {
+                continue;
+            }
+            if ($.inArray(element, array) > -1) {
+                continue;
+            }
+            for (var i = 0; i < _data.length; i++) {
+                // 使用下拉框的text文本值进行匹配，匹配上则拿到对应的value值
+                if (_data[i][_options.textField] == element) {
+                    array.push(_data[i][_options.valueField]);
+                }
+            }
+        }
     }
+    // 删除“所有”下拉项，该下拉项不能选中
+    if ($.inArray("", array) > -1) {
+        array.splice($.inArray("", array), 1);
+    }
+
+    $(this).combobox('setValues', array);
     return true;
 }
 
