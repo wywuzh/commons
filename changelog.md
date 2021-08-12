@@ -1,9 +1,13 @@
 ## 更新日志
+### SpringBoot/v2.5.2
+1. commons-static模块：
+  1. commons-static-easyui：v1.4.5以上版本combobox控件的setValues方法无法在onSelect事件中重新设置下拉值，会导致自定义的`initComboboxForCheck(selector, data, valueField, textField, onHidePanel, onLoadSuccess)`函数的下拉“所有”多选功能失效。因此将easyui的版本固定在v1.4.5，不再向上升级。
+
+
 ### SpringBoot/v2.4.5
 1. commons-mybatis-generator模块：
   1. 新增BatchUpdatePlugin插件：支持MySQL、Oracle数据库表的批量更新sql生成
   2. SelectByParamsPlugin插件调整：添加 not in 查询支持
-
 
 
 ### SpringBoot/v2.3.8
@@ -11,6 +15,7 @@
 2. 考虑jeesite4代码新版本版权原因，前端界面不再使用jeesite4的模板，删除commons-static模块下的commons-static-jeesite4子模块
 3. commons-static模块：
   1. 新增`commons-static-vue`子模块
+
 
 ### SpringBoot/V2.3.6
 1. commons-mybatis-generator模块：
