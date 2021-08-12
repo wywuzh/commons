@@ -1,7 +1,9 @@
 /**
- * easyui工具
- * @author 伍章红 2020-08-25
- * @requires jQuery, jQuery-EasyUI
+ * jquery easyui工具
+ *
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a>
+ * @version v2.3.8
+ * @since jquery
  */
 
 /**
@@ -29,7 +31,7 @@ var Datagrid = {
      */
     formatDate: function (value, row, index) {
         if (value) {
-            return DateUtil.format(new (value), Pattern.PATTERN_DATE);
+            return DateUtil.format(value, Pattern.PATTERN_DATE);
         }
         return '';
     },
@@ -41,7 +43,7 @@ var Datagrid = {
      */
     formatTime: function (value, row, index) {
         if (value) {
-            return DateUtil.format(new (value), Pattern.PATTERN_TIME);
+            return DateUtil.format(value, Pattern.PATTERN_TIME);
         }
         return '';
     },
@@ -53,7 +55,7 @@ var Datagrid = {
      */
     formatDateTime: function (value, row, index) {
         if (value) {
-            return DateUtil.format(new (value), Pattern.PATTERN_DATE_TIME);
+            return DateUtil.format(value, Pattern.PATTERN_DATE_TIME);
         }
         return '';
     },
@@ -65,7 +67,7 @@ var Datagrid = {
      */
     formatYearMonth: function (value, row, index) {
         if (value) {
-            return DateUtil.format(new (value), Pattern.PATTERN_YYYY_MM);
+            return DateUtil.format(value, Pattern.PATTERN_YYYY_MM);
         }
         return '';
     },
@@ -125,8 +127,8 @@ $.fn.datagrid.defaults = $.extend({}, $.fn.datagrid.defaults, {
     rownumbers: true,
     showFooter: true,
     singleSelect: false, // 是否只允许选择一行
-    checkOnSelect: true,
-    selectOnCheck: true,
+    checkOnSelect: true, // 用户点击行的时候是否选中或取消该复选框，如果为false则仅点击复选框的时候才会被选中或取消
+    selectOnCheck: true, // 用户点击复选框的时候是否选中该行
     pagination: true, // 在数据表格底部显示分页工具栏
     pageNumber: 1, // 初始化分页码（页码从1开始）
     pageSize: 20, // 初始化每页显示数据量
@@ -159,8 +161,8 @@ function initDatagrid(selector, options) {
         rownumbers: true,
         showFooter: true,
         singleSelect: false, // 是否只允许选择一行，默认可多选
-        checkOnSelect: true,
-        selectOnCheck: true,
+        checkOnSelect: true, // 用户点击行的时候是否选中或取消该复选框，如果为false则仅点击复选框的时候才会被选中或取消
+        selectOnCheck: true, // 用户点击复选框的时候是否选中该行
         pagination: true, // 在数据表格底部显示分页工具栏
         pageNumber: 1, // 初始化分页码（页码从1开始）
         pageSize: 20, // 初始化每页显示数据量
@@ -203,11 +205,11 @@ var Combobox = {
     hidePanelForSingle: function () {
         var _options = $(this).combobox('options');
         var _data = $(this).combobox('getData');
-        /* 下拉框所有选项 */
+        // 下拉框所有选项
         var _value = $(this).combobox('getValue');
-        /* 用户输入的值 */
+        // 用户输入的值
         var _b = false;
-        /* 标识是否在下拉列表中找到了用户输入的字符 */
+        // 标识是否在下拉列表中找到了用户输入的字符
         for (var i = 0; i < _data.length; i++) {
             if (_data[i][_options.valueField] == _value) {
                 _b = true;
@@ -215,7 +217,7 @@ var Combobox = {
             }
         }
         if (!_b) {
-            $(this).combobox('setValue', '');
+            $(this).combobox('clear');
             return false;
         }
         return true;
@@ -235,6 +237,9 @@ var Combobox = {
         if (selected[0].indexOf(",") == -1) {
             for (var index = 0; index < selected.length; index++) {
                 var element = selected[index];
+                if (element == null || element == '' || element == undefined) {
+                    continue;
+                }
                 if ($.inArray(element, array) > -1) {
                     continue;
                 }
@@ -570,11 +575,11 @@ function showPanelCombobox() {
 function hidePanelComboboxForSingle() {
     var _options = $(this).combobox('options');
     var _data = $(this).combobox('getData');
-    /* 下拉框所有选项 */
+    // 下拉框所有选项
     var _value = $(this).combobox('getValue');
-    /* 用户输入的值 */
+    // 用户输入的值
     var _b = false;
-    /* 标识是否在下拉列表中找到了用户输入的字符 */
+    // 标识是否在下拉列表中找到了用户输入的字符
     for (var i = 0; i < _data.length; i++) {
         if (_data[i][_options.valueField] == _value) {
             _b = true;
@@ -582,7 +587,7 @@ function hidePanelComboboxForSingle() {
         }
     }
     if (!_b) {
-        $(this).combobox('setValue', '');
+        $(this).combobox('clear');
         return false;
     }
     return true;
@@ -656,7 +661,7 @@ function hidePanelComboboxForMultiple() {
  */
 $.fn.combogrid.defaults = $.extend({}, $.fn.combogrid.defaults, {
     method: "post",
-    mode: 'remote',
+    mode: 'local', // 定义在文本改变的时候如何读取数据网格数据（local、remote）。设置为'remote'，数据表格将从远程服务器加载数据。当设置为'remote'模式的时候，用户输入将会发送到名为'q'的http请求参数，向服务器检索新的数据。默认值：local
     fitColumns: true, // 自动使列适应表格宽度以防止出现水平滚动
     fit: true,
     async: false, // 是否异步请求，默认为true
@@ -667,9 +672,10 @@ $.fn.combogrid.defaults = $.extend({}, $.fn.combogrid.defaults, {
     multiSort: true, // 是否允许多列排序
     rownumbers: true,
     singleSelect: true, // 是否只允许选择一行，默认单选
-    checkOnSelect: true,
-    selectOnCheck: true,
+    checkOnSelect: true, // 用户点击行的时候是否选中或取消该复选框，如果为false则仅点击复选框的时候才会被选中或取消
+    selectOnCheck: true, // 用户点击复选框的时候是否选中该行
     multiple: false, // 是否支持多选，默认为单选
+    onShowPanel: showPanelCombogrid,
     onHidePanel: hidePanelCombogridForSingle,
 });
 
@@ -686,36 +692,60 @@ function initCombogrid(selector, options) {
         queryParams: {
             q: '' // 控件模糊匹配请求条件
         },
-        idField: "id",
+        frozenColumns: [
+            {field: 'chex', checkbox: true, width: 30},
+        ],
+        idField: "id", // 标识字段
         textField: 'text',
-        mode: 'remote',
+        mode: 'remote', // local、remote
         fitColumns: true, // 自动使列适应表格宽度以防止出现水平滚动
         fit: true,
         async: false, // 是否异步请求，默认为true
         border: true,
-        striped: true, // 交替显示行背景
+        striped: true, // 交替显示行背景/是否显示斑马线效果
         nowrap: true, // 当数据长度超出列宽时将会自动截取
         loadMsg: "数据加载中，请稍候……",
         multiSort: true, // 是否允许多列排序
-        rownumbers: true,
+        rownumbers: true, // 是否显示行号列
         singleSelect: true, // 是否只允许选择一行，默认单选
-        checkOnSelect: true,
-        selectOnCheck: true,
+        checkOnSelect: true, // 用户点击行的时候是否选中或取消该复选框，如果为false则仅点击复选框的时候才会被选中或取消
+        selectOnCheck: true, // 用户点击复选框的时候是否选中该行
         multiple: false, // 是否支持多选，默认为单选
         panelWidth: 470,
         panelHeight: 230,
         readonly: false,
-        autoRowHeight: false,
+        autoRowHeight: false, // 根据该行的内容自适应设置行的高度。设置为false可以提高负载性能。
         showFooter: true,
         pagination: true, // 在数据表格底部显示分页工具栏
         pageNumber: 1, // 初始化分页码（页码从1开始）
         pageSize: 20, // 初始化每页显示数据量
         pageList: [10, 20, 50, 100, 200, 300, 400, 500], // 初始化每页记录数列表
+        onShowPanel: showPanelCombogrid,
         onHidePanel: hidePanelCombogridForSingle,
     };
     // 将options属性值合并到defaultOptions属性中
     $.extend(defaultOptions, options);
     $(selector).combogrid(defaultOptions);
+}
+
+/**
+ * combogrid控件面板显示事件
+ */
+function showPanelCombogrid() {
+    // 重新选中值，防止多次打开窗口时，之前选中的值失效
+    var selected = $(this).combogrid('getValues');
+    if (selected != null && selected.length > 0) {
+        // 重新加载当前页数据
+        $(this).combogrid("grid").datagrid('reload');
+        $(this).combogrid('setValues', selected);
+    } else {
+        // 注：未选中行时，第二次展开面板加载数据时“q”的查询条件还是旧的，需要清空掉
+        var queryParams = $(this).combogrid("grid").datagrid('options').queryParams;
+        queryParams.q = '';
+        $(this).combogrid("grid").datagrid('options').queryParams = queryParams;
+        $(this).combogrid("grid").datagrid('options').pageNumber = 1;
+        $(this).combogrid("grid").datagrid('load');
+    }
 }
 
 /**
@@ -830,51 +860,73 @@ var Tabs = {
      * 新增tab页
      * @param title tab页名称
      * @param url tab页地址
+     * @param closeExists 是否关闭之前存在的tab页
      */
-    add: function (title, url) {
+    add: function (title, url, closeExists) {
         var jq = top.jQuery;
-        if (jq('#tabs').tabs('exists', title)) {
-            jq('#tabs').tabs('select', title); // 选中并刷新
+        let $tabs = jq('#tabs');
+        // 检查 tabs 是否存在，如果不存在则新打开一个标签页
+        var tabsHtml = $tabs.html();
+        if (tabsHtml == null || tabsHtml == '' || tabsHtml == undefined) {
+            window.open(url, "_black");
+            return false;
+        }
+        if ($tabs.tabs('exists', title)) {
+            $tabs.tabs('select', title); // 选中并刷新
 
-            // 先关闭之前的tab页，然后重新add打开
-            // jq('#tabs').tabs('close', title);
-            // jq('#tabs').tabs('add', {
-            //     title: title,
-            //     content: content,
-            //     closable: true,
-            //     cache: false
-            // });
+            if (closeExists) {
+                // 先关闭之前的tab页，然后重新add打开
+                $tabs.tabs('close', title);
+                $tabs.tabs('add', {
+                    title: title,
+                    content: createFrame(url),
+                    closable: true,
+                    cache: false
+                });
+            }
         } else {
-            var content = createFrame(url);
-            jq('#tabs').tabs('add', {
+            $tabs.tabs('add', {
                 title: title,
-                content: content,
+                content: createFrame(url),
                 // href: url,
                 closable: true,
                 cache: false
             });
         }
+        initTabCloseEvent();
     },
     /**
      * 关闭指定的tab页
      * @param title tab页名称
      */
     close: function (title) {
-        var $mainTab = top.$('#tabs');
-        if (title && $mainTab.tabs('exists', title)) {
-            $mainTab.tabs('close', title);
+        var jq = top.jQuery;
+        let $tabs = jq('#tabs');
+        if (title && $tabs.tabs('exists', title)) {
+            $tabs.tabs('close', title);
         }
     },
     /**
      * 关闭tab页
      */
     closeSelected: function () {
-        var $mainTab = top.$('#tabs');
-        var currentTab = $mainTab.tabs('getSelected');
-        var tabIndex = $mainTab.tabs('getTabIndex', currentTab);
+        var jq = top.jQuery;
+        let $tabs = jq('#tabs');
+        // 检查 mainTabs 是否存在，如果不存在则新打开一个标签页
+        var tabsHtml = $tabs.html();
+        if (tabsHtml == null || tabsHtml == '' || tabsHtml == undefined) {
+            $.messager.confirm('确认', '即将关闭当前窗口？', function (flag) {
+                if (flag) {
+                    window.close();
+                }
+            });
+            return false;
+        }
+        var currentTab = $tabs.tabs('getSelected');
+        var tabIndex = $tabs.tabs('getTabIndex', currentTab);
 
         // 先关闭当前tab
-        $mainTab.tabs('close', tabIndex);
+        $tabs.tabs('close', tabIndex);
     },
     /**
      * 关闭tab页并刷新
@@ -898,19 +950,30 @@ var Tabs = {
      * @param callback 回调函数
      */
     closeAndSelect: function (selectTitle, callback) {
-        var $mainTab = top.$('#tabs');
-        var currentTab = $mainTab.tabs('getSelected');
-        var tabIndex = $mainTab.tabs('getTabIndex', currentTab);
+        var jq = top.jQuery;
+        let $tabs = jq('#tabs');
+        // 检查 mainTabs 是否存在，如果不存在则新打开一个标签页
+        var tabsHtml = $tabs.html();
+        if (tabsHtml == null || tabsHtml == '' || tabsHtml == undefined) {
+            $.messager.confirm('确认', '即将关闭当前窗口？', function (flag) {
+                if (flag) {
+                    window.close();
+                }
+            });
+            return false;
+        }
+        var currentTab = $tabs.tabs('getSelected');
+        var tabIndex = $tabs.tabs('getTabIndex', currentTab);
 
         // 先关闭当前tab
-        $mainTab.tabs('close', tabIndex);
-        if (selectTitle && $mainTab.tabs('exists', selectTitle)) {
-            var $target = $mainTab.tabs('select', selectTitle);
+        $tabs.tabs('close', tabIndex);
+        if (selectTitle && $tabs.tabs('exists', selectTitle)) {
+            var $target = $tabs.tabs('select', selectTitle);
 
             if (callback) {
                 // 获取选中的tab
-                var selectTab = $mainTab.tabs('getSelected');
-                var index = $mainTab.tabs('getTabIndex', selectTab);
+                var selectTab = $tabs.tabs('getSelected');
+                var index = $tabs.tabs('getTabIndex', selectTab);
                 var $targetFrame = $target.find('iframe');
                 callback($targetFrame[index - 1].contentWindow);
             }
@@ -923,6 +986,56 @@ function createFrame(url) {
     return frame;
 }
 
+/**
+ * 创建tab页
+ * @param title tab页名称
+ * @param url  tab页链接地址
+ * @since v2.3.7
+ * @requires jquery
+ */
+$.fn.addTab = function (title, url) {
+    var $tabs = this;
+    // 检查 tabs 是否存在，如果不存在则新打开一个标签页
+    var tabsHtml = $tabs.html();
+    if (tabsHtml == null || tabsHtml == '' || tabsHtml == undefined) {
+        window.open(url, "_black");
+        return false;
+    }
+    if ($tabs.tabs('exists', title)) {
+        $tabs.tabs('select', title); // 选中并刷新
+    } else {
+        var content = createFrame(url);
+        $tabs.tabs('add', {
+            title: title,
+            content: content,
+            // href: url,
+            closable: true,
+            cache: false
+        });
+    }
+};
+$.fn.closeTab = function (title) {
+    var $tabs = this;
+    // 检查 tabs 是否存在，如果不存在则新打开一个标签页
+    var tabsHtml = $tabs.html();
+    if (tabsHtml == null || tabsHtml == '' || tabsHtml == undefined) {
+        window.open(url, "_black");
+        return false;
+    }
+    if ($tabs.tabs('exists', title)) {
+        $tabs.tabs('select', title); // 选中并刷新
+    } else {
+        var content = createFrame(url);
+        $tabs.tabs('add', {
+            title: title,
+            content: content,
+            // href: url,
+            closable: true,
+            cache: false
+        });
+    }
+};
+
 function addTab(title, url) {
     Tabs.add(title, url);
 }
@@ -934,6 +1047,167 @@ function closeTab(title) {
         Tabs.closeSelected();
     }
 }
+
+function initTabCloseEvent() {
+    /*双击关闭TAB选项卡*/
+    $(".tabs-inner").dblclick(function () {
+        var subtitle = $(this).children(".tabs-closable").text();
+        $('#tabs').tabs('close', subtitle);
+    })
+    /*为选项卡绑定右键*/
+    $(".tabs-inner").bind('contextmenu', function (e) {
+        $('#mm').menu('show', {
+            left: e.pageX,
+            top: e.pageY
+        });
+
+        var subtitle = $(this).children(".tabs-closable").text();
+        if (subtitle == null || subtitle == '' || subtitle == undefined) {
+            subtitle = 'Home';
+        }
+
+        $('#mm').data("currtab", subtitle);
+        $('#tabs').tabs('select', subtitle);
+
+        var tab = $('#tabs').tabs('getTab', subtitle);
+        // 取得tab的索引
+        var tabIndex = $('#tabs').tabs('getTabIndex', tab);
+        if (tabIndex <= 0) {
+            tabIndex = 1;
+        } else {
+            tabIndex += 1;
+        }
+        tabsContextMenu(tabIndex, $('#tabs').tabs('tabs'));
+        return false;
+    });
+}
+
+/**
+ * 设置tab右键菜单
+ * @param curTabIndex tab索引，从1开始
+ * @param tabs
+ */
+function tabsContextMenu(curTabIndex, tabs) {
+    var length = tabs.length;
+    // console.log('curTabIndex=' + curTabIndex + ", tabs.length=" + length);
+
+    var tabclose = $('#mm-tabclose')[0];
+    var tabcloseother = $('#mm-tabcloseother')[0];
+    var tabcloseleft = $('#mm-tabcloseleft')[0];
+    var tabcloseright = $('#mm-tabcloseright')[0];
+    var tabcloseall = $('#mm-tabcloseall')[0];
+    $('#mm').menu('enableItem', tabclose);
+    $('#mm').menu('enableItem', tabcloseother);
+    $('#mm').menu('enableItem', tabcloseleft);
+    $('#mm').menu('enableItem', tabcloseright);
+    $('#mm').menu('enableItem', tabcloseall);
+
+    if (curTabIndex <= 1) {
+        $('#mm').menu('disableItem', tabclose);
+    }
+    if (length > 1) {
+        if (curTabIndex <= 2) {
+            $('#mm').menu('disableItem', tabcloseleft);
+        }
+
+        if (curTabIndex < length) {
+        } else if (curTabIndex >= length) {
+            $('#mm').menu('disableItem', tabcloseright);
+            if (curTabIndex == 2) {
+                $('#mm').menu('disableItem', tabcloseother);
+            }
+        }
+    } else {
+        // 当tabs只有一个首页选项卡时，除了“刷新选项卡”右键菜单外，其余的右键菜单禁用
+        $('#mm').menu('disableItem', tabclose);
+        $('#mm').menu('disableItem', tabcloseother);
+
+        $('#mm').menu('disableItem', tabcloseleft);
+        $('#mm').menu('disableItem', tabcloseright);
+        $('#mm').menu('disableItem', tabcloseall);
+    }
+}
+
+/**
+ * tab页右键管理
+ * @type {{init: context_menu.init, refresh: context_menu.refresh, close: context_menu.close, closeOther: context_menu.closeOther, closeLeft: context_menu.closeLeft, closeRight: context_menu.closeRight, closeAll: context_menu.closeAll}}
+ */
+var context_menu = {
+    init: function () {
+    },
+    refreshTab: function () { // 刷新选项卡
+        var currTab = $('#tabs').tabs('getSelected');
+        var url = $(currTab.panel('options').content).attr('src');
+        if (url != undefined && currTab.panel('options').title != 'Home') {
+            $('#tabs').tabs('update', {
+                tab: currTab,
+                options: {
+                    content: createFrame(url)
+                }
+            });
+        }
+    },
+    closeTab: function () { // 关闭选项卡
+        var currtab_title = $('#mm').data("currtab");
+        $('#tabs').tabs('close', currtab_title);
+    },
+    closeOtherTab: function () { // 关闭其他选项卡
+        var prevAll = $('.tabs-selected').prevAll();
+        var nextAll = $('.tabs-selected').nextAll();
+        if (prevAll.length > 0) {
+            prevAll.each(function (index, element) {
+                var text = $('a:eq(0) span', $(element)).text();
+                if (text != 'Home') {
+                    $('#tabs').tabs('close', text);
+                }
+            });
+        }
+        if (nextAll.length > 0) {
+            nextAll.each(function (index, element) {
+                var text = $('a:eq(0) span', $(element)).text();
+                if (text != 'Home') {
+                    $('#tabs').tabs('close', text);
+                }
+            });
+        }
+    },
+    closeLeftTab: function () { // 关闭左侧选项卡
+        var prevAll = $('.tabs-selected').prevAll();
+        if (prevAll.length == 0) {
+            // alert('到头了，前边没有啦~~');
+            return false;
+        }
+        prevAll.each(function (index, element) {
+            var text = $('a:eq(0) span', $(element)).text();
+            if (text != 'Home') {
+                $('#tabs').tabs('close', text);
+            }
+        });
+    },
+    closeRightTab: function () { // 关闭右侧选项卡
+        var nextAll = $('.tabs-selected').nextAll();
+        if (nextAll.length == 0) {
+            //msgShow('系统提示','后边没有啦~~','error');
+            // alert('后边没有啦~~');
+            return false;
+        }
+        nextAll.each(function (index, element) {
+            var text = $('a:eq(0) span', $(element)).text();
+            if (text != 'Home') {
+                $('#tabs').tabs('close', text);
+            }
+        });
+    },
+    closeAllTab: function () { // 关闭所有选项卡
+        $('.tabs-inner span').each(function (index, element) {
+            var text = $(element).text();
+            if (text != 'Home') {
+                $('#tabs').tabs('close', text);
+            }
+        });
+    },
+};
+
 
 /**
  * showMsg 入参支持三种格式<br>
@@ -995,12 +1269,80 @@ function alertMsg(message) {
  * EasyUI组建管理
  */
 var UIComponent = {
+    readonlyForDatebox: function (selector) {
+        $(selector).datebox({
+            required: false,
+            readonly: true
+        });
+    },
+    readonlyForValidatebox: function (selector) {
+        $(selector).validatebox({
+            required: false,
+            readonly: true
+        });
+    },
+    readonlyForTextbox: function (selector) {
+        // 将文本框设置为只读，并去掉之前设置的必填控制
+        $(selector).textbox({
+            required: false,
+            readonly: true
+        });
+    },
+    readonlyForNumberbox: function (selector) {
+        $(selector).attr("readonly", "readonly");
+        $(selector).numberbox({
+            required: false
+        });
+    },
+    readonlyForCombobox: function (selector) {
+        $(selector).closest("input.easyui-combobox").each(function () {
+            var $this = $(this);
+            // 将下拉框中的文本框设置为只读，并去掉之前设置的必填控制
+            $this.parent().find('.textbox-text').textbox({
+                required: false,
+                readonly: true
+            });
+            // 将下拉框右边的按钮点击事件的class去掉
+            $this.parent().find('.combo-arrow').removeClass('textbox-icon');
+        });
+    },
+    readonlyForCombogrid: function (selector) {
+        $(selector).closest("input.easyui-combogrid").each(function () {
+            var $this = $(this);
+            // 将下拉框中的文本框设置为只读，并去掉之前设置的必填控制
+            $this.parent().find('.textbox-text').textbox({
+                required: false,
+                readonly: true
+            });
+            // 将下拉框右边的按钮点击事件的class去掉
+            $this.parent().find('.combo-arrow').removeClass('textbox-icon');
+        });
+    },
+    readonlyForTextarea: function (selector) {
+        $(selector).closest("textarea").each(function () {
+            var $this = $(this);
+            var id = $this.attr("id");
+            if (id == null || id == '' || id == undefined) {
+                id = $this.data("id");
+            }
+
+            $("#" + id).attr("readonly", true);
+        });
+    },
     /**
      * 设置指定的selector下的所有组件为只读
      * @param selector 选择器
      */
     readonly: function (selector) {
-        $(selector).find("input.easyui-datebox").each(function () {
+        $(selector).parent().find(".textbox-text").each(function () {
+            var $this = $(this);
+            var id = $this.attr("id");
+            if (id == null || id == '' || id == undefined) {
+                id = $this.data("id");
+            }
+            UIComponent.readonlyForDatebox("#" + id);
+        });
+        /*$(selector).find("input.easyui-datebox").parent().find(".textbox-text").each(function () {
             var $this = $(this);
             var id = $this.attr("id");
             if (id == null || id == '' || id == undefined) {
@@ -1011,7 +1353,7 @@ var UIComponent = {
                 readonly: true
             });
         });
-        $(selector).find("input.easyui-validatebox").each(function () {
+        $(selector).find("input.easyui-validatebox").parent().find(".textbox-text").each(function () {
             var $this = $(this);
             var id = $this.attr("id");
             if (id == null || id == '' || id == undefined) {
@@ -1022,7 +1364,7 @@ var UIComponent = {
                 readonly: true
             });
         });
-        $(selector).find("input.easyui-textbox").each(function () {
+        $(selector).find("input.easyui-textbox").parent().find(".textbox-text").each(function () {
             var $this = $(this);
             var id = $this.attr("id");
             if (id == null || id == '' || id == undefined) {
@@ -1085,7 +1427,7 @@ var UIComponent = {
             var id = $this.data("id");
             // 父div禁用
             $this.parent().addClass('disabled-click');
-        });
+        });*/
     },
     getDictLabel: function (dictListJson, value, defaultValue, valueField, textField) {
         // valueField、textField两个参数字段配置为空时，设置默认值
@@ -1104,4 +1446,6 @@ var UIComponent = {
 };
 
 $(function () {
+    // Tab关闭事件
+    initTabCloseEvent();
 });
