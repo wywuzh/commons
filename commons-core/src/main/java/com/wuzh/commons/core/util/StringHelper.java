@@ -559,6 +559,29 @@ public class StringHelper {
         return sb.toString();
     }
 
+    /**
+     * 计算得到字符串长度：一个汉字或日韩文长度为2，英文字符长度为1
+     *
+     * @param content 字符串内容
+     * @return 字符串长度
+     * @since v2.4.8
+     */
+    public static int length(String content) {
+        if (content == null) {
+            return 0;
+        }
+        int letter = 0x80; // 十进制128
+        char[] chars = content.toCharArray();
+        int length = 0;
+        for (int i = 0; i < chars.length; i++) {
+            length++;
+            if (!(chars[i] / letter == 0)) {
+                length++;
+            }
+        }
+        return length;
+    }
+
     public static void main(String[] args) {
         System.out.println(fillZero(3, 2L));
 
