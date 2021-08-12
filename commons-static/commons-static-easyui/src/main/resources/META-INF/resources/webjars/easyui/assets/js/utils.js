@@ -193,6 +193,10 @@ var Combobox = {
         // 重新加载数据
         $(this).combobox('loadData', data);
         if (selected) {
+            // 删除“所有”下拉项，该下拉项不能选中
+            if ($.inArray("", selected) > -1) {
+                selected.splice($.inArray("", selected), 1);
+            }
             $(this).combobox('setValues', selected);
         }
     },
@@ -311,9 +315,10 @@ $.fn.combobox.defaults = $.extend({}, $.fn.combobox.defaults, {
  * 初始化combobox控件
  * @param selector 选择器，必填
  * @param data 数据，必填
- * @param valueField
- * @param textField
- * @param onHidePanel
+ * @param valueField 下拉选项值，选填，传入为空时默认："id"
+ * @param textField 下拉选项名称，选填，传入为空时默认："text"
+ * @param onHidePanel 下拉面板隐藏事件
+ * @param onLoadSuccess 数据加载成功事件
  */
 function initCombobox(selector, data, valueField, textField, onHidePanel, onLoadSuccess) {
     $(selector).combobox({
@@ -339,29 +344,35 @@ function initCombobox(selector, data, valueField, textField, onHidePanel, onLoad
 }
 
 /**
- * 初始化combobox控件
- * <b>注：要使用initComboboxForCheck的“所有”多选功能，那么valueField、textField这两个入参不能传同一个值，否则会导致“所有”功能失效</b>
+ * 初始化combobox控件，支持“所有”多选功能
+ * <p>
+ * 注意事项：
+ * 1. initComboboxForCheck目前仅能支持到easyui-v1.4.5版本，v1.4.5以上版本combobox控件的setValues方法无法在onSelect事件中重新设置下拉值
+ * 2. 传入的data数据中的valueField下拉选项值为数值时，需要转为字符格式。因为传入下拉选项值如果为数值0时，将会导致该下拉项无法选中
+ * 3. 要使用initComboboxForCheck的“所有”多选功能，那么valueField、textField这两个入参不能传同一个值，否则会导致“所有”功能失效
+ *
  * <pre>
  * 使用valueField、textField这两个参数值如果相同：
- * <code>initComboboxForCheck("#searchForm #isEnables", data, "id", "id", hidePanelForMultiple);</code>
- * <p>
+ * initComboboxForCheck("#searchForm #isEnables", data, "id", "id", hidePanelComboboxForMultiple);
+ *
  * 可以通过重新构建如下数组来实现：
- * var ncBrandUnitCodes = [];
+ * var isEnableData = [];
  $.each(data, function (index, element) {
-ncBrandUnitCodes.push({id: element.id, text: element.id});
+    isEnableData.push({id: element.id, text: element.id});
 });
- initComboboxForCheck("#searchForm #isEnables", ncBrandUnitCodes, "id", "text", hidePanelForMultiple);
+ initComboboxForCheck("#searchForm #isEnables", isEnableData, "id", "text", hidePanelComboboxForMultiple);
  * </pre>
+ *
  * 参考网址：
  * 1. https://www.jianshu.com/p/1e2e393171d8
  * 2. https://www.cnblogs.com/wgl0126/p/9230686.html
  *
  * @param selector 选择器，必填
  * @param data 数据，必填
- * @param valueField 选填，传入为空时默认："id"
- * @param textField 选填，传入为空时默认："text"
+ * @param valueField 下拉选项值，选填，传入为空时默认："id"
+ * @param textField 下拉选项名称，选填，传入为空时默认："text"
  * @param onHidePanel 下拉面板隐藏事件
- * @deprecated
+ * @param onLoadSuccess 数据加载成功事件
  */
 function initComboboxForCheck(selector, data, valueField, textField, onHidePanel, onLoadSuccess) {
     // 如果传入的“data”为空，则转到 initCombobox 函数上
@@ -446,19 +457,14 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
         },
         onSelect: function (row) { // 选中一个选项时调用
             var opts = $(this).combobox('options');
-
-            var valueField = opts.valueField,
-                textField = opts.textField;
-            var rowValue = row[valueField],
-                rowText = row[textField];
+            var data = $(selector).combobox('getData');
             // “所有”节点id
             var allEl = null;
 
-            var data = $(selector).combobox('getData');
             var checkTotal = 0;
             for (var i = 0; i < data.length; i++) {
-                var itemValue = data[i][valueField];
-                var itemText = data[i][textField];
+                var itemValue = data[i][opts.valueField];
+                var itemText = data[i][opts.textField];
                 if (itemText == '所有' || itemText === '所有') {
                     allEl = opts.finder.getEl(this, itemValue);
                     continue;
@@ -470,13 +476,13 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
                 }
             }
 
-            if (row[textField] === '所有') {
+            if (row[opts.textField] === '所有') {
                 // 检查第一个复选框“所有”是否已经勾选，如果已经勾选，那么本次就是取消勾选事件，执行清空所有选项逻辑
                 // 说明：第一行数据为“所有”，id值为空，在调用combobox控件的setValues方法时是无法设置上值的，因此这里通过判断已经勾选的条数来决定本次是全选还是清空
 
                 if (checkTotal >= (data.length - 1)) {
                     for (var i = 0; i < data.length; i++) {
-                        var itemValue = data[i][valueField];
+                        var itemValue = data[i][opts.valueField];
                         var el = opts.finder.getEl(this, itemValue);
                         el.find('input.combobox-checkbox')._propAttr('checked', false);
                     }
@@ -485,7 +491,7 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
                 } else {
                     var list = [];
                     for (var i = 0; i < data.length; i++) {
-                        var itemValue = data[i][valueField];
+                        var itemValue = data[i][opts.valueField];
                         if (itemValue != null && itemValue != '' && itemValue != undefined) {
                             list.push(itemValue);
                         }
@@ -499,8 +505,8 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
                     $(this).combobox('setValues', list);
                 }
             } else {
-                //设置选中选项所对应的复选框为选中状态
-                var el = opts.finder.getEl(this, rowValue);
+                // 设置选中选项所对应的复选框为选中状态
+                var el = opts.finder.getEl(this, row[opts.valueField]);
                 el.find('input.combobox-checkbox')._propAttr('checked', true);
                 // “所有”选项
                 // 需要加上本次选择的值，所以这里要+1
@@ -514,13 +520,9 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
         onUnselect: function (row) { // 取消选中一个选项时调用
             var opts = $(this).combobox('options');
             var data = $(selector).combobox('getData');
-            // var el = opts.finder.getEl(this, row[opts.valueField]);
-            // el.find('input.combobox-checkbox')._propAttr('checked', true);
 
-            var valueField = opts.valueField;
-            var textField = opts.textField;
             // 当取消全选勾中时，则取消所有的勾选
-            if (row[textField] === "所有") {
+            if (row[opts.textField] === "所有") {
                 for (var i = 0; i < data.length; i++) {
                     var el = opts.finder.getEl(this, data[i][opts.valueField]);
                     el.find('input.combobox-checkbox')._propAttr('checked', false);
@@ -529,12 +531,12 @@ function initComboboxForCheck(selector, data, valueField, textField, onHidePanel
                 $(this).combobox('setValues', []); // 重新复制选中项
             } else {
                 // 设置选中选项所对应的复选框为非选中状态
-                var el = opts.finder.getEl(this, row[valueField]);
+                var el = opts.finder.getEl(this, row[opts.valueField]);
                 el.find('input.combobox-checkbox')._propAttr('checked', false);
                 // 如果“所有”是选中状态,则将其取消选中
-                if (data[0][valueField] == "" || data[0][valueField] === "") {
+                if (data[0][opts.valueField] == "" || data[0][opts.valueField] === "") {
                     // 将“所有”选项移出数组，并且将该项的复选框设为非选中
-                    var el = opts.finder.getEl(this, data[0][valueField]);
+                    var el = opts.finder.getEl(this, data[0][opts.valueField]);
                     el.find('input.combobox-checkbox')._propAttr('checked', false);
                 }
             }
