@@ -103,8 +103,8 @@ public class ExcelUtilsTest {
             String[] columns = {
                     "username", "nick", "email", "mobile", "sex"
             };
-            List<User> dataColl = ExcelUtils.importData(inputStream, User.class, columns);
-            log.info("导入结果:{}", JsonMapper.buildNonEmptyMapper().toJsonFormat(dataColl));
+            List<User> dataColl = ExcelUtils.importData(inputStream, User.class, columns, 2);
+            log.info("导入结果:{}", JsonMapper.buildNonEmptyMapper().toJson(dataColl));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {
