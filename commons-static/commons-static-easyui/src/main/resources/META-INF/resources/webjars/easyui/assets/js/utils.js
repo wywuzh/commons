@@ -1270,18 +1270,24 @@ function alertMsg(message) {
  */
 var UIComponent = {
     readonlyForDatebox: function (selector) {
+        // 禁用验证，解决tooltip无法关闭的问题
+        $(selector).datebox('disableValidation');
         $(selector).datebox({
             required: false,
             readonly: true
         });
     },
     readonlyForValidatebox: function (selector) {
+        // 禁用验证，解决tooltip无法关闭的问题
+        $(selector).validatebox('disableValidation');
         $(selector).validatebox({
             required: false,
             readonly: true
         });
     },
     readonlyForTextbox: function (selector) {
+        // 禁用验证，解决tooltip无法关闭的问题
+        $(selector).textbox('disableValidation');
         // 将文本框设置为只读，并去掉之前设置的必填控制
         $(selector).textbox({
             required: false,
@@ -1289,12 +1295,17 @@ var UIComponent = {
         });
     },
     readonlyForNumberbox: function (selector) {
+        // 禁用验证，解决tooltip无法关闭的问题
+        $(selector).numberbox('disableValidation');
+        // 将数值输入框设置为只读，并去掉之前设置的必填控制
         $(selector).attr("readonly", "readonly");
         $(selector).numberbox({
             required: false
         });
     },
     readonlyForCombobox: function (selector) {
+        // 禁用验证，解决tooltip无法关闭的问题
+        $(selector).combobox('disableValidation');
         $(selector).closest("input.easyui-combobox").each(function () {
             var $this = $(this);
             // 将下拉框中的文本框设置为只读，并去掉之前设置的必填控制
@@ -1307,6 +1318,8 @@ var UIComponent = {
         });
     },
     readonlyForCombogrid: function (selector) {
+        // 禁用验证，解决tooltip无法关闭的问题
+        $(selector).combobox('disableValidation');
         $(selector).closest("input.easyui-combogrid").each(function () {
             var $this = $(this);
             // 将下拉框中的文本框设置为只读，并去掉之前设置的必填控制
