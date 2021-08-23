@@ -2,7 +2,7 @@
  * String工具类
  *
  * @author wywuzh@163.com 2019-01-24
- * @version v3.0.0
+ * @version v1.0.0
  * @requires jQuery
  */
 var StringUtils = {
@@ -35,5 +35,19 @@ var StringUtils = {
         } else {
             return [];
         }
+    },
+    /**
+     * 字符拼接功能
+     * 使用方法：join('字符串1','字符串2','字符串3');
+     *
+     * @returns {string}
+     * @since v2.4.8
+     */
+    join: function () {
+        var result = '';
+        for (var i = 0; i < arguments.length; i++) {
+            result += arguments[i];
+        }
+        return result;
     }
 };
