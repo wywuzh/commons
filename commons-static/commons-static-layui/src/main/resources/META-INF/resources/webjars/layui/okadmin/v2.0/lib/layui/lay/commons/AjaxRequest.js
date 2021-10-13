@@ -7,55 +7,61 @@ layui.define(["layer"], function (exprots) {
      */
     var AjaxRequest = {
         /**
-         * 同步请求数据
+         * GET同步请求数据
          *
          * @param url 请求地址
          * @param requestParam 请求参数
          * @param successCallback 请求成功回调函数
          */
-        getJSONForSync: function (url, requestParam, successCallback) {
+        getJSONForSync: function (url, requestParam, successCallback, errorCallback) {
             $.ajax({
                 url: url,
                 type: 'GET',
                 data: requestParam,
                 dataType: 'json',
                 cache: false,
-                async: false,// 同步请求
+                async: false, // 是否发送异步请求，默认为true
                 success: function (data) {
                     if (successCallback) {
                         successCallback(data);
                     }
                 },
-                error: function () {
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (errorCallback) {
+                        errorCallback(XMLHttpRequest, textStatus, errorThrown);
+                    }
                 }
             });
         },
         /**
-         * 异步请求数据
+         * GET异步请求数据
          *
          * @param url 请求地址
          * @param requestParam 请求参数
          * @param successCallback 请求成功回调函数
          */
-        getJSONForASync: function (url, requestParam, successCallback) {
+        getJSONForASync: function (url, requestParam, successCallback, errorCallback) {
             $.ajax({
                 url: url,
                 type: 'GET',
                 data: requestParam,
                 dataType: 'json',
                 cache: false,
-                async: true,// 异步请求
+                async: true, // 是否发送异步请求，默认为true
                 success: function (data) {
                     if (successCallback) {
                         successCallback(data);
                     }
                 },
-                error: function () {
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (errorCallback) {
+                        errorCallback(XMLHttpRequest, textStatus, errorThrown);
+                    }
                 }
             });
         },
         /**
-         * 同步请求数据
+         * POST同步请求数据
          *
          * @param url 请求地址
          * @param requestParam 请求参数
@@ -69,21 +75,21 @@ layui.define(["layer"], function (exprots) {
                 data: requestParam,
                 dataType: 'json',
                 cache: false,
-                async: false,// 同步请求
+                async: false, // 是否发送异步请求，默认为true
                 success: function (data) {
                     if (successCallback) {
                         successCallback(data);
                     }
                 },
-                error: function (data) {
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
                     if (errorCallback) {
-                        errorCallback(data);
+                        errorCallback(XMLHttpRequest, textStatus, errorThrown);
                     }
                 }
             });
         },
         /**
-         * 同步请求数据
+         * POST异步请求数据
          *
          * @param url 请求地址
          * @param requestParam 请求参数
@@ -97,19 +103,36 @@ layui.define(["layer"], function (exprots) {
                 data: requestParam,
                 dataType: 'json',
                 cache: false,
-                async: true,// 异步请求
+                async: true, // 是否发送异步请求，默认为true
                 success: function (data) {
                     if (successCallback) {
                         successCallback(data);
                     }
                 },
-                error: function (data) {
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
                     if (errorCallback) {
-                        errorCallback(data);
+                        errorCallback(XMLHttpRequest, textStatus, errorThrown);
                     }
                 }
             });
-        }
+        },
+        /**
+         * 发送请求
+         * @param options 请求参数
+         */
+        doRequest: function (options) {
+            options = options || {};
+            var defaultOptions = {
+                type: 'POST',
+                dataType: 'json',
+                cache: false,
+                async: true, // 是否发送异步请求，默认为true
+            };
+            // 将options请求对象合并到defaultOptions对象中
+            $.extend(defaultOptions, options);
+            // 执行请求
+            $.ajax(defaultOptions);
+        },
     };
 
     exprots("AjaxRequest", AjaxRequest);
