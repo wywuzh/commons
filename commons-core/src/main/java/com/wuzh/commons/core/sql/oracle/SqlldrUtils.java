@@ -49,13 +49,14 @@ import java.util.List;
 public class SqlldrUtils {
 
     /**
-     * 文件后缀：控制文件
+     * 控制文件后缀：默认以“.ctl”结尾
      */
     public static final String DEFAULT_CONTROL_FILE_SUFFIX = ".ctl";
     /**
-     * 文件后缀：数据文件
+     * 数据文件后缀：默认以“.csv”结尾
      */
     public static final String DEFAULT_DATA_FILE_SUFFIX = ".csv";
+
 
     /*---------------------------------------- 创建ctl控制器文件 >>> Start ----------------------------------------*/
 
@@ -70,12 +71,12 @@ public class SqlldrUtils {
      * @return
      */
     public static File createCtlFile(File folderPath, String ctlFileName, List<String> csvFilePaths, String tableName, String columns) throws IOException {
-        if (!StringUtils.endsWithIgnoreCase(ctlFileName, ".ctl")) {
-            ctlFileName = StringUtils.join(ctlFileName, ".ctl");
+        if (!StringUtils.endsWithIgnoreCase(ctlFileName, DEFAULT_CONTROL_FILE_SUFFIX)) {
+            ctlFileName = StringUtils.join(ctlFileName, DEFAULT_CONTROL_FILE_SUFFIX);
         }
         File ctlFile = new File(folderPath, ctlFileName);
         if (ctlFile.exists()) {
-            ctlFile.delete();
+            FileUtils.forceDelete(ctlFile);
         }
         return createCtlFile(ctlFile, csvFilePaths, tableName, columns);
     }
@@ -83,13 +84,13 @@ public class SqlldrUtils {
     /**
      * 创建ctl控制器文件
      *
-     * @param ctlFile      ctl文件
-     * @param csvFilePaths csv文件路径
-     * @param tableName    表名
-     * @param columns      列名，多个以逗号分隔
+     * @param ctlFile       控制文件
+     * @param dataFilePaths 数据文件路径
+     * @param tableName     表名
+     * @param columns       列名，多个以逗号分隔
      * @return
      */
-    public static File createCtlFile(File ctlFile, List<String> csvFilePaths, String tableName, String columns) throws IOException {
+    public static File createCtlFile(File ctlFile, List<String> dataFilePaths, String tableName, String columns) throws IOException {
         FileWriter fileWriter = new FileWriter(ctlFile);
 
         StringBuffer stringBuffer = new StringBuffer();
@@ -99,15 +100,17 @@ public class SqlldrUtils {
         stringBuffer.append("load data\n");
         // 字符集设定,这样才能导入中文
         stringBuffer.append("CHARACTERSET 'UTF8'\n");
-        for (String csvFilePath : csvFilePaths) {
+        for (String dataFilePath : dataFilePaths) {
             // 需要装载的数据文件的路径；如果是导入多个格式一致的数据文件，另起一行。
-            stringBuffer.append("infile '" + csvFilePath + "'\n");
+            stringBuffer.append("infile '" + dataFilePath + "'\n");
         }
         // 导入规则：
         // append=追加数据
         // truncate=清空前面导入的，只保留当前文件内容
         stringBuffer.append("append into table " + tableName + "\n");
-        // 指定每一列的间隔符号标识，占一行。`','`表示以逗号最为每一列的分隔符
+        // 指定每一列的间隔符号标识，占一行
+        // ','：表示以逗号作为每一列的分隔符
+        // x'09'：表示以“TAB”（制表符）作为每一列的分隔符
         stringBuffer.append("fields terminated by ','\n");
         stringBuffer.append("optionally enclosed by '\"'\n");
         // 允许字段为空值
@@ -128,11 +131,33 @@ public class SqlldrUtils {
 
     /*---------------------------------------- 向csv文件写入数据 >>> Start ----------------------------------------*/
 
+    /**
+     * 向dataFileName文件中写入数据
+     *
+     * @param folderPath   数据文件根路径
+     * @param dataFileName 数据文件名
+     * @param fieldName    字段名，多个以逗号分割
+     * @param list         需要写入数据文件的数据
+     * @return
+     * @throws IOException
+     * @throws IllegalAccessException
+     */
     public static <T> File writeDataFile(File folderPath, String dataFileName, String fieldName, List<T> list) throws IOException, IllegalAccessException {
         String[] fieldNameArr = StringUtils.split(fieldName, Constants.SEPARATE_COMMA);
         return writeDataFile(folderPath, dataFileName, fieldNameArr, list);
     }
 
+    /**
+     * 向dataFileName文件中写入数据
+     *
+     * @param folderPath   数据文件根路径
+     * @param dataFileName 数据文件名，默认为“.csv”后缀，文件后缀支持格式：.csv/.txt/.dat。
+     * @param fieldNameArr 字段名
+     * @param list         需要写入数据文件的数据
+     * @return
+     * @throws IOException
+     * @throws IllegalAccessException
+     */
     public static <T> File writeDataFile(File folderPath, String dataFileName, String[] fieldNameArr, List<T> list) throws IOException, IllegalAccessException {
         if (StringUtils.indexOf(dataFileName, Constants.SEPARATE_SPOT) <= 0) {
             dataFileName = StringUtils.join(dataFileName, DEFAULT_DATA_FILE_SUFFIX);
@@ -192,25 +217,26 @@ public class SqlldrUtils {
                 continue;
             }
             if (field.getType() == String.class) {
+                // html转义符
                 value = String.valueOf(value)
                         .replaceAll("\"", "“")
                         .replaceAll("'", "‘")
                         .replaceAll(",", "，")
                         .replaceAll("\n", "char(10)") // ascii码换行
                         .replaceAll("\r", "char(13)"); // ascii码回车
-                value = StringUtils.join("\"", value, "\"");
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, value, Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == java.util.Date.class) {
-                value = StringUtils.join("\"", DateUtil.format((Date) value, DateUtil.PATTERN_DATE_TIME), "\"");
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtil.format((Date) value, DateUtil.PATTERN_DATE_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == java.sql.Date.class) {
-                value = StringUtils.join("\"", DateUtil.format((Date) value, DateUtil.PATTERN_TIME), "\"");
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtil.format((Date) value, DateUtil.PATTERN_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == java.sql.Time.class) {
-                value = StringUtils.join("\"", DateUtil.format((Date) value, DateUtil.PATTERN_TIME), "\"");
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtil.format((Date) value, DateUtil.PATTERN_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == BigDecimal.class
                     || field.getType() == Double.class
                     || field.getType() == Float.class) {
-                value = StringUtils.join("\"", String.valueOf(value), "\"");
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, String.valueOf(value), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else {
-                value = StringUtils.join("\"", String.valueOf(value), "\"");
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, String.valueOf(value), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             }
 
             content.append(value);
@@ -290,6 +316,20 @@ public class SqlldrUtils {
     }
 
     /**
+     * @return Oracle环境变量
+     */
+    public static String getOracleHome() {
+        // Oracle安装目录：优先取Oracle环境变量，如果没有则从系统属性中取
+        String ORACLE_HOME = System.getenv("ORACLE_HOME");
+        log.info("根据System.getenv(\"ORACLE_HOME\")方法取Oracle环境变量：{}", ORACLE_HOME);
+        if (StringUtils.isBlank(ORACLE_HOME)) {
+            log.info("System.getenv(\"ORACLE_HOME\")未取到Oracle环境变量，改用System.getProperty(\"ORACLE_HOME\")取Oracle环境变量：{}", ORACLE_HOME);
+            ORACLE_HOME = System.getProperty("ORACLE_HOME");
+        }
+        return ORACLE_HOME;
+    }
+
+    /**
      * 执行命令
      *
      * @param command 命令
@@ -299,23 +339,23 @@ public class SqlldrUtils {
      */
     public static int executive(String command) throws IOException, InterruptedException {
         // Oracle安装目录：优先取Oracle环境变量，如果没有则从系统属性中取
-        String ORACLE_HOME = System.getenv("ORACLE_HOME");
+        String ORACLE_HOME = getOracleHome();
         if (StringUtils.isBlank(ORACLE_HOME)) {
-            ORACLE_HOME = System.getProperty("ORACLE_HOME");
-        }
-        if (StringUtils.isBlank(ORACLE_HOME)) {
+            log.error("未取到Oracle环境变量，无法执行传入的sqlldr命令：{}", command);
             throw new RuntimeException("请先设置Oracle环境变量！");
         }
-        String[] cmd = null;
-        if (OSInfo.OSType.WINDOWS.equals(OSInfo.getOSType())) {
-            cmd = new String[]{"cmd.exe", "/C", ORACLE_HOME + "\\bin\\" + command};
-        } else if (OSInfo.OSType.LINUX.equals(OSInfo.getOSType())) {
-            cmd = new String[]{"/bin/bash", "-c", ORACLE_HOME + "/bin/" + command};
-        }
 
+        long startTime = System.currentTimeMillis();
         InputStream inputStream = null;
         BufferedReader reader = null;
         try {
+            String[] cmd = null;
+            if (OSInfo.OSType.WINDOWS.equals(OSInfo.getOSType())) {
+                cmd = new String[]{"cmd.exe", "/C", ORACLE_HOME + "\\bin\\" + command};
+            } else if (OSInfo.OSType.LINUX.equals(OSInfo.getOSType())) {
+                cmd = new String[]{"/bin/bash", "-c", ORACLE_HOME + "/bin/" + command};
+            }
+            log.info("开始执行cmd命令：{}", StringUtils.join(cmd, Constants.SEPARATE_COMMA));
             Process process = Runtime.getRuntime().exec(cmd);
             inputStream = process.getInputStream(); // 获取执行cmd命令后的信息
 
@@ -339,7 +379,7 @@ public class SqlldrUtils {
 
             return exitValue;
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
+            log.error("{} 执行sqlldr命令失败：", command, e);
             throw e;
         } finally {
             if (inputStream != null) {
@@ -356,6 +396,7 @@ public class SqlldrUtils {
                     log.error(e.getMessage(), e);
                 }
             }
+            log.error("执行sqlldr命令结束，共耗时：{}毫秒", (System.currentTimeMillis() - startTime));
         }
     }
 
