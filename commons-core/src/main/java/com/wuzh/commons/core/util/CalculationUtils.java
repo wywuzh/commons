@@ -35,6 +35,12 @@ public class CalculationUtils {
      */
     public static final BigDecimal DEFAULT_ONE = new BigDecimal("1");
     /**
+     * 默认值：-1
+     *
+     * @since v2.4.8
+     */
+    public static final BigDecimal DEFAULT_NEGATIVE_ONE = new BigDecimal("-1");
+    /**
      * 默认值：10
      */
     public static final BigDecimal DEFAULT_TEN = new BigDecimal("10");
@@ -42,6 +48,12 @@ public class CalculationUtils {
      * 默认值：100
      */
     public static final BigDecimal DEFAULT_ONE_HUNDRED = new BigDecimal("100");
+    /**
+     * 默认值：1024
+     *
+     * @since v2.4.8
+     */
+    public static final BigDecimal DEFAULT_SIZE = new BigDecimal("1024");
 
     public static BigDecimal add(BigDecimal v1, BigDecimal... array) {
         if (v1 == null) {
