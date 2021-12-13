@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.jep;
+package com.wuzh.commons.core.math;
 
+import com.wuzh.commons.core.common.Constants;
 import com.wuzh.commons.core.util.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -39,7 +40,10 @@ import java.util.Map;
 public class CalcExpressionUtil {
     private final static Logger LOGGER = LoggerFactory.getLogger(CalcExpressionUtil.class);
 
-    public static final String SEPARATE_COMMA = ",";
+    /**
+     * 默认计算符号：加、减、乘、除、大于、小于、大于等于、小于等于、等于、并且、或者、不等于
+     */
+    public static final String DEFAULT_SYMBOL = "+-*/()><=!&|";
 
     /**
      * 计算公式解析
@@ -57,8 +61,8 @@ public class CalcExpressionUtil {
             return calcValue;
         }
         // 解析公式：将公式中的中文字段名替换为实体类中的英文字段名
-        String[] calcFieldNameArr = StringUtils.split(calcFieldName, SEPARATE_COMMA);
-        String[] calcFieldTitleArr = StringUtils.split(calcFieldTitle, SEPARATE_COMMA);
+        String[] calcFieldNameArr = StringUtils.split(calcFieldName, Constants.SEPARATE_COMMA);
+        String[] calcFieldTitleArr = StringUtils.split(calcFieldTitle, Constants.SEPARATE_COMMA);
         // key=中文字段名,value=英文字段名
         Map<String, String> fieldTitleMap = new HashMap<>(calcFieldTitleArr.length);
         for (int i = 0; i < calcFieldTitleArr.length; i++) {
@@ -68,7 +72,13 @@ public class CalcExpressionUtil {
             // 如果计算公式的第一个字符为“=”符号，需要先去掉
             calcExpression = StringUtils.substring(calcExpression, 1);
         }
-        List<String> characters = CommonUtil.splitEnglishCharacter(calcExpression);
+        // 并且、或者、不等于分别用&&、||、!=这三个符号表示。and、or、<>这三个符号不生效
+        calcExpression = calcExpression
+                .replaceAll("and/+", "&&")
+                .replaceAll("or/+", "||")
+                .replaceAll("<>/+", "!=")
+                .replaceAll("\\s", "");
+        List<String> characters = CommonUtil.splitContent(calcExpression, DEFAULT_SYMBOL);//CommonUtil.splitEnglishCharacter(calcExpression);
         StringBuffer sb = new StringBuffer();
         List<String> calcFieldNameList = new LinkedList<>();
         for (String str : characters) {
@@ -93,8 +103,12 @@ public class CalcExpressionUtil {
             Object calcFieldValue = null;
             try {
                 // 取出字段
-                Field field = FieldUtils.getDeclaredField(target.getClass(), fieldName, true);
-                calcFieldValue = field.get(target);
+                if (target instanceof Map) {
+                    calcFieldValue = ((Map) target).get(fieldName);
+                } else {
+                    Field field = FieldUtils.getDeclaredField(target.getClass(), fieldName, true);
+                    calcFieldValue = field.get(target);
+                }
                 if (calcFieldValue != null) {
                     // 取出的字段值要保留2位小数，避免字符赋值给另外一个对象时出现进度差异
                     calcFieldValue = new BigDecimal(calcFieldValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);

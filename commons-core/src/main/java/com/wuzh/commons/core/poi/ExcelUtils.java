@@ -20,7 +20,7 @@ import com.wuzh.commons.core.poi.annotation.ExcelCell;
 import com.wuzh.commons.core.poi.enums.CellTypeEnum;
 import com.wuzh.commons.core.poi.modle.ExcelRequest;
 import com.wuzh.commons.core.reflect.ReflectUtils;
-import com.wuzh.commons.core.util.CalculationUtils;
+import com.wuzh.commons.core.math.CalculationUtils;
 import com.wuzh.commons.core.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +28,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
@@ -341,11 +342,17 @@ public class ExcelUtils {
         if (StringUtils.isNotBlank(excelRequest.getTips())) {
             firstRowNumber = 2;
             Row tipsRow = sheet.createRow(0);
-            tipsRow.setHeightInPoints(height);
             // 第一行添加提示信息
             Cell cell = tipsRow.createCell(0);
             cell.setCellValue(excelRequest.getTips());
             cell.setCellStyle(createHeaderStyleForTips(workbook));
+            // 设置合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 12));
+            // 设置第一行高度
+            int length = StringUtils.split(excelRequest.getTips(), "\n").length;
+            tipsRow.setHeightInPoints(length * 18);
+            // 设置自动换行
+            cell.getCellStyle().setWrapText(true);
         }
 
         // 因为POI自动列宽计算的是String.length长度，在中文环境下会有问题，所以自行处理
