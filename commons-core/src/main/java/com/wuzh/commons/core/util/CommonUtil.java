@@ -15,10 +15,12 @@
  */
 package com.wuzh.commons.core.util;
 
+import com.wuzh.commons.core.math.CalculationUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Array;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -111,7 +113,6 @@ public class CommonUtil {
     public static boolean isNotNull(Object value, Object... items) {
         return !isNull(value, items);
     }
-
 
     public static boolean isAlpha(String value) {
         if (isNull(value)) {
@@ -357,6 +358,115 @@ public class CommonUtil {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 分割字符串，content中的内容只要出现在了separator分割字符串中，就会被分割出来
+     *
+     * @param content   内容
+     * @param separator 分割字符串
+     * @return
+     */
+    public static List<String> splitContent(String content, String separator) {
+        // 拼装规则：一个英文占一行，相邻的中文占一行
+        List<String> expressions = new LinkedList<>();
+        if (StringUtils.isBlank(content) || StringUtils.isBlank(separator)) {
+            return expressions;
+        }
+
+        char[] chars = content.toCharArray();
+        StringBuffer sb = new StringBuffer();
+        for (char c : chars) {
+            if (!StringUtils.contains(separator, String.valueOf(c))) {
+                sb.append(c);
+            } else {
+                // 检查sb中是否存在字符
+                if (sb.length() > 0) {
+                    expressions.add(sb.toString());
+                }
+                expressions.add(String.valueOf(c));
+                sb = new StringBuffer();
+            }
+        }
+        // 检查最后一部分没有加入的
+        if (sb.length() > 0) {
+            expressions.add(sb.toString());
+        }
+
+        // String spiltRules = "\\+|-|\\*|/|=|\\(|\\)";
+        // return Arrays.asList(content.split(spiltRules));
+        return expressions;
+    }
+
+    /**
+     * 拆分集合，按照每个list 1000行记录进行拆分
+     *
+     * @param list 集合信息
+     * @return
+     * @since v2.5.2
+     */
+    public static List<List<String>> splitList(List<String> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        List<List<String>> unions = new LinkedList<>();
+        int total = list.size();
+        final int pageSize = 1000;
+        long pageTotal = (total - 1) / pageSize + 1;
+        for (int index = 0; index < pageTotal; index++) {
+            int toIndex = (index + 1) * pageSize < total ? (index + 1) * pageSize : total;
+            List<String> subList = list.subList(index * pageSize, toIndex);
+            unions.add(subList);
+        }
+        return unions;
+    }
+
+    /**
+     * 匹配目标集合中存在的数据
+     *
+     * @param sourceList 目标集合
+     * @param matchList  匹配数据集合，可选，如果传入为空则直接返回目标集合
+     * @return
+     * @since v2.5.2
+     */
+    public static List<String> matchSourceList(List<String> sourceList, List<String> matchList) {
+        if (CollectionUtils.isEmpty(sourceList) || CollectionUtils.isEmpty(matchList)) {
+            return sourceList;
+        }
+        List<String> resultList = new ArrayList<>();
+        for (String item : sourceList) {
+            if (!matchList.contains(item)) {
+                continue;
+            }
+            resultList.add(item);
+        }
+        return resultList;
+    }
+
+    /**
+     * 解析文件大小
+     *
+     * @param sourceFileSize 源文件大小
+     * @return
+     * @since v2.5.2
+     */
+    public static String resolveFileSize(Long sourceFileSize) {
+        if (sourceFileSize == null) {
+            return null;
+        }
+        // KB
+        BigDecimal fileSize = CalculationUtils.div(new BigDecimal(sourceFileSize), CalculationUtils.DEFAULT_SIZE, 2);
+        if (fileSize.compareTo(CalculationUtils.DEFAULT_SIZE) <= 0) {
+            return fileSize.toString() + " KB";
+        }
+        // MB
+        fileSize = CalculationUtils.div(fileSize, CalculationUtils.DEFAULT_SIZE, 2);
+        if (fileSize.compareTo(CalculationUtils.DEFAULT_SIZE) <= 0) {
+            return fileSize.toString() + " MB";
+        }
+        // GB
+        fileSize = CalculationUtils.div(fileSize, CalculationUtils.DEFAULT_SIZE, 2);
+        return fileSize.toString() + " GB";
     }
 
     public static void main(String[] args) {

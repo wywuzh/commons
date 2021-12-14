@@ -15,7 +15,7 @@
  */
 package com.wuzh.commons.core.reflect;
 
-import com.wuzh.commons.core.util.CalculationUtils;
+import com.wuzh.commons.core.math.CalculationUtils;
 import com.wuzh.commons.core.json.jackson.JsonMapper;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
