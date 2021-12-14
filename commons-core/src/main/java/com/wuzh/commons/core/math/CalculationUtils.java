@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.wuzh.commons.core.util;
+package com.wuzh.commons.core.math;
 
 import java.math.BigDecimal;
 
@@ -49,7 +49,7 @@ public class CalculationUtils {
      */
     public static final BigDecimal DEFAULT_ONE_HUNDRED = new BigDecimal("100");
     /**
-     * 默认值：1024
+     * 数据存储计量单位：1024
      *
      * @since v2.4.8
      */
