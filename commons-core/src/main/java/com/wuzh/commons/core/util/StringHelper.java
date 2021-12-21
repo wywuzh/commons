@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -262,8 +263,7 @@ public class StringHelper {
             }
         }
 
-
-        return new sun.misc.BASE64Encoder().encode(out.toByteArray());
+        return Base64.getEncoder().encodeToString(out.toByteArray());
     }
 
     /**
@@ -283,7 +283,7 @@ public class StringHelper {
         byte[] compressed = null;
         String decompressed = null;
         try {
-            compressed = new sun.misc.BASE64Decoder().decodeBuffer(compressedStr);
+            compressed = Base64.getDecoder().decode(compressedStr);
             in = new ByteArrayInputStream(compressed);
             ginzip = new GZIPInputStream(in);
 
@@ -329,9 +329,9 @@ public class StringHelper {
      * @return 返回压缩后的文本
      */
     public static final String zip(String str) {
-        if (str == null)
+        if (str == null) {
             return null;
-        byte[] compressed;
+        }
         ByteArrayOutputStream out = null;
         ZipOutputStream zout = null;
         String compressedStr = null;
@@ -341,10 +341,9 @@ public class StringHelper {
             zout.putNextEntry(new ZipEntry("0"));
             zout.write(str.getBytes());
             zout.closeEntry();
-            compressed = out.toByteArray();
-            compressedStr = new sun.misc.BASE64Encoder().encodeBuffer(compressed);
+            byte[] compressed = out.toByteArray();
+            compressedStr = Base64.getEncoder().encodeToString(compressed);
         } catch (IOException e) {
-            compressed = null;
             LOGGER.error(e.getMessage(), e);
         } finally {
             if (zout != null) {
@@ -381,7 +380,7 @@ public class StringHelper {
         ZipInputStream zin = null;
         String decompressed = null;
         try {
-            byte[] compressed = new sun.misc.BASE64Decoder().decodeBuffer(compressedStr);
+            byte[] compressed = Base64.getDecoder().decode(compressedStr);
             out = new ByteArrayOutputStream();
             in = new ByteArrayInputStream(compressed);
             zin = new ZipInputStream(in);
