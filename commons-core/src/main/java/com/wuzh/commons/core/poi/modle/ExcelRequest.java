@@ -15,8 +15,6 @@
  */
 package com.wuzh.commons.core.poi.modle;
 
-import javafx.print.PrintSides;
-
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
