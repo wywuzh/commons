@@ -66,7 +66,7 @@
         <commons-codec.version>1.15</commons-codec.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-compress.version>1.20</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-configuration2.version>2.7</commons-configuration2.version>
         <commons-io.version>2.10.0</commons-io.version>
@@ -99,8 +99,8 @@
         <spring-kafka.version>2.7.3</spring-kafka.version>
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.0.1</curator_version>
-        <dubbo.version>2.7.12</dubbo.version>
-        <shiro.version>1.7.1</shiro.version>
+        <dubbo.version>2.7.15</dubbo.version>
+        <shiro.version>1.8.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>1.0.1</alibaba-dingtalk-service-sdk.version>
         <taobao-sdk-java-auto.version>1479188381469-20210409</taobao-sdk-java-auto.version>
