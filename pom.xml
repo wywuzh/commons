@@ -58,6 +58,9 @@
 
         <spring-cloud.version>2021.0.0</spring-cloud.version>
 
+        <log4j2.version>2.17.1</log4j2.version>
+        <logback.version>1.2.10</logback.version>
+        <slf4j.version>1.7.35</slf4j.version>
         <jackson-bom.version>2.13.0</jackson-bom.version>
         <json-lib.version>2.4</json-lib.version>
         <fastjson.version>1.2.78</fastjson.version>
@@ -100,7 +103,7 @@
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.0.1</curator_version>
         <dubbo.version>3.0.4</dubbo.version>
-        <shiro.version>1.7.1</shiro.version>
+        <shiro.version>1.8.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>2.0.0</alibaba-dingtalk-service-sdk.version>
         <taobao-sdk-java-auto.version>1479188381469-20210409</taobao-sdk-java-auto.version>
