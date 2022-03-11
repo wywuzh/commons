@@ -105,7 +105,7 @@
         <alibaba-dingtalk-service-sdk.version>1.0.1</alibaba-dingtalk-service-sdk.version>
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
-        <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
+        <webjars.jquery-ui.version>1.13.0</webjars.jquery-ui.version>
         <webjars.jquery-mobile.version>1.4.5</webjars.jquery-mobile.version>
         <webjars.jquery-form.version>4.2.2</webjars.jquery-form.version>
         <webjars.bootstrap.version>3.4.1</webjars.bootstrap.version>
@@ -527,6 +527,12 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>alibaba-dingtalk-service-sdk</artifactId>
                 <version>${alibaba-dingtalk-service-sdk.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
 
