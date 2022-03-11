@@ -66,7 +66,7 @@
         <commons-codec.version>1.15</commons-codec.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-compress.version>1.20</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-configuration2.version>2.7</commons-configuration2.version>
         <commons-io.version>2.11.0</commons-io.version>
@@ -99,11 +99,10 @@
         <spring-kafka.version>2.7.6</spring-kafka.version>
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.0.1</curator_version>
-        <dubbo.version>2.7.13</dubbo.version>
-        <shiro.version>1.7.1</shiro.version>
+        <dubbo.version>2.7.15</dubbo.version>
+        <shiro.version>1.8.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>1.0.1</alibaba-dingtalk-service-sdk.version>
-        <taobao-sdk-java-auto.version>1479188381469-20210409</taobao-sdk-java-auto.version>
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
         <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
@@ -529,11 +528,6 @@
                 <artifactId>alibaba-dingtalk-service-sdk</artifactId>
                 <version>${alibaba-dingtalk-service-sdk.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>taobao-sdk-java-auto</artifactId>
-                <version>${taobao-sdk-java-auto.version}</version>
-            </dependency>
 
 
             <!-- 静态资源jar -->
@@ -751,7 +745,7 @@
 
     <repositories>
         <!-- 阿里云Maven私服 -->
-        <!--<repository>
+        <repository>
             <id>maven-ali</id>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
             <releases>
@@ -762,32 +756,10 @@
                 <updatePolicy>always</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots>
-        </repository>-->
-        <repository>
-            <id>nexus</id>
-            <url>http://139.129.93.153:8081/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
     <profiles>
-        <profile>
-            <id>nexus-deploy</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>snapshots</id>
-                    <name>Nexus Snapshot Repository</name>
-                    <url>http://139.129.93.153:8081/nexus/content/repositories/snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>releases</id>
-                    <name>Nexus Release Repository</name>
-                    <url>http://139.129.93.153:8081/nexus/content/repositories/releases/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
         <profile>
             <id>oss-deploy</id>
             <build>
