@@ -31,17 +31,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 类CalcExpressionUtil的实现描述：计算公式解析
+ * 类CalcExpressionUtils的实现描述：计算公式解析
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019-12-12 12:59:09
  * @version v2.1.1
  * @since JDK 1.8
  */
-public class CalcExpressionUtil {
-    private final static Logger LOGGER = LoggerFactory.getLogger(CalcExpressionUtil.class);
+public class CalcExpressionUtils {
+    private final static Logger LOGGER = LoggerFactory.getLogger(CalcExpressionUtils.class);
 
     /**
      * 默认计算符号：加、减、乘、除、大于、小于、大于等于、小于等于、等于、并且、或者、不等于
+     *
+     * @since v2.5.2
      */
     public static final String DEFAULT_SYMBOL = "+-*/()><=!&|";
 
@@ -74,9 +76,9 @@ public class CalcExpressionUtil {
         }
         // 并且、或者、不等于分别用&&、||、!=这三个符号表示。and、or、<>这三个符号不生效
         calcExpression = calcExpression
-                .replaceAll("and/+", "&&")
-                .replaceAll("or/+", "||")
-                .replaceAll("<>/+", "!=")
+                .replaceAll("and+", "&&")
+                .replaceAll("or+", "||")
+                .replaceAll("<>+", "!=")
                 .replaceAll("\\s", "");
         List<String> characters = CommonUtil.splitContent(calcExpression, DEFAULT_SYMBOL);//CommonUtil.splitEnglishCharacter(calcExpression);
         StringBuffer sb = new StringBuffer();
@@ -136,14 +138,63 @@ public class CalcExpressionUtil {
         return new BigDecimal(value.toString());
     }
 
-    public static void main(String[] args) {
+    /**
+     * 计算公式解析
+     *
+     * @param calcExpression 计算公式。eg: -((鞋+总部无税成本)/1.08*0.08+0.13)
+     * @param fieldValueMap  字段值。eg：{"本月A租赁费":400,"上月A租赁费":300}
+     * @return
+     * @since v2.5.2
+     */
+    public static BigDecimal getCalcValue(String calcExpression, Map<String, Object> fieldValueMap) {
+        BigDecimal calcValue = BigDecimal.ZERO;
+        if (StringUtils.isBlank(calcExpression)) {
+            LOGGER.warn("calcExpression={}, fieldValueMap={} 传入的计算公式为空，直接返回0", calcExpression, fieldValueMap);
+            return calcValue;
+        }
+        // 解析公式：将公式中的中文字段名替换为实体类中的英文字段名
+        if (StringUtils.indexOf(calcExpression, "=") == 0) {
+            // 如果计算公式的第一个字符为“=”符号，需要先去掉
+            calcExpression = StringUtils.substring(calcExpression, 1);
+        }
+        // 并且、或者、不等于分别用&&、||、!=这三个符号表示。and、or、<>这三个符号不生效
+        calcExpression = calcExpression
+                .replaceAll("and+", "&&")
+                .replaceAll("or+", "||")
+                .replaceAll("<>+", "!=")
+                .replaceAll("\\s", "");
+        // 在计算公式后面加个“*1”，避免公式解析失败
+        calcExpression = calcExpression + "*1";
+
         JEP jep = new JEP();
-        jep.addVariable("鞋", 100);
-        jep.addVariable("总部无税成本", 100);
-        jep.parseExpression("-((鞋+总部无税成本)/1.08*0.08+0.13)");
+        for (Map.Entry<String, Object> entry : fieldValueMap.entrySet()) {
+            String fieldName = entry.getKey();
+            Object calcFieldValue = entry.getValue();
+            try {
+                // 取出字段
+                if (calcFieldValue != null) {
+                    // 取出的字段值要保留2位小数，避免字符赋值给另外一个对象时出现进度差异
+                    calcFieldValue = new BigDecimal(calcFieldValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                }
+            } catch (Exception e) {
+                LOGGER.error("fieldValueMap={}, fieldName={} 字段取值失败：", fieldValueMap, fieldName, e);
+            } finally {
+                // 如果字段没有取到值或者值为空，默认赋值为0
+                if (calcFieldValue == null) {
+                    calcFieldValue = BigDecimal.ZERO;
+                }
+            }
+            jep.addVariableAsObject(fieldName, calcFieldValue);
+        }
+        // 运算公式
+        jep.parseExpression(calcExpression);
+        // 取到结果
         Object value = jep.getValueAsObject();
-        System.out.println(value);
-        System.out.println(new BigDecimal(value.toString()).setScale(2, BigDecimal.ROUND_HALF_UP));
+        if (value == null) {
+            LOGGER.error("calcExpression={}, fieldValueMap={} 公式解析失败！", calcExpression, fieldValueMap);
+            throw new IllegalArgumentException("【" + calcExpression + "】 公式解析失败！");
+        }
+        return new BigDecimal(value.toString());
     }
 
 }
