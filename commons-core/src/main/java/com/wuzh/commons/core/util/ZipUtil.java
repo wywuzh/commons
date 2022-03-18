@@ -138,7 +138,6 @@ public class ZipUtil {
             outputStream.close();
             long endTime = System.currentTimeMillis();
             String minute = new BigDecimal(endTime - startTime).divide(new BigDecimal(1000)).setScale(3, 5).toString();
-            System.out.println("耗时 " + minute + " m");
         } else {
             // 组装压缩文件名称
             zipFileName = fileSuffix.substring(0, fileSuffix.lastIndexOf(".")) + format.getName();
@@ -260,21 +259,21 @@ public class ZipUtil {
         // ="E:\\work\\schabm\\document\\技术文档\\Spring帮助文档\\Spring MVC";
 
         try {
-            String filePath = "D:\\www\\logs\\learning\\SpringBoot\\MyBatis3\\Multi-DataSource";
+            String filePath = "D:\\www\\logs\\retail-electricity-mbg";
             String zipFilePath = "D:\\";
             // 注意：zipFile方法需要指定具体文件的文件夹，不支持递归查找文件操作
-            zipFile(filePath, zipFilePath, Format.RAR);
+            zipFile(filePath, zipFilePath, Format.ZIP);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        try {
-            String filePath = "D:\\www\\logs\\learning";
-            String zipFilePath = "D:\\learning.zip";
-            // 注意：compress需要指定压缩文件名称，支持递归查找文件操作
-            compress(filePath, zipFilePath, Format.RAR);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            String filePath = "D:\\www\\logs";
+//            String zipFilePath = "D:\\learning.zip";
+//            // 注意：compress需要指定压缩文件名称，支持递归查找文件操作
+//            compress(filePath, zipFilePath, Format.RAR);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 }

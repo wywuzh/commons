@@ -20,7 +20,7 @@ import com.wuzh.commons.core.poi.annotation.ExcelCell;
 import com.wuzh.commons.core.poi.enums.CellTypeEnum;
 import com.wuzh.commons.core.poi.modle.ExcelRequest;
 import com.wuzh.commons.core.reflect.ReflectUtils;
-import com.wuzh.commons.core.util.CalculationUtils;
+import com.wuzh.commons.core.math.CalculationUtils;
 import com.wuzh.commons.core.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +28,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
@@ -341,11 +342,17 @@ public class ExcelUtils {
         if (StringUtils.isNotBlank(excelRequest.getTips())) {
             firstRowNumber = 2;
             Row tipsRow = sheet.createRow(0);
-            tipsRow.setHeightInPoints(height);
             // 第一行添加提示信息
             Cell cell = tipsRow.createCell(0);
             cell.setCellValue(excelRequest.getTips());
             cell.setCellStyle(createHeaderStyleForTips(workbook));
+            // 设置合并单元格
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 12));
+            // 设置第一行高度
+            int length = StringUtils.split(excelRequest.getTips(), "\n").length;
+            tipsRow.setHeightInPoints(length * 18);
+            // 设置自动换行
+            cell.getCellStyle().setWrapText(true);
         }
 
         // 因为POI自动列宽计算的是String.length长度，在中文环境下会有问题，所以自行处理
@@ -886,6 +893,18 @@ public class ExcelUtils {
      * @param columns     读取字段
      */
     public static <T> List<T> importData(InputStream inputStream, Class<T> clazz, String[] columns) throws Exception {
+        return importData(inputStream, clazz, columns, 1);
+    }
+
+    /**
+     * 导入数据
+     *
+     * @param inputStream 输入流
+     * @param clazz       返回结果类
+     * @param columns     读取字段
+     * @param startRow    开始读取数据行，从0开始
+     */
+    public static <T> List<T> importData(InputStream inputStream, Class<T> clazz, String[] columns, int startRow) throws Exception {
         Assert.notNull(inputStream, "inputStream must not be null");
         Assert.notNull(clazz, "clazz must not be null");
 
@@ -893,9 +912,10 @@ public class ExcelUtils {
         try {
             // 解析需要读取的字段，如果 columns 为空，就以 clazz 类中ExcelCell标记的字段为准
             columns = transformRealColumns(clazz, columns);
+            Assert.notEmpty(columns, "columns must not be empty");
 
             // 读取内容
-            Workbook workbook = reader(inputStream);
+            Workbook workbook = create(inputStream);
 
             for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
                 Sheet sheet = workbook.getSheetAt(i);
@@ -904,7 +924,7 @@ public class ExcelUtils {
                         || workbook.isSheetHidden(i) || workbook.isSheetVeryHidden(i)) {
                     continue;
                 }
-                resultList.addAll(getSheetData(workbook, sheet, clazz, columns, 1));
+                resultList.addAll(getSheetData(workbook, sheet, clazz, columns, startRow));
             }
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
@@ -913,6 +933,13 @@ public class ExcelUtils {
         return resultList;
     }
 
+    /**
+     * 解析需要读取的字段，如果 columns 为空，就以 clazz 类中ExcelCell标记的字段为准
+     *
+     * @param clazz   目标类
+     * @param columns 需要读取的字段
+     * @return
+     */
     private static <T> String[] transformRealColumns(Class<T> clazz, String[] columns) {
         if (columns != null && columns.length != 0) {
             return columns;
@@ -925,7 +952,28 @@ public class ExcelUtils {
         return columnList.toArray(new String[0]);
     }
 
-    public static Workbook reader(InputStream inputStream) throws FileNotFoundException, IOException {
+    /**
+     * 创建工作簿
+     *
+     * @param file 目标文件
+     * @return
+     * @throws IOException
+     * @since v2.4.8
+     */
+    public static Workbook create(File file) throws IOException {
+        Assert.notNull(file, "file must not be null");
+
+        return WorkbookFactory.create(file);
+    }
+
+    /**
+     * 创建工作簿
+     *
+     * @param inputStream 输入流
+     * @return
+     * @throws IOException
+     */
+    public static Workbook create(InputStream inputStream) throws IOException {
         Assert.notNull(inputStream, "inputStream must not be null");
 
         return WorkbookFactory.create(inputStream);
@@ -938,11 +986,8 @@ public class ExcelUtils {
      * @param sheet    目标sheet
      * @param clazz    解析目标结果类
      * @param columns  字段
-     * @param startRow 开始读取行
-     * @param <T>
-     * @return
-     * @throws IllegalAccessException
-     * @throws InstantiationException
+     * @param startRow 开始读取数据行，从0开始
+     * @return 传入sheet页读取到的数据
      */
     public static <T> List<T> getSheetData(Workbook workbook, Sheet sheet, Class<T> clazz, String[] columns, int startRow)
             throws Exception {
@@ -973,7 +1018,7 @@ public class ExcelUtils {
                     } catch (Exception e) {
                         String errorMsg = MessageFormat.format("Excel文件中[{0}]Sheet的第{1}行第{2}列数据[{3}]导入错误，请检查！",
                                 sheet.getSheetName(), (r + 1), getExcelColumnLabel(cell.getColumnIndex()), cell);
-                        LOGGER.error("{}:", errorMsg, e);
+                        LOGGER.error("fieldName={} {}:", fieldName, errorMsg, e);
                         throw new IOException(errorMsg, e);
                     }
                 }

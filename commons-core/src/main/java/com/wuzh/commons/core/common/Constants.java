@@ -53,6 +53,18 @@ public class Constants {
     public static final String METHOD_DELETE = "DELETE"; // 删除
 
     /**
+     * 分隔符：英文单引号
+     *
+     * @since v2.4.8
+     */
+    public static final String SEPARATE_QUOTATION_MARK = "'";
+    /**
+     * 分隔符：英文双引号
+     *
+     * @since v2.4.8
+     */
+    public static final String SEPARATE_DOUBLE_QUOTATION_MARK = "\"";
+    /**
      * 分隔符：英文逗号
      */
     public static final String SEPARATE_COMMA = ",";

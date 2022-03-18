@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.wywuzh</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>2.4.8.SNAPSHOT</version>
+    <version>2.5.2.SNAPSHOT</version>
     <name>commons-parent</name>
     <packaging>pom</packaging>
     <description>项目公共组件类库</description>
@@ -44,7 +44,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.8</version>
+        <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -66,7 +66,7 @@
         <commons-codec.version>1.15</commons-codec.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-compress.version>1.20</commons-compress.version>
+        <commons-compress.version>1.21</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-configuration2.version>2.7</commons-configuration2.version>
         <commons-io.version>2.10.0</commons-io.version>
@@ -89,24 +89,23 @@
         <apollo-client.version>1.8.0</apollo-client.version>
 
         <commons-dbutils.version>1.7</commons-dbutils.version>
-        <mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
+        <mybatis-spring-boot.version>2.2.0</mybatis-spring-boot.version>
         <mybatis-generator-core.version>1.3.7</mybatis-generator-core.version>
         <mybatis-generator-plugin.version>1.3.8</mybatis-generator-plugin.version>
-        <pagehelper-spring-boot.version>1.3.0</pagehelper-spring-boot.version>
+        <pagehelper-spring-boot.version>1.3.1</pagehelper-spring-boot.version>
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <druid.version>1.2.6</druid.version>
 
-        <spring-kafka.version>2.6.9</spring-kafka.version>
+        <spring-kafka.version>2.7.3</spring-kafka.version>
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.0.1</curator_version>
-        <dubbo.version>2.7.12</dubbo.version>
-        <shiro.version>1.7.1</shiro.version>
+        <dubbo.version>2.7.15</dubbo.version>
+        <shiro.version>1.8.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>1.0.1</alibaba-dingtalk-service-sdk.version>
-        <taobao-sdk-java-auto.version>1479188381469-20210409</taobao-sdk-java-auto.version>
 
         <webjars.jquery.version>3.5.1</webjars.jquery.version>
-        <webjars.jquery-ui.version>1.12.1</webjars.jquery-ui.version>
+        <webjars.jquery-ui.version>1.13.0</webjars.jquery-ui.version>
         <webjars.jquery-mobile.version>1.4.5</webjars.jquery-mobile.version>
         <webjars.jquery-form.version>4.2.2</webjars.jquery-form.version>
         <webjars.bootstrap.version>3.4.1</webjars.bootstrap.version>
@@ -121,7 +120,7 @@
         <webjars.layui.version>2.5.6</webjars.layui.version>
         <webjars.AdminLTE.version>3.1.0</webjars.AdminLTE.version>
         <webjars.editor.md.version>1.5.0</webjars.editor.md.version>
-        <webjars.vue.version>2.6.12</webjars.vue.version>
+        <webjars.vue2.version>2.6.12</webjars.vue2.version>
         <webjars.vue-i18n.version>8.15.5</webjars.vue-i18n.version>
         <webjars.vue-router.version>3.4.9</webjars.vue-router.version>
     </properties>
@@ -528,11 +527,12 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>alibaba-dingtalk-service-sdk</artifactId>
                 <version>${alibaba-dingtalk-service-sdk.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>taobao-sdk-java-auto</artifactId>
-                <version>${taobao-sdk-java-auto.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>log4j</groupId>
+                        <artifactId>log4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
 
@@ -751,7 +751,7 @@
 
     <repositories>
         <!-- 阿里云Maven私服 -->
-        <!--<repository>
+        <repository>
             <id>maven-ali</id>
             <url>http://maven.aliyun.com/nexus/content/groups/public</url>
             <releases>
@@ -762,32 +762,10 @@
                 <updatePolicy>always</updatePolicy>
                 <checksumPolicy>fail</checksumPolicy>
             </snapshots>
-        </repository>-->
-        <repository>
-            <id>nexus</id>
-            <url>http://139.129.93.153:8081/nexus/content/groups/public/</url>
         </repository>
     </repositories>
 
     <profiles>
-        <profile>
-            <id>nexus-deploy</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>snapshots</id>
-                    <name>Nexus Snapshot Repository</name>
-                    <url>http://139.129.93.153:8081/nexus/content/repositories/snapshots/</url>
-                </snapshotRepository>
-                <repository>
-                    <id>releases</id>
-                    <name>Nexus Release Repository</name>
-                    <url>http://139.129.93.153:8081/nexus/content/repositories/releases/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
         <profile>
             <id>oss-deploy</id>
             <build>
