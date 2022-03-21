@@ -79,7 +79,7 @@ public class CalcExpressionUtilsTest {
     @Test
     public void getCalcValueTest() {
         String calcExpression = "利息支出+劳务费";//"-(鞋*(10/1.13))+4000.00";
-        Map<String, Object> fieldValueMap = new HashMap<>();
+        Map<String, BigDecimal> fieldValueMap = new HashMap<>();
         fieldValueMap.put("利息支出", BigDecimal.valueOf(400));
         fieldValueMap.put("劳务费", BigDecimal.valueOf(300));
         System.out.println("复杂逻辑：" + CalcExpressionUtils.getCalcValue(calcExpression, fieldValueMap));
