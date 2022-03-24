@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -328,6 +328,50 @@ public class CalculationUtils {
             return v1.divide(v2, scale, roundingMode); // 四舍五入
         }
         return CalculationUtils.DEFAULT_ZERO;
+    }
+
+    /**
+     * 比较大小
+     *
+     * @param v1
+     * @param v2
+     * @return
+     * @since v2.5.2
+     */
+    public static int compare(BigDecimal v1, BigDecimal v2) {
+        if (v1 == null) {
+            v1 = BigDecimal.ZERO;
+        }
+        if (v2 == null) {
+            v2 = BigDecimal.ZERO;
+        }
+        return v1.compareTo(v2);
+    }
+
+    /**
+     * 绝对值
+     *
+     * @param source 源数据
+     * @return
+     * @since v2.5.2
+     */
+    public static BigDecimal abs(BigDecimal source) {
+        return abs(source, 2);
+    }
+
+    /**
+     * 绝对值
+     *
+     * @param source 源数据
+     * @param scale  保留小数位数
+     * @return
+     * @since v2.5.2
+     */
+    public static BigDecimal abs(BigDecimal source, int scale) {
+        if (source == null) {
+            source = CalculationUtils.DEFAULT_ZERO;
+        }
+        return source.abs().setScale(scale, BigDecimal.ROUND_HALF_UP);
     }
 
     public static void main(String[] args) {
