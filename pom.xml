@@ -126,104 +126,165 @@
 		</dependency>
 	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<!-- 资源配置插件 xml、properties文件都是资源文件，编码的时候遇到中文总要进行转码，我们可以通过<encoding>${project.build.sourceEncoding}</encoding>配置来进行强制转码 -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<!-- 编译插件 -->
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<!-- 源代码编译版本 -->
-					<source>${java.version}</source>
-					<!-- 目标平台编译版本 一般而言，target与source是保持一致的，但是，有时候为了让程序能在其他版本的jdk中运行(对于低版本目标jdk，源代码中需要没有使用低版本jdk中不支持的语法)，会存在target不同于source的情况 -->
-					<target>${java.version}</target>
-					<!-- 字符集编码 -->
-					<encoding>${project.build.sourceEncoding}</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<!-- 如果要生存javadoc文档，将此注释打开
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<encoding>${project.build.sourceEncoding}</encoding>
-					<charset>${project.build.sourceEncoding}</charset>
-					<doclet>org.jboss.apiviz.APIviz</doclet>
-					<docletArtifact>
-						<groupId>org.jboss.apiviz</groupId>
-						<artifactId>apiviz</artifactId>
-						<version>${jboss-apiviz.version}</version>
-					</docletArtifact>
-					<useStandardDocletOptions>true</useStandardDocletOptions>
-					<breakiterator>true</breakiterator>
-					<version>true</version>
-					<author>true</author>
-					<keywords>true</keywords>
-				</configuration>
-				-->
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <!-- 编译插件 -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <!-- 源代码编译版本 -->
+                        <source>${java.version}</source>
+                        <!-- 目标平台编译版本 一般而言，target与source是保持一致的，但是，有时候为了让程序能在其他版本的jdk中运行(对于低版本目标jdk，源代码中需要没有使用低版本jdk中不支持的语法)，会存在target不同于source的情况 -->
+                        <target>${java.version}</target>
+                        <!-- 字符集编码 -->
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <!-- 资源配置插件 xml、properties文件都是资源文件，编码的时候遇到中文总要进行转码，我们可以通过<encoding>${project.build.sourceEncoding}</encoding>配置来进行强制转码 -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <configuration>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- Javadoc -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>attach-javadoc</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <doclint>none</doclint>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <show>public</show>
+                        <charset>UTF-8</charset>
+                        <encoding>UTF-8</encoding>
+                        <docencoding>UTF-8</docencoding>
+                        <links>
+                            <link>http://docs.oracle.com/javase/7/docs/api</link>
+                        </links>
+                    </configuration>
+                </plugin>
+                <!-- GPG -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                    <executions>
+                        <execution>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <!-- settings.xml文件中的servers中设置的ID -->
+                        <serverId>oss</serverId>
+                        <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                        <!--
+                        可以登录OSSRH去手动点击Release也可以自己本地执行命令：mvn nexus-staging:release
+                        也可以删除：mvn nexus-staging:drop
+                        -->
+                        <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <!-- 资源配置插件 xml、properties文件都是资源文件，编码的时候遇到中文总要进行转码，我们可以通过<encoding>${project.build.sourceEncoding}</encoding>配置来进行强制转码 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <!-- 编译插件 -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <!-- Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
-	<repositories>
-		<!-- 阿里云Maven私服 -->
-		<!--<repository>
-			<id>maven-ali</id>
-			<url>http://maven.aliyun.com/nexus/content/groups/public</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>fail</checksumPolicy>
-			</snapshots>
-		</repository>-->
-		<repository>
-			<id>nexus</id>
-			<url>http://139.129.93.153:8081/nexus/content/groups/public/</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <!-- 阿里云Maven私服 -->
+        <repository>
+            <id>maven-ali</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<name>Nexus Release Repository</name>
-			<url>http://139.129.93.153:8081/nexus/content/repositories/releases/</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<name>Nexus Snapshot Repository</name>
-			<url>http://139.129.93.153:8081/nexus/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <profiles>
+        <profile>
+            <id>oss-deploy</id>
+            <build>
+                <plugins>
+                    <!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 
 </project>
