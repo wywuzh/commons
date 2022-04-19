@@ -17,10 +17,8 @@ package com.wuzh.commons.core.http;
 
 import com.wuzh.commons.core.json.gson.GsonUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.AuthSchemes;
@@ -90,6 +88,11 @@ import java.util.Map;
  */
 public class HttpClientUtils {
     private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
+
+    /**
+     * @since v2.5.2
+     */
+    public static HttpClientSender httpClientSender = new HttpClientSender();
 
     /**
      * GET请求数据
@@ -237,7 +240,7 @@ public class HttpClientUtils {
             httpGet.setHeaders(headers);
         }
 
-        return doRequest(httpGet);
+        return httpClientSender.doRequest(httpGet);
     }
 
     /**
@@ -349,7 +352,7 @@ public class HttpClientUtils {
             }
             httpPost.setHeaders(headers);
         }
-        return doRequest(httpPost);
+        return httpClientSender.doRequest(httpPost);
     }
 
     /**
@@ -385,7 +388,7 @@ public class HttpClientUtils {
             }
             httpPost.setHeaders(headers);
         }
-        return doRequest(httpPost);
+        return httpClientSender.doRequest(httpPost);
     }
 
     /**
@@ -543,7 +546,7 @@ public class HttpClientUtils {
             }
             httpPut.setHeaders(headers);
         }
-        return doRequest(httpPut);
+        return httpClientSender.doRequest(httpPut);
     }
 
     /**
@@ -635,7 +638,9 @@ public class HttpClientUtils {
      * @param request
      * @return
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月12日 下午3:29:04
+     * @deprecated 已废弃，请使用 HttpClientSender 进行调用
      */
+    @Deprecated
     public static ResponseMessage doRequest(HttpUriRequest request) {
         if (null == request) {
             throw new IllegalArgumentException("HttpUriRequest must not be null");
@@ -699,7 +704,9 @@ public class HttpClientUtils {
      * @param request
      * @param callBack
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月11日 上午11:17:59
+     * @deprecated 已废弃，请使用 HttpClientSender 进行调用
      */
+    @Deprecated
     public static void doRequest(HttpUriRequest request, ResponseCallBack callBack) {
         if (null == request) {
             throw new IllegalArgumentException("HttpUriRequest must not be null");
@@ -764,4 +771,177 @@ public class HttpClientUtils {
         }
     }
 
+
+    /**
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2022-04-19 18:21:42
+     * @version v2.5.2
+     */
+    public static class HttpClientSender {
+
+        private RequestConfig requestConfig;
+        /**
+         * 可关闭的httpclient
+         */
+        private CloseableHttpClient httpClient;
+
+        public HttpClientSender() {
+            // 设置全局的标准cookie策略
+            requestConfig = RequestConfig.custom()
+                    .setCookieSpec(CookieSpecs.STANDARD_STRICT)
+                    .setExpectContinueEnabled(true)
+                    .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
+                    .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
+                    .setConnectTimeout(30 * 1000)
+                    .setSocketTimeout(30 * 1000)
+                    .setConnectionRequestTimeout(30 * 1000)
+                    .build();
+            // 创建可用Scheme
+            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
+                    .register(Scheme.HTTPS.name(), getConnectionSocketFactory())
+                    .build();
+            // 创建ConnectionManager
+            PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
+                    socketFactoryRegistry);
+            // 设置可关闭的httpclient
+            httpClient = HttpClientBuilder.create()
+                    .setConnectionManager(connectionManager)
+                    .setDefaultRequestConfig(requestConfig)
+                    .build();
+        }
+
+        /**
+         * 处理用户请求
+         *
+         * @param request http请求
+         * @return
+         */
+        public ResponseMessage doRequest(HttpRequestBase request) {
+            if (null == request) {
+                throw new IllegalArgumentException("HttpUriRequest must not be null");
+            }
+            if (null == request.getURI()) {
+                throw new IllegalArgumentException("HttpUriRequest URI must not be null");
+            }
+
+            CloseableHttpResponse httpResponse = null;
+            HttpEntity httpEntity = null;
+            ResponseMessage responseMessage = null;
+            try {
+                request.setConfig(requestConfig);
+
+                // 发起用户请求
+                httpResponse = httpClient.execute(request);
+                // 处理结果返回码
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+                // 返回结果
+                httpEntity = httpResponse.getEntity();
+                responseMessage = new ResponseMessage(statusCode, EntityUtils.toString(httpEntity, Charset.forName("UTF-8")));
+            } catch (ClientProtocolException e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+            } catch (IOException e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+            } catch (Exception e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+            } catch (Throwable e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+            } finally {
+                // 释放资源
+                if (httpResponse != null) {
+                    try {
+                        httpResponse.close();
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                if (httpEntity != null) {
+                    try {
+                        // 释放所有由httpEntity所持有的资源
+                        EntityUtils.consume(httpEntity);
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                request.releaseConnection();
+            }
+            return responseMessage;
+        }
+
+        /**
+         * 处理用户请求
+         *
+         * @param request  http请求
+         * @param callBack 请求回调
+         */
+        public void doRequest(HttpRequestBase request, ResponseCallBack callBack) {
+            if (null == request) {
+                throw new IllegalArgumentException("HttpUriRequest must not be null");
+            }
+            if (null == request.getURI()) {
+                throw new IllegalArgumentException("HttpUriRequest URI must not be null");
+            }
+
+            CloseableHttpResponse httpResponse = null;
+            HttpEntity httpEntity = null;
+            try {
+                request.setConfig(requestConfig);
+
+                // 发起用户请求
+                httpResponse = httpClient.execute(request);
+                // 处理结果返回码
+                int statusCode = httpResponse.getStatusLine().getStatusCode();
+                // 返回结果
+                httpEntity = httpResponse.getEntity();
+
+                // 是否将处理结果返回
+                if (null != callBack) {
+                    // 响应回调
+                    callBack.response(statusCode, EntityUtils.toString(httpResponse.getEntity(), Charset.forName("UTF-8")));
+                }
+            } catch (ClientProtocolException e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                if (null != callBack) {
+                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+                }
+            } catch (IOException e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                if (null != callBack) {
+                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+                }
+            } catch (Exception e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                if (null != callBack) {
+                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+                }
+            } catch (Throwable e) {
+                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+                if (null != callBack) {
+                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+                }
+            } finally {
+                // 释放资源
+                if (httpResponse != null) {
+                    try {
+                        httpResponse.close();
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                if (httpEntity != null) {
+                    try {
+                        // 释放所有由httpEntity所持有的资源
+                        EntityUtils.consume(httpEntity);
+                    } catch (IOException e) {
+                        logger.error(e.getMessage(), e);
+                    }
+                }
+                request.releaseConnection();
+            }
+        }
+
+    }
 }
