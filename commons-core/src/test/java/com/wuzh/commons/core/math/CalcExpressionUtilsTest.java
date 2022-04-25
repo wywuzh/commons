@@ -40,9 +40,9 @@ public class CalcExpressionUtilsTest {
 
             // 常规公式
             String formula01 = "3*x+4*y+-5*z";
-            jep.addVariableAsObject("x", 1);
-            jep.addVariableAsObject("y", 1);
-            jep.addVariableAsObject("z", 1);
+            jep.addVariable("x", 1);
+            jep.addVariable("y", 1);
+            jep.addVariable("z", 1);
             jep.parseExpression(formula01);
             System.out.println("常规公式：" + jep.getValueAsObject());
 
@@ -66,9 +66,9 @@ public class CalcExpressionUtilsTest {
 
             // 复杂逻辑
             String formula = "利息支出>0 || 工资<=0";
-            jep.addVariableAsObject("利息支出", 1000);
-            jep.addVariableAsObject("工资", -1);
-            jep.addVariableAsObject("劳务费", 6000);
+            jep.addVariable("利息支出", 1000);
+            jep.addVariable("工资", -1);
+            jep.addVariable("劳务费", 6000);
             jep.parseExpression(formula);
             System.out.println("复杂逻辑：" + jep.getValueAsObject());
         } catch (Exception e) {
@@ -78,11 +78,28 @@ public class CalcExpressionUtilsTest {
 
     @Test
     public void getCalcValueTest() {
-        String calcExpression = "利息支出+劳务费";//"-(鞋*(10/1.13))+4000.00";
+        // 计算公式解析：规则一
+        final String calcFieldName = "interestExpense,laborCost";
+        final String calcFieldTitle = "利息支出,劳务费";
+        final String calcExpression = "利息支出+劳务费";
+//        Map target = new HashMap<>();
+//        target.put("interestExpense", BigDecimal.valueOf(400));
+//        target.put("laborCost", BigDecimal.valueOf(300));
+        CalcTarget target = new CalcTarget();
+        target.setInterestExpense(new BigDecimal("0.000000000000000004"));
+        target.setLaborCost(new BigDecimal("0.000000003"));
+        System.out.println("复杂逻辑(" + calcExpression + ")：" + CalcExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, calcExpression, target));
+        System.out.println("复杂逻辑(" + calcExpression + ")：" + CalcExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, calcExpression, target).toPlainString());
+        System.out.println("复杂逻辑(" + calcExpression + ")：" + CalcExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, calcExpression, target).stripTrailingZeros().toPlainString());
+
+        // 计算公式解析：规则二
+        System.out.println("计算公式解析：规则二 ------------------------ >>>");
+        String formula = "利息支出+劳务费";
         Map<String, BigDecimal> fieldValueMap = new HashMap<>();
-        fieldValueMap.put("利息支出", BigDecimal.valueOf(400));
-        fieldValueMap.put("劳务费", BigDecimal.valueOf(300));
-        System.out.println("复杂逻辑：" + CalcExpressionUtils.getCalcValue(calcExpression, fieldValueMap));
+        fieldValueMap.put("利息支出", new BigDecimal("0.000000000000000004").setScale(23, BigDecimal.ROUND_HALF_UP));
+        fieldValueMap.put("劳务费", new BigDecimal("0.00000003").setScale(23, BigDecimal.ROUND_HALF_UP));
+        System.out.println("复杂逻辑(" + formula + ")：" + CalcExpressionUtils.getCalcValue(formula, fieldValueMap));
+        System.out.println("复杂逻辑(" + formula + ")：" + CalcExpressionUtils.getCalcValue(formula, fieldValueMap).stripTrailingZeros().toPlainString());
 
         fieldValueMap.clear();
         String formula01 = "(本月利息支出-上月利息支出)/上月利息支出*100";
@@ -102,6 +119,27 @@ public class CalcExpressionUtilsTest {
         fieldValueMap.put("劳务费", BigDecimal.valueOf(1));
         System.out.println("复杂逻辑(" + formula03 + ")：" + CalcExpressionUtils.getCalcValue(formula03, fieldValueMap));
 
+    }
+
+    public static class CalcTarget {
+        private BigDecimal interestExpense;
+        private BigDecimal laborCost;
+
+        public BigDecimal getInterestExpense() {
+            return interestExpense;
+        }
+
+        public void setInterestExpense(BigDecimal interestExpense) {
+            this.interestExpense = interestExpense;
+        }
+
+        public BigDecimal getLaborCost() {
+            return laborCost;
+        }
+
+        public void setLaborCost(BigDecimal laborCost) {
+            this.laborCost = laborCost;
+        }
     }
 
 }

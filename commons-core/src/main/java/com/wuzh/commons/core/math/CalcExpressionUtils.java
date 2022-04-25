@@ -17,15 +17,14 @@ package com.wuzh.commons.core.math;
 
 import com.wuzh.commons.core.common.Constants;
 import com.wuzh.commons.core.json.jackson.JsonMapper;
+import com.wuzh.commons.core.reflect.ReflectUtils;
 import com.wuzh.commons.core.util.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.nfunk.jep.JEP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.expression.ExpressionException;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -119,12 +118,13 @@ public class CalcExpressionUtils {
                 if (target instanceof Map) {
                     calcFieldValue = ((Map) target).get(fieldName);
                 } else {
-                    Field field = FieldUtils.getDeclaredField(target.getClass(), fieldName, true);
-                    calcFieldValue = field.get(target);
+                    calcFieldValue = ReflectUtils.getValue(target, fieldName);
                 }
                 if (calcFieldValue != null) {
-                    // 取出的字段值要保留2位小数，避免字符赋值给另外一个对象时出现进度差异
-                    calcFieldValue = new BigDecimal(calcFieldValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    if (calcFieldValue instanceof String) {
+                        // 取出的字段值要保留6位小数，避免字符赋值给另外一个对象时出现精度差异
+                        calcFieldValue = new BigDecimal(calcFieldValue.toString()).setScale(23, BigDecimal.ROUND_HALF_UP);
+                    }
                 }
             } catch (IllegalAccessException e) {
                 LOGGER.error("target.getClass()={}, fieldName={} 字段取值失败：", target.getClass(), fieldName, e);
