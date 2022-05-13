@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <description>项目公共组件类库</description>
     <url>http://git.oschina.net/wywuzh/commons</url>
+    <inceptionYear>2015</inceptionYear>
 
     <modules>
         <module>commons-core</module>
@@ -123,6 +124,9 @@
         <webjars.vue2.version>2.6.12</webjars.vue2.version>
         <webjars.vue-i18n.version>8.15.5</webjars.vue-i18n.version>
         <webjars.vue-router.version>3.4.9</webjars.vue-router.version>
+
+        <!-- Maven插件 -->
+        <license-maven-plugin.version>4.1</license-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -634,10 +638,28 @@
     </dependencyManagement>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+        </plugins>
         <pluginManagement>
             <plugins>
+                <!-- 源码编译插件 -->
                 <plugin>
-                    <!-- 编译插件 -->
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
@@ -649,14 +671,7 @@
                         <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
                 </plugin>
-                <plugin>
-                    <!-- 资源配置插件 xml、properties文件都是资源文件，编码的时候遇到中文总要进行转码，我们可以通过<encoding>${project.build.sourceEncoding}</encoding>配置来进行强制转码 -->
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <configuration>
-                        <encoding>${project.build.sourceEncoding}</encoding>
-                    </configuration>
-                </plugin>
+                <!-- 源码打包插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
@@ -669,7 +684,16 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- Javadoc -->
+                <!-- 资源配置插件 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <configuration>
+                        <!-- xml、properties文件都是资源文件，编码的时候遇到中文总要进行转码，我们可以通过<encoding>UTF-8</encoding>配置来进行强制转码 -->
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+                <!-- Javadoc文档插件 -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-javadoc-plugin</artifactId>
@@ -679,20 +703,91 @@
                             <goals>
                                 <goal>jar</goal>
                             </goals>
-                            <configuration>
-                                <doclint>none</doclint>
-                            </configuration>
                         </execution>
                     </executions>
                     <configuration>
                         <show>public</show>
-                        <charset>UTF-8</charset>
-                        <encoding>UTF-8</encoding>
-                        <docencoding>UTF-8</docencoding>
-                        <links>
-                            <link>http://docs.oracle.com/javase/7/docs/api</link>
-                        </links>
+                        <charset>${project.build.sourceEncoding}</charset>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <docencoding>${project.build.sourceEncoding}</docencoding>
+                        <additionalOptions>
+                            <!-- 跳过所有检查 -->
+                            <additionalOption>-Xdoclint:none</additionalOption>
+                        </additionalOptions>
+                        <!-- 自定义tag标签 -->
+                        <tags>
+                            <tag>
+                                <name>date</name>
+                                <placement>a</placement>
+                                <head>时间:</head>
+                            </tag>
+                            <tag>
+                                <name>time</name>
+                                <placement>a</placement>
+                                <head>时间:</head>
+                            </tag>
+                            <tag>
+                                <name>copyright</name>
+                                <placement>a</placement>
+                                <head>版权:</head>
+                            </tag>
+                        </tags>
                     </configuration>
+                </plugin>
+                <!-- license版权信息插件 -->
+                <plugin>
+                    <groupId>com.mycila</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${license-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <!-- maven项目打包时执行的插件命令 -->
+                                <goal>format</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!-- HEAD文件：版权信息配置的文件 -->
+                        <header>${project.basedir}/license.txt</header>
+                        <!-- 排除文件：不需要添加版权信息的文件 -->
+                        <excludes>
+                            <exclude>**/*.properties</exclude>
+                            <exclude>*.sh</exclude>
+                            <exclude>*.yml</exclude>
+                            <exclude>*.ymal</exclude>
+                            <exclude>.editorconfig</exclude>
+                            <exclude>.gitignore</exclude>
+                            <exclude>**/META-INF/**</exclude>
+                            <exclude>settings/**</exclude>
+                            <exclude>pom.xml</exclude>
+                            <exclude>**/*.ctrl</exclude>
+                            <exclude>**/*.dat</exclude>
+                            <exclude>**/*.lck</exclude>
+                            <exclude>**/*.log</exclude>
+                            <exclude>**/*maven-wrapper.properties</exclude>
+                            <exclude>**/*MavenWrapperDownloader.java</exclude>
+                            <exclude>.factorypath</exclude>
+                            <exclude>.gitattributes</exclude>
+                            <exclude>mvnw</exclude>
+                            <exclude>mvnw.cmd</exclude>
+                            <exclude>ICLA</exclude>
+                            <exclude>LICENSE</exclude>
+                            <exclude>KEYS</exclude>
+                            <exclude>NOTICE</exclude>
+                        </excludes>
+                        <mapping>
+                            <xml.vm>XML_STYLE</xml.vm>
+                        </mapping>
+                    </configuration>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.mycila</groupId>
+                            <artifactId>license-maven-plugin-git</artifactId>
+                            <version>${license-maven-plugin.version}</version>
+                        </dependency>
+                    </dependencies>
                 </plugin>
                 <!-- GPG -->
                 <plugin>
@@ -726,27 +821,6 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <!-- 资源配置插件 xml、properties文件都是资源文件，编码的时候遇到中文总要进行转码，我们可以通过<encoding>${project.build.sourceEncoding}</encoding>配置来进行强制转码 -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <!-- 编译插件 -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-            <!-- Javadoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-            </plugin>
-        </plugins>
     </build>
 
     <repositories>
@@ -766,6 +840,31 @@
     </repositories>
 
     <profiles>
+        <profile>
+            <id>license</id>
+            <activation>
+                <file>
+                    <exists>${basedir}/license.txt</exists>
+                </file>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <!-- maven项目打包时执行的插件命令 -->
+                                    <goal>format</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>oss-deploy</id>
             <build>

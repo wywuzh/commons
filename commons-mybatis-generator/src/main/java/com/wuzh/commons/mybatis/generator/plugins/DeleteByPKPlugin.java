@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -29,6 +30,9 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.TableConfiguration;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * 类DeleteByPKPlugin的实现描述：根据主键删除数据
@@ -75,6 +79,12 @@ public class DeleteByPKPlugin extends BasePlugin {
      */
     public static final String PK_NAME = "pk";
     /**
+     * 是否开启删除
+     *
+     * @since v2.5.2
+     */
+    public static final String ENABLE_DELETE = "enableDelete";
+    /**
      * 表是否开启逻辑删除
      */
     public static final String ENABLE_LOGIC_DELETE = "enableLogicDelete";
@@ -111,6 +121,10 @@ public class DeleteByPKPlugin extends BasePlugin {
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
+        if (enableDelete(introspectedTable.getTableConfiguration()) == true && getPrimaryKeyColumn(introspectedTable) == null) {
+            logger.error("table={}, comment={} 该表未定义主键字段，生成deleteByIds方法失败！", introspectedTable.getFullyQualifiedTable(), introspectedTable.getRemarks());
+            throw new RuntimeException(introspectedTable.getFullyQualifiedTable() + "表未定义主键字段，生成deleteByIds方法失败！");
+        }
 
         // 表是否开启逻辑删除，默认为true
         String enableLogicDelete = super.getProperties().getProperty(ENABLE_LOGIC_DELETE);
@@ -127,6 +141,22 @@ public class DeleteByPKPlugin extends BasePlugin {
         if (StringUtils.isNotBlank(logicDeletedFlag)) {
             this.logicDeletedFlag = logicDeletedFlag;
         }
+    }
+
+    /**
+     * 是否开启删除
+     *
+     * @param tableConfiguration table配置
+     * @return
+     * @since v2.5.2
+     */
+    private boolean enableDelete(TableConfiguration tableConfiguration) {
+        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
+        String enableDelete = tableConfiguration.getProperty(ENABLE_DELETE);
+        if (StringUtils.isNotBlank(enableDelete)) {
+            return Boolean.valueOf(enableDelete);
+        }
+        return true;
     }
 
     /**
@@ -174,6 +204,38 @@ public class DeleteByPKPlugin extends BasePlugin {
         return this.logicDeleteField;
     }
 
+    /**
+     * 获取主键字段
+     *
+     * @param introspectedTable table表信息
+     * @return
+     * @since v2.5.2
+     */
+    private IntrospectedColumn getPrimaryKeyColumn(IntrospectedTable introspectedTable) {
+        List<IntrospectedColumn> primaryKeyColumns = introspectedTable.getPrimaryKeyColumns();
+        if (CollectionUtils.isEmpty(primaryKeyColumns)) {
+            return null;
+        }
+        IntrospectedColumn introspectedColumn = primaryKeyColumns.get(0);
+        return introspectedColumn;
+    }
+
+    /**
+     * 获取主键字段的Java类型
+     *
+     * @param introspectedTable table表信息
+     * @return
+     * @since v2.5.2
+     */
+    private FullyQualifiedJavaType getPrimaryKeyJavaType(IntrospectedTable introspectedTable) {
+        List<IntrospectedColumn> primaryKeyColumns = introspectedTable.getPrimaryKeyColumns();
+        if (CollectionUtils.isEmpty(primaryKeyColumns)) {
+            return null;
+        }
+        IntrospectedColumn introspectedColumn = primaryKeyColumns.get(0);
+        return introspectedColumn.getFullyQualifiedJavaType();
+    }
+
 
     /**
      * Java Client Methods 生成
@@ -187,7 +249,7 @@ public class DeleteByPKPlugin extends BasePlugin {
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         FullyQualifiedJavaType deleteByType = FullyQualifiedJavaType.getNewListInstance();
-        deleteByType.addTypeArgument(new FullyQualifiedJavaType("java.lang.String"));
+        deleteByType.addTypeArgument(Optional.ofNullable(getPrimaryKeyJavaType(introspectedTable)).orElse(FullyQualifiedJavaType.getStringInstance()));
         Method mBatchInsert = JavaElementGeneratorTools.generateMethod(
                 DEFAULT_METHOD_NAME,
                 JavaVisibility.DEFAULT,
@@ -230,11 +292,13 @@ public class DeleteByPKPlugin extends BasePlugin {
      * 逻辑删除
      *
      * @param document
-     * @param introspectedTable
+     * @param introspectedTable table表信息
      * @param deleteByEle
      */
     private void generateLogicDelete(Document document, IntrospectedTable introspectedTable, XmlElement deleteByEle) {
         TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
+        // 主键字段
+        IntrospectedColumn primaryKeyColumn = getPrimaryKeyColumn(introspectedTable);
         IntrospectedColumn updateUser = introspectedTable.getColumn("UPDATE_USER");
         IntrospectedColumn updateTime = introspectedTable.getColumn("UPDATE_TIME");
 
@@ -251,7 +315,7 @@ public class DeleteByPKPlugin extends BasePlugin {
         foreachElement.addAttribute(new Attribute("open", "("));
         foreachElement.addAttribute(new Attribute("close", ")"));
         foreachElement.addAttribute(new Attribute("separator", ","));
-        foreachElement.addElement(new TextElement("#{item}"));
+        foreachElement.addElement(new TextElement("#{item,jdbcType=" + primaryKeyColumn.getJdbcTypeName() + "}"));
 
         deleteByEle.addElement(foreachElement);
     }
@@ -260,10 +324,13 @@ public class DeleteByPKPlugin extends BasePlugin {
      * 物理删除
      *
      * @param document
-     * @param introspectedTable
+     * @param introspectedTable table表信息
      * @param deleteByEle
      */
     private void generatePhysicsDelete(Document document, IntrospectedTable introspectedTable, XmlElement deleteByEle) {
+        // 主键字段
+        IntrospectedColumn primaryKeyColumn = getPrimaryKeyColumn(introspectedTable);
+
         deleteByEle.addElement(new TextElement("delete from " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
         deleteByEle.addElement(new TextElement("WHERE ID in"));
 
@@ -274,7 +341,7 @@ public class DeleteByPKPlugin extends BasePlugin {
         foreachElement.addAttribute(new Attribute("open", "("));
         foreachElement.addAttribute(new Attribute("close", ")"));
         foreachElement.addAttribute(new Attribute("separator", ","));
-        foreachElement.addElement(new TextElement("#{item}"));
+        foreachElement.addElement(new TextElement("#{item,jdbcType=" + primaryKeyColumn.getJdbcTypeName() + "}"));
 
         deleteByEle.addElement(foreachElement);
     }
