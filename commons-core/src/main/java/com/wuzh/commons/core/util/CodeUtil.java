@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 package com.wuzh.commons.core.util;
 
-import java.math.BigDecimal;
+import org.apache.commons.lang3.StringUtils;
 
-import org.springframework.util.StringUtils;
+import java.math.BigDecimal;
 
 /**
  * code编码工具类
- * 
+ *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a>, 2014-4-30 下午12:45:20
  * @version 4.0.0
  * @since JDK 1.6.0_20
@@ -29,7 +29,7 @@ import org.springframework.util.StringUtils;
 public class CodeUtil {
     /**
      * 计算下一个编码
-     * 
+     *
      * @param code
      * @return
      */
@@ -64,11 +64,11 @@ public class CodeUtil {
 
     /**
      * 获取第一个编码
-     * 
+     *
      * <pre>
      * 编码位数默认为13位
      * </pre>
-     * 
+     *
      * @return
      */
     public static String firstCode() {
@@ -82,7 +82,7 @@ public class CodeUtil {
 
     /**
      * 获取指定位数的第一个编码
-     * 
+     *
      * @param number
      * @return
      */
