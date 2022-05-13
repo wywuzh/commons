@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +16,15 @@
 package com.wuzh.commons.core.math;
 
 import com.wuzh.commons.core.common.Constants;
+import com.wuzh.commons.core.json.jackson.JsonMapper;
+import com.wuzh.commons.core.reflect.ReflectUtils;
 import com.wuzh.commons.core.util.CommonUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.nfunk.jep.JEP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.expression.ExpressionException;
 
-import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -56,7 +57,7 @@ public class CalcExpressionUtils {
      * @param target         计算目标类
      * @return
      */
-    public static BigDecimal getCalcValue(String calcFieldName, String calcFieldTitle, String calcExpression, Object target) {
+    public static BigDecimal getCalcValue(final String calcFieldName, final String calcFieldTitle, final String calcExpression, Object target) {
         BigDecimal calcValue = BigDecimal.ZERO;
         if (StringUtils.isBlank(calcExpression)) {
             LOGGER.warn("calcFieldName={}, calcFieldTitle={}, calcExpression={}, target.getClass()={} 传入的计算公式为空，直接返回0", calcFieldName, calcFieldTitle, calcExpression, target.getClass());
@@ -70,17 +71,26 @@ public class CalcExpressionUtils {
         for (int i = 0; i < calcFieldTitleArr.length; i++) {
             fieldTitleMap.put(calcFieldTitleArr[i], calcFieldNameArr[i]);
         }
-        if (StringUtils.indexOf(calcExpression, "=") == 0) {
+        String resolvedCalcExpression = calcExpression;
+        if (StringUtils.indexOf(resolvedCalcExpression, "=") == 0) {
             // 如果计算公式的第一个字符为“=”符号，需要先去掉
-            calcExpression = StringUtils.substring(calcExpression, 1);
+            resolvedCalcExpression = StringUtils.substring(resolvedCalcExpression, 1);
         }
         // 并且、或者、不等于分别用&&、||、!=这三个符号表示。and、or、<>这三个符号不生效
-        calcExpression = calcExpression
+        resolvedCalcExpression = resolvedCalcExpression
                 .replaceAll("and+", "&&")
                 .replaceAll("or+", "||")
                 .replaceAll("<>+", "!=")
                 .replaceAll("\\s", "");
-        List<String> characters = CommonUtil.splitContent(calcExpression, DEFAULT_SYMBOL);//CommonUtil.splitEnglishCharacter(calcExpression);
+        // 中英文冒号去掉
+        resolvedCalcExpression = resolvedCalcExpression
+                .replaceAll(":+", "")
+                .replaceAll("：+", "");
+        // 中文括号去掉
+        resolvedCalcExpression = resolvedCalcExpression
+                .replaceAll("（+", "")
+                .replaceAll("）+", "");
+        List<String> characters = CommonUtil.splitContent(resolvedCalcExpression, DEFAULT_SYMBOL);//CommonUtil.splitEnglishCharacter(resolvedCalcExpression);
         StringBuffer sb = new StringBuffer();
         List<String> calcFieldNameList = new LinkedList<>();
         for (String str : characters) {
@@ -98,7 +108,7 @@ public class CalcExpressionUtils {
             }
         }
         // 在计算公式后面加个“*1”，避免公式解析失败
-        calcExpression = sb.append("*1").toString();
+        resolvedCalcExpression = sb.append("*1").toString();
 
         JEP jep = new JEP();
         for (String fieldName : calcFieldNameList) {
@@ -108,12 +118,13 @@ public class CalcExpressionUtils {
                 if (target instanceof Map) {
                     calcFieldValue = ((Map) target).get(fieldName);
                 } else {
-                    Field field = FieldUtils.getDeclaredField(target.getClass(), fieldName, true);
-                    calcFieldValue = field.get(target);
+                    calcFieldValue = ReflectUtils.getValue(target, fieldName);
                 }
                 if (calcFieldValue != null) {
-                    // 取出的字段值要保留2位小数，避免字符赋值给另外一个对象时出现进度差异
-                    calcFieldValue = new BigDecimal(calcFieldValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
+                    if (calcFieldValue instanceof String) {
+                        // 取出的字段值要保留6位小数，避免字符赋值给另外一个对象时出现精度差异
+                        calcFieldValue = new BigDecimal(calcFieldValue.toString()).setScale(23, BigDecimal.ROUND_HALF_UP);
+                    }
                 }
             } catch (IllegalAccessException e) {
                 LOGGER.error("target.getClass()={}, fieldName={} 字段取值失败：", target.getClass(), fieldName, e);
@@ -128,14 +139,27 @@ public class CalcExpressionUtils {
             jep.addVariableAsObject(fieldName, calcFieldValue);
         }
         // 运算公式
-        jep.parseExpression(calcExpression);
+        jep.parseExpression(resolvedCalcExpression);
         // 取到结果
         Object value = jep.getValueAsObject();
         if (value == null) {
-            LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, target.getClass()={} 公式解析失败！", calcFieldName, calcFieldTitle, calcExpression, target.getClass());
-            throw new IllegalArgumentException("【" + calcExpression + "】 公式解析失败！");
+            LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式解析失败！", calcFieldName, calcFieldTitle, calcExpression, resolvedCalcExpression, JsonMapper.DEFAULT_JSON_MAPPER.toJson(target));
+            throw new ExpressionException("【" + calcExpression + "】 公式解析失败！");
         }
-        return new BigDecimal(value.toString());
+        if (StringUtils.equalsIgnoreCase("Infinity", value.toString())) {
+            LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式分母中出现为0的数值，解析失败！", calcFieldName, calcFieldTitle, calcExpression, resolvedCalcExpression, JsonMapper.DEFAULT_JSON_MAPPER.toJson(target));
+            throw new ExpressionException("【" + calcExpression + "】 公式分母中出现为0的数值，解析失败！");
+        }
+        if (StringUtils.equalsIgnoreCase("NaN", value.toString())) {
+            LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式分子和分母中出现为0的数值，解析失败！", calcFieldName, calcFieldTitle, calcExpression, resolvedCalcExpression, JsonMapper.DEFAULT_JSON_MAPPER.toJson(target));
+            throw new ExpressionException("【" + calcExpression + "】 公式分子和分母中出现为0的数值，解析失败！");
+        }
+        try {
+            return new BigDecimal(value.toString());
+        } catch (Exception e) {
+            LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式解析失败，结果值={}", calcFieldName, calcFieldTitle, calcExpression, resolvedCalcExpression, JsonMapper.DEFAULT_JSON_MAPPER.toJson(target), value);
+            throw new ExpressionException("【" + calcExpression + "】 公式解析失败！");
+        }
     }
 
     /**
@@ -146,55 +170,76 @@ public class CalcExpressionUtils {
      * @return
      * @since v2.5.2
      */
-    public static BigDecimal getCalcValue(String calcExpression, Map<String, Object> fieldValueMap) {
+    public static BigDecimal getCalcValue(final String calcExpression, Map<String, BigDecimal> fieldValueMap) {
         BigDecimal calcValue = BigDecimal.ZERO;
         if (StringUtils.isBlank(calcExpression)) {
             LOGGER.warn("calcExpression={}, fieldValueMap={} 传入的计算公式为空，直接返回0", calcExpression, fieldValueMap);
             return calcValue;
         }
+        String resolvedCalcExpression = calcExpression;
         // 解析公式：将公式中的中文字段名替换为实体类中的英文字段名
-        if (StringUtils.indexOf(calcExpression, "=") == 0) {
+        if (StringUtils.indexOf(resolvedCalcExpression, "=") == 0) {
             // 如果计算公式的第一个字符为“=”符号，需要先去掉
-            calcExpression = StringUtils.substring(calcExpression, 1);
+            resolvedCalcExpression = StringUtils.substring(resolvedCalcExpression, 1);
         }
         // 并且、或者、不等于分别用&&、||、!=这三个符号表示。and、or、<>这三个符号不生效
-        calcExpression = calcExpression
+        resolvedCalcExpression = resolvedCalcExpression
                 .replaceAll("and+", "&&")
                 .replaceAll("or+", "||")
                 .replaceAll("<>+", "!=")
                 .replaceAll("\\s", "");
+        // 中英文冒号去掉
+        resolvedCalcExpression = resolvedCalcExpression
+                .replaceAll(":+", "")
+                .replaceAll("：+", "");
+        // 中文括号去掉
+        resolvedCalcExpression = resolvedCalcExpression
+                .replaceAll("（+", "")
+                .replaceAll("）+", "");
         // 在计算公式后面加个“*1”，避免公式解析失败
-        calcExpression = calcExpression + "*1";
+        resolvedCalcExpression = "(" + resolvedCalcExpression + ")*1";
 
         JEP jep = new JEP();
-        for (Map.Entry<String, Object> entry : fieldValueMap.entrySet()) {
+        for (Map.Entry<String, BigDecimal> entry : fieldValueMap.entrySet()) {
             String fieldName = entry.getKey();
-            Object calcFieldValue = entry.getValue();
-            try {
-                // 取出字段
-                if (calcFieldValue != null) {
-                    // 取出的字段值要保留2位小数，避免字符赋值给另外一个对象时出现进度差异
-                    calcFieldValue = new BigDecimal(calcFieldValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
-                }
-            } catch (Exception e) {
-                LOGGER.error("fieldValueMap={}, fieldName={} 字段取值失败：", fieldValueMap, fieldName, e);
-            } finally {
-                // 如果字段没有取到值或者值为空，默认赋值为0
-                if (calcFieldValue == null) {
-                    calcFieldValue = BigDecimal.ZERO;
-                }
+            BigDecimal calcFieldValue = entry.getValue();
+            // 如果字段没有取到值或者值为空，默认赋值为0
+            if (calcFieldValue == null) {
+                LOGGER.warn("fieldValueMap={}, fieldName={} 该字段传值为空，设置默认值：0", fieldValueMap, fieldName);
+                calcFieldValue = BigDecimal.ZERO;
             }
+            // 中英文冒号去掉
+            fieldName = fieldName
+                    .replaceAll(":+", "")
+                    .replaceAll("：+", "");
+            // 中文括号去掉
+            fieldName = fieldName
+                    .replaceAll("（+", "")
+                    .replaceAll("）+", "");
             jep.addVariableAsObject(fieldName, calcFieldValue);
         }
         // 运算公式
-        jep.parseExpression(calcExpression);
+        jep.parseExpression(resolvedCalcExpression);
         // 取到结果
         Object value = jep.getValueAsObject();
         if (value == null) {
-            LOGGER.error("calcExpression={}, fieldValueMap={} 公式解析失败！", calcExpression, fieldValueMap);
-            throw new IllegalArgumentException("【" + calcExpression + "】 公式解析失败！");
+            LOGGER.error("calcExpression={}, resolvedCalcExpression={} fieldValueMap={} 公式解析失败！", calcExpression, resolvedCalcExpression, fieldValueMap);
+            throw new ExpressionException("【" + calcExpression + "】 公式解析失败！");
         }
-        return new BigDecimal(value.toString());
+        if (StringUtils.equalsIgnoreCase("Infinity", value.toString())) {
+            LOGGER.error("calcExpression={}, resolvedCalcExpression={}, fieldValueMap={} 公式分母中出现为0的数值，解析失败！", calcExpression, resolvedCalcExpression, fieldValueMap);
+            throw new ExpressionException("【" + calcExpression + "】 公式分母中出现为0的数值，解析失败！");
+        }
+        if (StringUtils.equalsIgnoreCase("NaN", value.toString())) {
+            LOGGER.error("calcExpression={}, resolvedCalcExpression={}, fieldValueMap={} 公式分子和分母中出现为0的数值，解析失败！", calcExpression, resolvedCalcExpression, fieldValueMap);
+            throw new ExpressionException("【" + calcExpression + "】 公式分子和分母中出现为0的数值，解析失败！");
+        }
+        try {
+            return new BigDecimal(value.toString());
+        } catch (Exception e) {
+            LOGGER.error("calcExpression={}, resolvedCalcExpression={}, fieldValueMap={} 公式解析失败，结果值={}", calcExpression, resolvedCalcExpression, fieldValueMap, value);
+            throw new ExpressionException("【" + calcExpression + "】 公式解析失败！");
+        }
     }
 
 }
