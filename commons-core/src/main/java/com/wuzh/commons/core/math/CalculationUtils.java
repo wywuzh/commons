@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,12 @@ import java.math.BigDecimal;
 public class CalculationUtils {
 
     /**
+     * 默认值：-1
+     *
+     * @since v2.4.8
+     */
+    public static final BigDecimal DEFAULT_NEGATIVE_ONE = new BigDecimal("-1");
+    /**
      * 默认值：0
      */
     public static final BigDecimal DEFAULT_ZERO = new BigDecimal("0");
@@ -34,12 +40,6 @@ public class CalculationUtils {
      * 默认值：1
      */
     public static final BigDecimal DEFAULT_ONE = new BigDecimal("1");
-    /**
-     * 默认值：-1
-     *
-     * @since v2.4.8
-     */
-    public static final BigDecimal DEFAULT_NEGATIVE_ONE = new BigDecimal("-1");
     /**
      * 默认值：10
      */
@@ -49,11 +49,18 @@ public class CalculationUtils {
      */
     public static final BigDecimal DEFAULT_ONE_HUNDRED = new BigDecimal("100");
     /**
+     * 默认值：1000
+     *
+     * @since v2.5.2
+     */
+    public static final BigDecimal DEFAULT_ONE_THOUSAND = new BigDecimal("1000");
+    /**
      * 数据存储计量单位：1024
      *
      * @since v2.4.8
      */
     public static final BigDecimal DEFAULT_SIZE = new BigDecimal("1024");
+
 
     public static BigDecimal add(BigDecimal v1, BigDecimal... array) {
         if (v1 == null) {
@@ -82,7 +89,7 @@ public class CalculationUtils {
      * @return
      */
     public static BigDecimal add(BigDecimal v1, BigDecimal v2) {
-        return add(v1, v2, 2);
+        return add(v1, v2, 2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -93,14 +100,8 @@ public class CalculationUtils {
      * @param scale 保留小数位数
      * @return
      */
-    public static synchronized BigDecimal add(BigDecimal v1, BigDecimal v2, int scale) {
-        if (v1 == null) {
-            v1 = CalculationUtils.DEFAULT_ZERO;
-        }
-        if (v2 == null) {
-            v2 = CalculationUtils.DEFAULT_ZERO;
-        }
-        return v1.add(v2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    public static BigDecimal add(BigDecimal v1, BigDecimal v2, int scale) {
+        return add(v1, v2, scale, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -121,6 +122,7 @@ public class CalculationUtils {
         }
         return v1.add(v2).setScale(scale, roundingMode);
     }
+
 
     public static BigDecimal sub(BigDecimal v1, BigDecimal... array) {
         if (v1 == null) {
@@ -149,7 +151,7 @@ public class CalculationUtils {
      * @return
      */
     public static BigDecimal sub(BigDecimal v1, BigDecimal v2) {
-        return sub(v1, v2, 2);
+        return sub(v1, v2, 2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -160,14 +162,8 @@ public class CalculationUtils {
      * @param scale 保留小数位数
      * @return
      */
-    public static synchronized BigDecimal sub(BigDecimal v1, BigDecimal v2, int scale) {
-        if (v1 == null) {
-            v1 = CalculationUtils.DEFAULT_ZERO;
-        }
-        if (v2 == null) {
-            v2 = CalculationUtils.DEFAULT_ZERO;
-        }
-        return v1.subtract(v2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    public static BigDecimal sub(BigDecimal v1, BigDecimal v2, int scale) {
+        return sub(v1, v2, scale, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -188,6 +184,7 @@ public class CalculationUtils {
         }
         return v1.subtract(v2).setScale(scale, roundingMode);
     }
+
 
     public static BigDecimal mul(BigDecimal v1, BigDecimal... array) {
         if (v1 == null) {
@@ -216,7 +213,7 @@ public class CalculationUtils {
      * @return
      */
     public static BigDecimal mul(BigDecimal v1, BigDecimal v2) {
-        return mul(v1, v2, 2);
+        return mul(v1, v2, 2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -227,14 +224,8 @@ public class CalculationUtils {
      * @param scale 保留小数位数
      * @return
      */
-    public static synchronized BigDecimal mul(BigDecimal v1, BigDecimal v2, int scale) {
-        if (v1 == null) {
-            v1 = CalculationUtils.DEFAULT_ZERO;
-        }
-        if (v2 == null) {
-            v2 = CalculationUtils.DEFAULT_ZERO;
-        }
-        return v1.multiply(v2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    public static BigDecimal mul(BigDecimal v1, BigDecimal v2, int scale) {
+        return mul(v1, v2, scale, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -255,6 +246,7 @@ public class CalculationUtils {
         }
         return v1.multiply(v2).setScale(scale, roundingMode);
     }
+
 
     public static BigDecimal div(BigDecimal v1, BigDecimal... array) {
         if (v1 == null) {
@@ -284,7 +276,7 @@ public class CalculationUtils {
      */
     public static BigDecimal div(BigDecimal v1, BigDecimal v2) {
         // 四舍五入,保留2位小数
-        return div(v1, v2, 2);
+        return div(v1, v2, 2, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -295,17 +287,8 @@ public class CalculationUtils {
      * @param scale 保留小数位数
      * @return
      */
-    public static synchronized BigDecimal div(BigDecimal v1, BigDecimal v2, int scale) {
-        if (v1 == null) {
-            v1 = CalculationUtils.DEFAULT_ZERO;
-        }
-        if (v2 == null) {
-            v2 = CalculationUtils.DEFAULT_ZERO;
-        }
-        if (v2.compareTo(CalculationUtils.DEFAULT_ZERO) != 0) {
-            return v1.divide(v2, scale, BigDecimal.ROUND_HALF_UP); // 四舍五入
-        }
-        return CalculationUtils.DEFAULT_ZERO;
+    public static BigDecimal div(BigDecimal v1, BigDecimal v2, int scale) {
+        return div(v1, v2, scale, BigDecimal.ROUND_HALF_UP);
     }
 
     /**
@@ -330,33 +313,48 @@ public class CalculationUtils {
         return CalculationUtils.DEFAULT_ZERO;
     }
 
-    public static void main(String[] args) {
-        /*for (int i = 0; i < 1000; i++) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    BigDecimal MALL_CTT_BASIC_DEDUCTION = new BigDecimal(14899.18);
-                    BigDecimal MALL_CTT_PROMOTION_DEDUCTION = new BigDecimal(-544.19);
-                    BigDecimal MALL_PROMOTION_DEDUCTION = new BigDecimal(-4663.81);
-                    BigDecimal LEASE_FEE = new BigDecimal(1006.22);
-                    BigDecimal result = add(MALL_CTT_BASIC_DEDUCTION, MALL_CTT_PROMOTION_DEDUCTION, MALL_PROMOTION_DEDUCTION, LEASE_FEE);
-                    System.out.println(*//*Thread.currentThread().getName() + ":" +*//* result);
-                }
-            }).start();
-        }*/
+    /**
+     * 比较大小
+     *
+     * @param v1
+     * @param v2
+     * @return
+     * @since v2.5.2
+     */
+    public static int compare(BigDecimal v1, BigDecimal v2) {
+        if (v1 == null) {
+            v1 = BigDecimal.ZERO;
+        }
+        if (v2 == null) {
+            v2 = BigDecimal.ZERO;
+        }
+        return v1.compareTo(v2);
+    }
 
-        BigDecimal mul = CalculationUtils.mul(
-                new BigDecimal("1018227.70"),
-                new BigDecimal("1.13")
-        );
-        System.out.println(mul);
+    /**
+     * 绝对值
+     *
+     * @param source 源数据
+     * @return
+     * @since v2.5.2
+     */
+    public static BigDecimal abs(BigDecimal source) {
+        return abs(source, 2);
+    }
 
-        BigDecimal result = CalculationUtils.div(
-                mul,
-                new BigDecimal("1.16"),
-                2
-        );
-        System.out.println(result);
+    /**
+     * 绝对值
+     *
+     * @param source 源数据
+     * @param scale  保留小数位数
+     * @return
+     * @since v2.5.2
+     */
+    public static BigDecimal abs(BigDecimal source, int scale) {
+        if (source == null) {
+            source = CalculationUtils.DEFAULT_ZERO;
+        }
+        return source.abs().setScale(scale, BigDecimal.ROUND_HALF_UP);
     }
 
 }
