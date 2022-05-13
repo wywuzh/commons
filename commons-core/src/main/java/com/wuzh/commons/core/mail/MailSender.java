@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.springframework.util.Assert;
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:50:18
  * @version v1.0.0
  * @see java.util.Properties
- * @see com.wuzh.frame.core.mail.MailAuthenticator
+ * @see com.wuzh.commons.core.mail.MailAuthenticator
  * @since JDK 1.7
  */
 public class MailSender {
@@ -69,7 +69,7 @@ public class MailSender {
 
     /**
      * 发送邮件
-     * 
+     *
      * @param recipient
      *            收件人邮箱地址
      * @param subject
@@ -98,7 +98,7 @@ public class MailSender {
 
     /**
      * 发送邮件（含抄送人）
-     * 
+     *
      * @param recipient
      *            收件人邮箱
      * @param cc
@@ -133,7 +133,7 @@ public class MailSender {
 
     /**
      * 发送邮件（包含抄送人、密送人）
-     * 
+     *
      * @param recipient
      *            收件人邮箱地址
      * @param cc
@@ -173,7 +173,7 @@ public class MailSender {
 
     /**
      * 群发邮件
-     * 
+     *
      * @param recipients
      *            收件人列表
      * @param subject
@@ -207,7 +207,7 @@ public class MailSender {
 
     /**
      * 群发邮件（包含抄送人）
-     * 
+     *
      * @param recipients
      *            收件人邮箱地址
      * @param ccs
@@ -250,7 +250,7 @@ public class MailSender {
 
     /**
      * 群发邮件（包含抄送人、密送人）
-     * 
+     *
      * @param recipients
      *            收件人邮箱地址
      * @param ccs
