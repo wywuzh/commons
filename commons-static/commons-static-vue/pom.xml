@@ -17,7 +17,7 @@
         <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>vue</artifactId>
-            <version>${webjars.vue2.version}</version>
+            <version>${webjars.vue.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.npm</groupId>
