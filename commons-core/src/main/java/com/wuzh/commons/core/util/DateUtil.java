@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,13 @@
  */
 package com.wuzh.commons.core.util;
 
+import com.wuzh.commons.core.common.Constants;
+import com.wuzh.commons.core.math.CalculationUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -547,34 +550,134 @@ public class DateUtil {
         return null == lastQuarter ? 0 : lastQuarter.getTime();
     }
 
-    public static void main(String[] args) {
-        SimpleDateFormat instance = getInstance();
-        System.out.println(instance.format(new Date()));
-        System.out.println(format(new Date()));
+    /**
+     * 获取上一年月
+     *
+     * @param yearMonth 年月，yyyy-MM格式
+     * @return 上一年月
+     * @since v2.5.2
+     */
+    public static String getPreYearMonth(String yearMonth) {
+        Date yearMonthForDate = DateUtil.parse(yearMonth, DateUtil.PATTERN_YYYY_MM);
+        if (yearMonthForDate == null) {
+            return null;
+        }
 
-        String ym = "2014-10";
-        Date parseDate = parse(ym, PATTERN_YYYY_MM);
-        System.out.println("parseDate:" + format(parseDate, PATTERN_DATE_TIME));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(yearMonthForDate);
+        calendar.add(Calendar.MONTH, -1);
 
-        Date currentDate = new Date();
-        System.out.println("addNumWithType:" + format(addNumWithType(currentDate, FIELD_DATE, -10), PATTERN_DATE_TIME));
-
-        // 日期
-        String daily = "2015-08-06";
-        System.out.println(format(getFirstDaily(daily), PATTERN_DATE_TIME));
-        System.out.println(format(getLastDaily(daily), PATTERN_DATE_TIME));
-
-        // 月份
-        String monthly = "2015-08";
-        System.out.println("getFirstMonthly:" + format(getFirstMonthly(monthly), PATTERN_DATE_TIME));
-        System.out.println("getLastMonthly:" + format(getLastMonthly(monthly), PATTERN_DATE_TIME));
-
-        // 季度
-        Date quarter = new Date();
-        System.out.println("getFirstQuarter:" + format(getFirstQuarter(quarter), PATTERN_DATE_TIME));
-        System.out.println("getLastQuarter:" + format(getLastQuarter(quarter), PATTERN_DATE_TIME));
-
-        long times = 1443715200000L;
-        System.out.println(format(new Date(times), PATTERN_DATE_TIME));
+        int fullYear = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        if (month < 10) {
+            return fullYear + Constants.SEPARATE_CROSS_BAR + "0" + month;
+        }
+        return fullYear + Constants.SEPARATE_CROSS_BAR + month;
     }
+
+    /**
+     * 获取下一年月
+     *
+     * @param yearMonth 年月，yyyy-MM格式
+     * @return 下一年月
+     * @since v2.5.2
+     */
+    public static String getNextYearMonth(String yearMonth) {
+        Date yearMonthForDate = DateUtil.parse(yearMonth, DateUtil.PATTERN_YYYY_MM);
+        if (yearMonthForDate == null) {
+            return null;
+        }
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(yearMonthForDate);
+        calendar.add(Calendar.MONTH, 1);
+
+        int fullYear = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1;
+        if (month < 10) {
+            return fullYear + Constants.SEPARATE_CROSS_BAR + "0" + month;
+        }
+        return fullYear + Constants.SEPARATE_CROSS_BAR + month;
+    }
+
+    /**
+     * 计算两个日期的天数间隔
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @returns 天数间隔
+     * @since v2.5.2
+     */
+    public static Integer getDayInterval(Date startDate, Date endDate) {
+        return getDayInterval(startDate, endDate, true);
+    }
+
+    /**
+     * 计算两个日期的天数间隔
+     *
+     * @param startDate         开始日期
+     * @param endDate           结束日期
+     * @param includeCurrentDay 是否包含当前天：false=否，true=是(默认)
+     * @returns 天数间隔
+     * @since v2.5.2
+     */
+    public static Integer getDayInterval(Date startDate, Date endDate, boolean includeCurrentDay) {
+        int dayInterval = CalculationUtils.div(new BigDecimal(endDate.getTime() - startDate.getTime()), new BigDecimal(1000 * 3600 * 24)).abs().intValue();
+        if (includeCurrentDay) {
+            return dayInterval + 1;
+        }
+        return dayInterval;
+    }
+
+    /**
+     * 计算两个日期的月份间隔
+     *
+     * @param startDate 开始日期
+     * @param endDate   结束日期
+     * @returns 月份间隔
+     * @since v2.5.2
+     */
+    public static Integer getMonthInterval(Date startDate, Date endDate) {
+        return getMonthInterval(startDate, endDate, true);
+    }
+
+    /**
+     * 计算两个日期的月份间隔
+     *
+     * @param startDate           开始日期
+     * @param endDate             结束日期
+     * @param includeCurrentMonth 是否包含当前月份：false=否，true=是(默认)
+     * @returns 月份间隔
+     * @since v2.5.2
+     */
+    public static Integer getMonthInterval(Date startDate, Date endDate, boolean includeCurrentMonth) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        // 开始日期：月份数
+        int monthForStart = calendar.get(Calendar.YEAR) + calendar.get(Calendar.MONTH);
+        // 结束日期：月份数
+        calendar.setTime(endDate);
+        int monthForEnd = calendar.get(Calendar.YEAR) + calendar.get(Calendar.MONTH);
+
+        int monthInterval = Math.abs(monthForEnd - monthForStart);
+        if (includeCurrentMonth) {
+            return monthInterval + 1;
+        }
+        return monthInterval;
+    }
+
+    /**
+     * 计算两个日期的月份间隔
+     *
+     * @param startYearMonth    开始年月：yyyy-MM格式
+     * @param endYearMonth      结束年月：yyyy-MM格式
+     * @param includeCurrentDay 是否包含当前月份：0=否，1=是。默认为0
+     * @returns 月份间隔
+     * @since v2.5.2
+     */
+    public static Integer getMonthInterval(String startYearMonth, String endYearMonth, boolean includeCurrentDay) {
+        return DateUtil.getMonthInterval(DateUtil.parse(startYearMonth, DateUtil.PATTERN_YYYY_MM), DateUtil.parse(endYearMonth, DateUtil.PATTERN_YYYY_MM), includeCurrentDay);
+    }
+
 }
