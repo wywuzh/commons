@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2020 the original author or authors.
+ * Copyright 2015-2021 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package com.wuzh.commons.core.enums;
 
 /**
- * 类IsDeleteEnum的实现描述：TODO 类实现描述
+ * 类IsDeleteEnum的实现描述：是否删除
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2020-08-19 14:22:09
  * @version v2.3.3

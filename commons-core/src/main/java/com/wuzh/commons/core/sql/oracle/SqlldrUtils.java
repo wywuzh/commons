@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,22 @@ public class SqlldrUtils {
      * @return
      */
     public static File createCtlFile(File folderPath, String ctlFileName, List<String> csvFilePaths, String tableName, String columns) throws IOException {
+        return createCtlFile(folderPath, ctlFileName, csvFilePaths, tableName, columns, Constants.SEPARATE_COMMA);
+    }
+
+    /**
+     * 创建ctl控制器文件
+     *
+     * @param folderPath       ctl、csv文件根路径
+     * @param ctlFileName      ctl文件名，不含后缀
+     * @param csvFilePaths     csv文件路径
+     * @param tableName        表名
+     * @param columns          列名，多个以逗号分隔
+     * @param contentSeparator 数据文件内容分隔符，默认为“,”
+     * @return
+     * @since v2.5.2
+     */
+    public static File createCtlFile(File folderPath, String ctlFileName, List<String> csvFilePaths, String tableName, String columns, String contentSeparator) throws IOException {
         if (!StringUtils.endsWithIgnoreCase(ctlFileName, DEFAULT_CONTROL_FILE_SUFFIX)) {
             ctlFileName = StringUtils.join(ctlFileName, DEFAULT_CONTROL_FILE_SUFFIX);
         }
@@ -78,7 +94,7 @@ public class SqlldrUtils {
         if (ctlFile.exists()) {
             FileUtils.forceDelete(ctlFile);
         }
-        return createCtlFile(ctlFile, csvFilePaths, tableName, columns);
+        return createCtlFile(ctlFile, csvFilePaths, tableName, columns, contentSeparator);
     }
 
     /**
@@ -91,6 +107,21 @@ public class SqlldrUtils {
      * @return
      */
     public static File createCtlFile(File ctlFile, List<String> dataFilePaths, String tableName, String columns) throws IOException {
+        return createCtlFile(ctlFile, dataFilePaths, tableName, columns, Constants.SEPARATE_COMMA);
+    }
+
+    /**
+     * 创建ctl控制器文件
+     *
+     * @param ctlFile          控制文件
+     * @param dataFilePaths    数据文件路径
+     * @param tableName        表名
+     * @param columns          列名，多个以逗号分隔
+     * @param contentSeparator 数据文件内容分隔符，默认为“,”
+     * @return
+     * @since v2.5.2
+     */
+    public static File createCtlFile(File ctlFile, List<String> dataFilePaths, String tableName, String columns, String contentSeparator) throws IOException {
         FileWriter fileWriter = new FileWriter(ctlFile);
 
         StringBuffer stringBuffer = new StringBuffer();
@@ -111,7 +142,7 @@ public class SqlldrUtils {
         // 指定每一列的间隔符号标识，占一行
         // ','：表示以逗号作为每一列的分隔符
         // x'09'：表示以“TAB”（制表符）作为每一列的分隔符
-        stringBuffer.append("fields terminated by ','\n");
+        stringBuffer.append("fields terminated by '").append(contentSeparator).append("'\n");
         stringBuffer.append("optionally enclosed by '\"'\n");
         // 允许字段为空值
         stringBuffer.append("TRAILING NULLCOLS\n");
@@ -142,9 +173,9 @@ public class SqlldrUtils {
      * @throws IOException
      * @throws IllegalAccessException
      */
-    public static <T> File writeDataFile(File folderPath, String dataFileName, String fieldName, List<T> list) throws IOException, IllegalAccessException {
+    public static <T> File writeDataFile(File folderPath, String dataFileName, String fieldName, List<T> list, String contentSeparator) throws IOException, IllegalAccessException {
         String[] fieldNameArr = StringUtils.split(fieldName, Constants.SEPARATE_COMMA);
-        return writeDataFile(folderPath, dataFileName, fieldNameArr, list);
+        return writeDataFile(folderPath, dataFileName, fieldNameArr, list, contentSeparator);
     }
 
     /**
@@ -158,7 +189,7 @@ public class SqlldrUtils {
      * @throws IOException
      * @throws IllegalAccessException
      */
-    public static <T> File writeDataFile(File folderPath, String dataFileName, String[] fieldNameArr, List<T> list) throws IOException, IllegalAccessException {
+    public static <T> File writeDataFile(File folderPath, String dataFileName, String[] fieldNameArr, List<T> list, String contentSeparator) throws IOException, IllegalAccessException {
         if (StringUtils.indexOf(dataFileName, Constants.SEPARATE_SPOT) <= 0) {
             dataFileName = StringUtils.join(dataFileName, DEFAULT_DATA_FILE_SUFFIX);
         }
@@ -167,10 +198,10 @@ public class SqlldrUtils {
         if (csvFile.exists()) {
             FileUtils.forceDelete(csvFile);
         }
-        return writeDataFile(csvFile, fieldNameArr, list);
+        return writeDataFile(csvFile, fieldNameArr, list, contentSeparator);
     }
 
-    public static <T> File writeDataFile(File dataFile, String[] fieldNameArr, List<T> list) throws IOException, IllegalAccessException {
+    public static <T> File writeDataFile(File dataFile, String[] fieldNameArr, List<T> list, String contentSeparator) throws IOException, IllegalAccessException {
         BufferedWriter bufferedWriter = null;
         try {
             bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(dataFile, true), Charset.forName("UTF-8")));
@@ -178,7 +209,7 @@ public class SqlldrUtils {
             // 字段值
             for (T item : list) {
                 StringBuilder content = new StringBuilder();
-                content.append(appendContent(fieldNameArr, item));
+                content.append(appendContent(fieldNameArr, item, contentSeparator));
                 content.append("\n");
                 bufferedWriter.write(content.toString());
             }
@@ -198,7 +229,7 @@ public class SqlldrUtils {
         return dataFile;
     }
 
-    public static <T> String appendContent(String[] fieldNameArr, T item) throws IllegalAccessException {
+    public static <T> String appendContent(String[] fieldNameArr, T item, String contentSeparator) throws IllegalAccessException {
         StringBuilder content = new StringBuilder();
         for (int i = 0; i < fieldNameArr.length; i++) {
             String fieldName = fieldNameArr[i];
@@ -210,7 +241,7 @@ public class SqlldrUtils {
                 continue;
             }
             if (i > 0) {
-                content.append(Constants.SEPARATE_COMMA);
+                content.append(contentSeparator);
             }
             Object value = ReflectUtils.getValue(item, fieldName);
             if (value == null) {
@@ -221,7 +252,6 @@ public class SqlldrUtils {
                 value = String.valueOf(value)
                         .replaceAll("\"", "“")
                         .replaceAll("'", "‘")
-                        .replaceAll(",", "，")
                         .replaceAll("\n", "char(10)") // ascii码换行
                         .replaceAll("\r", "char(13)"); // ascii码回车
                 value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, value, Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
@@ -308,8 +338,8 @@ public class SqlldrUtils {
      * @return
      */
     public static String buildSqlldrCommand(String username, String password, String database, String ctlFile, String logFile, String badFile) {
-        // 格式：sqlldr userid={username}/{password}@{database} control={ctlFile} log={logFile} bad={badFile}
-        final String format = "sqlldr userid={0}/{1}@{2} control={3} log={4} bad={5} direct=true errors=0";
+        // 格式：sqlldr userid={username}/{password}@{database} control={ctlFile} log={logFile} bad={badFile} direct=true
+        final String format = "sqlldr userid={0}/{1}@{2} control={3} log={4} bad={5} errors=0";
 
         String sqlldrCommand = MessageFormat.format(format, username, password, database, ctlFile, logFile, badFile);
         return sqlldrCommand;
@@ -361,10 +391,12 @@ public class SqlldrUtils {
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
             String line = null;
+            StringBuilder execMsg = new StringBuilder();
             while ((line = reader.readLine()) != null) {
                 String msg = new String(line.getBytes("ISO-8859-1"), "UTF-8");
-                log.info(msg); // 输出
+                execMsg.append(msg).append("<br/>");
             }
+            log.info(execMsg.toString()); // 输出
             int exitValue = process.waitFor();
 
             log.info("导入数据返回值：{}", exitValue);
@@ -396,7 +428,7 @@ public class SqlldrUtils {
                     log.error(e.getMessage(), e);
                 }
             }
-            log.error("执行sqlldr命令结束，共耗时：{}毫秒", (System.currentTimeMillis() - startTime));
+            log.error("{} 执行sqlldr命令结束，共耗时：{}毫秒", command, (System.currentTimeMillis() - startTime));
         }
     }
 
