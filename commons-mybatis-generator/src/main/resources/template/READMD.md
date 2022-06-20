@@ -3,9 +3,9 @@
 第一步：pom.xml文件引入依赖包：
 ```xml
 <dependency>
-    <groupId>com.wuzh.commons.springboot</groupId>
+    <groupId>com.github.wywuzh</groupId>
     <artifactId>commons-mybatis-generator</artifactId>
-    <version>2.2.1</version>
+    <version>${commons.version}</version>
 </dependency>
 ```
 
@@ -37,9 +37,9 @@
         3. https://segmentfault.com/a/1190000013037968
         -->
         <dependency>
-            <groupId>com.wuzh.commons.springboot</groupId>
+            <groupId>com.github.wywuzh</groupId>
             <artifactId>commons-mybatis-generator</artifactId>
-            <version>2.2.1</version>
+            <version>${commons.version}</version>
         </dependency>
     </dependencies>
 </plugin>
@@ -47,12 +47,13 @@
 
 
 ### commons-mybatis-generator 插件功能清单
-#### BatchInsertPlugin 批量新增插件
-插件全路径：com.wuzh.commons.mybatis.generator.plugins.BatchInsertPlugin。
+#### BatchInsertPlugin - 批量新增插件
+* 插件全路径：com.wuzh.commons.mybatis.generator.plugins.BatchInsertPlugin。
+* 版本：2.1.1+
 
 该插件是itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖。
 
-使用：
+`BatchInsertPlugin`插件的使用：
 ```xml
     <!-- 批量插入插件 -->
     <plugin type="com.wuzh.commons.mybatis.generator.plugins.BatchInsertPlugin">
@@ -61,14 +62,37 @@
         需开启allowMultiQueries=true多条sql提交操作，所以不建议使用！插件默认不开启
         -->
         <property name="allowMultiQueries" value="false"/>
+       <!-- 是否启用merge into格式进行插入，默认为false -->
+       <property name="enableMergeInto" value="true"/>
     </plugin>
 ```
 
+`enableMergeInto`使用方式：
+1. 添加`<plugin>`，在`plugin`中配置的`property`属性做为全局属性存在
+```xml
+    <plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin">
+        <!-- 是否启用merge into格式进行插入，默认为false -->
+        <property name="enableMergeInto" value="true"/>
+    </plugin>
+```
 
-### SelectByParamsPlugin 自定义select查询插件
-插件全路径：com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin。
+2. 若需要对某张表单独定制，可在该`table`下配置进行覆盖
+```xml
+    <table tableName="goods_brand" domainObjectName="GoodsBrand"
+              enableUpdateByExample="false" enableDeleteByExample="false"
+              enableCountByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+        <!-- 是否启用merge into格式进行插入，默认为false -->
+        <property name="enableMergeInto" value="true"/>
+    </table>
+```
+**注：`enableMergeInto`属性仅在Oracle数据库情况下才有效！**
 
-插件使用：
+
+#### SelectByParamsPlugin - 自定义select查询插件
+* 插件全路径：com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin。
+* 版本：2.1.1+
+
+`SelectByParamsPlugin`插件的使用：
 ```xml
     <!-- 批量插入插件 -->
     <plugin type="com.wuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin"></plugin>
