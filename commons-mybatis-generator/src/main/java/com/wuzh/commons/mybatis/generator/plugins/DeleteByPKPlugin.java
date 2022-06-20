@@ -122,8 +122,8 @@ public class DeleteByPKPlugin extends BasePlugin {
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
         if (enableDelete(introspectedTable.getTableConfiguration()) == true && getPrimaryKeyColumn(introspectedTable) == null) {
-            logger.error("table={}, comment={} 该表未定义主键字段，生成deleteByIds方法失败！", introspectedTable.getFullyQualifiedTable(), introspectedTable.getRemarks());
-            throw new RuntimeException(introspectedTable.getFullyQualifiedTable() + "表未定义主键字段，生成deleteByIds方法失败！");
+            logger.error("DeleteByPKPlugin(根据主键删除数据插件):{} 检查到该表未定义主键字段，initialized方法初始化失败！", introspectedTable.getFullyQualifiedTable());
+            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTable() + " 检查到该表未定义主键字段，initialized方法初始化失败！");
         }
 
         // 表是否开启逻辑删除，默认为true
@@ -261,7 +261,7 @@ public class DeleteByPKPlugin extends BasePlugin {
         commentGenerator.addGeneralMethodComment(mBatchInsert, introspectedTable);
         // interface 增加方法
         FormatTools.addMethodWithBestPosition(interfaze, mBatchInsert);
-        logger.debug("itfsw(根据主键删除数据插件):" + interfaze.getType().getShortName() + "增加deleteByIds方法。");
+        logger.debug("DeleteByPKPlugin(根据主键删除数据插件):" + interfaze.getType().getShortName() + "增加deleteByIds方法。");
         return true;
     }
 
@@ -284,7 +284,7 @@ public class DeleteByPKPlugin extends BasePlugin {
         }
 
         document.getRootElement().addElement(deleteByEle);
-        logger.debug("itfsw(根据主键删除数据插件):" + introspectedTable.getMyBatis3XmlMapperFileName() + "增加deleteByIds方法。");
+        logger.debug("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getMyBatis3XmlMapperFileName() + "增加deleteByIds方法。");
         return true;
     }
 
@@ -301,9 +301,29 @@ public class DeleteByPKPlugin extends BasePlugin {
         IntrospectedColumn primaryKeyColumn = getPrimaryKeyColumn(introspectedTable);
         IntrospectedColumn updateUser = introspectedTable.getColumn("UPDATE_USER");
         IntrospectedColumn updateTime = introspectedTable.getColumn("UPDATE_TIME");
+        if (updateUser == null) {
+            logger.error("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " 检查到该表未定义UPDATE_USER字段，生成逻辑删除SQL语句失败！");
+            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " UPDATE_USER字段检验不通过！");
+        }
+        if (updateTime == null) {
+            logger.error("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " 检查到该表未定义UPDATE_TIME字段，生成逻辑删除SQL语句失败！");
+            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " UPDATE_TIME字段检验不通过！");
+        }
+        String logicDeleteField = logicDeleteField(tableConfiguration);
+        if (StringUtils.isBlank(logicDeleteField)) {
+            logger.error("DeleteByPKPlugin(根据主键删除数据插件):{} logicDeleteField属性值定义为空，生成逻辑删除SQL语句失败！",
+                    introspectedTable.getFullyQualifiedTableNameAtRuntime());
+            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " logicDeleteField属性值检验不通过！");
+        }
+        IntrospectedColumn deleteField = introspectedTable.getColumn(logicDeleteField);
+        if (deleteField == null) {
+            logger.error("DeleteByPKPlugin(根据主键删除数据插件):{} 检查到该表未定义{}字段，生成逻辑删除SQL语句失败！",
+                    introspectedTable.getFullyQualifiedTableNameAtRuntime(), logicDeleteField);
+            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " logicDeleteField属性值检验不通过！");
+        }
 
         deleteByEle.addElement(new TextElement("UPDATE " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));
-        deleteByEle.addElement(new TextElement("set " + logicDeleteField(tableConfiguration) + " = " + logicDeletedFlag(tableConfiguration) + ","));
+        deleteByEle.addElement(new TextElement("set " + MyBatis3FormattingUtilities.getAliasedEscapedColumnName(deleteField) + " = " + logicDeletedFlag(tableConfiguration) + ","));
         deleteByEle.addElement(new TextElement(MyBatis3FormattingUtilities.getAliasedEscapedColumnName(updateUser) + " = " + MyBatis3FormattingUtilities.getParameterClause(updateUser) + ","));
         deleteByEle.addElement(new TextElement(MyBatis3FormattingUtilities.getAliasedEscapedColumnName(updateTime) + " = " + MyBatis3FormattingUtilities.getParameterClause(updateTime)));
         deleteByEle.addElement(new TextElement("WHERE ID in"));
