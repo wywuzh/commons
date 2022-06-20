@@ -765,6 +765,7 @@
                             <exclude>**/META-INF/**</exclude>
                             <exclude>settings/**</exclude>
                             <exclude>pom.xml</exclude>
+                            <exclude>**/com/itfsw/**</exclude>
                             <exclude>**/*.ctrl</exclude>
                             <exclude>**/*.dat</exclude>
                             <exclude>**/*.lck</exclude>
