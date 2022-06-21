@@ -97,7 +97,7 @@
         <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <druid.version>1.2.8</druid.version>
 
-        <spring-kafka.version>2.7.10</spring-kafka.version>
+        <spring-kafka.version>2.7.11</spring-kafka.version>
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.0.1</curator_version>
         <dubbo.version>2.7.15</dubbo.version>
