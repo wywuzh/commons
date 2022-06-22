@@ -86,6 +86,7 @@
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
+        <hutool.version>5.7.21</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
         <apollo-client.version>1.9.2</apollo-client.version>
 
@@ -348,6 +349,13 @@
                 <groupId>jep</groupId>
                 <artifactId>jep</artifactId>
                 <version>${jep.version}</version>
+            </dependency>
+
+            <!-- Java工具包 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
             </dependency>
 
             <!-- springfox自动生成API文档 -->
