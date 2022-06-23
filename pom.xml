@@ -471,11 +471,6 @@
                 <artifactId>alibaba-dingtalk-service-sdk</artifactId>
                 <version>${alibaba-dingtalk-service-sdk.version}</version>
             </dependency>
-            <dependency>
-                <groupId>com.aliyun</groupId>
-                <artifactId>taobao-sdk-java-auto</artifactId>
-                <version>${taobao-sdk-java-auto.version}</version>
-            </dependency>
 
 
             <!-- 静态资源jar -->
