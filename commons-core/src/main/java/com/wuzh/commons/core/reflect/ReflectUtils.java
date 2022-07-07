@@ -77,8 +77,6 @@ public class ReflectUtils {
      */
     public static <T> T getValue(Object instance, String fieldName) throws IllegalAccessException {
         try {
-//            Field declaredField = FieldUtils.getField(instance.getClass(), fieldName, true);
-//            return (T) declaredField.get(instance);
             Object realValue = null;
             if (instance instanceof Map) {
                 realValue = ((Map) instance).get(fieldName);
