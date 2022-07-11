@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.wuzh.commons.dingtalk.DingtalkAutoConfiguration
+  com.github.wywuzh.commons.dingtalk.DingtalkAutoConfiguration

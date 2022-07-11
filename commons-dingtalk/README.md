@@ -3,12 +3,12 @@
 
 
 ## 接口调用
-### com.wuzh.commons.dingtalk.api.TokenAPI
+### TokenAPI
 
 获取`access_token`信息，钉钉接口的调用都需要带上token来进行访问。
 
 
-### com.wuzh.commons.dingtalk.config.ApiConfig
+### ApiConfig
 API配置类，项目中请保证其为单例。
 
 该配置类的核心方法`getAccessToken()`提供了获取`access_token`的功能，并对该token进行了缓存，我们使用该方法可以避免频繁的调用`/gettoken`接口来获取token。

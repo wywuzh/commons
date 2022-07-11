@@ -1,4 +1,8 @@
 ## 更新日志
+### SpringBoot/v2.7.0
+1. 工具包根目录统一调整为`com.github.wywuzh`，与groupId保持一致。若仍然打算使用`com.wuzh`目录，请使用`v2.7.0`以下的包
+
+
 ### SpringBoot/v2.5.2
 1. commons-static模块：
   1. commons-static-easyui：v1.4.5以上版本combobox控件的setValues方法无法在onSelect事件中重新设置下拉值，会导致自定义的`initComboboxForCheck(selector, data, valueField, textField, onHidePanel, onLoadSuccess)`函数的下拉“所有”多选功能失效。因此将easyui的版本固定在v1.4.5，不再向上升级。
