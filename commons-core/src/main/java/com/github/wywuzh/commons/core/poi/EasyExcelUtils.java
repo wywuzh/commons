@@ -111,7 +111,7 @@ public class EasyExcelUtils {
             head.add(Collections.singletonList(columnTitle));
         }
         writeSheet.setHead(head);
-        writeSheet.setIncludeColumnFiledNames(Arrays.asList(columnTitles));
+        writeSheet.setIncludeColumnFieldNames(Arrays.asList(columnTitles));
 
         return writeSheet;
     }
