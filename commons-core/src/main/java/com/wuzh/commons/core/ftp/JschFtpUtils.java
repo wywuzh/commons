@@ -56,6 +56,7 @@ public class JschFtpUtils {
             session.setPassword(password);
 
             Properties config = new Properties();
+            // SSH公钥检查机制：no、ask、yes
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
             // 设置超时
@@ -194,23 +195,6 @@ public class JschFtpUtils {
      */
     public static void downloadFile(String host, int port, String username, String password,
                                     String ftpPath, String fileName) {
-    }
-
-    public static void main(String[] args) {
-        String host = "10.0.43.32";
-        int port = 60777;
-        String username = "root";
-        String password = "12345678";
-        String path = "/www/tools/";
-        String localFile = "D:\\华北预算201903-202011.xlsx";
-        String remoteFile = "华北预算201903-202011.xlsx";
-        try {
-            uploadFile(host, port, username, password, path, localFile, remoteFile);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } catch (JSchException e) {
-            log.error(e.getMessage(), e);
-        }
     }
 
 
