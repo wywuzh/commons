@@ -17,6 +17,7 @@ package com.wuzh.commons.core.reflect;
 
 import com.wuzh.commons.core.math.CalculationUtils;
 import com.wuzh.commons.core.json.jackson.JsonMapper;
+import com.wuzh.commons.core.util.StringHelper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -76,6 +77,8 @@ public class ReflectUtils {
      * @throws IllegalAccessException
      */
     public static <T> T getValue(Object instance, String fieldName) throws IllegalAccessException {
+        Assert.notNull(instance, "instance must not be null");
+        Assert.hasLength(fieldName, "fieldName must not be blank");
         try {
             Object realValue = null;
             if (instance instanceof Map) {
@@ -125,6 +128,8 @@ public class ReflectUtils {
      * @throws Exception
      */
     public static <T> void setValue(Object instance, String fieldName, T value) throws Exception {
+        Assert.notNull(instance, "instance must not be null");
+        Assert.hasLength(fieldName, "fieldName must not be blank");
         try {
             Field declaredField = FieldUtils.getField(instance.getClass(), fieldName, true);
             declaredField.set(instance, value);
@@ -143,6 +148,10 @@ public class ReflectUtils {
      * @throws Exception
      */
     public static void copyProperties(Object sourceInstance, Object targetInstance, String[] fields) throws Exception {
+        Assert.notNull(sourceInstance, "sourceInstance is not null");
+        Assert.notNull(targetInstance, "targetInstance is not null");
+        Assert.notEmpty(fields, "fields is not empty");
+
         // 源字段
         String[] sourceFields = fields;
         // 目标字段
@@ -167,7 +176,7 @@ public class ReflectUtils {
         Assert.notEmpty(targetFields, "targetFields is not empty");
 
         if (sourceFields.length != targetFields.length) {
-            LOGGER.error("sourceFields={},targetFields={} sourceFields和targetFields的数组长度不一致！", JsonMapper.DEFAULT_JSON_MAPPER.toJson(sourceFields), JsonMapper.DEFAULT_JSON_MAPPER.toJson(targetFields));
+            LOGGER.error("sourceFields={}, targetFields={} sourceFields和targetFields的数组长度不一致！", JsonMapper.DEFAULT_JSON_MAPPER.toJson(sourceFields), JsonMapper.DEFAULT_JSON_MAPPER.toJson(targetFields));
             throw new IllegalArgumentException("sourceFields和targetFields的数组长度不一致！");
         }
 
@@ -198,6 +207,10 @@ public class ReflectUtils {
      * @throws Exception
      */
     public static void mergeProperties(Object sourceInstance, Object targetInstance, String[] fields) throws Exception {
+        Assert.notNull(sourceInstance, "sourceInstance is not null");
+        Assert.notNull(targetInstance, "targetInstance is not null");
+        Assert.notEmpty(fields, "fields is not empty");
+
         // 源字段
         String[] sourceFields = fields;
         // 目标字段
