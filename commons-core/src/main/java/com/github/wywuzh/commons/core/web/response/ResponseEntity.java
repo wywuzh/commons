@@ -32,7 +32,7 @@ public class ResponseEntity<T> implements Serializable {
 
     /**
      * 结果编号
-     * 200=请求成功
+     * 0/200=请求成功
      * 301=表示传入额参数有问题
      * 302=根据参数找不到数据
      * 400=请求失败，例如处理出现异常
@@ -130,25 +130,28 @@ public class ResponseEntity<T> implements Serializable {
         this.errors = errors;
     }
 
-    public void addError(ErrorMsg error) {
+    public ResponseEntity<T> addError(ErrorMsg error) {
         if (errors == null) {
             errors = new ArrayList<ErrorMsg>();
         }
         errors.add(error);
+        return this;
     }
 
-    public void addError(String field, String message) {
+    public ResponseEntity<T> addError(String field, String message) {
         if (errors == null) {
             errors = new ArrayList<ErrorMsg>();
         }
         errors.add(new ErrorMsg(field, message));
+        return this;
     }
 
-    public void addError(String code, String field, String message) {
+    public ResponseEntity<T> addError(String code, String field, String message) {
         if (errors == null) {
             errors = new ArrayList<ErrorMsg>();
         }
         errors.add(new ErrorMsg(code, field, message));
+        return this;
     }
 
     /**

@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public class PropertiesConfiguration extends AbstractConfiguration {
     private final Log logger = LogFactory.getLog(PropertiesConfiguration.class);
 
-    public final String DEFAULT_FILE_NAME = "commons-core.properties";
+    public final String DEFAULT_FILE_NAME = "application.properties";
 
     @Override
     public Configuration getInstance() {
@@ -50,11 +50,10 @@ public class PropertiesConfiguration extends AbstractConfiguration {
             // Automatic Reloading 自动重新加载
             // 通常需要开启一个线程来监视配置文件的时间，并在文件被修改后重新加载进来。
             // Commons Configuration集成了这个加载机制,如果需要使用自动加载，只需要在年id配置信息里声明一个自动重载策略：
-            // 现在我们随时手动修改了schabm-core.properties，配置信息都能够自动刷新，修改后的值立即在程序里生效。
+            // 现在我们随时手动修改了 application.properties，配置信息都能够自动刷新，修改后的值立即在程序里生效。
             configuration.setReloadingStrategy(new FileChangedReloadingStrategy());
         } catch (ConfigurationException e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
         return configuration;
     }

@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 类CustomCellWriteHandler的实现描述：自适用列宽
+ * 类CustomCellWriteHandler的实现描述：自适应列宽
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2020-11-13 13:40:11
  * @version v2.3.5
@@ -40,8 +40,13 @@ import java.util.Map;
 public class CustomCellWriteHandler extends AbstractColumnWidthStyleStrategy {
     private final Logger LOGGER = LoggerFactory.getLogger(CustomCellWriteHandler.class);
 
+    /**
+     * 列的长度
+     */
     private Integer[] columnLengths;
-
+    /**
+     * key=sheetNo, value=Map&lt;columnIndex,maxColumnWidth&gt;
+     */
     private Map<Integer, Map<Integer, Integer>> CACHE = new HashMap<>();
 
     public CustomCellWriteHandler() {
@@ -54,29 +59,30 @@ public class CustomCellWriteHandler extends AbstractColumnWidthStyleStrategy {
     @Override
     protected void setColumnWidth(WriteSheetHolder writeSheetHolder, List<WriteCellData<?>> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
         boolean needSetWidth = isHead || !CollectionUtils.isEmpty(cellDataList);
-        if (needSetWidth) {
-            // 列索引，从0开始
-            int columnIndex = cell.getColumnIndex();
-            if (columnLengths != null && columnLengths.length > 0) {
-                writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnLengths[columnIndex] * 30);
-            } else {
-                Map<Integer, Integer> maxColumnWidthMap = CACHE.get(writeSheetHolder.getSheetNo());
-                if (maxColumnWidthMap == null) {
-                    maxColumnWidthMap = new HashMap<>();
-                    CACHE.put(writeSheetHolder.getSheetNo(), maxColumnWidthMap);
+        if (!needSetWidth) {
+            return;
+        }
+        // 列索引，从0开始
+        int columnIndex = cell.getColumnIndex();
+        if (columnLengths != null && columnLengths.length > 0) {
+            writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnLengths[columnIndex] * 30);
+        } else {
+            Map<Integer, Integer> maxColumnWidthMap = CACHE.get(writeSheetHolder.getSheetNo());
+            if (maxColumnWidthMap == null) {
+                maxColumnWidthMap = new HashMap<>();
+                CACHE.put(writeSheetHolder.getSheetNo(), maxColumnWidthMap);
+            }
+
+            Integer columnWidth = this.dataLength(cellDataList, cell, isHead);
+            if (columnWidth >= 0) {
+                if (columnWidth > 255) {
+                    columnWidth = 255;
                 }
 
-                Integer columnWidth = this.dataLength(cellDataList, cell, isHead);
-                if (columnWidth >= 0) {
-                    if (columnWidth > 255) {
-                        columnWidth = 255;
-                    }
-
-                    Integer maxColumnWidth = maxColumnWidthMap.get(columnIndex);
-                    if (maxColumnWidth == null || columnWidth > maxColumnWidth) {
-                        maxColumnWidthMap.put(columnIndex, columnWidth);
-                        writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnWidth * 256);
-                    }
+                Integer maxColumnWidth = maxColumnWidthMap.get(columnIndex);
+                if (maxColumnWidth == null || columnWidth > maxColumnWidth) {
+                    maxColumnWidthMap.put(columnIndex, columnWidth);
+                    writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnWidth * 256);
                 }
             }
         }

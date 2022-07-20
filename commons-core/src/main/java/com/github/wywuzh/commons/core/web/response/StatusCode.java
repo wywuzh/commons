@@ -62,9 +62,9 @@ public enum StatusCode {
     }
 
     public static StatusCode findBy(int statusCode) {
-        for (StatusCode status : values()) {
-            if (status.value == statusCode) {
-                return status;
+        for (StatusCode item : values()) {
+            if (item.value == statusCode) {
+                return item;
             }
         }
         throw new IllegalArgumentException("No matching constant for [" + statusCode + "]");
