@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
  */
 public class PropertiesUtil {
     private static final Log logger = LogFactory.getLog(PropertiesUtil.class);
-    public static final String DEFAULT_FILE_NAME = "commons-core.properties";
+    public static final String DEFAULT_FILE_NAME = "application.properties";
 
     private static Properties properties = null;
 

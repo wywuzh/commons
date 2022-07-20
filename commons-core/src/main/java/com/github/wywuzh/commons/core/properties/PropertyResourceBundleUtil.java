@@ -40,7 +40,7 @@ import org.apache.commons.logging.LogFactory;
 public class PropertyResourceBundleUtil {
     private static final Log logger = LogFactory.getLog(PropertyResourceBundleUtil.class);
 
-    public static final String DEFAULT_FILE_NAME = "commons-core.properties";
+    public static final String DEFAULT_FILE_NAME = "application.properties";
 
     private static ResourceBundle resourceBundle = null;
 

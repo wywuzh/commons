@@ -45,7 +45,7 @@ import org.apache.commons.logging.LogFactory;
 public class CompositeConfigurationUtil {
     private static final Log logger = LogFactory.getLog(CompositeConfigurationUtil.class);
 
-    private static final String DEFAULT_PATHNAME = "commons-core.properties";
+    private static final String DEFAULT_PATHNAME = "application.properties";
 
     private static CompositeConfiguration configuration = null;
 

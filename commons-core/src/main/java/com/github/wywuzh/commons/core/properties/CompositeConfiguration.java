@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
 public class CompositeConfiguration extends AbstractConfiguration {
     private static final Log logger = LogFactory.getLog(CompositeConfiguration.class);
 
-    private static final String DEFAULT_PATHNAME = "commons-core.properties";
+    private static final String DEFAULT_PATHNAME = "application.properties";
 
     @Override
     public Configuration getInstance() {
@@ -51,8 +51,7 @@ public class CompositeConfiguration extends AbstractConfiguration {
             configuration = new org.apache.commons.configuration.CompositeConfiguration();
             configuration.addConfiguration(new PropertiesConfiguration(resource));
         } catch (ConfigurationException e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
         return configuration;
     }
