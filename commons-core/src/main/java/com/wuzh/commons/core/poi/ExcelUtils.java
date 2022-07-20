@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2021 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,11 @@
 package com.wuzh.commons.core.poi;
 
 import com.wuzh.commons.core.common.ContentType;
+import com.wuzh.commons.core.math.CalculationUtils;
 import com.wuzh.commons.core.poi.annotation.ExcelCell;
 import com.wuzh.commons.core.poi.enums.CellTypeEnum;
 import com.wuzh.commons.core.poi.modle.ExcelRequest;
 import com.wuzh.commons.core.reflect.ReflectUtils;
-import com.wuzh.commons.core.math.CalculationUtils;
 import com.wuzh.commons.core.util.DateUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -135,20 +135,20 @@ public class ExcelUtils {
      *
      * @param request
      * @param response
-     * @param fileName            文件名称
-     * @param sheetName           文件sheet名
-     * @param sheetColumnNames    列名/字段名
-     * @param sheetColumnComments 列的标题
-     * @param dataColl            请求数据
+     * @param fileName     文件名称
+     * @param sheetName    文件sheet名
+     * @param columns      列名/字段名
+     * @param columnTitles 列的标题
+     * @param dataColl     请求数据
      * @throws IOException
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
     public static <T> void exportData(HttpServletRequest request, HttpServletResponse response,
-                                      String fileName, String sheetName, String[] sheetColumnNames, String[] sheetColumnComments,
+                                      String fileName, String sheetName, String[] columns, String[] columnTitles,
                                       Collection<T> dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        exportData(request, response, fileName, new String[]{sheetName}, new String[][]{sheetColumnNames}, new String[][]{sheetColumnComments}, new Collection[]{dataColl});
+        exportData(request, response, fileName, new String[]{sheetName}, new String[][]{columns}, new String[][]{columnTitles}, new Collection[]{dataColl});
     }
 
     /**
@@ -156,39 +156,26 @@ public class ExcelUtils {
      *
      * @param request
      * @param response
-     * @param fileName            文件名称
-     * @param sheetNames          文件sheet名
-     * @param sheetColumnNames    列名/字段名
-     * @param sheetColumnComments 列的标题
-     * @param dataColl            请求数据
+     * @param fileName     文件名称
+     * @param sheetNames   文件sheet名
+     * @param columns      列名/字段名
+     * @param columnTitles 列的标题
+     * @param dataColl     请求数据
      * @throws IOException
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
     public static <T> void exportData(HttpServletRequest request, HttpServletResponse response,
-                                      String fileName, String[] sheetNames, String[][] sheetColumnNames, String[][] sheetColumnComments,
+                                      String fileName, String[] sheetNames, String[][] columns, String[][] columnTitles,
                                       Collection<T>[] dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        OutputStream outputStream = response.getOutputStream();
-        response.reset();
-        // 获取浏览器类型
-        String userAgent = request.getHeader("USER-AGENT").toLowerCase();
-        response.setContentType(ContentType.APPLICATION_POINT_OFFICE2003_XLS);
-        if (StringUtils.contains(userAgent, "firefox")) {
-            response.setCharacterEncoding("utf-8");
-            response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1"));
-        } else {
-            String codedFileName = java.net.URLEncoder.encode(fileName, "UTF-8");
-            response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
-        }
-
         // 创建workbook
         Workbook workbook = createWorkbook(fileName);
         for (int i = 0; i < sheetNames.length; i++) {
             ExcelRequest excelRequest = new ExcelRequest();
             excelRequest.setSheetName(sheetNames[i]);
-            excelRequest.setColumns(sheetColumnNames[i]);
-            excelRequest.setColumnTitles(sheetColumnComments[i]);
+            excelRequest.setColumns(columns[i]);
+            excelRequest.setColumnTitles(columnTitles[i]);
             excelRequest.setDataColl(dataColl[i]);
 
             // 创建sheet
@@ -197,9 +184,8 @@ public class ExcelUtils {
             writeData(workbook, sheet, excelRequest);
         }
 
-        workbook.write(outputStream);
-        outputStream.flush();
-        outputStream.close();
+        // 将workbook工作簿内容写入输出流中
+        writeWorkbook(request, response, workbook, fileName);
     }
 
     /**
@@ -212,6 +198,27 @@ public class ExcelUtils {
      */
     public static void exportData(HttpServletRequest request, HttpServletResponse response, String fileName, ExcelRequest excelRequest)
             throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        // 创建workbook
+        Workbook workbook = createWorkbook(fileName);
+        // 创建sheet
+        Sheet sheet = createSheet(workbook, excelRequest);
+        // 写入内容
+        writeData(workbook, sheet, excelRequest);
+
+        // 将workbook工作簿内容写入输出流中
+        writeWorkbook(request, response, workbook, fileName);
+    }
+
+    /**
+     * 将workbook工作簿内容写入输出流中
+     *
+     * @param request
+     * @param response
+     * @param workbook 工作簿
+     * @param fileName 文件名称
+     * @since v2.6.0
+     */
+    public static <T> void writeWorkbook(HttpServletRequest request, HttpServletResponse response, Workbook workbook, String fileName) throws IOException {
         OutputStream outputStream = response.getOutputStream();
         response.reset();
         // 获取浏览器类型
@@ -224,13 +231,6 @@ public class ExcelUtils {
             String codedFileName = java.net.URLEncoder.encode(fileName, "UTF-8");
             response.setHeader("content-disposition", "attachment;filename=" + codedFileName);
         }
-
-        // 创建workbook
-        Workbook workbook = createWorkbook(fileName);
-        // 创建sheet
-        Sheet sheet = createSheet(workbook, excelRequest);
-        // 写入内容
-        writeData(workbook, sheet, excelRequest);
 
         workbook.write(outputStream);
         outputStream.flush();
@@ -282,22 +282,48 @@ public class ExcelUtils {
     /**
      * 写入数据
      *
-     * @param workbook            工作簿
-     * @param sheet               写入数据的目标sheet
-     * @param sheetColumnNames    列名/字段名
-     * @param sheetColumnComments 列的标题
-     * @param dataColl            请求数据
+     * @param workbook     工作簿
+     * @param sheet        写入数据的目标sheet
+     * @param columns      列名/字段名
+     * @param columnTitles 列的标题
+     * @param dataColl     请求数据
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      * @since 2.3.6
      */
     public static <T> void writeData(Workbook workbook, Sheet sheet,
-                                     String[] sheetColumnNames, String[] sheetColumnComments,
+                                     String[] columns, String[] columnTitles,
                                      Collection<T> dataColl) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         ExcelRequest excelRequest = new ExcelRequest();
-        excelRequest.setColumns(sheetColumnNames);
-        excelRequest.setColumnTitles(sheetColumnComments);
+        excelRequest.setColumns(columns);
+        excelRequest.setColumnTitles(columnTitles);
+        excelRequest.setDataColl(dataColl);
+
+        // 写入内容
+        writeData(workbook, sheet, excelRequest);
+    }
+
+    /**
+     * 写入数据
+     *
+     * @param workbook     工作簿
+     * @param sheet        写入数据的目标sheet
+     * @param columns      列名/字段名
+     * @param columnTitles 列的标题
+     * @param dataColl     请求数据
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @since 2.6.0
+     */
+    public static <T> void writeData(Workbook workbook, Sheet sheet,
+                                     String[] columns, String[] columnTitles, Integer[] columnLengths,
+                                     Collection<T> dataColl) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        ExcelRequest excelRequest = new ExcelRequest();
+        excelRequest.setColumns(columns);
+        excelRequest.setColumnTitles(columnTitles);
+        excelRequest.setColumnLengths(columnLengths);
         excelRequest.setDataColl(dataColl);
 
         // 写入内容
@@ -321,44 +347,46 @@ public class ExcelUtils {
         Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
         Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
 
-        // 生成头部列(单元格)样式
-        CellStyle headerStyle = createHeaderStyle(workbook);
-        CellStyle requiredHeaderStyle = null;
-        // 生成内容列(单元格)样式
-        CellStyle cellStyle = createContentStyle(workbook);
-
         String[] columns = excelRequest.getColumns();
         String[] columnTitles = excelRequest.getColumnTitles();
         Integer[] columnLengths = excelRequest.getColumnLengths();
         List<String> requiredColumnTitles = excelRequest.getRequiredColumnTitles();
+        // 字段有效性验证：key=column字段，value=column字段下拉框列表数据（验证数据）
+        Map<String, String[]> columnValidation = excelRequest.getColumnValidation();
+
+        // 头部列(单元格)样式
+        CellStyle headerStyle = createHeaderStyle(workbook);
+        CellStyle requiredHeaderStyle = null;
         if (CollectionUtils.isNotEmpty(requiredColumnTitles)) {
             requiredHeaderStyle = createRequiredHeaderStyle(workbook);
         }
-        // 行高
+        // 内容列(单元格)样式
+        CellStyle cellStyle = createContentStyle(workbook);
+
+        // 行高，-1时会设置为默认高度
         final float height = -1;
 
         // 数据开始行
         int firstRowNumber = 1;
+        // 提示信息。注意：该信息不为空时，会占据第一行，标题行会变为第二行
         if (StringUtils.isNotBlank(excelRequest.getTips())) {
             firstRowNumber = 2;
-            Row tipsRow = sheet.createRow(0);
+            Row row = sheet.createRow(0);
             // 第一行添加提示信息
-            Cell cell = tipsRow.createCell(0);
+            Cell cell = row.createCell(0);
             cell.setCellValue(excelRequest.getTips());
             cell.setCellStyle(createHeaderStyleForTips(workbook));
             // 设置合并单元格
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 12));
             // 设置第一行高度
             int length = StringUtils.split(excelRequest.getTips(), "\n").length;
-            tipsRow.setHeightInPoints(length * 18);
+            row.setHeightInPoints(length * 18);
             // 设置自动换行
             cell.getCellStyle().setWrapText(true);
         }
 
         // 因为POI自动列宽计算的是String.length长度，在中文环境下会有问题，所以自行处理
         int[] maxLength = new int[columnTitles.length];
-
-        Map<String, String[]> columnValidation = excelRequest.getColumnValidation();
 
         // 标题行
         Row headerRow = sheet.createRow(firstRowNumber - 1);
@@ -427,7 +455,7 @@ public class ExcelUtils {
                     Cell cell = sheetRow.createCell(k);
                     String columnName = columns[k];
 
-                    Object realValue = getRealValue(data, columnName);
+                    Object realValue = ReflectUtils.getValue(data, columnName); //getRealValue(data, columnName);
                     setCellValue(cell, realValue);
                     setCellStyle(workbook, cell, cellStyle, data, columnName);
 
