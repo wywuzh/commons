@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2019 the original author or authors.
+ * Copyright 2015-2022 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,9 +62,9 @@ public enum StatusCode {
     }
 
     public static StatusCode findBy(int statusCode) {
-        for (StatusCode status : values()) {
-            if (status.value == statusCode) {
-                return status;
+        for (StatusCode item : values()) {
+            if (item.value == statusCode) {
+                return item;
             }
         }
         throw new IllegalArgumentException("No matching constant for [" + statusCode + "]");
