@@ -38,7 +38,7 @@ import org.springframework.util.Assert;
 public class ResourceBundleUtil {
     private static final Log logger = LogFactory.getLog(ResourceBundleUtil.class);
 
-    public static final String DEFAULT_BASE_NAME = "commons-core";
+    public static final String DEFAULT_BASE_NAME = "application";
 
     private static ResourceBundle resourceBundle = null;
 
