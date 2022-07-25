@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.wywuzh</groupId>
     <artifactId>commons-parent</artifactId>
-    <version>2.7.0.SNAPSHOT</version>
+    <version>${revision}</version>
     <name>commons-parent</name>
     <packaging>pom</packaging>
     <description>项目公共组件类库</description>
@@ -56,6 +56,8 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
+
+        <revision>2.7.0.SNAPSHOT</revision>
 
         <spring-cloud.version>2021.0.3</spring-cloud.version>
 
@@ -666,6 +668,10 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -800,6 +806,32 @@
                             <version>${license-maven-plugin.version}</version>
                         </dependency>
                     </dependencies>
+                </plugin>
+                <!-- Maven多模块版本管理插件 -->
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>flatten-maven-plugin</artifactId>
+                    <version>1.2.7</version>
+                    <configuration>
+                        <updatePomFile>true</updatePomFile>
+                        <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>flatten</id>
+                            <phase>process-resources</phase>
+                            <goals>
+                                <goal>flatten</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>flatten.clean</id>
+                            <phase>clean</phase>
+                            <goals>
+                                <goal>clean</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <!-- GPG -->
                 <plugin>
