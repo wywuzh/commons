@@ -21,7 +21,9 @@ package com.github.wywuzh.commons.core.enums;
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:26:12
  * @version v1.0.0
  * @since JDK 1.7
+ * @deprecated 废弃，请使用 {@link IsSystemEnum}
  */
+@Deprecated
 public enum SystemFlag {
 
     /**

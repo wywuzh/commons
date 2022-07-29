@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wywuzh.commons.core.util;
-
-import org.springframework.context.annotation.Configuration;
+package com.github.wywuzh.commons.core.sequence;
 
 /**
  * 类IdWorker.java的实现描述：Twitter Snowflake
@@ -32,18 +30,21 @@ import org.springframework.context.annotation.Configuration;
  * snowflake生成的ID整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞（由datacenter和workerId作区分），并且效率较高。据说：snowflake每秒能够产生26万个ID。
  *
  * 参考网址：
- * 1）http://www.cnblogs.com/relucent/p/4955340.html
- * 2）http://www.lanindex.com/twitter-snowflake%EF%BC%8C64%E4%BD%8D%E8%87%AA%E5%A2%9Eid%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/
+ * 1. http://www.cnblogs.com/relucent/p/4955340.html
+ * 2. http://www.lanindex.com/twitter-snowflake%EF%BC%8C64%E4%BD%8D%E8%87%AA%E5%A2%9Eid%E7%AE%97%E6%B3%95%E8%AF%A6%E8%A7%A3/
+ * 3. https://zhuanlan.zhihu.com/p/402822041
  * </pre>
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:36:23
  * @version v1.0.0
  * @since JDK 1.7
  */
-@Configuration
-public class IdWorker {
+public class SnowflakeIdWorker {
 
-    private final long twepoch = 1288834974657L;
+    /**
+     * 开始时间戳（2015-01-01）
+     */
+    private final long twepoch = 1420041600000L;
     /**
      * 机器id所占的位数
      */
@@ -77,7 +78,7 @@ public class IdWorker {
      */
     private final long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
     /**
-     * 生成序列的掩码
+     * 生成序列的掩码，这里为4095 (0b111111111111=0xfff=4095)
      */
     private final long sequenceMask = -1L ^ (-1L << sequenceBits);
 
@@ -98,13 +99,20 @@ public class IdWorker {
      */
     private long lastTimestamp = -1L;
 
-    public IdWorker() {
+    public SnowflakeIdWorker() {
+        // 工作ID (0~31)
         int workerId = Integer.parseInt(System.getProperty("Snowflake.workerId", "0")) % 31;
+        // 数据中心ID (0~31)
         int datacenterId = Integer.parseInt(System.getProperty("Snowflake.datacenterId", "0")) % 31;
+
         init(workerId, datacenterId);
     }
 
-    public IdWorker(long workerId, long datacenterId) {
+    /**
+     * @param workerId     工作ID (0~31)
+     * @param datacenterId 数据中心ID (0~31)
+     */
+    public SnowflakeIdWorker(long workerId, long datacenterId) {
         init(workerId, datacenterId);
     }
 
@@ -158,8 +166,10 @@ public class IdWorker {
         lastTimestamp = timestamp;
 
         // 移位并通过或运算拼到一起组成64位的ID
-        return ((timestamp - twepoch) << timestampLeftShift) | (datacenterId << datacenterIdShift)
-                | (workerId << workerIdShift) | sequence;
+        return ((timestamp - twepoch) << timestampLeftShift)
+                | (datacenterId << datacenterIdShift)
+                | (workerId << workerIdShift)
+                | sequence;
     }
 
     /**
@@ -183,6 +193,23 @@ public class IdWorker {
      */
     private long timeGen() {
         return System.currentTimeMillis();
+    }
+
+
+    // ============================== static =====================================
+    private static SnowflakeIdWorker idWorker = new SnowflakeIdWorker();
+
+    public static Long nextIdLong() {
+        return idWorker.nextId();
+    }
+
+    /**
+     * @return 16进制ID
+     */
+    public static String nextIdHex() {
+        // %x：转化为小写的十六进制格式
+        // %X：转化为大写的十六进制格式
+        return String.format("%x", idWorker.nextId());
     }
 
 }

@@ -16,12 +16,13 @@
 package com.github.wywuzh.commons.core.poi;
 
 import com.github.wywuzh.commons.core.common.ContentType;
-import com.github.wywuzh.commons.core.reflect.ReflectUtils;
+import com.github.wywuzh.commons.core.math.CalculationUtils;
 import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
 import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
 import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
-import com.github.wywuzh.commons.core.math.CalculationUtils;
+import com.github.wywuzh.commons.core.reflect.ReflectUtils;
 import com.github.wywuzh.commons.core.util.DateUtil;
+import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -325,7 +326,7 @@ public class ExcelUtils {
         CellStyle headerStyle = createHeaderStyle(workbook);
         CellStyle requiredHeaderStyle = null;
         // 生成内容列(单元格)样式
-        CellStyle cellStyle = createContentStyle(workbook);
+        CellStyle contentStyle = createContentStyle(workbook);
 
         String[] columns = excelRequest.getColumns();
         String[] columnTitles = excelRequest.getColumnTitles();
@@ -346,8 +347,8 @@ public class ExcelUtils {
             Cell cell = tipsRow.createCell(0);
             cell.setCellValue(excelRequest.getTips());
             cell.setCellStyle(createHeaderStyleForTips(workbook));
-            // 设置合并单元格
-            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, 12));
+            // 合并单元格，合并的列与导出列保持一致
+            sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, columns.length - 1));
             // 设置第一行高度
             int length = StringUtils.split(excelRequest.getTips(), "\n").length;
             tipsRow.setHeightInPoints(length * 18);
@@ -429,7 +430,7 @@ public class ExcelUtils {
 
                     Object realValue = getRealValue(data, columnName);
                     setCellValue(cell, realValue);
-                    setCellStyle(workbook, cell, cellStyle, data, columnName);
+                    setCellStyle(workbook, cell, contentStyle, data, columnName);
 
                     if (columnLengths != null && columnLengths.length > 0) {
                         maxLength[k] = columnLengths[k] * 30;
@@ -739,13 +740,21 @@ public class ExcelUtils {
      */
     private static CellStyle createHeaderStyle(Workbook workbook) {
         CellStyle cellStyle = createCellStyle(workbook);
+        // [v2.7.0]增加底色
+        // 填充方案：全部前景色
+        cellStyle.setFillPattern(FillPatternType.forInt(SystemPropertyUtils.getHeaderStyleForFillPatternCode()));
+        // 设置前景色
+        cellStyle.setFillForegroundColor(SystemPropertyUtils.getHeaderStyleForFillForegroundColor());
+        // 设置背景色
+        cellStyle.setFillBackgroundColor(SystemPropertyUtils.getHeaderStyleForFillBackgroundColor());
 
         // 设置字体
         Font font = workbook.createFont();
+        font.setColor(SystemPropertyUtils.getHeaderStyleForFontColor());
         // 文本加粗
         font.setBold(true);
-        font.setFontName("宋体");
-        font.setFontHeightInPoints((short) 12);
+        font.setFontName(SystemPropertyUtils.getFontName());
+        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
         cellStyle.setFont(font);
         return cellStyle;
     }
@@ -761,13 +770,20 @@ public class ExcelUtils {
         // 内容左对齐 、垂直居中
         cellStyle.setAlignment(HorizontalAlignment.LEFT);
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        // [v2.7.0]增加底色
+        // 填充方案：全部前景色
+        cellStyle.setFillPattern(FillPatternType.forInt(SystemPropertyUtils.getHeaderStyleTipsForFillPatternCode())); // FillPatternType.SOLID_FOREGROUND
+        // 设置前景色
+        cellStyle.setFillForegroundColor(SystemPropertyUtils.getHeaderStyleTipsForFillForegroundColor()); // IndexedColors.YELLOW.getIndex()
+        // 设置背景色
+        cellStyle.setFillBackgroundColor(SystemPropertyUtils.getHeaderStyleTipsForFillBackgroundColor()); // IndexedColors.YELLOW.getIndex()
 
         // 设置字体
         Font font = workbook.createFont();
-        font.setColor(Font.COLOR_RED);
+        font.setColor(SystemPropertyUtils.getHeaderStyleTipsForFontColor()); // Font.COLOR_RED
         font.setBold(true);
-        font.setFontName("宋体");
-        font.setFontHeightInPoints((short) 12);
+        font.setFontName(SystemPropertyUtils.getFontName());
+        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
         cellStyle.setFont(font);
         return cellStyle;
     }
@@ -781,14 +797,21 @@ public class ExcelUtils {
      */
     private static CellStyle createRequiredHeaderStyle(Workbook workbook) {
         CellStyle cellStyle = createCellStyle(workbook);
+        // [v2.7.0]增加底色
+        // 填充方案：全部前景色
+        cellStyle.setFillPattern(FillPatternType.forInt(SystemPropertyUtils.getHeaderStyleRequiredForFillPatternCode())); // FillPatternType.SOLID_FOREGROUND
+        // 设置前景色
+        cellStyle.setFillForegroundColor(SystemPropertyUtils.getHeaderStyleRequiredForFillForegroundColor()); // IndexedColors.YELLOW.getIndex()
+        // 设置背景色
+        cellStyle.setFillBackgroundColor(SystemPropertyUtils.getHeaderStyleRequiredForFillBackgroundColor()); // IndexedColors.YELLOW.getIndex()
 
         // 设置字体
         Font font = workbook.createFont();
-        font.setColor(Font.COLOR_RED);
+        font.setColor(SystemPropertyUtils.getHeaderStyleRequiredForFontColor()); // Font.COLOR_RED
         // 文本加粗
         font.setBold(true);
-        font.setFontName("宋体");
-        font.setFontHeightInPoints((short) 12);
+        font.setFontName(SystemPropertyUtils.getFontName());
+        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
         cellStyle.setFont(font);
         return cellStyle;
     }
@@ -806,8 +829,8 @@ public class ExcelUtils {
         // 设置字体
         Font font = workbook.createFont();
         font.setColor(Font.COLOR_NORMAL);
-        font.setFontName("宋体");
-        font.setFontHeightInPoints((short) 11);
+        font.setFontName(SystemPropertyUtils.getFontName());
+        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
         cellStyle.setFont(font);
         return cellStyle;
     }
