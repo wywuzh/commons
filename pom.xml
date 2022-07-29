@@ -133,6 +133,7 @@
 
         <!-- Maven插件 -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
+        <flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -811,7 +812,7 @@
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
-                    <version>1.2.7</version>
+                    <version>${flatten-maven-plugin.version}</version>
                     <configuration>
                         <updatePomFile>true</updatePomFile>
                         <flattenMode>resolveCiFriendliesOnly</flattenMode>
