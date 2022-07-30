@@ -10,14 +10,15 @@
     <parent>
         <groupId>com.github.wywuzh</groupId>
         <artifactId>commons-static</artifactId>
-        <version>2.5.2.SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.webjars.npm</groupId>
             <artifactId>vue</artifactId>
-            <version>${webjars.vue2.version}</version>
+            <version>${webjars.vue.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars.npm</groupId>

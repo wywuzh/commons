@@ -9,7 +9,8 @@
     <parent>
         <groupId>com.github.wywuzh</groupId>
         <artifactId>commons-parent</artifactId>
-        <version>2.5.2.SNAPSHOT</version>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <dependencies>
@@ -197,6 +198,12 @@
         <dependency>
             <groupId>jep</groupId>
             <artifactId>jep</artifactId>
+        </dependency>
+
+        <!-- Java工具包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
         </dependency>
     </dependencies>
 

@@ -4,6 +4,28 @@
 
 ### 依赖资源
 
+#### SpringBoot/v2.7.x
+* spring-boot：2.7.x
+* spring-cloud：2021.0.x
+* spring-kafka：2.8.x
+* mybatis：3.5.9
+* mybatis-spring：2.0.7
+* mybatis-spring-boot：2.2.2
+* dubbo：3.x
+* poi：5.x
+
+
+#### SpringBoot/v2.6.x
+* spring-boot：2.6.x
+* spring-cloud：2021.0.x
+* spring-kafka：2.7.x
+* mybatis：3.5.7
+* mybatis-spring：2.0.6
+* mybatis-spring-boot：2.2.0
+* dubbo：3.x
+* poi：4.x
+
+
 #### SpringBoot/v2.5.x
 * spring-boot：2.5.x
 * spring-cloud：2020.0.x
@@ -11,6 +33,8 @@
 * mybatis：3.5.7
 * mybatis-spring：2.0.6
 * mybatis-spring-boot：2.2.0
+* dubbo：2.x
+* poi：4.x
 
 
 #### SpringBoot/v2.4.x

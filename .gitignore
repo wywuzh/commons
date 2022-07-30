@@ -11,6 +11,7 @@
 *.iml
 /**/.gitignore
 .git-credentials
+.flattened-pom.xml
 
 # folder #
 target/
