@@ -45,9 +45,9 @@ public class SnowflakeIdWorkerTest {
         log.info("nextLongIdHex={}, 长度={}", nextLongIdHex, nextLongIdHex.length());
 
         final long twepoch = 1288834974657L;
-        log.info("开始时间:{}", DateUtil.format(new Date(twepoch), DateUtil.PATTERN_DATE_TIME));
+        log.info("开始时间:{}", DateUtils.format(new Date(twepoch), DateUtils.PATTERN_DATE_TIME));
 
-        log.info("开始时间戳:{}", DateUtil.parse("2015-01-01", DateUtil.PATTERN_DATE).getTime());
+        log.info("开始时间戳:{}", DateUtils.parse("2015-01-01", DateUtils.PATTERN_DATE).getTime());
     }
 
 }

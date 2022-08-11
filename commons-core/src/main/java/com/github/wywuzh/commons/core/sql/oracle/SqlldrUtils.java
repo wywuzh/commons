@@ -17,7 +17,7 @@ package com.github.wywuzh.commons.core.sql.oracle;
 
 import com.github.wywuzh.commons.core.common.Constants;
 import com.github.wywuzh.commons.core.reflect.ReflectUtils;
-import com.github.wywuzh.commons.core.util.DateUtil;
+import com.github.wywuzh.commons.core.util.DateUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -256,11 +256,11 @@ public class SqlldrUtils {
                         .replaceAll("\r", "char(13)"); // ascii码回车
                 value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, value, Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == java.util.Date.class) {
-                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtil.format((Date) value, DateUtil.PATTERN_DATE_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtils.format((Date) value, DateUtils.PATTERN_DATE_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == java.sql.Date.class) {
-                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtil.format((Date) value, DateUtil.PATTERN_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtils.format((Date) value, DateUtils.PATTERN_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == java.sql.Time.class) {
-                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtil.format((Date) value, DateUtil.PATTERN_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
+                value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtils.format((Date) value, DateUtils.PATTERN_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == BigDecimal.class
                     || field.getType() == Double.class
                     || field.getType() == Float.class) {

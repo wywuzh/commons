@@ -15,25 +15,24 @@
  */
 package com.github.wywuzh.commons.core.util;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.lang.Nullable;
+import java.util.Enumeration;
+import java.util.Properties;
 
 /**
- * 类Asset的实现描述：Spring Assert扩展
+ * 类SystemPropertyUtilsTest的实现描述：系统属性工具
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2022-08-02 10:42:24
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2022-08-11 13:46:22
  * @version v2.7.0
  * @since JDK 1.8
  */
-public class Assert extends org.springframework.util.Assert {
+public class SystemPropertyUtilsTest {
 
-    public static void notBlank(@Nullable String text) {
-        notBlank(text, "[Assertion failed] - this argument is required; it must not be blank");
-    }
-
-    public static void notBlank(@Nullable String text, String message) {
-        if (StringUtils.isNotBlank(text)) {
-            throw new IllegalArgumentException(message);
+    public static void main(String[] args) {
+        Properties properties = System.getProperties();
+        Enumeration<?> propertyNames = properties.propertyNames();
+        while (propertyNames.hasMoreElements()) {
+            String propertyName = (String) propertyNames.nextElement();
+            System.out.println(String.format("属性名=%s, 属性值=%s", propertyName, properties.getProperty(propertyName)));
         }
     }
 

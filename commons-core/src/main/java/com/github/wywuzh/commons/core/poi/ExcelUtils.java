@@ -20,8 +20,9 @@ import com.github.wywuzh.commons.core.math.CalculationUtils;
 import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
 import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
 import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
+import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
 import com.github.wywuzh.commons.core.reflect.ReflectUtils;
-import com.github.wywuzh.commons.core.util.DateUtil;
+import com.github.wywuzh.commons.core.util.DateUtils;
 import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -541,17 +542,17 @@ public class ExcelUtils {
 
         if (realValue instanceof Date) {
             //进行转换
-            String dateValue = DateUtil.format((Date) realValue, DateUtil.PATTERN_DATE_TIME);
+            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_DATE_TIME);
             //将属性值存入单元格
             cell.setCellValue(dateValue);
         } else if (realValue instanceof java.sql.Date) {
             //进行转换
-            String dateValue = DateUtil.format((Date) realValue, DateUtil.PATTERN_DATE);
+            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_DATE);
             //将属性值存入单元格
             cell.setCellValue(dateValue);
         } else if (realValue instanceof java.sql.Time) {
             //进行转换
-            String dateValue = DateUtil.format((Date) realValue, DateUtil.PATTERN_TIME);
+            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_TIME);
             //将属性值存入单元格
             cell.setCellValue(dateValue);
         } else if (realValue instanceof BigDecimal
@@ -742,17 +743,17 @@ public class ExcelUtils {
         CellStyle cellStyle = createCellStyle(workbook);
         // [v2.7.0]增加底色
         // 填充方案：全部前景色
-        Short fillPatternCode = SystemPropertyUtils.getHeaderStyleForFillPatternCode();
+        Short fillPatternCode = CellStyleTools.getHeaderStyleForFillPatternCode();
         if (fillPatternCode != null) {
             cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode));
         }
         // 设置前景色
-        Short fillForegroundColor = SystemPropertyUtils.getHeaderStyleForFillForegroundColor();
+        Short fillForegroundColor = CellStyleTools.getHeaderStyleForFillForegroundColor();
         if (fillForegroundColor != null) {
             cellStyle.setFillForegroundColor(fillForegroundColor);
         }
         // 设置背景色
-        Short fillBackgroundColor = SystemPropertyUtils.getHeaderStyleForFillBackgroundColor();
+        Short fillBackgroundColor = CellStyleTools.getHeaderStyleForFillBackgroundColor();
         if (fillBackgroundColor != null) {
             cellStyle.setFillBackgroundColor(fillBackgroundColor);
         }
@@ -763,7 +764,7 @@ public class ExcelUtils {
 
         // 设置字体
         Font font = workbook.createFont();
-        Short fontColor = SystemPropertyUtils.getHeaderStyleForFontColor();
+        Short fontColor = CellStyleTools.getHeaderStyleForFontColor();
         if (fontColor != null) {
             font.setColor(fontColor); // Font.COLOR_RED
         }
@@ -788,18 +789,18 @@ public class ExcelUtils {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         // [v2.7.0]增加底色
         // 填充方案：全部前景色
-        Short fillPatternCode = Optional.ofNullable(SystemPropertyUtils.getHeaderStyleTipsForFillPatternCode()).orElse(FillPatternType.SOLID_FOREGROUND.getCode());
+        Short fillPatternCode = Optional.ofNullable(CellStyleTools.getHeaderStyleTipsForFillPatternCode()).orElse(FillPatternType.SOLID_FOREGROUND.getCode());
         cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode)); // FillPatternType.SOLID_FOREGROUND
         // 设置前景色：默认黄色
-        Short fillForegroundColor = Optional.ofNullable(SystemPropertyUtils.getHeaderStyleTipsForFillForegroundColor()).orElse(IndexedColors.YELLOW.getIndex());
+        Short fillForegroundColor = Optional.ofNullable(CellStyleTools.getHeaderStyleTipsForFillForegroundColor()).orElse(IndexedColors.YELLOW.getIndex());
         cellStyle.setFillForegroundColor(fillForegroundColor); // IndexedColors.YELLOW.getIndex()
         // 设置背景色：默认黄色
-        Short fillBackgroundColor = Optional.ofNullable(SystemPropertyUtils.getHeaderStyleTipsForFillBackgroundColor()).orElse(IndexedColors.YELLOW.getIndex());
+        Short fillBackgroundColor = Optional.ofNullable(CellStyleTools.getHeaderStyleTipsForFillBackgroundColor()).orElse(IndexedColors.YELLOW.getIndex());
         cellStyle.setFillBackgroundColor(fillBackgroundColor); // IndexedColors.YELLOW.getIndex()
 
         // 设置字体
         Font font = workbook.createFont();
-        Short fontColor = SystemPropertyUtils.getHeaderStyleTipsForFontColor();
+        Short fontColor = CellStyleTools.getHeaderStyleTipsForFontColor();
         if (fontColor != null) {
             font.setColor(fontColor); // Font.COLOR_RED
         }
@@ -821,17 +822,17 @@ public class ExcelUtils {
         CellStyle cellStyle = createCellStyle(workbook);
         // [v2.7.0]增加底色
         // 填充方案：全部前景色
-        Short fillPatternCode = SystemPropertyUtils.getHeaderStyleRequiredForFillPatternCode();
+        Short fillPatternCode = CellStyleTools.getHeaderStyleRequiredForFillPatternCode();
         if (fillPatternCode != null) {
             cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode)); // FillPatternType.SOLID_FOREGROUND.getCode()
         }
         // 设置前景色
-        Short fillForegroundColor = SystemPropertyUtils.getHeaderStyleRequiredForFillForegroundColor();
+        Short fillForegroundColor = CellStyleTools.getHeaderStyleRequiredForFillForegroundColor();
         if (fillForegroundColor != null) {
             cellStyle.setFillForegroundColor(fillForegroundColor); // IndexedColors.YELLOW.getIndex()
         }
         // 设置背景色
-        Short fillBackgroundColor = SystemPropertyUtils.getHeaderStyleRequiredForFillBackgroundColor();
+        Short fillBackgroundColor = CellStyleTools.getHeaderStyleRequiredForFillBackgroundColor();
         if (fillBackgroundColor != null) {
             cellStyle.setFillBackgroundColor(fillBackgroundColor); // IndexedColors.YELLOW.getIndex()
         }
@@ -842,7 +843,7 @@ public class ExcelUtils {
 
         // 设置字体
         Font font = workbook.createFont();
-        font.setColor(SystemPropertyUtils.getHeaderStyleRequiredForFontColor()); // Font.COLOR_RED
+        font.setColor(CellStyleTools.getHeaderStyleRequiredForFontColor()); // Font.COLOR_RED
         // 文本加粗
         font.setBold(true);
         font.setFontName(SystemPropertyUtils.getFontName());
@@ -1191,16 +1192,16 @@ public class ExcelUtils {
             }
             // 日期转换优先级别：yyyy-MM-dd HH:mm:ss -> yyyy-MM-dd -> yyyy/MM/dd -> yyyy-MM
             if (cellValue == null) {
-                cellValue = DateUtil.parse(cell.getStringCellValue(), DateUtil.PATTERN_DATE_TIME);
+                cellValue = DateUtils.parse(cell.getStringCellValue(), DateUtils.PATTERN_DATE_TIME);
             }
             if (cellValue == null) {
-                cellValue = DateUtil.parse(cell.getStringCellValue(), DateUtil.PATTERN_DATE);
+                cellValue = DateUtils.parse(cell.getStringCellValue(), DateUtils.PATTERN_DATE);
             }
             if (cellValue == null) {
-                cellValue = DateUtil.parse(cell.getStringCellValue(), "yyyy/MM/dd");
+                cellValue = DateUtils.parse(cell.getStringCellValue(), "yyyy/MM/dd");
             }
             if (cellValue == null) {
-                cellValue = DateUtil.parse(cell.getStringCellValue(), DateUtil.PATTERN_YYYY_MM);
+                cellValue = DateUtils.parse(cell.getStringCellValue(), DateUtils.PATTERN_YYYY_MM);
             }
             return cellValue;
         }
