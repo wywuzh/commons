@@ -34,8 +34,7 @@ public class BankUtil {
      * 如传入的银行卡号为6222020200102027979，输出时则为6222 0202 0010 2027 979
      * </pre>
      *
-     * @param cardId
-     *            银行卡号
+     * @param cardId 银行卡号
      * @return
      */
     public static String convert4BankCardId(String cardId) {
@@ -50,7 +49,4 @@ public class BankUtil {
         return card.toString();
     }
 
-    public static void main(String[] args) {
-        logger.info("bank card id:" + convert4BankCardId("6222020200102027979"));
-    }
 }

@@ -108,7 +108,7 @@ public class MapStructTest {
 
         @Mappings({
                 @Mapping(source = "nick", target = "nickname"), // //属性名不一致映射
-                @Mapping(target = "birthdateFormat", expression = "java(com.github.wywuzh.commons.core.util.DateUtil.format(user.getBirthdate(), com.github.wywuzh.commons.core.util.DateUtil.PATTERN_DATE_TIME))")
+                @Mapping(target = "birthdateFormat", expression = "java(com.github.wywuzh.commons.core.util.DateUtils.format(user.getBirthdate(), com.github.wywuzh.commons.core.util.DateUtils.PATTERN_DATE_TIME))")
         })
         public UserVo UserToUserVo(User user);
 

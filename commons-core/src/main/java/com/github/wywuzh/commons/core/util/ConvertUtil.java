@@ -63,11 +63,11 @@ public class ConvertUtil {
                     Object result = descriptor.getReadMethod().invoke(bean, new Object[0]);
                     if (null != result) {
                         if (typeName == "java.util.Date") {
-                            map.put(propertyName, DateUtil.format((java.util.Date) result, DateUtil.PATTERN_DATE_TIME));
+                            map.put(propertyName, DateUtils.format((java.util.Date) result, DateUtils.PATTERN_DATE_TIME));
                         } else if (typeName == "java.sql.Date") {
-                            map.put(propertyName, DateUtil.format((java.sql.Date) result, DateUtil.PATTERN_DATE));
+                            map.put(propertyName, DateUtils.format((java.sql.Date) result, DateUtils.PATTERN_DATE));
                         } else if (typeName == "java.sql.Time") {
-                            map.put(propertyName, DateUtil.format((Time) result, DateUtil.PATTERN_TIME));
+                            map.put(propertyName, DateUtils.format((Time) result, DateUtils.PATTERN_TIME));
                         } else if (typeName == "java.lang.Long" || typeName == "long") {
                             map.put(propertyName, result);
                         } else if (typeName == "java.lang.Short" || typeName == "short") {
@@ -132,7 +132,7 @@ public class ConvertUtil {
                     Object value = map.get(propertyName);
                     Object[] args = new Object[1];
                     if (typeName == "java.util.Date" || typeName == "java.sql.Date") {
-                        args[0] = DateUtil.parse(value.toString(), DateUtil.PATTERN_DATE_TIME);
+                        args[0] = DateUtils.parse(value.toString(), DateUtils.PATTERN_DATE_TIME);
                         ;
                     } else if (typeName == "java.lang.Long" || typeName == "long") {
                         args[0] = Long.valueOf(value.toString());

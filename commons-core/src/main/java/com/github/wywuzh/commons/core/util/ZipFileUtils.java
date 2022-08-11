@@ -41,7 +41,7 @@ import org.springframework.util.Assert;
  * @version v1.0.0
  * @since JDK 1.7.0_71
  */
-public class ZipUtil {
+public class ZipFileUtils {
 
     /**
      * 压缩文件格式

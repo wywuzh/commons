@@ -47,8 +47,8 @@ import java.util.Date;
  * @version 1.0.0
  * @since JDK 1.6.0_20
  */
-public class DateUtil {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DateUtil.class);
+public class DateUtils {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DateUtils.class);
 
     public static final String PATTERN_YYYY = "yyyy";
     public static final String PATTERN_YYYY_MM = "yyyy-MM";
@@ -558,7 +558,7 @@ public class DateUtil {
      * @since v2.5.2
      */
     public static String getPreYearMonth(String yearMonth) {
-        Date yearMonthForDate = DateUtil.parse(yearMonth, DateUtil.PATTERN_YYYY_MM);
+        Date yearMonthForDate = DateUtils.parse(yearMonth, DateUtils.PATTERN_YYYY_MM);
         if (yearMonthForDate == null) {
             return null;
         }
@@ -583,7 +583,7 @@ public class DateUtil {
      * @since v2.5.2
      */
     public static String getNextYearMonth(String yearMonth) {
-        Date yearMonthForDate = DateUtil.parse(yearMonth, DateUtil.PATTERN_YYYY_MM);
+        Date yearMonthForDate = DateUtils.parse(yearMonth, DateUtils.PATTERN_YYYY_MM);
         if (yearMonthForDate == null) {
             return null;
         }
@@ -677,7 +677,7 @@ public class DateUtil {
      * @since v2.5.2
      */
     public static Integer getMonthInterval(String startYearMonth, String endYearMonth, boolean includeCurrentDay) {
-        return DateUtil.getMonthInterval(DateUtil.parse(startYearMonth, DateUtil.PATTERN_YYYY_MM), DateUtil.parse(endYearMonth, DateUtil.PATTERN_YYYY_MM), includeCurrentDay);
+        return DateUtils.getMonthInterval(DateUtils.parse(startYearMonth, DateUtils.PATTERN_YYYY_MM), DateUtils.parse(endYearMonth, DateUtils.PATTERN_YYYY_MM), includeCurrentDay);
     }
 
 }

@@ -17,7 +17,7 @@ package com.github.wywuzh.commons.core.validator.support;
 
 import java.util.Date;
 
-import com.github.wywuzh.commons.core.util.DateUtil;
+import com.github.wywuzh.commons.core.util.DateUtils;
 import com.github.wywuzh.commons.core.validator.PatternType;
 import com.github.wywuzh.commons.core.validator.Validate;
 import org.springframework.util.Assert;
@@ -49,8 +49,8 @@ public class ValidateRangeDate extends ValidateDate {
     }
 
     public static void main(String[] args) {
-        Date startDate = DateUtil.parse("2014-12-12 00:00:00");
-        Date endDate = DateUtil.parse("2014-12-13 00:00:00");
+        Date startDate = DateUtils.parse("2014-12-12 00:00:00");
+        Date endDate = DateUtils.parse("2014-12-13 00:00:00");
         ValidateRangeDate rangeDate = new ValidateRangeDate(startDate, endDate);
         System.out.println(rangeDate.validate());
     }
