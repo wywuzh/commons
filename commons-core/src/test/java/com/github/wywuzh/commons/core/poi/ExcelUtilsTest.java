@@ -19,10 +19,7 @@ import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
 import com.github.wywuzh.commons.core.poi.entity.User;
 import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,12 +36,14 @@ import java.util.*;
 @Slf4j
 public class ExcelUtilsTest {
 
-    //    @Before
+//    @Before
     public void init() {
         System.setProperty("font.name", "宋体");
         System.setProperty("font.height", "11");
 
         // 表头列(单元格)样式 - 表头提示信息
+        // 填充方案编码
+        System.setProperty("cell_style.header.tips.fill_pattern_type.code", String.valueOf(FillPatternType.SOLID_FOREGROUND.getCode()));
         // 设置前景色
         System.setProperty("cell_style.header.tips.foreground.color", String.valueOf(IndexedColors.YELLOW.getIndex()));
         // 设置背景色
@@ -52,21 +51,25 @@ public class ExcelUtilsTest {
         // 字体颜色
         System.setProperty("cell_style.header.tips.font.color", String.valueOf(Font.COLOR_RED));
 
-        // 表头列(单元格)样式 - 表头必填字段
-        // 设置前景色：深青色/蓝色, 个形色1, 深色50%
-        System.setProperty("cell_style.header.required.foreground.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
-        // 设置背景色：深青色/蓝色, 个形色1, 深色50%
-        System.setProperty("cell_style.header.required.background.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
-        // 字体颜色：白色
-        System.setProperty("cell_style.header.required.font.color", String.valueOf(IndexedColors.WHITE.index));
+//        // 表头列(单元格)样式 - 表头必填字段
+//        // 填充方案编码
+//        System.setProperty("cell_style.header.required.fill_pattern_type.code", String.valueOf(FillPatternType.SOLID_FOREGROUND.getCode()));
+//        // 设置前景色：深青色/蓝色, 个形色1, 深色50%
+//        System.setProperty("cell_style.header.required.foreground.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
+//        // 设置背景色：深青色/蓝色, 个形色1, 深色50%
+//        System.setProperty("cell_style.header.required.background.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
+//        // 字体颜色：白色
+//        System.setProperty("cell_style.header.required.font.color", String.valueOf(IndexedColors.WHITE.index));
 
-        // 表头列(单元格)样式 - 表头
-        // 设置前景色：深青色/蓝色, 个形色1, 深色50%
-        System.setProperty("cell_style.header.foreground.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
-        // 设置背景色：深青色/蓝色, 个形色1, 深色50%
-        System.setProperty("cell_style.header.background.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
-        // 字体颜色：白色
-        System.setProperty("cell_style.header.font.color", String.valueOf(IndexedColors.WHITE.index));
+//        // 表头列(单元格)样式 - 表头
+//        // 填充方案编码
+//        System.setProperty("cell_style.header.fill_pattern_type.code", String.valueOf(FillPatternType.SOLID_FOREGROUND.getCode()));
+//        // 设置前景色：深青色/蓝色, 个形色1, 深色50%
+//        System.setProperty("cell_style.header.foreground.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
+//        // 设置背景色：深青色/蓝色, 个形色1, 深色50%
+//        System.setProperty("cell_style.header.background.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
+//        // 字体颜色：白色
+//        System.setProperty("cell_style.header.font.color", String.valueOf(IndexedColors.WHITE.index));
     }
 
     @Test

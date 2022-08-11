@@ -434,7 +434,7 @@ public class SystemPropertyUtils {
      * @return 字体大小
      */
     public static short getFontHeight() {
-        return Short.parseShort(System.getProperty("font.height", "12"));
+        return Short.parseShort(System.getProperty("font.height", "11"));
     }
 
     // =========================================== POI属性 >>> Start ===========================================
@@ -444,12 +444,12 @@ public class SystemPropertyUtils {
      *
      * @return 填充方案编码
      */
-    public static int getHeaderStyleTipsForFillPatternCode() {
+    public static Short getHeaderStyleTipsForFillPatternCode() {
         String property = System.getProperty("cell_style.header.tips.fill_pattern_type.code");
         if (StringUtils.isNotBlank(property)) {
-            return Integer.parseInt(property);
+            return Short.parseShort(property);
         }
-        return FillPatternType.SOLID_FOREGROUND.getCode();
+        return null;//FillPatternType.SOLID_FOREGROUND.getCode();
     }
 
     /**
@@ -457,12 +457,12 @@ public class SystemPropertyUtils {
      *
      * @return 前景色
      */
-    public static short getHeaderStyleTipsForFillForegroundColor() {
+    public static Short getHeaderStyleTipsForFillForegroundColor() {
         String property = System.getProperty("cell_style.header.tips.foreground.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return IndexedColors.YELLOW.getIndex();
+        return null;//IndexedColors.YELLOW.getIndex();
     }
 
     /**
@@ -470,12 +470,12 @@ public class SystemPropertyUtils {
      *
      * @return 背景色
      */
-    public static short getHeaderStyleTipsForFillBackgroundColor() {
+    public static Short getHeaderStyleTipsForFillBackgroundColor() {
         String property = System.getProperty("cell_style.header.tips.background.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return IndexedColors.YELLOW.getIndex();
+        return null;//IndexedColors.YELLOW.getIndex();
     }
 
     /**
@@ -483,12 +483,12 @@ public class SystemPropertyUtils {
      *
      * @return 字体颜色
      */
-    public static short getHeaderStyleTipsForFontColor() {
+    public static Short getHeaderStyleTipsForFontColor() {
         String property = System.getProperty("cell_style.header.tips.font.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return Font.COLOR_RED;
+        return null;//Font.COLOR_RED;
     }
 
 
@@ -497,12 +497,12 @@ public class SystemPropertyUtils {
      *
      * @return 填充方案编码
      */
-    public static int getHeaderStyleRequiredForFillPatternCode() {
+    public static Short getHeaderStyleRequiredForFillPatternCode() {
         String property = System.getProperty("cell_style.header.required.fill_pattern_type.code");
         if (StringUtils.isNotBlank(property)) {
-            return Integer.parseInt(property);
+            return Short.parseShort(property);
         }
-        return FillPatternType.SOLID_FOREGROUND.getCode();
+        return null;//FillPatternType.SOLID_FOREGROUND.getCode();
     }
 
     /**
@@ -510,12 +510,12 @@ public class SystemPropertyUtils {
      *
      * @return 前景色
      */
-    public static short getHeaderStyleRequiredForFillForegroundColor() {
+    public static Short getHeaderStyleRequiredForFillForegroundColor() {
         String property = System.getProperty("cell_style.header.required.foreground.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return IndexedColors.WHITE.getIndex();
+        return null;//IndexedColors.BRIGHT_GREEN.getIndex();
     }
 
     /**
@@ -523,12 +523,12 @@ public class SystemPropertyUtils {
      *
      * @return 背景色
      */
-    public static short getHeaderStyleRequiredForFillBackgroundColor() {
+    public static Short getHeaderStyleRequiredForFillBackgroundColor() {
         String property = System.getProperty("cell_style.header.required.background.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return IndexedColors.AUTOMATIC.getIndex();
+        return null;//IndexedColors.AUTOMATIC.getIndex();
     }
 
     /**
@@ -550,12 +550,12 @@ public class SystemPropertyUtils {
      *
      * @return 填充方案编码
      */
-    public static int getHeaderStyleForFillPatternCode() {
+    public static Short getHeaderStyleForFillPatternCode() {
         String property = System.getProperty("cell_style.header.fill_pattern_type.code");
         if (StringUtils.isNotBlank(property)) {
-            return Integer.parseInt(property);
+            return Short.parseShort(property);
         }
-        return FillPatternType.SOLID_FOREGROUND.getCode();
+        return null;//FillPatternType.SOLID_FOREGROUND.getCode();
     }
 
     /**
@@ -563,12 +563,12 @@ public class SystemPropertyUtils {
      *
      * @return 前景色
      */
-    public static short getHeaderStyleForFillForegroundColor() {
+    public static Short getHeaderStyleForFillForegroundColor() {
         String property = System.getProperty("cell_style.header.foreground.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return IndexedColors.AUTOMATIC.getIndex();
+        return null;//IndexedColors.AUTOMATIC.getIndex();
     }
 
     /**
@@ -576,12 +576,12 @@ public class SystemPropertyUtils {
      *
      * @return 背景色
      */
-    public static short getHeaderStyleForFillBackgroundColor() {
+    public static Short getHeaderStyleForFillBackgroundColor() {
         String property = System.getProperty("cell_style.header.background.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return IndexedColors.AUTOMATIC.getIndex();
+        return null;//IndexedColors.AUTOMATIC.getIndex();
     }
 
     /**
@@ -589,12 +589,12 @@ public class SystemPropertyUtils {
      *
      * @return 字体颜色
      */
-    public static short getHeaderStyleForFontColor() {
+    public static Short getHeaderStyleForFontColor() {
         String property = System.getProperty("cell_style.header.font.color");
         if (StringUtils.isNotBlank(property)) {
             return Short.parseShort(property);
         }
-        return Font.COLOR_RED;
+        return null;//Font.COLOR_RED;
     }
 
     // =========================================== POI属性 <<< End ===========================================

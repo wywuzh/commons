@@ -333,7 +333,7 @@ public class ExcelUtils {
         Integer[] columnLengths = excelRequest.getColumnLengths();
         List<String> requiredColumnTitles = excelRequest.getRequiredColumnTitles();
         if (CollectionUtils.isNotEmpty(requiredColumnTitles)) {
-            requiredHeaderStyle = createRequiredHeaderStyle(workbook);
+            requiredHeaderStyle = createHeaderStyleForRequired(workbook);
         }
         // 行高
         final float height = -1;
@@ -742,15 +742,31 @@ public class ExcelUtils {
         CellStyle cellStyle = createCellStyle(workbook);
         // [v2.7.0]增加底色
         // 填充方案：全部前景色
-        cellStyle.setFillPattern(FillPatternType.forInt(SystemPropertyUtils.getHeaderStyleForFillPatternCode()));
+        Short fillPatternCode = SystemPropertyUtils.getHeaderStyleForFillPatternCode();
+        if (fillPatternCode != null) {
+            cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode));
+        }
         // 设置前景色
-        cellStyle.setFillForegroundColor(SystemPropertyUtils.getHeaderStyleForFillForegroundColor());
+        Short fillForegroundColor = SystemPropertyUtils.getHeaderStyleForFillForegroundColor();
+        if (fillForegroundColor != null) {
+            cellStyle.setFillForegroundColor(fillForegroundColor);
+        }
         // 设置背景色
-        cellStyle.setFillBackgroundColor(SystemPropertyUtils.getHeaderStyleForFillBackgroundColor());
+        Short fillBackgroundColor = SystemPropertyUtils.getHeaderStyleForFillBackgroundColor();
+        if (fillBackgroundColor != null) {
+            cellStyle.setFillBackgroundColor(fillBackgroundColor);
+        }
+        // 注：前景色/背景色不为空时，填充方案不可为空
+        if (fillPatternCode == null && (fillForegroundColor != null || fillBackgroundColor != null)) {
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        }
 
         // 设置字体
         Font font = workbook.createFont();
-        font.setColor(SystemPropertyUtils.getHeaderStyleForFontColor());
+        Short fontColor = SystemPropertyUtils.getHeaderStyleForFontColor();
+        if (fontColor != null) {
+            font.setColor(fontColor); // Font.COLOR_RED
+        }
         // 文本加粗
         font.setBold(true);
         font.setFontName(SystemPropertyUtils.getFontName());
@@ -772,15 +788,21 @@ public class ExcelUtils {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         // [v2.7.0]增加底色
         // 填充方案：全部前景色
-        cellStyle.setFillPattern(FillPatternType.forInt(SystemPropertyUtils.getHeaderStyleTipsForFillPatternCode())); // FillPatternType.SOLID_FOREGROUND
-        // 设置前景色
-        cellStyle.setFillForegroundColor(SystemPropertyUtils.getHeaderStyleTipsForFillForegroundColor()); // IndexedColors.YELLOW.getIndex()
-        // 设置背景色
-        cellStyle.setFillBackgroundColor(SystemPropertyUtils.getHeaderStyleTipsForFillBackgroundColor()); // IndexedColors.YELLOW.getIndex()
+        Short fillPatternCode = Optional.ofNullable(SystemPropertyUtils.getHeaderStyleTipsForFillPatternCode()).orElse(FillPatternType.SOLID_FOREGROUND.getCode());
+        cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode)); // FillPatternType.SOLID_FOREGROUND
+        // 设置前景色：默认黄色
+        Short fillForegroundColor = Optional.ofNullable(SystemPropertyUtils.getHeaderStyleTipsForFillForegroundColor()).orElse(IndexedColors.YELLOW.getIndex());
+        cellStyle.setFillForegroundColor(fillForegroundColor); // IndexedColors.YELLOW.getIndex()
+        // 设置背景色：默认黄色
+        Short fillBackgroundColor = Optional.ofNullable(SystemPropertyUtils.getHeaderStyleTipsForFillBackgroundColor()).orElse(IndexedColors.YELLOW.getIndex());
+        cellStyle.setFillBackgroundColor(fillBackgroundColor); // IndexedColors.YELLOW.getIndex()
 
         // 设置字体
         Font font = workbook.createFont();
-        font.setColor(SystemPropertyUtils.getHeaderStyleTipsForFontColor()); // Font.COLOR_RED
+        Short fontColor = SystemPropertyUtils.getHeaderStyleTipsForFontColor();
+        if (fontColor != null) {
+            font.setColor(fontColor); // Font.COLOR_RED
+        }
         font.setBold(true);
         font.setFontName(SystemPropertyUtils.getFontName());
         font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
@@ -789,21 +811,34 @@ public class ExcelUtils {
     }
 
     /**
-     * 设置表头列(单元格)样式 - 红色提示
+     * 设置表头列(单元格)样式：表头必填字段 - 红色提示
      *
      * @param workbook 工作簿对象
      * @return
      * @author 伍章红 2015年4月28日 ( 下午3:07:26 )
      */
-    private static CellStyle createRequiredHeaderStyle(Workbook workbook) {
+    private static CellStyle createHeaderStyleForRequired(Workbook workbook) {
         CellStyle cellStyle = createCellStyle(workbook);
         // [v2.7.0]增加底色
         // 填充方案：全部前景色
-        cellStyle.setFillPattern(FillPatternType.forInt(SystemPropertyUtils.getHeaderStyleRequiredForFillPatternCode())); // FillPatternType.SOLID_FOREGROUND
+        Short fillPatternCode = SystemPropertyUtils.getHeaderStyleRequiredForFillPatternCode();
+        if (fillPatternCode != null) {
+            cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode)); // FillPatternType.SOLID_FOREGROUND.getCode()
+        }
         // 设置前景色
-        cellStyle.setFillForegroundColor(SystemPropertyUtils.getHeaderStyleRequiredForFillForegroundColor()); // IndexedColors.YELLOW.getIndex()
+        Short fillForegroundColor = SystemPropertyUtils.getHeaderStyleRequiredForFillForegroundColor();
+        if (fillForegroundColor != null) {
+            cellStyle.setFillForegroundColor(fillForegroundColor); // IndexedColors.YELLOW.getIndex()
+        }
         // 设置背景色
-        cellStyle.setFillBackgroundColor(SystemPropertyUtils.getHeaderStyleRequiredForFillBackgroundColor()); // IndexedColors.YELLOW.getIndex()
+        Short fillBackgroundColor = SystemPropertyUtils.getHeaderStyleRequiredForFillBackgroundColor();
+        if (fillBackgroundColor != null) {
+            cellStyle.setFillBackgroundColor(fillBackgroundColor); // IndexedColors.YELLOW.getIndex()
+        }
+        // 注：前景色/背景色不为空时，填充方案不可为空
+        if (fillPatternCode == null && (fillForegroundColor != null || fillBackgroundColor != null)) {
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        }
 
         // 设置字体
         Font font = workbook.createFont();
