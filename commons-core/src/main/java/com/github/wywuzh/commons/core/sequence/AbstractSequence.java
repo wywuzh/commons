@@ -15,7 +15,7 @@
  */
 package com.github.wywuzh.commons.core.sequence;
 
-import com.github.wywuzh.commons.core.util.DateUtil;
+import com.github.wywuzh.commons.core.util.DateUtils;
 import com.github.wywuzh.commons.core.util.StringHelper;
 
 import java.util.Date;
@@ -56,7 +56,7 @@ public abstract class AbstractSequence {
      * @return
      */
     private String getCurrentTime() {
-        return DateUtil.format(new Date(), datePattern());
+        return DateUtils.format(new Date(), datePattern());
     }
 
     /**
