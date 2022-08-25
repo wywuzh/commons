@@ -107,7 +107,7 @@
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.0.1</curator_version>
         <dubbo.version>3.0.10</dubbo.version>
-        <shiro.version>1.9.0</shiro.version>
+        <shiro.version>1.9.1</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>2.0.0</alibaba-dingtalk-service-sdk.version>
 
