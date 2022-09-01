@@ -32,7 +32,7 @@ public class Assert extends org.springframework.util.Assert {
     }
 
     public static void notBlank(@Nullable String text, String message) {
-        if (StringUtils.isNotBlank(text)) {
+        if (StringUtils.isBlank(text)) {
             throw new IllegalArgumentException(message);
         }
     }
