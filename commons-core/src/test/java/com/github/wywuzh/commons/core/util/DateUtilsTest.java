@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -30,6 +31,21 @@ import java.util.Date;
  */
 @Slf4j
 public class DateUtilsTest {
+
+    // 根据时间类型添加num值
+    @Test
+    public void addNumWithType() {
+        Date currentDate = new Date();
+        int fieldType = Calendar.DAY_OF_MONTH;
+        int num = 1;
+        log.info("date={}, fieldType={}, num={} addNumWithType结果：{}", currentDate, fieldType, num, DateUtils.addNumWithType(currentDate, fieldType, num));
+    }
+
+    @Test
+    public void getFirstDaily() {
+        Date currentDate = new Date();
+        log.info("date={} getFirstDaily结果：{}", currentDate, DateUtils.getFirstDaily(currentDate));
+    }
 
     @Test
     public void getPreYearMonth() {
