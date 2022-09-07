@@ -1,3 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2015-2022 the original author or authors.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -134,6 +152,8 @@
         <!-- Maven插件 -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
         <flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -771,16 +791,11 @@
                         <header>${project.basedir}/license.txt</header>
                         <!-- 排除文件：不需要添加版权信息的文件 -->
                         <excludes>
-                            <exclude>**/*.properties</exclude>
-                            <exclude>*.sh</exclude>
-                            <exclude>*.yml</exclude>
-                            <exclude>*.ymal</exclude>
+                            <exclude>src/main/java/com/itfsw/**</exclude>
                             <exclude>.editorconfig</exclude>
                             <exclude>.gitignore</exclude>
                             <exclude>**/META-INF/**</exclude>
                             <exclude>settings/**</exclude>
-                            <exclude>pom.xml</exclude>
-                            <exclude>**/com/itfsw/**</exclude>
                             <exclude>**/*.ctrl</exclude>
                             <exclude>**/*.dat</exclude>
                             <exclude>**/*.lck</exclude>
@@ -838,7 +853,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-gpg-plugin</artifactId>
-                    <version>1.6</version>
+                    <version>${maven-gpg-plugin.version}</version>
                     <executions>
                         <execution>
                             <phase>verify</phase>
@@ -851,7 +866,7 @@
                 <plugin>
                     <groupId>org.sonatype.plugins</groupId>
                     <artifactId>nexus-staging-maven-plugin</artifactId>
-                    <version>1.6.8</version>
+                    <version>${nexus-staging-maven-plugin.version}</version>
                     <extensions>true</extensions>
                     <configuration>
                         <!-- settings.xml文件中的servers中设置的ID -->

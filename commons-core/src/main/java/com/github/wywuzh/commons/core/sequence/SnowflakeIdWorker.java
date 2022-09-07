@@ -15,6 +15,8 @@
  */
 package com.github.wywuzh.commons.core.sequence;
 
+import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
+
 /**
  * 类IdWorker.java的实现描述：Twitter Snowflake
  *
@@ -25,7 +27,7 @@ package com.github.wywuzh.commons.core.sequence;
  *
  * snowflake的结构如下(每部分用-分开):
  * 0 - 0000000000 0000000000 0000000000 0000000000 0 - 00000 - 00000 - 000000000000
- * 第一位为未使用，接下来的41位为毫秒级时间(41位的长度可以使用69年)，然后是5位datacenterId和5位workerId(10位的长度最多支持部署1024个节点） ，最后12位是毫秒内的计数（12位的计数顺序号支持每个节点每毫秒产生4096个ID序号）
+ * 第一位为未使用，接下来的41位为毫秒级时间(41位的长度可以使用69年)，然后是5位dataCenterId和5位workerId(10位的长度最多支持部署1024个节点） ，最后12位是毫秒内的计数（12位的计数顺序号支持每个节点每毫秒产生4096个ID序号）
  * 一共加起来刚好64位，为一个Long型。(转换成字符串长度为18)
  * snowflake生成的ID整体上按照时间自增排序，并且整个分布式系统内不会产生ID碰撞（由datacenter和workerId作区分），并且效率较高。据说：snowflake每秒能够产生26万个ID。
  *
@@ -52,7 +54,7 @@ public class SnowflakeIdWorker {
     /**
      * 数据标识id所占的位数
      */
-    private final long datacenterIdBits = 5L;
+    private final long dataCenterIdBits = 5L;
     /**
      * 支持的最大机器id，结果是31 (这个移位算法可以很快的计算出几位二进制数所能表示的最大十进制数)
      */
@@ -60,7 +62,7 @@ public class SnowflakeIdWorker {
     /**
      * 支持的最大数据标识id，结果是31
      */
-    private final long maxDatacenterId = -1L ^ (-1L << datacenterIdBits);
+    private final long maxDataCenterId = -1L ^ (-1L << dataCenterIdBits);
     /**
      * 序列在id中占的位数
      */
@@ -72,11 +74,11 @@ public class SnowflakeIdWorker {
     /**
      * 数据标识id向左移17位(12+5)
      */
-    private final long datacenterIdShift = sequenceBits + workerIdBits;
+    private final long dataCenterIdShift = sequenceBits + workerIdBits;
     /**
      * 时间截向左移22位(5+5+12)
      */
-    private final long timestampLeftShift = sequenceBits + workerIdBits + datacenterIdBits;
+    private final long timestampLeftShift = sequenceBits + workerIdBits + dataCenterIdBits;
     /**
      * 生成序列的掩码，这里为4095 (0b111111111111=0xfff=4095)
      */
@@ -89,7 +91,7 @@ public class SnowflakeIdWorker {
     /**
      * 数据中心ID(0~31)
      */
-    private long datacenterId;
+    private long dataCenterId;
     /**
      * 毫秒内序列(0~4095)
      */
@@ -101,36 +103,36 @@ public class SnowflakeIdWorker {
 
     public SnowflakeIdWorker() {
         // 工作ID (0~31)
-        int workerId = Integer.parseInt(System.getProperty("Snowflake.workerId", "0")) % 31;
+        int workerId = SystemPropertyUtils.getInteger("Snowflake.workerId", 0) % 31;
         // 数据中心ID (0~31)
-        int datacenterId = Integer.parseInt(System.getProperty("Snowflake.datacenterId", "0")) % 31;
+        int dataCenterId = SystemPropertyUtils.getInteger("Snowflake.dataCenterId", 0) % 31;
 
-        init(workerId, datacenterId);
+        init(workerId, dataCenterId);
     }
 
     /**
      * @param workerId     工作ID (0~31)
-     * @param datacenterId 数据中心ID (0~31)
+     * @param dataCenterId 数据中心ID (0~31)
      */
-    public SnowflakeIdWorker(long workerId, long datacenterId) {
-        init(workerId, datacenterId);
+    public SnowflakeIdWorker(long workerId, long dataCenterId) {
+        init(workerId, dataCenterId);
     }
 
     /**
      * @param workerId     工作ID (0~31)
-     * @param datacenterId 数据中心ID (0~31)
+     * @param dataCenterId 数据中心ID (0~31)
      */
-    private void init(long workerId, long datacenterId) {
+    private void init(long workerId, long dataCenterId) {
         if (workerId > maxWorkerId || workerId < 0) {
             throw new IllegalArgumentException(
                     String.format("worker Id can't be greater than %d or less than 0", maxWorkerId));
         }
-        if (datacenterId > maxDatacenterId || datacenterId < 0) {
+        if (dataCenterId > maxDataCenterId || dataCenterId < 0) {
             throw new IllegalArgumentException(
-                    String.format("datacenter Id can't be greater than %d or less than 0", maxDatacenterId));
+                    String.format("dataCenter Id can't be greater than %d or less than 0", maxDataCenterId));
         }
         this.workerId = workerId;
-        this.datacenterId = datacenterId;
+        this.dataCenterId = dataCenterId;
     }
 
     public synchronized String getId() {
@@ -140,11 +142,11 @@ public class SnowflakeIdWorker {
     /**
      * 获得下一个ID (该方法是线程安全的)
      *
-     * @return
+     * @return 下一个ID
      */
     public synchronized long nextId() {
         long timestamp = timeGen();
-        // 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
+        // 如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过，这个时候应当抛出异常
         if (timestamp < lastTimestamp) {
             throw new RuntimeException(String.format(
                     "Clock moved backwards.  Refusing to generate id for %d milliseconds", lastTimestamp - timestamp));
@@ -154,7 +156,7 @@ public class SnowflakeIdWorker {
             sequence = (sequence + 1) & sequenceMask;
             // 毫秒内序列溢出
             if (sequence == 0) {
-                // 阻塞到下一个毫秒,获得新的时间戳
+                // 阻塞到下一个毫秒，获得新的时间戳
                 timestamp = tilNextMillis(lastTimestamp);
             }
         } else {
@@ -165,9 +167,10 @@ public class SnowflakeIdWorker {
         // 上次生成ID的时间截
         lastTimestamp = timestamp;
 
+        // 时间戳部分 | 数据中心部分 | 机器标识部分 | 序列号部分
         // 移位并通过或运算拼到一起组成64位的ID
         return ((timestamp - twepoch) << timestampLeftShift)
-                | (datacenterId << datacenterIdShift)
+                | (dataCenterId << dataCenterIdShift)
                 | (workerId << workerIdShift)
                 | sequence;
     }
@@ -199,12 +202,25 @@ public class SnowflakeIdWorker {
     // ============================== static =====================================
     private static SnowflakeIdWorker idWorker = new SnowflakeIdWorker();
 
+    /**
+     * @return 数值ID
+     * @since v2.7.0
+     */
     public static Long nextIdLong() {
         return idWorker.nextId();
     }
 
     /**
+     * @return 字符ID
+     * @since v2.7.0
+     */
+    public static String nextIdStr() {
+        return idWorker.getId();
+    }
+
+    /**
      * @return 16进制ID
+     * @since v2.7.0
      */
     public static String nextIdHex() {
         // %x：转化为小写的十六进制格式
