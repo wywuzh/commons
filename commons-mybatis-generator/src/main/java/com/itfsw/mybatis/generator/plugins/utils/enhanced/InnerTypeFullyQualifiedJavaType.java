@@ -21,55 +21,57 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ---------------------------------------------------------------------------
- *
  * ---------------------------------------------------------------------------
+ * 
  * @author: hewei
  * @time:2017/8/2 16:55
- * ---------------------------------------------------------------------------
+ *                ---------------------------------------------------------------------------
  */
 public class InnerTypeFullyQualifiedJavaType extends FullyQualifiedJavaType {
-    private final static Logger logger = LoggerFactory.getLogger(InnerTypeFullyQualifiedJavaType.class);
-    private String outerType;   // 内部类
-    /**
-     * Use this constructor to construct a generic type with the specified type parameters.
-     * @param fullTypeSpecification the full type specification
-     */
-    public InnerTypeFullyQualifiedJavaType(String fullTypeSpecification){
-        super(fullTypeSpecification);
+  private final static Logger logger = LoggerFactory.getLogger(InnerTypeFullyQualifiedJavaType.class);
+  private String outerType;   // 内部类
 
-        try{
-            // 修正package
-            java.lang.reflect.Field packageName = this.getClass().getSuperclass().getDeclaredField("packageName");
-            packageName.setAccessible(true);
-            String oldPackageName = getPackageName();
-            packageName.set(this, oldPackageName.substring(0, oldPackageName.lastIndexOf(".")));
+  /**
+   * Use this constructor to construct a generic type with the specified type parameters.
+   * 
+   * @param fullTypeSpecification the full type specification
+   */
+  public InnerTypeFullyQualifiedJavaType(String fullTypeSpecification) {
+    super(fullTypeSpecification);
 
-            outerType = oldPackageName.substring(oldPackageName.lastIndexOf(".") + 1);
-        } catch (Exception e){
-            logger.error("InnerTypeFullyQualifiedJavaType 赋值失败！", e);
-        }
+    try {
+      // 修正package
+      java.lang.reflect.Field packageName = this.getClass().getSuperclass().getDeclaredField("packageName");
+      packageName.setAccessible(true);
+      String oldPackageName = getPackageName();
+      packageName.set(this, oldPackageName.substring(0, oldPackageName.lastIndexOf(".")));
+
+      outerType = oldPackageName.substring(oldPackageName.lastIndexOf(".") + 1);
+    } catch (Exception e) {
+      logger.error("InnerTypeFullyQualifiedJavaType 赋值失败！", e);
     }
+  }
 
-    /**
-     * This method returns the fully qualified name - including any generic type parameters.
-     *
-     * @return Returns the fullyQualifiedName.
-     */
-    @Override
-    public String getFullyQualifiedName() {
-        String fullyQualifiedName = super.getFullyQualifiedName();
-        String before = fullyQualifiedName.substring(0, fullyQualifiedName.lastIndexOf("."));
-        String end = fullyQualifiedName.substring(fullyQualifiedName.lastIndexOf("."));
-        return before + "." + outerType + end;
-    }
+  /**
+   * This method returns the fully qualified name - including any generic type parameters.
+   *
+   * @return Returns the fullyQualifiedName.
+   */
+  @Override
+  public String getFullyQualifiedName() {
+    String fullyQualifiedName = super.getFullyQualifiedName();
+    String before = fullyQualifiedName.substring(0, fullyQualifiedName.lastIndexOf("."));
+    String end = fullyQualifiedName.substring(fullyQualifiedName.lastIndexOf("."));
+    return before + "." + outerType + end;
+  }
 
-    /**
-     * Gets the short name.
-     *
-     * @return Returns the shortName - including any type arguments.
-     */
-    @Override
-    public String getShortName() {
-        return outerType + "." + super.getShortName();
-    }
+  /**
+   * Gets the short name.
+   *
+   * @return Returns the shortName - including any type arguments.
+   */
+  @Override
+  public String getShortName() {
+    return outerType + "." + super.getShortName();
+  }
 }

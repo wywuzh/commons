@@ -16,9 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类UserGetByUnionId的实现描述：根据手机号获取用户信息
@@ -29,18 +30,18 @@ import java.io.Serializable;
  */
 @Data
 public class UserGetByUnionid implements Serializable {
-    private static final long serialVersionUID = -7942331814511039517L;
+  private static final long serialVersionUID = -7942331814511039517L;
 
-    /**
-     * 联系类型：0=企业内部员工, 1=企业外部联系人
-     */
-    @SerializedName(value = "contact_type")
-    private String contactType;
+  /**
+   * 联系类型：0=企业内部员工, 1=企业外部联系人
+   */
+  @SerializedName(value = "contact_type")
+  private String contactType;
 
-    /**
-     * 员工的userid
-     */
-    @SerializedName(value = "userid")
-    private String userid;
+  /**
+   * 员工的userid
+   */
+  @SerializedName(value = "userid")
+  private String userid;
 
 }

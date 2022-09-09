@@ -28,10 +28,10 @@ import org.springframework.util.Assert;
 @Component
 public class RunnableExecutor {
 
-    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-    public void runnable(Runnable runnable) {
-        Assert.notNull(runnable, "Runnable must be not null");
-        runnable.run();
-    }
+  @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+  public void runnable(Runnable runnable) {
+    Assert.notNull(runnable, "Runnable must be not null");
+    runnable.run();
+  }
 
 }

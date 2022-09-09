@@ -28,26 +28,27 @@ import java.util.Properties;
  * @author: hewei
  * @time:2017/6/8 11:21
  * @author <a mailto="wywuzh@163.com">伍章红</a> 2020-01-09 09:47
- * ---------------------------------------------------------------------------
+ *         ---------------------------------------------------------------------------
  */
 public class CommentPlugin extends BasePlugin {
-    /**
-     * 模板路径，使用样例：
-     * <pre>
-     * &lt;plugin type="com.itfsw.mybatis.generator.plugins.CommentPlugin"&gt;
-     *     &lt;property name="template" value="src/main/resources/mybatis-comment.ftl" /&gt;
-     * &lt;/plugin&gt;
-     * </pre>
-     */
-    public static final String PRO_TEMPLATE = "template";
+  /**
+   * 模板路径，使用样例：
+   * 
+   * <pre>
+   * &lt;plugin type="com.itfsw.mybatis.generator.plugins.CommentPlugin"&gt;
+   *     &lt;property name="template" value="src/main/resources/mybatis-comment.ftl" /&gt;
+   * &lt;/plugin&gt;
+   * </pre>
+   */
+  public static final String PRO_TEMPLATE = "template";
 
-    /**
-     * 插件具体实现查看BasePlugin
-     *
-     * @param properties
-     */
-    @Override
-    public void setProperties(Properties properties) {
-        super.setProperties(properties);
-    }
+  /**
+   * 插件具体实现查看BasePlugin
+   *
+   * @param properties
+   */
+  @Override
+  public void setProperties(Properties properties) {
+    super.setProperties(properties);
+  }
 }

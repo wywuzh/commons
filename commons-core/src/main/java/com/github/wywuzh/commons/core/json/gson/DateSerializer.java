@@ -28,26 +28,25 @@ import java.lang.reflect.Type;
  */
 public class DateSerializer implements TypeSerializer<java.sql.Date> {
 
-    @Override
-    public Type getType() {
-        return java.sql.Date.class;
-    }
+  @Override
+  public Type getType() {
+    return java.sql.Date.class;
+  }
 
-    @Override
-    public JsonElement serialize(java.sql.Date value, Type typeOfSrc, JsonSerializationContext context) {
-        // 对象转换为json时调用，实现JsonDeserializer接口
-        return new JsonPrimitive(value.getTime());
-    }
+  @Override
+  public JsonElement serialize(java.sql.Date value, Type typeOfSrc, JsonSerializationContext context) {
+    // 对象转换为json时调用，实现JsonDeserializer接口
+    return new JsonPrimitive(value.getTime());
+  }
 
-    @Override
-    public java.sql.Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
-        // json转换为对象时调用，实现JsonSerializer接口
-        long value = json.getAsLong();
-        if (value == 0) {
-            return null;
-        }
-        return new java.sql.Date(value);
+  @Override
+  public java.sql.Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    // json转换为对象时调用，实现JsonSerializer接口
+    long value = json.getAsLong();
+    if (value == 0) {
+      return null;
     }
+    return new java.sql.Date(value);
+  }
 
 }

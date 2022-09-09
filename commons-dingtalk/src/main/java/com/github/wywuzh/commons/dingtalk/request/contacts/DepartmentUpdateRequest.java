@@ -16,6 +16,7 @@
 package com.github.wywuzh.commons.dingtalk.request.contacts;
 
 import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,56 +30,56 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class DepartmentUpdateRequest extends DepartmentCreateRequest {
-    private static final long serialVersionUID = -1151758676410204159L;
+  private static final long serialVersionUID = -1151758676410204159L;
 
-    /**
-     * 通讯录语言：
-     * zh_CN：中文
-     * en_US：英文
-     */
-    @SerializedName(value = "language")
-    private String language;
-    /**
-     * 当部门群已经创建后，有新人加入部门时是否会自动加入该群：
-     * true：自动加入群
-     * false：不会自动加入群
-     * 不传值，则保持不变。
-     */
-    @SerializedName(value = "auto_add_user")
-    private Boolean autoAddUser;
-    /**
-     * 部门的主管userid列表。多个值用英文逗号分隔
-     */
-    @SerializedName(value = "dept_manager_userid_list")
-    private String deptManagerUseridList;
-    /**
-     * 部门群是否包含子部门：
-     * true：包含
-     * false：不包含
-     * 不传值，则保持不变。
-     */
-    @SerializedName(value = "group_contain_sub_dept")
-    private Boolean groupContainSubDept;
-    /**
-     * 部门群是否包含外包部门：
-     * true：包含
-     * false：不包含
-     * 不传值，则保持不变。
-     */
-    @SerializedName(value = "group_contain_outer_dept")
-    private Boolean groupContainOuterDept;
-    /**
-     * 部门群是否包含隐藏部门：
-     * true：包含
-     * false：不包含
-     * 不传值，则保持不变
-     */
-    @SerializedName(value = "group_contain_hidden_dept")
-    private Boolean groupContainHiddenDept;
-    /**
-     * 企业群群主的userid
-     */
-    @SerializedName(value = "org_dept_owner")
-    private Boolean orgDeptOwner;
+  /**
+   * 通讯录语言：
+   * zh_CN：中文
+   * en_US：英文
+   */
+  @SerializedName(value = "language")
+  private String language;
+  /**
+   * 当部门群已经创建后，有新人加入部门时是否会自动加入该群：
+   * true：自动加入群
+   * false：不会自动加入群
+   * 不传值，则保持不变。
+   */
+  @SerializedName(value = "auto_add_user")
+  private Boolean autoAddUser;
+  /**
+   * 部门的主管userid列表。多个值用英文逗号分隔
+   */
+  @SerializedName(value = "dept_manager_userid_list")
+  private String deptManagerUseridList;
+  /**
+   * 部门群是否包含子部门：
+   * true：包含
+   * false：不包含
+   * 不传值，则保持不变。
+   */
+  @SerializedName(value = "group_contain_sub_dept")
+  private Boolean groupContainSubDept;
+  /**
+   * 部门群是否包含外包部门：
+   * true：包含
+   * false：不包含
+   * 不传值，则保持不变。
+   */
+  @SerializedName(value = "group_contain_outer_dept")
+  private Boolean groupContainOuterDept;
+  /**
+   * 部门群是否包含隐藏部门：
+   * true：包含
+   * false：不包含
+   * 不传值，则保持不变
+   */
+  @SerializedName(value = "group_contain_hidden_dept")
+  private Boolean groupContainHiddenDept;
+  /**
+   * 企业群群主的userid
+   */
+  @SerializedName(value = "org_dept_owner")
+  private Boolean orgDeptOwner;
 
 }

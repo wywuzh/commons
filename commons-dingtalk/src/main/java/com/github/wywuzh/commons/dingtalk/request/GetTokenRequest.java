@@ -16,8 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.request;
 
 import com.github.wywuzh.commons.core.web.request.BaseRequest;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
@@ -30,19 +32,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class GetTokenRequest extends BaseRequest {
-    private static final long serialVersionUID = 8844322137430327841L;
+  private static final long serialVersionUID = 8844322137430327841L;
 
-    /**
-     * 应用的唯一标识key
-     */
-    private String appkey;
-    /**
-     * 应用的密钥
-     */
-    private String appsecret;
+  /**
+   * 应用的唯一标识key
+   */
+  private String appkey;
+  /**
+   * 应用的密钥
+   */
+  private String appsecret;
 
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
+  @Override
+  public String toString() {
+    return ToStringBuilder.reflectionToString(this);
+  }
 }

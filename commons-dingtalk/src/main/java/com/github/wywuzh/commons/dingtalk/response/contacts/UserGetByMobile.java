@@ -16,9 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类UserGetByMobile的实现描述：根据手机号获取userid
@@ -29,12 +30,12 @@ import java.io.Serializable;
  */
 @Data
 public class UserGetByMobile implements Serializable {
-    private static final long serialVersionUID = -2409453649718773300L;
+  private static final long serialVersionUID = -2409453649718773300L;
 
-    /**
-     * 员工的userid
-     */
-    @SerializedName(value = "userid")
-    private String userid;
+  /**
+   * 员工的userid
+   */
+  @SerializedName(value = "userid")
+  private String userid;
 
 }

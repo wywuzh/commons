@@ -27,14 +27,14 @@ import org.springframework.lang.Nullable;
  */
 public class Assert extends org.springframework.util.Assert {
 
-    public static void notBlank(@Nullable String text) {
-        notBlank(text, "[Assertion failed] - this argument is required; it must not be blank");
-    }
+  public static void notBlank(@Nullable String text) {
+    notBlank(text, "[Assertion failed] - this argument is required; it must not be blank");
+  }
 
-    public static void notBlank(@Nullable String text, String message) {
-        if (StringUtils.isBlank(text)) {
-            throw new IllegalArgumentException(message);
-        }
+  public static void notBlank(@Nullable String text, String message) {
+    if (StringUtils.isBlank(text)) {
+      throw new IllegalArgumentException(message);
     }
+  }
 
 }

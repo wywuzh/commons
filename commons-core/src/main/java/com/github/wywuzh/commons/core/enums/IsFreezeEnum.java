@@ -23,25 +23,24 @@ package com.github.wywuzh.commons.core.enums;
  * @since JDK 1.8
  */
 public enum IsFreezeEnum {
-    TRUE(1),
-    FALSE(0);
+  TRUE(1), FALSE(0);
 
-    private Integer value;
+  private Integer value;
 
-    IsFreezeEnum(Integer value) {
-        this.value = value;
+  IsFreezeEnum(Integer value) {
+    this.value = value;
+  }
+
+  public Integer getValue() {
+    return value;
+  }
+
+  public static IsFreezeEnum findByValue(Integer value) {
+    if (value == 0) {
+      return IsFreezeEnum.FALSE;
+    } else if (value == 1) {
+      return IsFreezeEnum.TRUE;
     }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public static IsFreezeEnum findByValue(Integer value) {
-        if (value == 0) {
-            return IsFreezeEnum.FALSE;
-        } else if (value == 1) {
-            return IsFreezeEnum.TRUE;
-        }
-        return null;
-    }
+    return null;
+  }
 }

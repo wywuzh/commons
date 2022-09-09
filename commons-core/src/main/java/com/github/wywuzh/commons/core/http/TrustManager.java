@@ -15,9 +15,10 @@
  */
 package com.github.wywuzh.commons.core.http;
 
-import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.X509TrustManager;
 
 /**
  * 类TrustManager.java的实现描述：重写验证方法，取消检测SSL
@@ -33,17 +34,17 @@ import java.security.cert.X509Certificate;
  */
 public class TrustManager implements X509TrustManager {
 
-    @Override
-    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-    }
+  @Override
+  public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+  }
 
-    @Override
-    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-    }
+  @Override
+  public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+  }
 
-    @Override
-    public X509Certificate[] getAcceptedIssuers() {
-        return null;
-    }
+  @Override
+  public X509Certificate[] getAcceptedIssuers() {
+    return null;
+  }
 
 }

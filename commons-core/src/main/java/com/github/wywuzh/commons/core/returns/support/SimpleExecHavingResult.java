@@ -26,37 +26,37 @@ import com.github.wywuzh.commons.core.returns.ReturnCode;
  * @since JDK 1.7.0_71
  */
 public class SimpleExecHavingResult<T> extends ReturnBase {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    private T entity;
+  private T entity;
 
-    public SimpleExecHavingResult() {
-        super();
-    }
+  public SimpleExecHavingResult() {
+    super();
+  }
 
-    public SimpleExecHavingResult(ReturnCode returnCode, String message) {
-        super(returnCode, message);
-    }
+  public SimpleExecHavingResult(ReturnCode returnCode, String message) {
+    super(returnCode, message);
+  }
 
-    public SimpleExecHavingResult(ReturnCode returnCode) {
-        super(returnCode);
-    }
+  public SimpleExecHavingResult(ReturnCode returnCode) {
+    super(returnCode);
+  }
 
-    public T getEntity() {
-        return entity;
-    }
+  public T getEntity() {
+    return entity;
+  }
 
-    public void setEntity(T entity) {
-        this.entity = entity;
-    }
+  public void setEntity(T entity) {
+    this.entity = entity;
+  }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder("SimpleExecResult [");
-        result.append("returnCode=").append(getReturnCode()).append(",");
-        result.append("message=").append(getMessage()).append(",");
-        result.append("entity=").append(entity);
-        result.append("]");
-        return result.toString();
-    }
+  @Override
+  public String toString() {
+    StringBuilder result = new StringBuilder("SimpleExecResult [");
+    result.append("returnCode=").append(getReturnCode()).append(",");
+    result.append("message=").append(getMessage()).append(",");
+    result.append("entity=").append(entity);
+    result.append("]");
+    return result.toString();
+  }
 }

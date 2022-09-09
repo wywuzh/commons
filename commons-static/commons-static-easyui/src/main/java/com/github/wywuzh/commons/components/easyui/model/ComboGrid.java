@@ -26,30 +26,30 @@ import java.util.List;
  * @since JDK 1.8
  */
 public class ComboGrid<T> implements Serializable {
-    private static final long serialVersionUID = 1400606840645509781L;
+  private static final long serialVersionUID = 1400606840645509781L;
 
-    /**
-     * 数据总行数
-     */
-    private Long total;
-    /**
-     * 查询记录数
-     */
-    private List<T> rows;
+  /**
+   * 数据总行数
+   */
+  private Long total;
+  /**
+   * 查询记录数
+   */
+  private List<T> rows;
 
-    public Long getTotal() {
-        return total;
-    }
+  public Long getTotal() {
+    return total;
+  }
 
-    public void setTotal(Long total) {
-        this.total = total;
-    }
+  public void setTotal(Long total) {
+    this.total = total;
+  }
 
-    public List<T> getRows() {
-        return rows;
-    }
+  public List<T> getRows() {
+    return rows;
+  }
 
-    public void setRows(List<T> rows) {
-        this.rows = rows;
-    }
+  public void setRows(List<T> rows) {
+    this.rows = rows;
+  }
 }

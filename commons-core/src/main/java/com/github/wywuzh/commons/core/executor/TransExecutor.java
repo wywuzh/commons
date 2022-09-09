@@ -28,9 +28,9 @@ import org.springframework.util.Assert;
 @Component
 public class TransExecutor {
 
-    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-    public void doExecutor(TransUnit unit) {
-        Assert.notNull(unit, "TransUnit must be not null");
-        unit.excute();
-    }
+  @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+  public void doExecutor(TransUnit unit) {
+    Assert.notNull(unit, "TransUnit must be not null");
+    unit.excute();
+  }
 }

@@ -15,11 +15,11 @@
  */
 package com.github.wywuzh.commons.core.executor;
 
+import java.util.concurrent.*;
+
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-
-import java.util.concurrent.*;
 
 /**
  * 类CallableExecutor.java的实现描述：事物管理
@@ -30,27 +30,26 @@ import java.util.concurrent.*;
 @Component
 public class CallableExecutor<T> {
 
-    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-    public T callable(Callable<T> callable) {
-        Assert.notNull(callable, "Callable must be not null");
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+  @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+  public T callable(Callable<T> callable) {
+    Assert.notNull(callable, "Callable must be not null");
+    ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-        T executeResult = null;
-        try {
-            ExecutorCompletionService<T> completionService = new ExecutorCompletionService<T>(
-                    executorService);
+    T executeResult = null;
+    try {
+      ExecutorCompletionService<T> completionService = new ExecutorCompletionService<T>(executorService);
 
-            Future<T> future = completionService.submit(callable);
-            executeResult = future.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } finally {
-            executorService.shutdown();
-        }
-
-        return executeResult;
+      Future<T> future = completionService.submit(callable);
+      executeResult = future.get();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (ExecutionException e) {
+      e.printStackTrace();
+    } finally {
+      executorService.shutdown();
     }
+
+    return executeResult;
+  }
 
 }
