@@ -16,9 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts.userget;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类UserCreate的实现描述：创建用户
@@ -29,12 +30,12 @@ import java.io.Serializable;
  */
 @Data
 public class UserCreate implements Serializable {
-    private static final long serialVersionUID = 3802477338441046693L;
+  private static final long serialVersionUID = 3802477338441046693L;
 
-    /**
-     * 员工的userid
-     */
-    @SerializedName(value = "userid")
-    private String userid;
+  /**
+   * 员工的userid
+   */
+  @SerializedName(value = "userid")
+  private String userid;
 
 }

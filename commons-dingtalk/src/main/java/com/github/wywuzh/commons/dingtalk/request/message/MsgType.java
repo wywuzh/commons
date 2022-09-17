@@ -23,23 +23,23 @@ package com.github.wywuzh.commons.dingtalk.request.message;
  * @since JDK 1.8
  */
 public enum MsgType {
-    text("text"), // 文本
-    image("image"), // 图片
-    voice("voice"), // 语音
-    file("file"), // 文件
-    link("link"), // 链接
-    oa("oa"), // oa
-    markdown("markdown"), // markdown
-    action_card("action_card"), // 卡片
-    ;
+  text("text"), // 文本
+  image("image"), // 图片
+  voice("voice"), // 语音
+  file("file"), // 文件
+  link("link"), // 链接
+  oa("oa"), // oa
+  markdown("markdown"), // markdown
+  action_card("action_card"), // 卡片
+  ;
 
-    private String type;
+  private String type;
 
-    MsgType(String type) {
-        this.type = type;
-    }
+  MsgType(String type) {
+    this.type = type;
+  }
 
-    public String getType() {
-        return type;
-    }
+  public String getType() {
+    return type;
+  }
 }

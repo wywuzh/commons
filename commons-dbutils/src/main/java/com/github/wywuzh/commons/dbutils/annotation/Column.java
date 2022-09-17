@@ -32,17 +32,17 @@ import java.lang.annotation.Target;
  * @since JDK 1.7
  */
 @Target({
-        ElementType.METHOD, ElementType.FIELD
+    ElementType.METHOD, ElementType.FIELD
 })
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
 public @interface Column {
 
-    /**
-     * 表字段名
-     *
-     * @return 表字段名
-     */
-    String name();
+  /**
+   * 表字段名
+   *
+   * @return 表字段名
+   */
+  String name();
 }

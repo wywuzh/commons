@@ -16,6 +16,7 @@
 package com.github.wywuzh.commons.dingtalk.response;
 
 import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,21 +30,21 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class BaseResponse extends com.github.wywuzh.commons.core.web.response.BaseResponse {
-    private static final long serialVersionUID = -7123803560551710336L;
+  private static final long serialVersionUID = -7123803560551710336L;
 
-    /**
-     * 返回码
-     */
-    @SerializedName(value = "errcode")
-    private Integer errCode;
-    /**
-     * 返回码描述
-     */
-    @SerializedName(value = "errmsg")
-    private String errMsg;
+  /**
+   * 返回码
+   */
+  @SerializedName(value = "errcode")
+  private Integer errCode;
+  /**
+   * 返回码描述
+   */
+  @SerializedName(value = "errmsg")
+  private String errMsg;
 
-    @SerializedName(value = "sub_code")
-    private String subCode;
-    @SerializedName(value = "sub_msg")
-    private String subMsg;
+  @SerializedName(value = "sub_code")
+  private String subCode;
+  @SerializedName(value = "sub_msg")
+  private String subMsg;
 }

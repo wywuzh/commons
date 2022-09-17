@@ -16,14 +16,15 @@
 package com.github.wywuzh.commons.components.layui;
 
 import com.github.wywuzh.commons.core.util.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 类UIComponent的实现描述：组件
@@ -33,22 +34,21 @@ import java.util.Map;
  * @since JDK 1.8
  */
 public class UIComponent {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UIComponent.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(UIComponent.class);
 
-    public static List<Map<String, Object>> transformTree(List<Tree> treeList)
-            throws IllegalAccessException, IntrospectionException, InvocationTargetException {
-        List<Map<String, Object>> resultMap = new ArrayList<Map<String, Object>>(treeList.size());
-        for (Tree tree : treeList) {
-            try {
-                Map<String, Object> map = BeanUtils.convertBeanToMap(tree);
-                map.put("parentId", tree.getParentId());
-                resultMap.add(map);
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage(), e);
-                throw e;
-            }
-        }
-        return resultMap;
+  public static List<Map<String, Object>> transformTree(List<Tree> treeList) throws IllegalAccessException, IntrospectionException, InvocationTargetException {
+    List<Map<String, Object>> resultMap = new ArrayList<Map<String, Object>>(treeList.size());
+    for (Tree tree : treeList) {
+      try {
+        Map<String, Object> map = BeanUtils.convertBeanToMap(tree);
+        map.put("parentId", tree.getParentId());
+        resultMap.add(map);
+      } catch (Exception e) {
+        LOGGER.error(e.getMessage(), e);
+        throw e;
+      }
     }
+    return resultMap;
+  }
 
 }

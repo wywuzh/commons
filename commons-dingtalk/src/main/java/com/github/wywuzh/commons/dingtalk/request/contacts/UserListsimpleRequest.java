@@ -15,9 +15,10 @@
  */
 package com.github.wywuzh.commons.dingtalk.request.contacts;
 
-import com.google.gson.annotations.SerializedName;
 import com.github.wywuzh.commons.core.web.request.BaseRequest;
 import com.github.wywuzh.commons.dingtalk.enums.Language;
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,75 +32,73 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class UserListsimpleRequest extends BaseRequest {
-    private static final long serialVersionUID = 2958886522615924202L;
+  private static final long serialVersionUID = 2958886522615924202L;
 
-    /**
-     * 部门ID，根部门ID为1
-     */
-    @SerializedName(value = "dept_id")
-    private Long deptId;
-    /**
-     * 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值
-     */
-    @SerializedName(value = "cursor")
-    private Long cursor = 0L;
-    /**
-     * 分页长度
-     */
-    @SerializedName(value = "size")
-    private Long size = 10L;
-    /**
-     * 部门成员的排序规则：
-     * <pre>
-     * <strong>entry_asc</strong>：代表按照进入部门的时间升序。
-     * <strong>entry_desc</strong>：代表按照进入部门的时间降序。
-     * <strong>modify_asc</strong>：代表按照部门信息修改时间升序。
-     * <strong>modify_desc</strong>：代表按照部门信息修改时间降序。
-     * <strong>custom</strong>：代表用户定义(未定义时按照拼音)排序。默认值
-     * </pre>
-     */
-    @SerializedName(value = "order_field")
-    private String orderField = OrderField.custom.getOrder();
-    /**
-     * 是否返回访问受限的员工
-     */
-    @SerializedName(value = "contain_access_limit")
-    private Boolean containAccessLimit;
-    /**
-     * 通讯录语言
-     * <pre>
-     * zh_CN：中文（默认值）。
-     * en_US：英文。
-     * </pre>
-     */
-    @SerializedName(value = "language")
-    private String language = Language.zh_CN.getLang();
+  /**
+   * 部门ID，根部门ID为1
+   */
+  @SerializedName(value = "dept_id")
+  private Long deptId;
+  /**
+   * 分页查询的游标，最开始传0，后续传返回参数中的next_cursor值
+   */
+  @SerializedName(value = "cursor")
+  private Long cursor = 0L;
+  /**
+   * 分页长度
+   */
+  @SerializedName(value = "size")
+  private Long size = 10L;
+  /**
+   * 部门成员的排序规则：
+   * 
+   * <pre>
+   * <strong>entry_asc</strong>：代表按照进入部门的时间升序。
+   * <strong>entry_desc</strong>：代表按照进入部门的时间降序。
+   * <strong>modify_asc</strong>：代表按照部门信息修改时间升序。
+   * <strong>modify_desc</strong>：代表按照部门信息修改时间降序。
+   * <strong>custom</strong>：代表用户定义(未定义时按照拼音)排序。默认值
+   * </pre>
+   */
+  @SerializedName(value = "order_field")
+  private String orderField = OrderField.custom.getOrder();
+  /**
+   * 是否返回访问受限的员工
+   */
+  @SerializedName(value = "contain_access_limit")
+  private Boolean containAccessLimit;
+  /**
+   * 通讯录语言
+   * 
+   * <pre>
+   * zh_CN：中文（默认值）。
+   * en_US：英文。
+   * </pre>
+   */
+  @SerializedName(value = "language")
+  private String language = Language.zh_CN.getLang();
 
+  /**
+   * 排序规则
+   */
+  public static enum OrderField {
+    entry_asc("entry_asc", "按照进入部门的时间升序"), entry_desc("entry_desc", "按照进入部门的时间降序"), modify_asc("modify_asc", "按照部门信息修改时间升序"), modify_desc("modify_desc", "按照部门信息修改时间降序"), custom("custom",
+        "用户定义(未定义时按照拼音)排序"),;
 
-    /**
-     * 排序规则
-     */
-    public static enum OrderField {
-        entry_asc("entry_asc", "按照进入部门的时间升序"),
-        entry_desc("entry_desc", "按照进入部门的时间降序"),
-        modify_asc("modify_asc", "按照部门信息修改时间升序"),
-        modify_desc("modify_desc", "按照部门信息修改时间降序"),
-        custom("custom", "用户定义(未定义时按照拼音)排序"),
-        ;
-        private String order;
-        private String desc;
+    private String order;
+    private String desc;
 
-        OrderField(String order, String desc) {
-            this.order = order;
-            this.desc = desc;
-        }
-
-        public String getOrder() {
-            return order;
-        }
-
-        public String getDesc() {
-            return desc;
-        }
+    OrderField(String order, String desc) {
+      this.order = order;
+      this.desc = desc;
     }
+
+    public String getOrder() {
+      return order;
+    }
+
+    public String getDesc() {
+      return desc;
+    }
+  }
 }

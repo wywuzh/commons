@@ -26,40 +26,40 @@ import com.github.wywuzh.commons.core.returns.ReturnCode;
  * @since JDK 1.7.0_71
  */
 public class SimpleInfoResult<T> extends ReturnBase {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 单个数据信息列表
-     */
-    public T entity;
+  /**
+   * 单个数据信息列表
+   */
+  public T entity;
 
-    public SimpleInfoResult() {
-        super();
-    }
+  public SimpleInfoResult() {
+    super();
+  }
 
-    public SimpleInfoResult(ReturnCode returnCode, String message) {
-        super(returnCode, message);
-    }
+  public SimpleInfoResult(ReturnCode returnCode, String message) {
+    super(returnCode, message);
+  }
 
-    public SimpleInfoResult(ReturnCode returnCode) {
-        super(returnCode);
-    }
+  public SimpleInfoResult(ReturnCode returnCode) {
+    super(returnCode);
+  }
 
-    public T getEntity() {
-        return entity;
-    }
+  public T getEntity() {
+    return entity;
+  }
 
-    public void setEntity(T entity) {
-        this.entity = entity;
-    }
+  public void setEntity(T entity) {
+    this.entity = entity;
+  }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder("SimpleQueryResult [");
-        result.append("returnCode=").append(getReturnCode()).append(",");
-        result.append("message=").append(getMessage()).append(",");
-        result.append("entity=").append(entity);
-        result.append("]");
-        return result.toString();
-    }
+  @Override
+  public String toString() {
+    StringBuilder result = new StringBuilder("SimpleQueryResult [");
+    result.append("returnCode=").append(getReturnCode()).append(",");
+    result.append("message=").append(getMessage()).append(",");
+    result.append("entity=").append(entity);
+    result.append("]");
+    return result.toString();
+  }
 }

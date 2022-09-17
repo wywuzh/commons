@@ -25,21 +25,21 @@ package com.github.wywuzh.commons.core.entity;
  */
 public interface Status extends Entity {
 
-    /**
-     * 数据使用状态
-     * 0）初始（不可用）
-     * 1）正常
-     * 2）删除
-     *
-     * @author 伍章红 2015-8-19 上午11:40:07
-     * @return
-     */
-    public String getStatus();
+  /**
+   * 数据使用状态
+   * 0）初始（不可用）
+   * 1）正常
+   * 2）删除
+   *
+   * @author 伍章红 2015-8-19 上午11:40:07
+   * @return
+   */
+  public String getStatus();
 
-    /**
-     * @author 伍章红 2015-8-19 上午11:40:11
-     * @param status
-     */
-    public void setStatus(String status);
+  /**
+   * @author 伍章红 2015-8-19 上午11:40:11
+   * @param status
+   */
+  public void setStatus(String status);
 
 }

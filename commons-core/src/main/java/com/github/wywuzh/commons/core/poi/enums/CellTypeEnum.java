@@ -24,14 +24,6 @@ package com.github.wywuzh.commons.core.poi.enums;
  */
 public enum CellTypeEnum {
 
-    Undefined,
-    String,
-    Integer,
-    BigDecimal,
-    Money,
-    Percent,
-    Date,
-    Time,
-    DateTime;
+  Undefined, String, Integer, BigDecimal, Money, Percent, Date, Time, DateTime;
 
 }

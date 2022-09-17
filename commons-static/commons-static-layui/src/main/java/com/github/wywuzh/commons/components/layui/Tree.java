@@ -26,134 +26,134 @@ import java.util.List;
  * @since JDK 1.8
  */
 public class Tree<T extends Serializable> implements Serializable {
-    private static final long serialVersionUID = -3854844412243011587L;
+  private static final long serialVersionUID = -3854844412243011587L;
 
-    /**
-     * 节点唯一索引值，用于对指定节点进行各类操作
-     */
-    private String id;
-    /**
-     * 节点字段名
-     */
-    private String field;
-    /**
-     * 节点标题
-     */
-    private String title;
-    /**
-     * 父类节点id
-     */
-    private String parentId;
-    /**
-     * 点击节点弹出新窗口对应的 url。需开启 isJump 参数
-     */
-    private String href;
-    /**
-     * 节点是否初始展开，默认 false
-     */
-    private boolean spread = false;
-    /**
-     * 节点是否初始为选中状态（如果开启复选框的话），默认 false
-     */
-    private boolean checked = false;
-    /**
-     * 节点是否为禁用状态。默认 false
-     */
-    private boolean disabled = false;
-    /**
-     * 子节点。支持设定选项同父节点
-     */
-    private List<Tree<T>> children;
-    /**
-     * 自定义属性
-     */
-    private T attributes;
+  /**
+   * 节点唯一索引值，用于对指定节点进行各类操作
+   */
+  private String id;
+  /**
+   * 节点字段名
+   */
+  private String field;
+  /**
+   * 节点标题
+   */
+  private String title;
+  /**
+   * 父类节点id
+   */
+  private String parentId;
+  /**
+   * 点击节点弹出新窗口对应的 url。需开启 isJump 参数
+   */
+  private String href;
+  /**
+   * 节点是否初始展开，默认 false
+   */
+  private boolean spread = false;
+  /**
+   * 节点是否初始为选中状态（如果开启复选框的话），默认 false
+   */
+  private boolean checked = false;
+  /**
+   * 节点是否为禁用状态。默认 false
+   */
+  private boolean disabled = false;
+  /**
+   * 子节点。支持设定选项同父节点
+   */
+  private List<Tree<T>> children;
+  /**
+   * 自定义属性
+   */
+  private T attributes;
 
-    public Tree() {
-    }
+  public Tree() {
+  }
 
-    public Tree(String id, String title) {
-        this.id = id;
-        this.title = title;
-    }
+  public Tree(String id, String title) {
+    this.id = id;
+    this.title = title;
+  }
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    public String getField() {
-        return field;
-    }
+  public String getField() {
+    return field;
+  }
 
-    public void setField(String field) {
-        this.field = field;
-    }
+  public void setField(String field) {
+    this.field = field;
+  }
 
-    public String getTitle() {
-        return title;
-    }
+  public String getTitle() {
+    return title;
+  }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+  public void setTitle(String title) {
+    this.title = title;
+  }
 
-    public String getParentId() {
-        return parentId;
-    }
+  public String getParentId() {
+    return parentId;
+  }
 
-    public void setParentId(String parentId) {
-        this.parentId = parentId;
-    }
+  public void setParentId(String parentId) {
+    this.parentId = parentId;
+  }
 
-    public String getHref() {
-        return href;
-    }
+  public String getHref() {
+    return href;
+  }
 
-    public void setHref(String href) {
-        this.href = href;
-    }
+  public void setHref(String href) {
+    this.href = href;
+  }
 
-    public boolean isSpread() {
-        return spread;
-    }
+  public boolean isSpread() {
+    return spread;
+  }
 
-    public void setSpread(boolean spread) {
-        this.spread = spread;
-    }
+  public void setSpread(boolean spread) {
+    this.spread = spread;
+  }
 
-    public boolean isChecked() {
-        return checked;
-    }
+  public boolean isChecked() {
+    return checked;
+  }
 
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
+  public void setChecked(boolean checked) {
+    this.checked = checked;
+  }
 
-    public boolean isDisabled() {
-        return disabled;
-    }
+  public boolean isDisabled() {
+    return disabled;
+  }
 
-    public void setDisabled(boolean disabled) {
-        this.disabled = disabled;
-    }
+  public void setDisabled(boolean disabled) {
+    this.disabled = disabled;
+  }
 
-    public List<Tree<T>> getChildren() {
-        return children;
-    }
+  public List<Tree<T>> getChildren() {
+    return children;
+  }
 
-    public void setChildren(List<Tree<T>> children) {
-        this.children = children;
-    }
+  public void setChildren(List<Tree<T>> children) {
+    this.children = children;
+  }
 
-    public T getAttributes() {
-        return attributes;
-    }
+  public T getAttributes() {
+    return attributes;
+  }
 
-    public void setAttributes(T attributes) {
-        this.attributes = attributes;
-    }
+  public void setAttributes(T attributes) {
+    this.attributes = attributes;
+  }
 }

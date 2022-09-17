@@ -16,10 +16,11 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * 类ListUserByDept的实现描述：获取部门用户userid列表
@@ -30,11 +31,11 @@ import java.util.List;
  */
 @Data
 public class ListUserByDept implements Serializable {
-    private static final long serialVersionUID = 885614848684180527L;
+  private static final long serialVersionUID = 885614848684180527L;
 
-    /**
-     * 指定部门的userid列表
-     */
-    @SerializedName(value = "userid_list")
-    public List<String> useridList;
+  /**
+   * 指定部门的userid列表
+   */
+  @SerializedName(value = "userid_list")
+  public List<String> useridList;
 }

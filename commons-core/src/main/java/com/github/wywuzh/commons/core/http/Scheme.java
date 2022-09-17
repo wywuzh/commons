@@ -24,27 +24,27 @@ package com.github.wywuzh.commons.core.http;
  */
 public enum Scheme {
 
-    HTTP("http"), HTTPS("https");
+  HTTP("http"), HTTPS("https");
 
-    /**
-     * 协议名称
-     */
-    private String name;
+  /**
+   * 协议名称
+   */
+  private String name;
 
-    private Scheme(String name) {
-        this.name = name;
+  private Scheme(String name) {
+    this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public static Scheme getByName(String name) {
+    for (Scheme protocol : values()) {
+      if (protocol.name.equals(name)) {
+        return protocol;
+      }
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public static Scheme getByName(String name) {
-        for (Scheme protocol : values()) {
-            if (protocol.name.equals(name)) {
-                return protocol;
-            }
-        }
-        return null;
-    }
+    return null;
+  }
 }

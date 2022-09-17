@@ -16,9 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类ListUserSimple的实现描述：用户信息列表
@@ -29,16 +30,16 @@ import java.io.Serializable;
  */
 @Data
 public class ListUserSimple implements Serializable {
-    private static final long serialVersionUID = 8979729297062092927L;
+  private static final long serialVersionUID = 8979729297062092927L;
 
-    /**
-     * 用户的userid
-     */
-    @SerializedName(value = "userid")
-    private String userid;
-    /**
-     * 用户姓名
-     */
-    @SerializedName(value = "name")
-    private String name;
+  /**
+   * 用户的userid
+   */
+  @SerializedName(value = "userid")
+  private String userid;
+  /**
+   * 用户姓名
+   */
+  @SerializedName(value = "name")
+  private String name;
 }

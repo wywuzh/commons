@@ -15,11 +15,11 @@
  */
 package com.github.wywuzh.commons.core.json.jsonlib;
 
+import java.util.*;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
-
-import java.util.*;
 
 /**
  * 类JsonUtil.java的实现描述：JSON工具类
@@ -30,59 +30,59 @@ import java.util.*;
  */
 public class JsonUtil {
 
-    /**
-     * 把javaBean转换为JSONObject
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:46:22
-     * @param bean
-     * @return
-     */
-    public static JSONObject convertJsonObject(Object bean) {
-        JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = JSONObject.fromObject(bean, jsonConfig);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return jsonObject;
+  /**
+   * 把javaBean转换为JSONObject
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:46:22
+   * @param bean
+   * @return
+   */
+  public static JSONObject convertJsonObject(Object bean) {
+    JsonConfig jsonConfig = new JsonConfig();
+    jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+    JSONObject jsonObject = null;
+    try {
+      jsonObject = JSONObject.fromObject(bean, jsonConfig);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return jsonObject;
+  }
 
-    /**
-     * 把对象转换为JSONArray
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:46:37
-     * @param obj
-     * @return
-     */
-    public static JSONArray convertJsonArray(Object obj) {
-        JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-        JSONArray jsonArray = null;
-        try {
-            jsonArray = JSONArray.fromObject(obj, jsonConfig);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return jsonArray;
+  /**
+   * 把对象转换为JSONArray
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:46:37
+   * @param obj
+   * @return
+   */
+  public static JSONArray convertJsonArray(Object obj) {
+    JsonConfig jsonConfig = new JsonConfig();
+    jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+    JSONArray jsonArray = null;
+    try {
+      jsonArray = JSONArray.fromObject(obj, jsonConfig);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return jsonArray;
+  }
 
-    public static void main(String[] args) {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> s1 = new HashMap<String, Object>();
-        s1.put("name", "jim");
-        s1.put("age", "15");
-        s1.put("time", new Date());
-        list.add(s1);
-        Map<String, Object> s2 = new HashMap<String, Object>();
-        s2.put("name", "lucy");
-        s2.put("age", "12");
-        s2.put("time", new Date());
-        list.add(s2);
-        JsonConfig jsonConfig = new JsonConfig();
-        jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
-        JSONArray jo = JSONArray.fromObject(list, jsonConfig);
-        System.out.println("json:" + jo.toString());
-    }
+  public static void main(String[] args) {
+    List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+    Map<String, Object> s1 = new HashMap<String, Object>();
+    s1.put("name", "jim");
+    s1.put("age", "15");
+    s1.put("time", new Date());
+    list.add(s1);
+    Map<String, Object> s2 = new HashMap<String, Object>();
+    s2.put("name", "lucy");
+    s2.put("age", "12");
+    s2.put("time", new Date());
+    list.add(s2);
+    JsonConfig jsonConfig = new JsonConfig();
+    jsonConfig.registerJsonValueProcessor(Date.class, new JsonDateValueProcessor());
+    JSONArray jo = JSONArray.fromObject(list, jsonConfig);
+    System.out.println("json:" + jo.toString());
+  }
 }

@@ -15,9 +15,10 @@
  */
 package com.github.wywuzh.commons.dbutils.transaction;
 
+import com.github.wywuzh.commons.dbutils.JdbcUtils;
+
 import java.sql.SQLException;
 
-import com.github.wywuzh.commons.dbutils.JdbcUtils;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.support.DefaultTransactionStatus;
@@ -30,30 +31,30 @@ import org.springframework.transaction.support.DefaultTransactionStatus;
  * @since JDK 1.7
  */
 public class DbUtilsTransactionManager extends DataSourceTransactionManager {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    @Override
-    protected void doCommit(DefaultTransactionStatus status) {
-        try {
-            if (status.isDebug()) {
-                logger.debug("Committing JDBC transaction on Connection [" + JdbcUtils.getConnection() + "]");
-            }
-            JdbcUtils.commit();
-        } catch (SQLException ex) {
-            throw new TransactionSystemException("Could not commit JDBC transaction", ex);
-        }
+  @Override
+  protected void doCommit(DefaultTransactionStatus status) {
+    try {
+      if (status.isDebug()) {
+        logger.debug("Committing JDBC transaction on Connection [" + JdbcUtils.getConnection() + "]");
+      }
+      JdbcUtils.commit();
+    } catch (SQLException ex) {
+      throw new TransactionSystemException("Could not commit JDBC transaction", ex);
     }
+  }
 
-    @Override
-    protected void doRollback(DefaultTransactionStatus status) {
-        try {
-            if (status.isDebug()) {
-                logger.debug("Rolling back JDBC transaction on Connection [" + JdbcUtils.getConnection() + "]");
-            }
-            JdbcUtils.rollback();
-        } catch (SQLException ex) {
-            throw new TransactionSystemException("Could not roll back JDBC transaction", ex);
-        }
+  @Override
+  protected void doRollback(DefaultTransactionStatus status) {
+    try {
+      if (status.isDebug()) {
+        logger.debug("Rolling back JDBC transaction on Connection [" + JdbcUtils.getConnection() + "]");
+      }
+      JdbcUtils.rollback();
+    } catch (SQLException ex) {
+      throw new TransactionSystemException("Could not roll back JDBC transaction", ex);
     }
+  }
 
 }

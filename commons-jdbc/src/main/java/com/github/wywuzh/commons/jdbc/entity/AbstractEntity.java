@@ -25,22 +25,22 @@ import java.io.Serializable;
  * @since JDK 1.7
  */
 public abstract class AbstractEntity implements Serializable {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键id
-     */
-    private String id;
+  /**
+   * 主键id
+   */
+  private String id;
 
-    public String getId() {
-        return id;
-    }
+  public String getId() {
+    return id;
+  }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    @Override
-    public abstract String toString();
+  @Override
+  public abstract String toString();
 
 }

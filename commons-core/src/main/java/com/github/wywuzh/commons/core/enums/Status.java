@@ -24,37 +24,37 @@ package com.github.wywuzh.commons.core.enums;
  */
 public enum Status {
 
-    /**
-     * 初始（不可用）
-     */
-    INITIALIZE("0"),
-    /**
-     * 正常
-     */
-    EFFECTIVE("1"),
-    /**
-     * 删除
-     */
-    DELETE("2");
+  /**
+   * 初始（不可用）
+   */
+  INITIALIZE("0"),
+  /**
+   * 正常
+   */
+  EFFECTIVE("1"),
+  /**
+   * 删除
+   */
+  DELETE("2");
 
-    private String value;
+  private String value;
 
-    private Status(String value) {
-        this.value = value;
+  private Status(String value) {
+    this.value = value;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public static Status findByValue(String value) {
+    if ("0".equals(value)) {
+      return INITIALIZE;
+    } else if ("1".equals(value)) {
+      return EFFECTIVE;
+    } else if ("2".equals(value)) {
+      return DELETE;
     }
-
-    public String getValue() {
-        return value;
-    }
-
-    public static Status findByValue(String value) {
-        if ("0".equals(value)) {
-            return INITIALIZE;
-        } else if ("1".equals(value)) {
-            return EFFECTIVE;
-        } else if ("2".equals(value)) {
-            return DELETE;
-        }
-        return null;
-    }
+    return null;
+  }
 }

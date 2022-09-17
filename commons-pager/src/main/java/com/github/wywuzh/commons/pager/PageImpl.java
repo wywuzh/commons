@@ -30,110 +30,110 @@ import java.util.List;
  * @since JDK 1.8
  */
 public abstract class PageImpl implements Page, Serializable {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 页码（当前所处页号）。页码从1开始
-     */
-    private int pageNo;
-    /**
-     * 每页显示数据量
-     */
-    private int pageSize;
+  /**
+   * 页码（当前所处页号）。页码从1开始
+   */
+  private int pageNo;
+  /**
+   * 每页显示数据量
+   */
+  private int pageSize;
 
-    /**
-     * 行记录总数
-     */
-    // private long rowCount;
+  /**
+   * 行记录总数
+   */
+  // private long rowCount;
 
-    public PageImpl() {
-        super();
+  public PageImpl() {
+    super();
+  }
+
+  public PageImpl(int pageNo, int pageSize) {
+    super();
+    if (pageNo < 1) {
+      this.pageNo = 1;
+    } else {
+      this.pageNo = pageNo;
     }
 
-    public PageImpl(int pageNo, int pageSize) {
-        super();
-        if (pageNo < 1) {
-            this.pageNo = 1;
-        } else {
-            this.pageNo = pageNo;
-        }
-
-        if (pageSize < 1) {
-            this.pageSize = 10;
-        } else {
-            this.pageSize = pageSize;
-        }
+    if (pageSize < 1) {
+      this.pageSize = 10;
+    } else {
+      this.pageSize = pageSize;
     }
+  }
 
-    @Override
-    public int getPageNo() {
-        if (this.pageNo < 1) {
-            this.pageNo = 1;
-        }
-        return pageNo;
+  @Override
+  public int getPageNo() {
+    if (this.pageNo < 1) {
+      this.pageNo = 1;
     }
+    return pageNo;
+  }
 
-    public void setPageNo(int pageNo) {
-        this.pageNo = pageNo;
+  public void setPageNo(int pageNo) {
+    this.pageNo = pageNo;
+  }
+
+  @Override
+  public int getPageSize() {
+    if (this.pageSize < 1) {
+      this.pageSize = 10;
     }
+    return pageSize;
+  }
 
-    @Override
-    public int getPageSize() {
-        if (this.pageSize < 1) {
-            this.pageSize = 10;
-        }
-        return pageSize;
-    }
+  public void setPageSize(int pageSize) {
+    this.pageSize = pageSize;
+  }
 
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
+  @Override
+  public int getPageTotal() {
+    // 计算分页页码总数共分两种算法：
+    // 1.pageTotal=rowCount%pageSize==0?rowCount%pageSize:rowCount%pageSize+1
+    // 2.pageTotal = (rowCount-1) / pageSize + 1
 
-    @Override
-    public int getPageTotal() {
-        // 计算分页页码总数共分两种算法：
-        // 1.pageTotal=rowCount%pageSize==0?rowCount%pageSize:rowCount%pageSize+1
-        // 2.pageTotal = (rowCount-1) / pageSize + 1
+    return (int) ((getRowCount() - 1) / getPageSize() + 1);
+  }
 
-        return (int) ((getRowCount() - 1) / getPageSize() + 1);
-    }
+  @Override
+  public abstract long getRowCount();
 
-    @Override
-    public abstract long getRowCount();
+  @Override
+  public int getOffSet() {
+    // 当前页开始行
+    return (getPageNo() - 1) * getPageSize();
+  }
 
-    @Override
-    public int getOffSet() {
-        // 当前页开始行
-        return (getPageNo() - 1) * getPageSize();
-    }
+  @Override
+  public int getEndSet() {
+    // 当前页结束行
+    return getOffSet() + getPageSize();
+  }
 
-    @Override
-    public int getEndSet() {
-        // 当前页结束行
-        return getOffSet() + getPageSize();
-    }
+  @Override
+  public boolean isFirstPage() {
+    return getPageNo() <= 1;
+  }
 
-    @Override
-    public boolean isFirstPage() {
-        return getPageNo() <= 1;
-    }
+  @Override
+  public boolean isLastPage() {
+    return getPageNo() >= getPageTotal();
+  }
 
-    @Override
-    public boolean isLastPage() {
-        return getPageNo() >= getPageTotal();
-    }
+  @Override
+  public boolean hasPreviousPage() {
+    return !isFirstPage();
+  }
 
-    @Override
-    public boolean hasPreviousPage() {
-        return !isFirstPage();
-    }
+  @Override
+  public boolean hasNextPage() {
+    return !isLastPage();
+  }
 
-    @Override
-    public boolean hasNextPage() {
-        return !isLastPage();
-    }
-
-    @Override
-    public abstract List<Sort> getSorts();
+  @Override
+  public abstract List<Sort> getSorts();
 
 }

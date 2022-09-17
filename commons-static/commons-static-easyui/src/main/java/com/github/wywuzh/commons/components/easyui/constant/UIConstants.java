@@ -24,10 +24,10 @@ package com.github.wywuzh.commons.components.easyui.constant;
  */
 public class UIConstants {
 
-    public static final String DEFAULT_KEY_TOTAL = "total";
-    public static final String DEFAULT_KEY_ROWS = "rows";
-    public static final String DEFAULT_KEY_FOOTER = "footer";
+  public static final String DEFAULT_KEY_TOTAL = "total";
+  public static final String DEFAULT_KEY_ROWS = "rows";
+  public static final String DEFAULT_KEY_FOOTER = "footer";
 
-    public static final String DEFAULT_KEY_CHILDREN = "children";
+  public static final String DEFAULT_KEY_CHILDREN = "children";
 
 }

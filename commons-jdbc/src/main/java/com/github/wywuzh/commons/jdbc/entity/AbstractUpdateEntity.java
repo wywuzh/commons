@@ -27,35 +27,35 @@ import java.util.Date;
  * @since JDK 1.7
  */
 public abstract class AbstractUpdateEntity extends AbstractCreateEntity implements Updated {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 修改人
-     */
-    private String updateUser;
-    /**
-     * 修改时间
-     */
-    private Date updateTime;
+  /**
+   * 修改人
+   */
+  private String updateUser;
+  /**
+   * 修改时间
+   */
+  private Date updateTime;
 
-    @Override
-    public String getUpdateUser() {
-        return updateUser;
-    }
+  @Override
+  public String getUpdateUser() {
+    return updateUser;
+  }
 
-    @Override
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
+  @Override
+  public void setUpdateUser(String updateUser) {
+    this.updateUser = updateUser;
+  }
 
-    @Override
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+  @Override
+  public Date getUpdateTime() {
+    return updateTime;
+  }
 
-    @Override
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+  @Override
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
+  }
 
 }
