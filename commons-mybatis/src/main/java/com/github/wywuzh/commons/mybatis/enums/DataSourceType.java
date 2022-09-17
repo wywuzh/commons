@@ -24,23 +24,23 @@ package com.github.wywuzh.commons.mybatis.enums;
  */
 public enum DataSourceType {
 
-    /**
-     * 主数据源：写
-     */
-    WRITE("writeDataSource"),
-    /**
-     * 数据源：读
-     */
-    READ("readDataSource");
+  /**
+   * 主数据源：写
+   */
+  WRITE("writeDataSource"),
+  /**
+   * 数据源：读
+   */
+  READ("readDataSource");
 
-    private String name;
+  private String name;
 
-    DataSourceType(java.lang.String name) {
-        this.name = name;
-    }
+  DataSourceType(java.lang.String name) {
+    this.name = name;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
 }

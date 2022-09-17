@@ -27,13 +27,13 @@ import com.github.wywuzh.commons.core.validator.Validate;
  */
 public class ValidatePhone extends Validate {
 
-    @Override
-    protected PatternType getPatternType() {
-        return PatternType.PATTERN_PHONE;
-    }
+  @Override
+  protected PatternType getPatternType() {
+    return PatternType.PATTERN_PHONE;
+  }
 
-    public static void main(String[] args) {
-        Validate validate = new ValidatePhone();
-        System.out.println(validate.matches("020-8888888"));
-    }
+  public static void main(String[] args) {
+    Validate validate = new ValidatePhone();
+    System.out.println(validate.matches("020-8888888"));
+  }
 }

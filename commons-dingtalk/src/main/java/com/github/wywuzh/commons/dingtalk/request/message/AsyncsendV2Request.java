@@ -16,9 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.request.message;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类AsyncsendV2Body的实现描述：发送工作通知请求
@@ -29,33 +30,33 @@ import java.io.Serializable;
  */
 @Data
 public class AsyncsendV2Request implements Serializable {
-    private static final long serialVersionUID = -5900398987563654895L;
+  private static final long serialVersionUID = -5900398987563654895L;
 
-    /**
-     * 发送消息时使用的微应用的AgentID
-     */
-    @SerializedName(value = "agent_id")
-    private String agentId;
-    /**
-     * 接收者的userid列表，最大用户列表长度100
-     */
-    @SerializedName(value = "userid_list")
-    private String useridList;
-    /**
-     * 接收者的部门id列表，最大列表长度20。接收者是部门ID时，包括子部门下的所有用户
-     */
-    @SerializedName(value = "dept_id_list")
-    private String deptIdList;
-    /**
-     * 是否发送给企业全部用户。
-     * 说明：当设置为false时必须指定userid_list或dept_id_list其中一个参数的值。
-     */
-    @SerializedName(value = "to_all_user")
-    private Boolean toAllUser;
-    /**
-     * 消息内容，最长不超过2048个字节
-     */
-    @SerializedName(value = "msg")
-    private Msg msg;
+  /**
+   * 发送消息时使用的微应用的AgentID
+   */
+  @SerializedName(value = "agent_id")
+  private String agentId;
+  /**
+   * 接收者的userid列表，最大用户列表长度100
+   */
+  @SerializedName(value = "userid_list")
+  private String useridList;
+  /**
+   * 接收者的部门id列表，最大列表长度20。接收者是部门ID时，包括子部门下的所有用户
+   */
+  @SerializedName(value = "dept_id_list")
+  private String deptIdList;
+  /**
+   * 是否发送给企业全部用户。
+   * 说明：当设置为false时必须指定userid_list或dept_id_list其中一个参数的值。
+   */
+  @SerializedName(value = "to_all_user")
+  private Boolean toAllUser;
+  /**
+   * 消息内容，最长不超过2048个字节
+   */
+  @SerializedName(value = "msg")
+  private Msg msg;
 
 }

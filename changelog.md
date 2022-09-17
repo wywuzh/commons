@@ -2,6 +2,7 @@
 ### SpringBoot/v2.7.0
 1. 工具包根目录统一调整为`com.github.wywuzh`，与groupId保持一致。若仍然打算使用`com.wuzh`目录，请使用`v2.7.0`以下的包
 2. 引入flatten-maven-plugin插件管理Maven多模块版本
+3. 引入formatter-maven-plugin插件，增加commons-build-tools构建工具模块，用于统一格式化源码风格
 
 
 ### SpringBoot/v2.5.2

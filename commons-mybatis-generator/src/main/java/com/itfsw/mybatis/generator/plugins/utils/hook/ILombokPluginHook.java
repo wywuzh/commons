@@ -20,34 +20,37 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 /**
  * ---------------------------------------------------------------------------
- *
  * ---------------------------------------------------------------------------
+ * 
  * @author: hewei
  * @time:2018/10/31 17:27
- * ---------------------------------------------------------------------------
+ *                  ---------------------------------------------------------------------------
  */
 public interface ILombokPluginHook {
-    /**
-     * Model builder class 生成
-     * @param topLevelClass
-     * @param introspectedTable
-     * @return
-     */
-    boolean modelBaseRecordBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
+  /**
+   * Model builder class 生成
+   * 
+   * @param topLevelClass
+   * @param introspectedTable
+   * @return
+   */
+  boolean modelBaseRecordBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
 
-    /**
-     * Model builder class 生成
-     * @param topLevelClass
-     * @param introspectedTable
-     * @return
-     */
-    boolean modelPrimaryKeyBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
+  /**
+   * Model builder class 生成
+   * 
+   * @param topLevelClass
+   * @param introspectedTable
+   * @return
+   */
+  boolean modelPrimaryKeyBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
 
-    /**
-     * Model builder class 生成
-     * @param topLevelClass
-     * @param introspectedTable
-     * @return
-     */
-    boolean modelRecordWithBLOBsBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
+  /**
+   * Model builder class 生成
+   * 
+   * @param topLevelClass
+   * @param introspectedTable
+   * @return
+   */
+  boolean modelRecordWithBLOBsBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
 }

@@ -24,31 +24,31 @@ package com.github.wywuzh.commons.pager;
  */
 public enum Order {
 
-    /**
-     * 升序
-     */
-    ASC("ASC"),
-    /**
-     * 降序
-     */
-    DESC("DESC");
+  /**
+   * 升序
+   */
+  ASC("ASC"),
+  /**
+   * 降序
+   */
+  DESC("DESC");
 
-    private String value;
+  private String value;
 
-    private Order(String value) {
-        this.value = value;
+  private Order(String value) {
+    this.value = value;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public static Order findByValue(String value) {
+    if ("ASC".equals(value)) {
+      return ASC;
+    } else if ("DESC".equals(value)) {
+      return DESC;
     }
-
-    public String getValue() {
-        return value;
-    }
-
-    public static Order findByValue(String value) {
-        if ("ASC".equals(value)) {
-            return ASC;
-        } else if ("DESC".equals(value)) {
-            return DESC;
-        }
-        return null;
-    }
+    return null;
+  }
 }

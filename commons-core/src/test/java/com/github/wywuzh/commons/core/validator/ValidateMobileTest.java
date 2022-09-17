@@ -16,6 +16,7 @@
 package com.github.wywuzh.commons.core.validator;
 
 import com.github.wywuzh.commons.core.validator.support.ValidateMobile;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,26 +29,26 @@ import org.slf4j.LoggerFactory;
  * @since JDK 1.8
  */
 public class ValidateMobileTest {
-    private final Logger logger = LoggerFactory.getLogger(ValidateMobileTest.class);
+  private final Logger logger = LoggerFactory.getLogger(ValidateMobileTest.class);
 
-    @Test
-    public void validateMobileType() {
-        ValidateMobile validateMobile = ValidateMobile.getInstance();
-        String mobileType = validateMobile.validateMobileType("18500000000");
-        logger.info("手机类型：{}", mobileType);
-    }
+  @Test
+  public void validateMobileType() {
+    ValidateMobile validateMobile = ValidateMobile.getInstance();
+    String mobileType = validateMobile.validateMobileType("18500000000");
+    logger.info("手机类型：{}", mobileType);
+  }
 
-    @Test
-    public void getMobileEmail() {
-        ValidateMobile validateMobile = ValidateMobile.getInstance();
-        String mobileType = validateMobile.getMobileEmail("18500000000");
-        logger.info("获取手机号的邮箱地址：{}", mobileType);
-    }
+  @Test
+  public void getMobileEmail() {
+    ValidateMobile validateMobile = ValidateMobile.getInstance();
+    String mobileType = validateMobile.getMobileEmail("18500000000");
+    logger.info("获取手机号的邮箱地址：{}", mobileType);
+  }
 
-    @Test
-    public void matches() {
-        ValidateMobile validateMobile = ValidateMobile.getInstance();
-        boolean mobileType = validateMobile.matches("18500000000");
-        logger.info("验证：{}", mobileType);
-    }
+  @Test
+  public void matches() {
+    ValidateMobile validateMobile = ValidateMobile.getInstance();
+    boolean mobileType = validateMobile.matches("18500000000");
+    logger.info("验证：{}", mobileType);
+  }
 }

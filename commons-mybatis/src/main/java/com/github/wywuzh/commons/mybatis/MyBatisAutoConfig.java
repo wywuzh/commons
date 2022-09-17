@@ -28,7 +28,9 @@ import org.springframework.context.annotation.Import;
  * @since JDK 1.8
  */
 @Configuration
-@Import({MyBatisConfig.class, TransactionConfiguration.class})
+@Import({
+    MyBatisConfig.class, TransactionConfiguration.class
+})
 @AutoConfigureBefore(MybatisAutoConfiguration.class)
 public class MyBatisAutoConfig {
 

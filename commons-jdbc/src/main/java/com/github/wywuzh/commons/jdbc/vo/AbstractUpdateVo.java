@@ -25,34 +25,34 @@ import com.github.wywuzh.commons.core.entity.Updated;
  * @since JDK 1.7
  */
 public abstract class AbstractUpdateVo extends AbstractCreateVo implements Updated {
-    private static final long serialVersionUID = -8338295599469735619L;
+  private static final long serialVersionUID = -8338295599469735619L;
 
-    /**
-     * 修改人
-     */
-    private String updateUser;
-    /**
-     * 修改时间
-     */
-    private java.util.Date updateTime;
+  /**
+   * 修改人
+   */
+  private String updateUser;
+  /**
+   * 修改时间
+   */
+  private java.util.Date updateTime;
 
-    @Override
-    public String getUpdateUser() {
-        return updateUser;
-    }
+  @Override
+  public String getUpdateUser() {
+    return updateUser;
+  }
 
-    @Override
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
+  @Override
+  public void setUpdateUser(String updateUser) {
+    this.updateUser = updateUser;
+  }
 
-    @Override
-    public java.util.Date getUpdateTime() {
-        return updateTime;
-    }
+  @Override
+  public java.util.Date getUpdateTime() {
+    return updateTime;
+  }
 
-    @Override
-    public void setUpdateTime(java.util.Date updateTime) {
-        this.updateTime = updateTime;
-    }
+  @Override
+  public void setUpdateTime(java.util.Date updateTime) {
+    this.updateTime = updateTime;
+  }
 }

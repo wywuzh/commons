@@ -31,83 +31,81 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class DigestUtils {
 
-    /**
-     * 默认编码字符集
-     */
-    public static String DEFAULT_CHARSET = "UTF-8";
+  /**
+   * 默认编码字符集
+   */
+  public static String DEFAULT_CHARSET = "UTF-8";
 
-    /**
-     * 内容信息编码
-     *
-     * @param content
-     *            需要编码的内容信息
-     * @param algorithm
-     *            算法类型
-     * @return 根据指定的algorithm算法计算摘要，并返回值为32个字符的十六进制字符串
-     */
-    public static String encode(String content, MessageDigestAlgorithm algorithm) {
-        return encode(content, DEFAULT_CHARSET, algorithm);
+  /**
+   * 内容信息编码
+   *
+   * @param content
+   *                    需要编码的内容信息
+   * @param algorithm
+   *                    算法类型
+   * @return 根据指定的algorithm算法计算摘要，并返回值为32个字符的十六进制字符串
+   */
+  public static String encode(String content, MessageDigestAlgorithm algorithm) {
+    return encode(content, DEFAULT_CHARSET, algorithm);
+  }
+
+  /**
+   * 内容信息编码
+   *
+   * @param content
+   *                      需要编码的内容信息
+   * @param charsetName
+   *                      字符集，默认为UTF-8
+   * @param algorithm
+   *                      算法类型
+   * @return 根据指定的algorithm算法计算摘要，并返回值为32个字符的十六进制字符串
+   */
+  public static String encode(String content, String charsetName, MessageDigestAlgorithm algorithm) {
+    return encode(content, StringUtils.isEmpty(charsetName) ? Charset.forName(DEFAULT_CHARSET) : Charset.forName(charsetName), algorithm);
+  }
+
+  /**
+   * 内容信息编码
+   *
+   * @param content
+   *                    需要编码的内容信息
+   * @param charset
+   *                    字符集
+   * @param algorithm
+   *                    算法类型
+   * @return 根据指定的algorithm算法计算摘要，并返回值为32个字符的十六进制字符串
+   */
+  public static String encode(String content, Charset charset, MessageDigestAlgorithm algorithm) {
+    if (StringUtils.isEmpty(content)) {
+      throw new IllegalArgumentException("content不能为空");
+    }
+    if (algorithm == null) {
+      throw new IllegalArgumentException("algorithm不能为空");
     }
 
-    /**
-     * 内容信息编码
-     *
-     * @param content
-     *            需要编码的内容信息
-     * @param charsetName
-     *            字符集，默认为UTF-8
-     * @param algorithm
-     *            算法类型
-     * @return 根据指定的algorithm算法计算摘要，并返回值为32个字符的十六进制字符串
-     */
-    public static String encode(String content, String charsetName, MessageDigestAlgorithm algorithm) {
-        return encode(content,
-                StringUtils.isEmpty(charsetName) ? Charset.forName(DEFAULT_CHARSET) : Charset.forName(charsetName),
-                algorithm);
-    }
+    // 根据指定的algorithm算法计算摘要
+    MessageDigest messageDigest = getDigest(algorithm);
+    // 获取内容信息的字节数组
+    byte[] bytes = content.getBytes(charset == null ? Charset.forName(DEFAULT_CHARSET) : charset);
+    // 使用指定的 byte 数组对摘要进行最后更新，然后完成摘要计算。
+    byte[] digest = messageDigest.digest(bytes);
+    // 把计算完的摘要信息转化为十六进制字符串
+    return new String(Hex.encodeHex(digest, false));
+  }
 
-    /**
-     * 内容信息编码
-     *
-     * @param content
-     *            需要编码的内容信息
-     * @param charset
-     *            字符集
-     * @param algorithm
-     *            算法类型
-     * @return 根据指定的algorithm算法计算摘要，并返回值为32个字符的十六进制字符串
-     */
-    public static String encode(String content, Charset charset, MessageDigestAlgorithm algorithm) {
-        if (StringUtils.isEmpty(content)) {
-            throw new IllegalArgumentException("content不能为空");
-        }
-        if (algorithm == null) {
-            throw new IllegalArgumentException("algorithm不能为空");
-        }
-
-        // 根据指定的algorithm算法计算摘要
-        MessageDigest messageDigest = getDigest(algorithm);
-        // 获取内容信息的字节数组
-        byte[] bytes = content.getBytes(charset == null ? Charset.forName(DEFAULT_CHARSET) : charset);
-        // 使用指定的 byte 数组对摘要进行最后更新，然后完成摘要计算。
-        byte[] digest = messageDigest.digest(bytes);
-        // 把计算完的摘要信息转化为十六进制字符串
-        return new String(Hex.encodeHex(digest, false));
+  /**
+   * 获取信息摘要
+   *
+   * @param algorithm
+   *                    信息摘要算法
+   * @return 实现指定算法的 MessageDigest 对象
+   */
+  public static MessageDigest getDigest(MessageDigestAlgorithm algorithm) {
+    try {
+      return MessageDigest.getInstance(algorithm.getValue());
+    } catch (NoSuchAlgorithmException e) {
+      throw new IllegalArgumentException(e);
     }
-
-    /**
-     * 获取信息摘要
-     *
-     * @param algorithm
-     *            信息摘要算法
-     * @return 实现指定算法的 MessageDigest 对象
-     */
-    public static MessageDigest getDigest(MessageDigestAlgorithm algorithm) {
-        try {
-            return MessageDigest.getInstance(algorithm.getValue());
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
+  }
 
 }

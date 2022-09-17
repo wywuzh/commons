@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 类OSPlatform的实现描述：操作系统平台枚举类
+ * 
  * <pre>
  * 参考：
  * https://blog.csdn.net/fangchao2011/article/details/88785637
@@ -30,49 +31,32 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum OSPlatform {
 
-    Any("any"),
-    Linux("Linux"),
-    Mac_OS("Mac OS"),
-    Mac_OS_X("Mac OS X"),
-    Windows("Windows"),
-    OS2("OS/2"),
-    Solaris("Solaris"),
-    SunOS("SunOS"),
-    MPEiX("MPE/iX"),
-    HP_UX("HP-UX"),
-    AIX("AIX"),
-    OS390("OS/390"),
-    FreeBSD("FreeBSD"),
-    Irix("Irix"),
-    Digital_Unix("Digital Unix"),
-    NetWare_411("NetWare"),
-    OSF1("OSF1"),
-    OpenVMS("OpenVMS"),
-    Others("Others");
+  Any("any"), Linux("Linux"), Mac_OS("Mac OS"), Mac_OS_X("Mac OS X"), Windows("Windows"), OS2("OS/2"), Solaris("Solaris"), SunOS("SunOS"), MPEiX("MPE/iX"), HP_UX("HP-UX"), AIX("AIX"), OS390(
+      "OS/390"), FreeBSD("FreeBSD"), Irix("Irix"), Digital_Unix("Digital Unix"), NetWare_411("NetWare"), OSF1("OSF1"), OpenVMS("OpenVMS"), Others("Others");
 
-    /**
-     * 操作系统名称
-     */
-    private String name;
+  /**
+   * 操作系统名称
+   */
+  private String name;
 
-    OSPlatform(String name) {
-        this.name = name;
+  OSPlatform(String name) {
+    this.name = name;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public static OSPlatform findByName(String name) {
+    if (StringUtils.isBlank(name)) {
+      return null;
     }
-
-    public String getName() {
-        return name;
+    for (OSPlatform item : values()) {
+      if (item.name.equals(name)) {
+        return item;
+      }
     }
-
-    public static OSPlatform findByName(String name) {
-        if (StringUtils.isBlank(name)) {
-            return null;
-        }
-        for (OSPlatform item : values()) {
-            if (item.name.equals(name)) {
-                return item;
-            }
-        }
-        return null;
-    }
+    return null;
+  }
 
 }

@@ -24,31 +24,31 @@ package com.github.wywuzh.commons.core.enums;
  */
 public enum DeleteType {
 
-    /**
-     * 逻辑删除
-     */
-    LOGIC("LOGIC"),
-    /**
-     * 物理删除
-     */
-    PHYSICS("PHYSICS");
+  /**
+   * 逻辑删除
+   */
+  LOGIC("LOGIC"),
+  /**
+   * 物理删除
+   */
+  PHYSICS("PHYSICS");
 
-    private String type;
+  private String type;
 
-    private DeleteType(String type) {
-        this.type = type;
+  private DeleteType(String type) {
+    this.type = type;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public static DeleteType findByType(String type) {
+    if ("LOGIC".equals(type)) {
+      return LOGIC;
+    } else if ("PHYSICS".equals(type)) {
+      return PHYSICS;
     }
-
-    public String getType() {
-        return type;
-    }
-
-    public static DeleteType findByType(String type) {
-        if ("LOGIC".equals(type)) {
-            return LOGIC;
-        } else if ("PHYSICS".equals(type)) {
-            return PHYSICS;
-        }
-        return null;
-    }
+    return null;
+  }
 }

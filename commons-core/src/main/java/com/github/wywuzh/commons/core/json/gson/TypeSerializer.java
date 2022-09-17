@@ -29,11 +29,11 @@ import java.lang.reflect.Type;
  */
 public interface TypeSerializer<T> extends JsonSerializer<T>, JsonDeserializer<T> {
 
-    /**
-     * 返回泛型T的Type
-     *
-     * @return
-     */
-    Type getType();
+  /**
+   * 返回泛型T的Type
+   *
+   * @return
+   */
+  Type getType();
 
 }

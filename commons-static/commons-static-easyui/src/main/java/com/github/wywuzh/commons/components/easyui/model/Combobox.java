@@ -15,9 +15,9 @@
  */
 package com.github.wywuzh.commons.components.easyui.model;
 
-import lombok.Data;
-
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类Combobox的实现描述：easyui-combobox
@@ -28,16 +28,16 @@ import java.io.Serializable;
  */
 @Data
 public class Combobox implements Serializable {
-    private static final long serialVersionUID = 2200870702520865560L;
+  private static final long serialVersionUID = 2200870702520865560L;
 
-    private String id;
-    private String text;
+  private String id;
+  private String text;
 
-    public Combobox() {
-    }
+  public Combobox() {
+  }
 
-    public Combobox(String id, String text) {
-        this.id = id;
-        this.text = text;
-    }
+  public Combobox(String id, String text) {
+    this.id = id;
+    this.text = text;
+  }
 }

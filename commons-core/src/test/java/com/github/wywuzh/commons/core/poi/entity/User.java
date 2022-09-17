@@ -15,9 +15,9 @@
  */
 package com.github.wywuzh.commons.core.poi.entity;
 
-import lombok.Data;
-
 import java.util.Date;
+
+import lombok.Data;
 
 /**
  * 类User的实现描述：用户
@@ -29,29 +29,29 @@ import java.util.Date;
 @Data
 public class User {
 
-    /**
-     * 用户名
-     */
-    private String username;
-    /**
-     * 昵称
-     */
-    private String nick;
-    /**
-     * 邮箱
-     */
-    private String email;
-    /**
-     * 手机号
-     */
-    private String mobile;
-    /**
-     * 性别
-     */
-    private String sex;
-    /**
-     * 出生日期
-     */
-    private Date birthdate;
+  /**
+   * 用户名
+   */
+  private String username;
+  /**
+   * 昵称
+   */
+  private String nick;
+  /**
+   * 邮箱
+   */
+  private String email;
+  /**
+   * 手机号
+   */
+  private String mobile;
+  /**
+   * 性别
+   */
+  private String sex;
+  /**
+   * 出生日期
+   */
+  private Date birthdate;
 
 }

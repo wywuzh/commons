@@ -32,661 +32,661 @@ import org.apache.commons.lang.StringUtils;
  */
 public abstract class AbstractConfiguration {
 
-    private Configuration configuration = null;
+  private Configuration configuration = null;
 
-    public abstract Configuration getInstance();
+  public abstract Configuration getInstance();
 
-    public abstract Configuration getInstance(String fileName);
+  public abstract Configuration getInstance(String fileName);
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回null
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public String getString(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getString(key);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回null
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public String getString(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回defaultValue
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public String getString(String key, String defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getString(key, defaultValue);
+    if (null == configuration) {
+      configuration = getInstance();
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回null
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public String[] getStringArray(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return configuration.getString(key);
+  }
 
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getStringArray(key);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回defaultValue
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public String getString(String key, String defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回-1
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public Byte getByte(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        Byte value = getByte(key, null);
-        if (null == value) {
-            return -1;
-        }
-        return null;
+    if (null == configuration) {
+      configuration = getInstance();
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Byte getByte(String key, byte defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return configuration.getString(key, defaultValue);
+  }
 
-        return getByte(key, new Byte(defaultValue));
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回null
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public String[] getStringArray(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Byte getByte(String key, Byte defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getByte(key, defaultValue);
+    if (null == configuration) {
+      configuration = getInstance();
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回null
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public Byte getShort(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return configuration.getStringArray(key);
+  }
 
-        Short value = getShort(key, null);
-        if (null == value) {
-            return -1;
-        }
-        return null;
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回-1
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public Byte getByte(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Short getShort(String key, short defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-        return getShort(key, new Short(defaultValue));
+    Byte value = getByte(key, null);
+    if (null == value) {
+      return -1;
+    }
+    return null;
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Byte getByte(String key, byte defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Short getShort(String key, Short defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return getByte(key, new Byte(defaultValue));
+  }
 
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getShort(key, defaultValue);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Byte getByte(String key, Byte defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回-1
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public Integer getInt(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        Integer integer = getInteger(key, null);
-        if (null == integer) {
-            return -1;
-        }
-
-        return integer;
+    if (null == configuration) {
+      configuration = getInstance();
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Integer getInt(String key, int defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return configuration.getByte(key, defaultValue);
+  }
 
-        return getInteger(key, defaultValue);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回null
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public Byte getShort(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Integer getInteger(String key, Integer defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    Short value = getShort(key, null);
+    if (null == value) {
+      return -1;
+    }
+    return null;
+  }
 
-        if (null == configuration) {
-            configuration = getInstance();
-        }
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Short getShort(String key, short defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+    return getShort(key, new Short(defaultValue));
+  }
 
-        return configuration.getInteger(key, defaultValue);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Short getShort(String key, Short defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回-1
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public Long getLong(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        Long value = getLong(key, null);
-        if (null == value) {
-            return -1L;
-        }
-
-        return value;
+    if (null == configuration) {
+      configuration = getInstance();
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Long getLong(String key, long defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return configuration.getShort(key, defaultValue);
+  }
 
-        return getLong(key, new Long(defaultValue));
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回-1
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public Integer getInt(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Long getLong(String key, Long defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getLong(key, defaultValue);
+    Integer integer = getInteger(key, null);
+    if (null == integer) {
+      return -1;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回-1
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public Float getFloat(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return integer;
+  }
 
-        Float value = getFloat(key, null);
-        if (null == value) {
-            return new Float(-1);
-        }
-
-        return value;
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Integer getInt(String key, int defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Float getFloat(String key, float defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return getInteger(key, defaultValue);
+  }
 
-        return getFloat(key, new Float(defaultValue));
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Integer getInteger(String key, Integer defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Float getFloat(String key, Float defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getFloat(key, defaultValue);
+    if (null == configuration) {
+      configuration = getInstance();
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回-1
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public Double getDouble(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return configuration.getInteger(key, defaultValue);
+  }
 
-        Double value = getDouble(key, null);
-        if (null == value) {
-            return new Double(-1);
-        }
-
-        return value;
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回-1
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public Long getLong(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Double getDouble(String key, double defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        return getDouble(key, new Double(defaultValue));
+    Long value = getLong(key, null);
+    if (null == value) {
+      return -1L;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Double getDouble(String key, Double defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return value;
+  }
 
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getDouble(key, defaultValue);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Long getLong(String key, long defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回null
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public BigDecimal getBigDecimal(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return getLong(key, new Long(defaultValue));
+  }
 
-        return getBigDecimal(key, null);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Long getLong(String key, Long defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public BigDecimal getBigDecimal(String key, BigDecimal defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getBigDecimal(key, defaultValue);
+    if (null == configuration) {
+      configuration = getInstance();
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回null
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public BigInteger getBigInteger(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return configuration.getLong(key, defaultValue);
+  }
 
-        return getBigInteger(key, null);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回-1
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public Float getFloat(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public BigInteger getBigInteger(String key, BigInteger defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getBigInteger(key, defaultValue);
+    Float value = getFloat(key, null);
+    if (null == value) {
+      return new Float(-1);
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回null
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public Boolean getBoolean(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return value;
+  }
 
-        return getBoolean(key, null);
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Float getFloat(String key, float defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Boolean getBoolean(String key, boolean defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
+    return getFloat(key, new Float(defaultValue));
+  }
 
-        return getBoolean(key, BooleanUtils.toBoolean(defaultValue));
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Float getFloat(String key, Float defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
     }
 
-    /**
-     * 根据指定的key获取value值
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public Boolean getBoolean(String key, Boolean defaultValue) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-
-        if (null == configuration) {
-            configuration = getInstance();
-        }
-
-        return configuration.getBoolean(key, defaultValue);
+    if (null == configuration) {
+      configuration = getInstance();
     }
+
+    return configuration.getFloat(key, defaultValue);
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回-1
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public Double getDouble(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    Double value = getDouble(key, null);
+    if (null == value) {
+      return new Double(-1);
+    }
+
+    return value;
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Double getDouble(String key, double defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    return getDouble(key, new Double(defaultValue));
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Double getDouble(String key, Double defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    if (null == configuration) {
+      configuration = getInstance();
+    }
+
+    return configuration.getDouble(key, defaultValue);
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回null
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public BigDecimal getBigDecimal(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    return getBigDecimal(key, null);
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public BigDecimal getBigDecimal(String key, BigDecimal defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    if (null == configuration) {
+      configuration = getInstance();
+    }
+
+    return configuration.getBigDecimal(key, defaultValue);
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回null
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public BigInteger getBigInteger(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    return getBigInteger(key, null);
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public BigInteger getBigInteger(String key, BigInteger defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    if (null == configuration) {
+      configuration = getInstance();
+    }
+
+    return configuration.getBigInteger(key, defaultValue);
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回null
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public Boolean getBoolean(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    return getBoolean(key, null);
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Boolean getBoolean(String key, boolean defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    return getBoolean(key, BooleanUtils.toBoolean(defaultValue));
+  }
+
+  /**
+   * 根据指定的key获取value值
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public Boolean getBoolean(String key, Boolean defaultValue) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+
+    if (null == configuration) {
+      configuration = getInstance();
+    }
+
+    return configuration.getBoolean(key, defaultValue);
+  }
 }

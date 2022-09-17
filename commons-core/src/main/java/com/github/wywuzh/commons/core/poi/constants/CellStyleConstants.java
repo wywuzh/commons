@@ -24,58 +24,55 @@ package com.github.wywuzh.commons.core.poi.constants;
  */
 public class CellStyleConstants {
 
+  /**
+   * 表头列(单元格)样式 - 表头字段：填充方案编码
+   */
+  public static final String HEADER_STYLE_FILL_PATTERN_CODE = "cell_style.header.fill_pattern_type.code";
+  /**
+   * 表头列(单元格)样式 - 表头字段：前景色
+   */
+  public static final String HEADER_STYLE_FOREGROUND_COLOR = "cell_style.header.foreground.color";
+  /**
+   * 表头列(单元格)样式 - 表头字段：背景色
+   */
+  public static final String HEADER_STYLE_BACKGROUND_COLOR = "cell_style.header.background.color";
+  /**
+   * 表头列(单元格)样式 - 表头字段：字体颜色
+   */
+  public static final String HEADER_STYLE_FONT_COLOR = "cell_style.header.font.color";
 
-    /**
-     * 表头列(单元格)样式 - 表头字段：填充方案编码
-     */
-    public static final String HEADER_STYLE_FILL_PATTERN_CODE = "cell_style.header.fill_pattern_type.code";
-    /**
-     * 表头列(单元格)样式 - 表头字段：前景色
-     */
-    public static final String HEADER_STYLE_FOREGROUND_COLOR = "cell_style.header.foreground.color";
-    /**
-     * 表头列(单元格)样式 - 表头字段：背景色
-     */
-    public static final String HEADER_STYLE_BACKGROUND_COLOR = "cell_style.header.background.color";
-    /**
-     * 表头列(单元格)样式 - 表头字段：字体颜色
-     */
-    public static final String HEADER_STYLE_FONT_COLOR = "cell_style.header.font.color";
+  /**
+   * 表头列(单元格)样式 - 表头提示信息：填充方案编码
+   */
+  public static final String HEADER_STYLE_TIPS_FILL_PATTERN_CODE = "cell_style.header.tips.fill_pattern_type.code";
+  /**
+   * 表头列(单元格)样式 - 表头提示信息：前景色
+   */
+  public static final String HEADER_STYLE_TIPS_FOREGROUND_COLOR = "cell_style.header.tips.foreground.color";
+  /**
+   * 表头列(单元格)样式 - 表头提示信息：背景色
+   */
+  public static final String HEADER_STYLE_TIPS_BACKGROUND_COLOR = "cell_style.header.tips.background.color";
+  /**
+   * 表头列(单元格)样式 - 表头提示信息：字体颜色
+   */
+  public static final String HEADER_STYLE_TIPS_FONT_COLOR = "cell_style.header.tips.font.color";
 
-
-    /**
-     * 表头列(单元格)样式 - 表头提示信息：填充方案编码
-     */
-    public static final String HEADER_STYLE_TIPS_FILL_PATTERN_CODE = "cell_style.header.tips.fill_pattern_type.code";
-    /**
-     * 表头列(单元格)样式 - 表头提示信息：前景色
-     */
-    public static final String HEADER_STYLE_TIPS_FOREGROUND_COLOR = "cell_style.header.tips.foreground.color";
-    /**
-     * 表头列(单元格)样式 - 表头提示信息：背景色
-     */
-    public static final String HEADER_STYLE_TIPS_BACKGROUND_COLOR = "cell_style.header.tips.background.color";
-    /**
-     * 表头列(单元格)样式 - 表头提示信息：字体颜色
-     */
-    public static final String HEADER_STYLE_TIPS_FONT_COLOR = "cell_style.header.tips.font.color";
-
-
-    /**
-     * 表头列(单元格)样式 - 表头必填字段：填充方案编码
-     */
-    public static final String HEADER_STYLE_REQUIRED_FILL_PATTERN_CODE = "cell_style.header.required.fill_pattern_type.code";
-    /**
-     * 表头列(单元格)样式 - 表头必填字段：前景色
-     */
-    public static final String HEADER_STYLE_REQUIRED_FOREGROUND_COLOR = "cell_style.header.required.foreground.color";
-    /**
-     * 表头列(单元格)样式 - 表头必填字段：背景色
-     */
-    public static final String HEADER_STYLE_REQUIRED_BACKGROUND_COLOR = "cell_style.header.required.background.color";
-    /**
-     * 表头列(单元格)样式 - 表头必填字段：字体颜色
-     */
-    public static final String HEADER_STYLE_REQUIRED_FONT_COLOR = "cell_style.header.required.font.color";
+  /**
+   * 表头列(单元格)样式 - 表头必填字段：填充方案编码
+   */
+  public static final String HEADER_STYLE_REQUIRED_FILL_PATTERN_CODE = "cell_style.header.required.fill_pattern_type.code";
+  /**
+   * 表头列(单元格)样式 - 表头必填字段：前景色
+   */
+  public static final String HEADER_STYLE_REQUIRED_FOREGROUND_COLOR = "cell_style.header.required.foreground.color";
+  /**
+   * 表头列(单元格)样式 - 表头必填字段：背景色
+   */
+  public static final String HEADER_STYLE_REQUIRED_BACKGROUND_COLOR = "cell_style.header.required.background.color";
+  /**
+   * 表头列(单元格)样式 - 表头必填字段：字体颜色
+   */
+  public static final String HEADER_STYLE_REQUIRED_FONT_COLOR = "cell_style.header.required.font.color";
 
 }

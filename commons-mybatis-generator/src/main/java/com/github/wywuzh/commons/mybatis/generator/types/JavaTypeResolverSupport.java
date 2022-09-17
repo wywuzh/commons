@@ -15,11 +15,11 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.types;
 
+import java.sql.Types;
+
 import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 import org.mybatis.generator.internal.types.JavaTypeResolverDefaultImpl;
 import org.springframework.context.annotation.Configuration;
-
-import java.sql.Types;
 
 /**
  * 类JavaTypeResolverSupport的实现描述：Java类型映射扩展插件
@@ -31,11 +31,11 @@ import java.sql.Types;
 @Configuration
 public class JavaTypeResolverSupport extends JavaTypeResolverDefaultImpl {
 
-    public JavaTypeResolverSupport() {
-        super();
-        // 把数据库的 TINYINT 映射成 Integer
-        super.typeMap.put(Types.TINYINT, new JdbcTypeInformation("TINYINT", new FullyQualifiedJavaType(Integer.class.getName())));
-        // 把数据库的 TINYINT 映射成 Integer
-        super.typeMap.put(Types.SMALLINT, new JdbcTypeInformation("SMALLINT", new FullyQualifiedJavaType(Integer.class.getName())));
-    }
+  public JavaTypeResolverSupport() {
+    super();
+    // 把数据库的 TINYINT 映射成 Integer
+    super.typeMap.put(Types.TINYINT, new JdbcTypeInformation("TINYINT", new FullyQualifiedJavaType(Integer.class.getName())));
+    // 把数据库的 TINYINT 映射成 Integer
+    super.typeMap.put(Types.SMALLINT, new JdbcTypeInformation("SMALLINT", new FullyQualifiedJavaType(Integer.class.getName())));
+  }
 }

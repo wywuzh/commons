@@ -15,10 +15,10 @@
  */
 package com.github.wywuzh.commons.dbutils.entity;
 
-import java.util.Date;
-
 import com.github.wywuzh.commons.core.entity.Created;
 import com.github.wywuzh.commons.dbutils.annotation.Column;
+
+import java.util.Date;
 
 /**
  * 类DeleteEntity.java的实现描述：实体基类（含创建信息）
@@ -28,33 +28,33 @@ import com.github.wywuzh.commons.dbutils.annotation.Column;
  * @since JDK 1.7
  */
 public abstract class AbstractCreateEntity extends AbstractEntity implements Created {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 创建人
-     */
-    @Column(name = "CREATE_USER")
-    private String createUser;
-    /**
-     * 创建时间
-     */
-    @Column(name = "CREATE_TIME")
-    private Date createTime;
+  /**
+   * 创建人
+   */
+  @Column(name = "CREATE_USER")
+  private String createUser;
+  /**
+   * 创建时间
+   */
+  @Column(name = "CREATE_TIME")
+  private Date createTime;
 
-    public String getCreateUser() {
-        return createUser;
-    }
+  public String getCreateUser() {
+    return createUser;
+  }
 
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
+  public void setCreateUser(String createUser) {
+    this.createUser = createUser;
+  }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+  public Date getCreateTime() {
+    return createTime;
+  }
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+  public void setCreateTime(Date createTime) {
+    this.createTime = createTime;
+  }
 
 }

@@ -15,8 +15,9 @@
  */
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
-import com.google.gson.annotations.SerializedName;
 import com.github.wywuzh.commons.dingtalk.response.BaseResponse;
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,17 +31,17 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ContactsResponse<T> extends BaseResponse {
-    private static final long serialVersionUID = 1353956884950909981L;
+  private static final long serialVersionUID = 1353956884950909981L;
 
-    /**
-     * 请求ID
-     */
-    @SerializedName(value = "request_id")
-    private String requestId;
-    /**
-     * 结果
-     */
-    @SerializedName(value = "result")
-    private T result;
+  /**
+   * 请求ID
+   */
+  @SerializedName(value = "request_id")
+  private String requestId;
+  /**
+   * 结果
+   */
+  @SerializedName(value = "result")
+  private T result;
 
 }

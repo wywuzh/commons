@@ -15,8 +15,9 @@
  */
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
-import com.google.gson.annotations.SerializedName;
 import com.github.wywuzh.commons.dingtalk.response.BaseResponse;
+import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 
 /**
@@ -28,16 +29,16 @@ import lombok.Data;
  */
 @Data
 public class V2UserListResponse extends BaseResponse {
-    private static final long serialVersionUID = 75304106390344877L;
+  private static final long serialVersionUID = 75304106390344877L;
 
-    /**
-     * 是否还有更多的数据
-     */
-    @SerializedName(value = "has_more")
-    private Long nextCursor;
-    /**
-     * 下一次分页的游标，如果has_more为false，表示没有更多的分页数据
-     */
-    @SerializedName(value = "next_cursor")
-    private Boolean hasMore;
+  /**
+   * 是否还有更多的数据
+   */
+  @SerializedName(value = "has_more")
+  private Long nextCursor;
+  /**
+   * 下一次分页的游标，如果has_more为false，表示没有更多的分页数据
+   */
+  @SerializedName(value = "next_cursor")
+  private Boolean hasMore;
 }
