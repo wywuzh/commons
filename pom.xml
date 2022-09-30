@@ -80,9 +80,9 @@
 
         <spring-cloud.version>2021.0.3</spring-cloud.version>
 
-        <log4j2.version>2.17.1</log4j2.version>
-        <logback.version>1.2.10</logback.version>
-        <slf4j.version>1.7.35</slf4j.version>
+        <log4j2.version>2.17.2</log4j2.version>
+        <logback.version>1.2.11</logback.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <jackson-bom.version>2.13.3</jackson-bom.version>
         <json-lib.version>2.4</json-lib.version>
         <fastjson.version>2.0.5</fastjson.version>
@@ -104,7 +104,7 @@
 
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <apache-poi.version>4.1.2</apache-poi.version>
-        <easyexcel.version>2.2.11</easyexcel.version>
+        <easyexcel.version>3.1.0</easyexcel.version>
         <google-zxing.version>3.4.1</google-zxing.version>
         <ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
