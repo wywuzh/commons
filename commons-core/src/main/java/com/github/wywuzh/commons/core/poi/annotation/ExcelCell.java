@@ -29,25 +29,27 @@ import java.lang.annotation.Target;
  * @version v2.2.6
  * @since JDK 1.8
  */
-@Target({ElementType.FIELD, ElementType.METHOD})
+@Target({
+    ElementType.FIELD, ElementType.METHOD
+})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelCell {
 
-    String value();
+  String value();
 
-    /**
-     * 单元格列类型
-     *
-     * @return
-     */
-    CellTypeEnum cellType() default CellTypeEnum.Undefined;
+  /**
+   * 单元格列类型
+   *
+   * @return
+   */
+  CellTypeEnum cellType() default CellTypeEnum.Undefined;
 
-    /**
-     * 列索引，从0开始
-     *
-     * @return
-     * @since v2.3.2
-     */
-    int index() default 0;
+  /**
+   * 列索引，从0开始
+   *
+   * @return
+   * @since v2.3.2
+   */
+  int index() default 0;
 
 }

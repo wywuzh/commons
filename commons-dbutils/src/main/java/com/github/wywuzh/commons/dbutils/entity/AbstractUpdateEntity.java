@@ -15,10 +15,10 @@
  */
 package com.github.wywuzh.commons.dbutils.entity;
 
-import java.util.Date;
-
 import com.github.wywuzh.commons.core.entity.Updated;
 import com.github.wywuzh.commons.dbutils.annotation.Column;
+
+import java.util.Date;
 
 /**
  * 类AbstractUpdateEntity.java的实现描述：实体基类（含修改信息）
@@ -28,33 +28,33 @@ import com.github.wywuzh.commons.dbutils.annotation.Column;
  * @since JDK 1.7
  */
 public abstract class AbstractUpdateEntity extends AbstractCreateEntity implements Updated {
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /**
-     * 修改人
-     */
-    @Column(name = "UPDATE_USER")
-    private String updateUser;
-    /**
-     * 修改时间
-     */
-    @Column(name = "UPDATE_TIME")
-    private Date updateTime;
+  /**
+   * 修改人
+   */
+  @Column(name = "UPDATE_USER")
+  private String updateUser;
+  /**
+   * 修改时间
+   */
+  @Column(name = "UPDATE_TIME")
+  private Date updateTime;
 
-    public String getUpdateUser() {
-        return updateUser;
-    }
+  public String getUpdateUser() {
+    return updateUser;
+  }
 
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
+  public void setUpdateUser(String updateUser) {
+    this.updateUser = updateUser;
+  }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
+  public Date getUpdateTime() {
+    return updateTime;
+  }
 
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
+  public void setUpdateTime(Date updateTime) {
+    this.updateTime = updateTime;
+  }
 
 }

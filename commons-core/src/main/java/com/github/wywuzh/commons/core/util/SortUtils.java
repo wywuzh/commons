@@ -15,14 +15,14 @@
  */
 package com.github.wywuzh.commons.core.util;
 
+import java.util.*;
+
 import org.apache.commons.beanutils.BeanComparator;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ComparableComparator;
 import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.lang3.StringUtils;
-
-import java.util.*;
 
 /**
  * 类ComparatorUtils的实现描述：排序工具类
@@ -33,80 +33,80 @@ import java.util.*;
  */
 public class SortUtils {
 
-    /**
-     * 排序，正序
-     *
-     * @param data       源数据
-     * @param fieldNames 需要排序的字段名
-     * @param <T>
-     * @return
-     */
-    public static <T> List<T> sort(List<T> data, String[] fieldNames) {
-        if (fieldNames == null || fieldNames.length == 0) {
-            return data;
-        }
-        ArrayList<Object> sortFields = new ArrayList<Object>();
-        for (String fieldName : fieldNames) {
-            Comparator comparator = ComparableComparator.getInstance();
-            // 允许null
-            comparator = ComparatorUtils.nullHighComparator(comparator);
-
-            sortFields.add(new BeanComparator<>(fieldName, comparator));
-        }
-        // 创建一个排序链
-        ComparatorChain multiSort = new ComparatorChain(sortFields);
-        Collections.sort(data, multiSort);
-        return data;
+  /**
+   * 排序，正序
+   *
+   * @param data       源数据
+   * @param fieldNames 需要排序的字段名
+   * @param <T>
+   * @return
+   */
+  public static <T> List<T> sort(List<T> data, String[] fieldNames) {
+    if (fieldNames == null || fieldNames.length == 0) {
+      return data;
     }
+    ArrayList<Object> sortFields = new ArrayList<Object>();
+    for (String fieldName : fieldNames) {
+      Comparator comparator = ComparableComparator.getInstance();
+      // 允许null
+      comparator = ComparatorUtils.nullHighComparator(comparator);
 
-    /**
-     * 排序，正序
-     *
-     * @param data       源数据
-     * @param fieldNames 需要排序的字段名
-     * @param <T>
-     * @return
-     */
-    public static <T> List<T> sort(List<T> data, List<String> fieldNames) {
-        if (CollectionUtils.isEmpty(fieldNames)) {
-            return data;
-        }
-        return sort(data, fieldNames.toArray(new String[0]));
+      sortFields.add(new BeanComparator<>(fieldName, comparator));
     }
+    // 创建一个排序链
+    ComparatorChain multiSort = new ComparatorChain(sortFields);
+    Collections.sort(data, multiSort);
+    return data;
+  }
 
-    /**
-     * 排序，正序
-     *
-     * @param data         源数据
-     * @param fieldNameMap 需要排序的字段：key=字段名，value=排序类型（ASC|DESC）
-     * @param <T>
-     * @return
-     */
-    public static <T> List<T> sort(List<T> data, Map<String, String> fieldNameMap) {
-        if (fieldNameMap == null || fieldNameMap.size() == 0) {
-            return data;
-        }
-        ArrayList<Object> sortFields = new ArrayList<Object>();
-        for (Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
-            // 字段名
-            String fieldName = entry.getKey();
-            // 排序类型：ASC, DESC
-            String sortType = entry.getValue();
-
-            Comparator comparator = ComparableComparator.getInstance();
-            // 允许null
-            comparator = ComparatorUtils.nullHighComparator(comparator);
-            // 默认为正序，可选择设置为逆序
-            if (StringUtils.equalsIgnoreCase(sortType, "DESC")) {
-                comparator = ComparatorUtils.reversedComparator(comparator);
-            }
-
-            sortFields.add(new BeanComparator<>(fieldName, comparator));
-        }
-        // 创建一个排序链
-        ComparatorChain multiSort = new ComparatorChain(sortFields);
-        Collections.sort(data, multiSort);
-        return data;
+  /**
+   * 排序，正序
+   *
+   * @param data       源数据
+   * @param fieldNames 需要排序的字段名
+   * @param <T>
+   * @return
+   */
+  public static <T> List<T> sort(List<T> data, List<String> fieldNames) {
+    if (CollectionUtils.isEmpty(fieldNames)) {
+      return data;
     }
+    return sort(data, fieldNames.toArray(new String[0]));
+  }
+
+  /**
+   * 排序，正序
+   *
+   * @param data         源数据
+   * @param fieldNameMap 需要排序的字段：key=字段名，value=排序类型（ASC|DESC）
+   * @param <T>
+   * @return
+   */
+  public static <T> List<T> sort(List<T> data, Map<String, String> fieldNameMap) {
+    if (fieldNameMap == null || fieldNameMap.size() == 0) {
+      return data;
+    }
+    ArrayList<Object> sortFields = new ArrayList<Object>();
+    for (Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
+      // 字段名
+      String fieldName = entry.getKey();
+      // 排序类型：ASC, DESC
+      String sortType = entry.getValue();
+
+      Comparator comparator = ComparableComparator.getInstance();
+      // 允许null
+      comparator = ComparatorUtils.nullHighComparator(comparator);
+      // 默认为正序，可选择设置为逆序
+      if (StringUtils.equalsIgnoreCase(sortType, "DESC")) {
+        comparator = ComparatorUtils.reversedComparator(comparator);
+      }
+
+      sortFields.add(new BeanComparator<>(fieldName, comparator));
+    }
+    // 创建一个排序链
+    ComparatorChain multiSort = new ComparatorChain(sortFields);
+    Collections.sort(data, multiSort);
+    return data;
+  }
 
 }

@@ -16,10 +16,12 @@
 package com.github.wywuzh.commons.core.ftp;
 
 import com.jcraft.jsch.JSchException;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 
 import java.io.IOException;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.Test;
 
 /**
  * 类JschFtpUtilsTest的实现描述：jsch FTP 文件传输工具
@@ -31,22 +33,22 @@ import java.io.IOException;
 @Slf4j
 public class JschFtpUtilsTest {
 
-    @Test
-    public void uploadFile() {
-        String host = "10.0.43.32";
-        int port = 60777;
-        String username = "root";
-        String password = "12345678";
-        String path = "/www/tools/";
-        String localFile = "D:\\test.txt";
-        String remoteFile = "test.txt";
-        try {
-            JschFtpUtils.uploadFile(host, port, username, password, path, localFile, remoteFile);
-        } catch (IOException e) {
-            log.error(e.getMessage(), e);
-        } catch (JSchException e) {
-            log.error(e.getMessage(), e);
-        }
+  @Test
+  public void uploadFile() {
+    String host = "10.0.43.32";
+    int port = 60777;
+    String username = "root";
+    String password = "12345678";
+    String path = "/www/tools/";
+    String localFile = "D:\\test.txt";
+    String remoteFile = "test.txt";
+    try {
+      JschFtpUtils.uploadFile(host, port, username, password, path, localFile, remoteFile);
+    } catch (IOException e) {
+      log.error(e.getMessage(), e);
+    } catch (JSchException e) {
+      log.error(e.getMessage(), e);
     }
+  }
 
 }

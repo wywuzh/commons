@@ -15,11 +15,13 @@
  */
 package com.github.wywuzh.commons.core.util;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.Test;
 
 /**
  * 类DateUtilTest的实现描述：时间工具类
@@ -31,65 +33,79 @@ import java.util.Date;
 @Slf4j
 public class DateUtilsTest {
 
-    @Test
-    public void getPreYearMonth() {
-        String yearMonth = "2022-03";
-        String preYearMonth = DateUtils.getPreYearMonth(yearMonth);
-        log.info("{}的上一年月是：{}", yearMonth, preYearMonth);
-    }
+  // 根据时间类型添加num值
+  @Test
+  public void addNumWithType() {
+    Date currentDate = new Date();
+    int fieldType = Calendar.DAY_OF_MONTH;
+    int num = 1;
+    log.info("date={}, fieldType={}, num={} addNumWithType结果：{}", currentDate, fieldType, num, DateUtils.addNumWithType(currentDate, fieldType, num));
+  }
 
-    @Test
-    public void getNextYearMonth() {
-        String yearMonth = "2022-03";
-        String preYearMonth = DateUtils.getNextYearMonth(yearMonth);
-        log.info("{}的下一年月是：{}", yearMonth, preYearMonth);
-    }
+  @Test
+  public void getFirstDaily() {
+    Date currentDate = new Date();
+    log.info("date={} getFirstDaily结果：{}", currentDate, DateUtils.getFirstDaily(currentDate));
+  }
 
-    @Test
-    public void getDayInterval() {
-        String startDate = "2022-01-01";
-        String endDate = "2022-03-31";
-        Integer dayInterval = DateUtils.getDayInterval(DateUtils.parse(startDate, DateUtils.PATTERN_DATE), DateUtils.parse(endDate, DateUtils.PATTERN_DATE), true);
-        log.info("startDate={}, endDate={} 两个日期的天数间隔：{}", startDate, endDate, dayInterval);
-    }
+  @Test
+  public void getPreYearMonth() {
+    String yearMonth = "2022-03";
+    String preYearMonth = DateUtils.getPreYearMonth(yearMonth);
+    log.info("{}的上一年月是：{}", yearMonth, preYearMonth);
+  }
 
-    @Test
-    public void getMonthInterval() {
-        String startDate = "2022-01-01";
-        String endDate = "2022-03-31";
-        Integer dayInterval = DateUtils.getMonthInterval(DateUtils.parse(startDate, DateUtils.PATTERN_DATE), DateUtils.parse(endDate, DateUtils.PATTERN_DATE), true);
-        log.info("startDate={}, endDate={} 两个日期的月份间隔：{}", startDate, endDate, dayInterval);
-    }
+  @Test
+  public void getNextYearMonth() {
+    String yearMonth = "2022-03";
+    String preYearMonth = DateUtils.getNextYearMonth(yearMonth);
+    log.info("{}的下一年月是：{}", yearMonth, preYearMonth);
+  }
 
+  @Test
+  public void getDayInterval() {
+    String startDate = "2022-01-01";
+    String endDate = "2022-03-31";
+    Integer dayInterval = DateUtils.getDayInterval(DateUtils.parse(startDate, DateUtils.PATTERN_DATE), DateUtils.parse(endDate, DateUtils.PATTERN_DATE), true);
+    log.info("startDate={}, endDate={} 两个日期的天数间隔：{}", startDate, endDate, dayInterval);
+  }
 
-    public static void main(String[] args) {
-        SimpleDateFormat instance = DateUtils.getInstance();
-        System.out.println(instance.format(new Date()));
-        System.out.println(DateUtils.format(new Date()));
+  @Test
+  public void getMonthInterval() {
+    String startDate = "2022-01-01";
+    String endDate = "2022-03-31";
+    Integer dayInterval = DateUtils.getMonthInterval(DateUtils.parse(startDate, DateUtils.PATTERN_DATE), DateUtils.parse(endDate, DateUtils.PATTERN_DATE), true);
+    log.info("startDate={}, endDate={} 两个日期的月份间隔：{}", startDate, endDate, dayInterval);
+  }
 
-        String ym = "2014-10";
-        Date parseDate = DateUtils.parse(ym, DateUtils.PATTERN_YYYY_MM);
-        System.out.println("parseDate:" + DateUtils.format(parseDate, DateUtils.PATTERN_DATE_TIME));
+  public static void main(String[] args) {
+    SimpleDateFormat instance = DateUtils.getInstance();
+    System.out.println(instance.format(new Date()));
+    System.out.println(DateUtils.format(new Date()));
 
-        Date currentDate = new Date();
-        System.out.println("addNumWithType:" + DateUtils.format(DateUtils.addNumWithType(currentDate, DateUtils.FIELD_DATE, -10), DateUtils.PATTERN_DATE_TIME));
+    String ym = "2014-10";
+    Date parseDate = DateUtils.parse(ym, DateUtils.PATTERN_YYYY_MM);
+    System.out.println("parseDate:" + DateUtils.format(parseDate, DateUtils.PATTERN_DATE_TIME));
 
-        // 日期
-        String daily = "2015-08-06";
-        System.out.println(DateUtils.format(DateUtils.getFirstDaily(daily), DateUtils.PATTERN_DATE_TIME));
-        System.out.println(DateUtils.format(DateUtils.getLastDaily(daily), DateUtils.PATTERN_DATE_TIME));
+    Date currentDate = new Date();
+    System.out.println("addNumWithType:" + DateUtils.format(DateUtils.addNumWithType(currentDate, DateUtils.FIELD_DATE, -10), DateUtils.PATTERN_DATE_TIME));
 
-        // 月份
-        String monthly = "2015-08";
-        System.out.println("getFirstMonthly:" + DateUtils.format(DateUtils.getFirstMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
-        System.out.println("getLastMonthly:" + DateUtils.format(DateUtils.getLastMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
+    // 日期
+    String daily = "2015-08-06";
+    System.out.println(DateUtils.format(DateUtils.getFirstDaily(daily), DateUtils.PATTERN_DATE_TIME));
+    System.out.println(DateUtils.format(DateUtils.getLastDaily(daily), DateUtils.PATTERN_DATE_TIME));
 
-        // 季度
-        Date quarter = new Date();
-        System.out.println("getFirstQuarter:" + DateUtils.format(DateUtils.getFirstQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
-        System.out.println("getLastQuarter:" + DateUtils.format(DateUtils.getLastQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
+    // 月份
+    String monthly = "2015-08";
+    System.out.println("getFirstMonthly:" + DateUtils.format(DateUtils.getFirstMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
+    System.out.println("getLastMonthly:" + DateUtils.format(DateUtils.getLastMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
 
-        long times = 1443715200000L;
-        System.out.println(DateUtils.format(new Date(times), DateUtils.PATTERN_DATE_TIME));
-    }
+    // 季度
+    Date quarter = new Date();
+    System.out.println("getFirstQuarter:" + DateUtils.format(DateUtils.getFirstQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
+    System.out.println("getLastQuarter:" + DateUtils.format(DateUtils.getLastQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
+
+    long times = 1443715200000L;
+    System.out.println(DateUtils.format(new Date(times), DateUtils.PATTERN_DATE_TIME));
+  }
 }

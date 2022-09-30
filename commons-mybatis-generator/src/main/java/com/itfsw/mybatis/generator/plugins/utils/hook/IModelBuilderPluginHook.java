@@ -15,41 +15,43 @@
  */
 package com.itfsw.mybatis.generator.plugins.utils.hook;
 
+import java.util.List;
+
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.InnerClass;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
-import java.util.List;
-
 /**
  * ---------------------------------------------------------------------------
- *
  * ---------------------------------------------------------------------------
+ * 
  * @author: hewei
  * @time:2018/4/28 17:29
- * ---------------------------------------------------------------------------
+ *                 ---------------------------------------------------------------------------
  */
 public interface IModelBuilderPluginHook {
-    /**
-     * Model builder class 生成
-     * @param topLevelClass
-     * @param builderClass
-     * @param columns
-     * @param introspectedTable
-     * @return
-     */
-    boolean modelBuilderClassGenerated(TopLevelClass topLevelClass, InnerClass builderClass, List<IntrospectedColumn> columns, IntrospectedTable introspectedTable);
+  /**
+   * Model builder class 生成
+   * 
+   * @param topLevelClass
+   * @param builderClass
+   * @param columns
+   * @param introspectedTable
+   * @return
+   */
+  boolean modelBuilderClassGenerated(TopLevelClass topLevelClass, InnerClass builderClass, List<IntrospectedColumn> columns, IntrospectedTable introspectedTable);
 
-    /**
-     * Model builder set 方法生成
-     * @param method
-     * @param topLevelClass
-     * @param builderClass
-     * @param introspectedColumn
-     * @param introspectedTable
-     * @return
-     */
-    boolean modelBuilderSetterMethodGenerated(Method method, TopLevelClass topLevelClass, InnerClass builderClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable);
+  /**
+   * Model builder set 方法生成
+   * 
+   * @param method
+   * @param topLevelClass
+   * @param builderClass
+   * @param introspectedColumn
+   * @param introspectedTable
+   * @return
+   */
+  boolean modelBuilderSetterMethodGenerated(Method method, TopLevelClass topLevelClass, InnerClass builderClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable);
 }

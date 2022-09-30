@@ -28,9 +28,9 @@ import com.github.wywuzh.commons.core.validator.Validate;
  */
 public class ValidateEmail extends Validate {
 
-    @Override
-    protected PatternType getPatternType() {
-        return PatternType.PATTERN_EMAIL;
-    }
+  @Override
+  protected PatternType getPatternType() {
+    return PatternType.PATTERN_EMAIL;
+  }
 
 }

@@ -26,77 +26,77 @@ import java.util.UUID;
  * @since JDK 1.6
  */
 public class UUIDUtil implements Serializable {
-    private static final long serialVersionUID = -741325524978030957L;
+  private static final long serialVersionUID = -741325524978030957L;
 
-    /**
-     * 获取随机UUID值
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:32:34
-     * @return
-     */
-    public static UUID getUUID() {
-        return UUID.randomUUID();
-    }
+  /**
+   * 获取随机UUID值
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:32:34
+   * @return
+   */
+  public static UUID getUUID() {
+    return UUID.randomUUID();
+  }
 
-    /**
-     * 根据指定name生成UUID
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:32:37
-     * @param name
-     * @return
-     */
-    public static UUID getUUID(String name) {
-        return UUID.fromString(name);
-    }
+  /**
+   * 根据指定name生成UUID
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:32:37
+   * @param name
+   * @return
+   */
+  public static UUID getUUID(String name) {
+    return UUID.fromString(name);
+  }
 
-    /**
-     * 获取32个字符长度的UUID
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:34:40
-     * @return
-     */
-    public static String getUUID32() {
-        return getUUID36().replaceAll("-", "");
-    }
+  /**
+   * 获取32个字符长度的UUID
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:34:40
+   * @return
+   */
+  public static String getUUID32() {
+    return getUUID36().replaceAll("-", "");
+  }
 
-    /**
-     * 获取36个字符长度的UUID
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:34:43
-     * @return
-     */
-    public static String getUUID36() {
-        return UUID.randomUUID().toString();
-    }
+  /**
+   * 获取36个字符长度的UUID
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:34:43
+   * @return
+   */
+  public static String getUUID36() {
+    return UUID.randomUUID().toString();
+  }
 
-    /**
-     * 获取指定name的32个字符长度的UUID
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:33:30
-     * @param name
-     * @return
-     */
-    public static String getUUID32(String name) {
-        return getUUID36(name).replaceAll("-", "");
-    }
+  /**
+   * 获取指定name的32个字符长度的UUID
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:33:30
+   * @param name
+   * @return
+   */
+  public static String getUUID32(String name) {
+    return getUUID36(name).replaceAll("-", "");
+  }
 
-    /**
-     * 获取指定name的36个字符长度的UUID
-     *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:33:33
-     * @param name
-     * @return
-     */
-    public static String getUUID36(String name) {
-        return getUUID(name).toString();
-    }
+  /**
+   * 获取指定name的36个字符长度的UUID
+   *
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年11月28日 上午11:33:33
+   * @param name
+   * @return
+   */
+  public static String getUUID36(String name) {
+    return getUUID(name).toString();
+  }
 
-    public static void main(String[] args) {
-        System.out.println(getUUID36());
-        System.out.println(getUUID36().length());
+  public static void main(String[] args) {
+    System.out.println(getUUID36());
+    System.out.println(getUUID36().length());
 
-        System.out.println(getUUID32());
-        System.out.println(getUUID32().length());
-    }
+    System.out.println(getUUID32());
+    System.out.println(getUUID32().length());
+  }
 
 }

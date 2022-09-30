@@ -16,6 +16,7 @@
 package com.github.wywuzh.commons.dingtalk.response;
 
 import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,16 +30,16 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class JsapiTicketResponse extends BaseResponse {
-    private static final long serialVersionUID = 7791718016337166504L;
+  private static final long serialVersionUID = 7791718016337166504L;
 
-    /**
-     * 生成的临时jsapi_ticket
-     */
-    @SerializedName(value = "ticket")
-    private String ticket;
-    /**
-     * ticket过期时间，单位秒
-     */
-    @SerializedName(value = "expires_in")
-    private Integer expiresIn;
+  /**
+   * 生成的临时jsapi_ticket
+   */
+  @SerializedName(value = "ticket")
+  private String ticket;
+  /**
+   * ticket过期时间，单位秒
+   */
+  @SerializedName(value = "expires_in")
+  private Integer expiresIn;
 }

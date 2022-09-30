@@ -16,6 +16,21 @@
 package com.github.wywuzh.commons.core.http;
 
 import com.github.wywuzh.commons.core.json.gson.GsonUtil;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.*;
@@ -46,19 +61,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
-import javax.net.ssl.SSLContext;
-import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 /**
  * 类HttpUtil.java的实现描述：HTTP、HTTPS调用工具类
  *
@@ -87,861 +89,818 @@ import java.util.Map;
  * @since JDK 1.7
  */
 public class HttpClientUtils {
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
+  private static final Logger logger = LoggerFactory.getLogger(HttpClientUtils.class);
 
-    /**
-     * @since v2.5.2
-     */
-    public static HttpClientSender httpClientSender = new HttpClientSender();
+  /**
+   * @since v2.5.2
+   */
+  public static HttpClientSender httpClientSender = new HttpClientSender();
 
-    /**
-     * GET请求数据
-     *
-     * @param uri   请求URI地址
-     * @param param 请求参数。格式param1=value1&amp;param2=value2&amp;param3=value3
-     * @return
-     * @author wywuzh 2016年4月25日 下午2:17:14
-     */
-    public static ResponseMessage doGet(String uri, String param) {
-        Assert.notNull(uri, "uri must not be null");
+  /**
+   * GET请求数据
+   *
+   * @param uri   请求URI地址
+   * @param param 请求参数。格式param1=value1&amp;param2=value2&amp;param3=value3
+   * @return
+   * @author wywuzh 2016年4月25日 下午2:17:14
+   */
+  public static ResponseMessage doGet(String uri, String param) {
+    Assert.notNull(uri, "uri must not be null");
 
-        return doGet(uri, param, Charset.defaultCharset());
-    }
+    return doGet(uri, param, Charset.defaultCharset());
+  }
 
-    /**
-     * GET请求数据
-     *
-     * @param uri   请求URI地址
-     * @param param 请求参数
-     * @return
-     * @author wywuzh 2016年4月25日 下午2:37:27
-     */
-    public static ResponseMessage doGet(String uri, Map<String, String> param) {
-        Assert.notNull(uri, "uri must not be null");
+  /**
+   * GET请求数据
+   *
+   * @param uri   请求URI地址
+   * @param param 请求参数
+   * @return
+   * @author wywuzh 2016年4月25日 下午2:37:27
+   */
+  public static ResponseMessage doGet(String uri, Map<String, String> param) {
+    Assert.notNull(uri, "uri must not be null");
 
-        StringBuilder paramStr = new StringBuilder();
-        if (null != param && param.size() > 0) {
-            for (String key : param.keySet()) {
-                if (paramStr.length() > 0) {
-                    paramStr.append("&");
-                }
-                paramStr.append(key).append("=").append(param.get(key));
-            }
+    StringBuilder paramStr = new StringBuilder();
+    if (null != param && param.size() > 0) {
+      for (String key : param.keySet()) {
+        if (paramStr.length() > 0) {
+          paramStr.append("&");
         }
-        return doGet(uri, paramStr.toString());
+        paramStr.append(key).append("=").append(param.get(key));
+      }
     }
+    return doGet(uri, paramStr.toString());
+  }
 
-    /**
-     * GET请求数据
-     *
-     * @param uri    请求URI地址
-     * @param param  请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
-     * @param header 请求参数（header）
-     * @return
-     * @author wywuzh 2016年5月23日 下午5:47:07
-     */
-    public static ResponseMessage doGet(String uri, String param, Map<String, String> header) {
-        Assert.notNull(uri, "uri must not be null");
+  /**
+   * GET请求数据
+   *
+   * @param uri    请求URI地址
+   * @param param  请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
+   * @param header 请求参数（header）
+   * @return
+   * @author wywuzh 2016年5月23日 下午5:47:07
+   */
+  public static ResponseMessage doGet(String uri, String param, Map<String, String> header) {
+    Assert.notNull(uri, "uri must not be null");
 
-        return doGet(uri, param, header, Charset.defaultCharset());
-    }
+    return doGet(uri, param, header, Charset.defaultCharset());
+  }
 
-    /**
-     * GET请求数据
-     *
-     * @param uri    请求URI地址
-     * @param param  请求参数（urlParam）
-     * @param header 请求参数（header）
-     * @return
-     * @author wywuzh 2016年5月23日 下午5:47:15
-     */
-    public static ResponseMessage doGet(String uri, Map<String, String> param, Map<String, String> header) {
-        Assert.notNull(uri, "uri must not be null");
+  /**
+   * GET请求数据
+   *
+   * @param uri    请求URI地址
+   * @param param  请求参数（urlParam）
+   * @param header 请求参数（header）
+   * @return
+   * @author wywuzh 2016年5月23日 下午5:47:15
+   */
+  public static ResponseMessage doGet(String uri, Map<String, String> param, Map<String, String> header) {
+    Assert.notNull(uri, "uri must not be null");
 
-        return doGet(uri, param, header, Charset.defaultCharset());
-    }
+    return doGet(uri, param, header, Charset.defaultCharset());
+  }
 
-    /**
-     * GET请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数,格式param1=value1&amp;param2=value2&amp;param3=value3
-     * @param charset 字符集
-     * @return
-     * @author wywuzh 2016年4月25日 下午2:23:07
-     */
-    public static ResponseMessage doGet(String uri, String param, Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
+  /**
+   * GET请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数,格式param1=value1&amp;param2=value2&amp;param3=value3
+   * @param charset 字符集
+   * @return
+   * @author wywuzh 2016年4月25日 下午2:23:07
+   */
+  public static ResponseMessage doGet(String uri, String param, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
 
-        return doGet(uri, param, null, charset);
-    }
+    return doGet(uri, param, null, charset);
+  }
 
-    /**
-     * GET请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数
-     * @param charset 字符集
-     * @return
-     * @author wywuzh 2016年4月25日 下午2:39:19
-     */
-    public static ResponseMessage doGet(String uri, Map<String, String> param, Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
+  /**
+   * GET请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数
+   * @param charset 字符集
+   * @return
+   * @author wywuzh 2016年4月25日 下午2:39:19
+   */
+  public static ResponseMessage doGet(String uri, Map<String, String> param, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
 
-        StringBuilder paramStr = new StringBuilder();
-        if (null != param && param.size() > 0) {
-            for (String key : param.keySet()) {
-                if (paramStr.length() > 0) {
-                    paramStr.append("&");
-                }
-                paramStr.append(key).append("=").append(param.get(key));
-            }
+    StringBuilder paramStr = new StringBuilder();
+    if (null != param && param.size() > 0) {
+      for (String key : param.keySet()) {
+        if (paramStr.length() > 0) {
+          paramStr.append("&");
         }
-        return doGet(uri, paramStr.toString(), charset);
+        paramStr.append(key).append("=").append(param.get(key));
+      }
+    }
+    return doGet(uri, paramStr.toString(), charset);
+  }
+
+  /**
+   * GET请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
+   * @param header  请求参数（header）
+   * @param charset 字符集
+   * @return
+   * @author wywuzh 2016年5月23日 下午5:46:29
+   */
+  public static ResponseMessage doGet(String uri, String param, Map<String, String> header, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    HttpGet httpGet = new HttpGet();
+
+    // 请求参数（urlParam）
+    if (StringUtils.isNotEmpty(param)) {
+      uri = uri + "?" + param;
     }
 
-    /**
-     * GET请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数（urlParam,格式param1=value1&amp;param2=value2&amp;param3=value3）
-     * @param header  请求参数（header）
-     * @param charset 字符集
-     * @return
-     * @author wywuzh 2016年5月23日 下午5:46:29
-     */
-    public static ResponseMessage doGet(String uri, String param, Map<String, String> header, Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
+    try {
+      httpGet.setURI(new URI(uri));
+    } catch (URISyntaxException e) {
+      logger.error("URISyntaxException", e);
+    }
 
-        HttpGet httpGet = new HttpGet();
+    // 请求参数（header）
+    if (null != header && header.size() > 0) {
+      Header[] headers = new Header[header.size()];
+      int index = 0;
+      for (String key : header.keySet()) {
+        headers[index] = new BasicHeader(key, header.get(key));
+        index++;
+      }
+      httpGet.setHeaders(headers);
+    }
 
-        // 请求参数（urlParam）
-        if (StringUtils.isNotEmpty(param)) {
-            uri = uri + "?" + param;
+    return httpClientSender.doRequest(httpGet);
+  }
+
+  /**
+   * GET请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数（urlParam）
+   * @param header  请求参数（header）
+   * @param charset 字符集
+   * @return
+   * @author wywuzh 2016年5月23日 下午5:47:21
+   */
+  public static ResponseMessage doGet(String uri, Map<String, String> param, Map<String, String> header, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    StringBuilder paramStr = new StringBuilder();
+    if (null != param && param.size() > 0) {
+      for (String key : param.keySet()) {
+        if (paramStr.length() > 0) {
+          paramStr.append("&");
         }
+        paramStr.append(key).append("=").append(param.get(key));
+      }
+    }
+    return doGet(uri, paramStr.toString(), header, charset);
+  }
 
-        try {
-            httpGet.setURI(new URI(uri));
-        } catch (URISyntaxException e) {
-            logger.error("URISyntaxException", e);
-        }
+  /**
+   * POST请求数据
+   *
+   * @param uri    请求URI地址
+   * @param params 请求参数
+   * @return
+   * @author wywuzh 2016年4月26日 下午5:15:22
+   */
+  public static ResponseMessage doPost(String uri, Map<String, String> params) {
+    Assert.notNull(uri, "uri must not be null");
 
-        // 请求参数（header）
-        if (null != header && header.size() > 0) {
-            Header[] headers = new Header[header.size()];
-            int index = 0;
-            for (String key : header.keySet()) {
-                headers[index] = new BasicHeader(key, header.get(key));
-                index++;
-            }
-            httpGet.setHeaders(headers);
-        }
+    return doPost(uri, params, Charset.defaultCharset());
+  }
 
-        return httpClientSender.doRequest(httpGet);
+  /**
+   * POST请求数据
+   *
+   * @param uri    请求URI地址
+   * @param param  请求参数
+   * @param header
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:58:00
+   */
+  public static ResponseMessage doPost(String uri, Map<String, String> param, Map<String, String> header) {
+    Assert.notNull(uri, "uri must not be null");
+
+    return doPost(uri, param, header, Charset.defaultCharset());
+  }
+
+  /**
+   * POST请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数
+   * @param charset
+   * @return
+   * @author wywuzh 2016年4月25日 下午2:41:10
+   */
+  public static ResponseMessage doPost(String uri, Map<String, String> param, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    return doPost(uri, param, null, charset);
+  }
+
+  /**
+   * POST请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数
+   * @param header  header参数
+   * @param charset 字符集
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:57:56
+   */
+  public static ResponseMessage doPost(String uri, Map<String, String> param, Map<String, String> header, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    HttpPost httpPost = new HttpPost(uri);
+
+    // 请求参数
+    if (null != param && param.size() > 0) {
+      List<NameValuePair> list = new ArrayList<NameValuePair>();
+      for (String key : param.keySet()) {
+        list.add(new BasicNameValuePair(key, param.get(key)));
+      }
+      UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, charset);
+      httpPost.setEntity(entity);
     }
 
-    /**
-     * GET请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数（urlParam）
-     * @param header  请求参数（header）
-     * @param charset 字符集
-     * @return
-     * @author wywuzh 2016年5月23日 下午5:47:21
-     */
-    public static ResponseMessage doGet(String uri, Map<String, String> param, Map<String, String> header,
-                                        Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
+    // header参数
+    if (null != header && header.size() > 0) {
+      Header[] headers = new Header[header.size()];
+      int index = 0;
+      for (String key : header.keySet()) {
+        headers[index] = new BasicHeader(key, header.get(key));
+        index++;
+      }
+      httpPost.setHeaders(headers);
+    }
+    return httpClientSender.doRequest(httpPost);
+  }
 
-        StringBuilder paramStr = new StringBuilder();
-        if (null != param && param.size() > 0) {
-            for (String key : param.keySet()) {
-                if (paramStr.length() > 0) {
-                    paramStr.append("&");
-                }
-                paramStr.append(key).append("=").append(param.get(key));
-            }
-        }
-        return doGet(uri, paramStr.toString(), header, charset);
+  /**
+   * POST请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数
+   * @param header  header参数
+   * @param charset 字符集
+   * @return
+   * @since v2.3.8
+   */
+  public static ResponseMessage doPost(String uri, Object param, Map<String, String> header, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    HttpPost httpPost = new HttpPost(uri);
+
+    // 请求参数
+    if (null != param) {
+      String json = GsonUtil.format(param);
+      httpPost.setEntity(new StringEntity(json, charset));
     }
 
-    /**
-     * POST请求数据
-     *
-     * @param uri    请求URI地址
-     * @param params 请求参数
-     * @return
-     * @author wywuzh 2016年4月26日 下午5:15:22
-     */
-    public static ResponseMessage doPost(String uri, Map<String, String> params) {
-        Assert.notNull(uri, "uri must not be null");
+    // header参数
+    if (null != header && header.size() > 0) {
+      Header[] headers = new Header[header.size()];
+      int index = 0;
+      for (String key : header.keySet()) {
+        headers[index] = new BasicHeader(key, header.get(key));
+        index++;
+      }
+      httpPost.setHeaders(headers);
+    }
+    return httpClientSender.doRequest(httpPost);
+  }
 
-        return doPost(uri, params, Charset.defaultCharset());
+  /**
+   * PUT请求数据
+   *
+   * @param uri    请求URI地址
+   * @param params 请求参数
+   * @return
+   * @author wywuzh 2016年4月26日 下午6:04:49
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> params) {
+    Assert.notNull(uri, "uri must not be null");
+
+    return doPut(uri, params, Charset.defaultCharset());
+  }
+
+  /**
+   * PUT请求数据
+   *
+   * @param uri    请求URI地址
+   * @param param  请求参数
+   * @param header header参数
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:32:48
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header) {
+    Assert.notNull(uri, "uri must not be null");
+
+    return doPut(uri, param, header, Charset.defaultCharset());
+  }
+
+  /**
+   * PUT请求数据
+   *
+   * @param uri      请求URI地址
+   * @param param    请求参数
+   * @param fileList 附件列表
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:50
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> param, List<File> fileList) {
+    Assert.notNull(uri, "uri must not be null");
+
+    return doPut(uri, param, fileList, Charset.defaultCharset());
+  }
+
+  /**
+   * PUT请求数据
+   *
+   * @param uri      请求URI地址
+   * @param param    请求参数
+   * @param header   header参数
+   * @param fileList 附件列表
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:34
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header, List<File> fileList) {
+    Assert.notNull(uri, "uri must not be null");
+
+    return doPut(uri, param, header, fileList, Charset.defaultCharset());
+  }
+
+  /**
+   * PUT请求数据
+   *
+   * @param uri   请求URI地址
+   * @param param 请求参数
+   * @return
+   * @author wywuzh 2016年4月26日 下午5:38:20
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> param, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    return doPut(uri, param, null, null, charset);
+  }
+
+  /**
+   * PUT请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数
+   * @param header  header参数
+   * @param charset 字符集
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:15
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    return doPut(uri, param, header, null, charset);
+  }
+
+  /**
+   * PUT请求数据
+   *
+   * @param uri      请求URI地址
+   * @param param    请求参数
+   * @param fileList 附件列表
+   * @param charset  字符集
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:18
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> param, List<File> fileList, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    return doPut(uri, param, null, fileList, charset);
+  }
+
+  /**
+   * PUT请求数据
+   *
+   * @param uri      请求URI地址
+   * @param param    请求参数
+   * @param header   header参数
+   * @param fileList 附件列表
+   * @param charset  字符集
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:14:04
+   */
+  public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header, List<File> fileList, Charset charset) {
+    Assert.notNull(uri, "uri must note be null");
+    Assert.notNull(charset, "charset must not be null");
+
+    HttpPut httpPut = new HttpPut(uri);
+    MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+    // 请求参数
+    if (null != param && param.size() > 0) {
+      for (String key : param.keySet()) {
+        multipartEntityBuilder.addPart(key, new StringBody(param.get(key), ContentType.APPLICATION_FORM_URLENCODED));
+      }
     }
 
-    /**
-     * POST请求数据
-     *
-     * @param uri    请求URI地址
-     * @param param  请求参数
-     * @param header
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:58:00
-     */
-    public static ResponseMessage doPost(String uri, Map<String, String> param, Map<String, String> header) {
-        Assert.notNull(uri, "uri must not be null");
-
-        return doPost(uri, param, header, Charset.defaultCharset());
+    // 需要上传的文件
+    if (null != fileList && fileList.size() > 0) {
+      for (File file : fileList) {
+        multipartEntityBuilder.addBinaryBody("file", file, ContentType.MULTIPART_FORM_DATA, file.getName());
+      }
     }
+    httpPut.setEntity(multipartEntityBuilder.build());
 
-    /**
-     * POST请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数
-     * @param charset
-     * @return
-     * @author wywuzh 2016年4月25日 下午2:41:10
-     */
-    public static ResponseMessage doPost(String uri, Map<String, String> param, Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
-
-        return doPost(uri, param, null, charset);
+    // header参数
+    if (null != header && header.size() > 0) {
+      Header[] headers = new Header[header.size()];
+      int index = 0;
+      for (String key : header.keySet()) {
+        headers[index] = new BasicHeader(key, header.get(key));
+        index++;
+      }
+      httpPut.setHeaders(headers);
     }
+    return httpClientSender.doRequest(httpPut);
+  }
 
-    /**
-     * POST请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数
-     * @param header  header参数
-     * @param charset 字符集
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午9:57:56
-     */
-    public static ResponseMessage doPost(String uri, Map<String, String> param, Map<String, String> header,
-                                         Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
+  /**
+   * DELETE请求数据
+   *
+   * @param uri   请求URI地址
+   * @param param 请求参数
+   * @return
+   * @author wywuzh 2016年4月26日 下午6:06:47
+   */
+  public static String doDelete(String uri, String param) {
+    Assert.notNull(uri, "uri must not be null");
 
-        HttpPost httpPost = new HttpPost(uri);
+    return doDelete(uri, param, Charset.defaultCharset());
+  }
 
-        // 请求参数
-        if (null != param && param.size() > 0) {
-            List<NameValuePair> list = new ArrayList<NameValuePair>();
-            for (String key : param.keySet()) {
-                list.add(new BasicNameValuePair(key, param.get(key)));
-            }
-            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(list, charset);
-            httpPost.setEntity(entity);
-        }
+  /**
+   * DELETE请求数据
+   *
+   * @param uri     请求URI地址
+   * @param param   请求参数
+   * @param charset
+   * @return
+   * @author wywuzh 2016年4月26日 下午6:07:06
+   */
+  public static String doDelete(String uri, String param, Charset charset) {
+    Assert.notNull(uri, "uri must not be null");
+    Assert.notNull(charset, "charset must not be null");
 
-        // header参数
-        if (null != header && header.size() > 0) {
-            Header[] headers = new Header[header.size()];
-            int index = 0;
-            for (String key : header.keySet()) {
-                headers[index] = new BasicHeader(key, header.get(key));
-                index++;
-            }
-            httpPost.setHeaders(headers);
-        }
-        return httpClientSender.doRequest(httpPost);
+    String result = null;
+    try {
+      HttpClient httpClient = HttpClientBuilder.create().build();
+      HttpDelete httpDelete = new HttpDelete();
+
+      if (StringUtils.isNotEmpty(param)) {
+        uri = uri + "?" + param;
+      }
+      httpDelete.setURI(new URI(uri));
+
+      // 调用DELETE请求
+      HttpResponse httpResponse = httpClient.execute(httpDelete);
+
+      // 返回处理结果状态
+      int statusCode = httpResponse.getStatusLine().getStatusCode();
+      if (statusCode == 200) {
+        result = EntityUtils.toString(httpResponse.getEntity(), charset);
+      }
+    } catch (ClientProtocolException e) {
+      logger.error("ClientProtocolException：", e);
+    } catch (IOException e) {
+      logger.error("IOException：", e);
+    } catch (URISyntaxException e) {
+      logger.error("URISyntaxException：", e);
     }
+    return result;
+  }
 
-    /**
-     * POST请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数
-     * @param header  header参数
-     * @param charset 字符集
-     * @return
-     * @since v2.3.8
-     */
-    public static ResponseMessage doPost(String uri, Object param, Map<String, String> header,
-                                         Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
+  /**
+   * 私密连接工厂（单例）
+   *
+   * @since v2.3.8
+   */
+  private volatile static ConnectionSocketFactory connectionSocketFactory;
 
-        HttpPost httpPost = new HttpPost(uri);
-
-        // 请求参数
-        if (null != param) {
-            String json = GsonUtil.format(param);
-            httpPost.setEntity(new StringEntity(json, charset));
-        }
-
-        // header参数
-        if (null != header && header.size() > 0) {
-            Header[] headers = new Header[header.size()];
-            int index = 0;
-            for (String key : header.keySet()) {
-                headers[index] = new BasicHeader(key, header.get(key));
-                index++;
-            }
-            httpPost.setHeaders(headers);
-        }
-        return httpClientSender.doRequest(httpPost);
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri    请求URI地址
-     * @param params 请求参数
-     * @return
-     * @author wywuzh 2016年4月26日 下午6:04:49
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> params) {
-        Assert.notNull(uri, "uri must not be null");
-
-        return doPut(uri, params, Charset.defaultCharset());
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri    请求URI地址
-     * @param param  请求参数
-     * @param header header参数
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:32:48
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header) {
-        Assert.notNull(uri, "uri must not be null");
-
-        return doPut(uri, param, header, Charset.defaultCharset());
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri      请求URI地址
-     * @param param    请求参数
-     * @param fileList 附件列表
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:50
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> param, List<File> fileList) {
-        Assert.notNull(uri, "uri must not be null");
-
-        return doPut(uri, param, fileList, Charset.defaultCharset());
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri      请求URI地址
-     * @param param    请求参数
-     * @param header   header参数
-     * @param fileList 附件列表
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:33:34
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header,
-                                        List<File> fileList) {
-        Assert.notNull(uri, "uri must not be null");
-
-        return doPut(uri, param, header, fileList, Charset.defaultCharset());
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri   请求URI地址
-     * @param param 请求参数
-     * @return
-     * @author wywuzh 2016年4月26日 下午5:38:20
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> param, Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
-
-        return doPut(uri, param, null, null, charset);
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数
-     * @param header  header参数
-     * @param charset 字符集
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:15
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header,
-                                        Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
-
-        return doPut(uri, param, header, null, charset);
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri      请求URI地址
-     * @param param    请求参数
-     * @param fileList 附件列表
-     * @param charset  字符集
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:37:18
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> param, List<File> fileList, Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
-
-        return doPut(uri, param, null, fileList, charset);
-    }
-
-    /**
-     * PUT请求数据
-     *
-     * @param uri      请求URI地址
-     * @param param    请求参数
-     * @param header   header参数
-     * @param fileList 附件列表
-     * @param charset  字符集
-     * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月17日 下午11:14:04
-     */
-    public static ResponseMessage doPut(String uri, Map<String, String> param, Map<String, String> header,
-                                        List<File> fileList, Charset charset) {
-        Assert.notNull(uri, "uri must note be null");
-        Assert.notNull(charset, "charset must not be null");
-
-        HttpPut httpPut = new HttpPut(uri);
-        MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
-        // 请求参数
-        if (null != param && param.size() > 0) {
-            for (String key : param.keySet()) {
-                multipartEntityBuilder.addPart(key,
-                        new StringBody(param.get(key), ContentType.APPLICATION_FORM_URLENCODED));
-            }
-        }
-
-        // 需要上传的文件
-        if (null != fileList && fileList.size() > 0) {
-            for (File file : fileList) {
-                multipartEntityBuilder.addBinaryBody("file", file, ContentType.MULTIPART_FORM_DATA, file.getName());
-            }
-        }
-        httpPut.setEntity(multipartEntityBuilder.build());
-
-        // header参数
-        if (null != header && header.size() > 0) {
-            Header[] headers = new Header[header.size()];
-            int index = 0;
-            for (String key : header.keySet()) {
-                headers[index] = new BasicHeader(key, header.get(key));
-                index++;
-            }
-            httpPut.setHeaders(headers);
-        }
-        return httpClientSender.doRequest(httpPut);
-    }
-
-    /**
-     * DELETE请求数据
-     *
-     * @param uri   请求URI地址
-     * @param param 请求参数
-     * @return
-     * @author wywuzh 2016年4月26日 下午6:06:47
-     */
-    public static String doDelete(String uri, String param) {
-        Assert.notNull(uri, "uri must not be null");
-
-        return doDelete(uri, param, Charset.defaultCharset());
-    }
-
-    /**
-     * DELETE请求数据
-     *
-     * @param uri     请求URI地址
-     * @param param   请求参数
-     * @param charset
-     * @return
-     * @author wywuzh 2016年4月26日 下午6:07:06
-     */
-    public static String doDelete(String uri, String param, Charset charset) {
-        Assert.notNull(uri, "uri must not be null");
-        Assert.notNull(charset, "charset must not be null");
-
-        String result = null;
-        try {
-            HttpClient httpClient = HttpClientBuilder.create().build();
-            HttpDelete httpDelete = new HttpDelete();
-
-            if (StringUtils.isNotEmpty(param)) {
-                uri = uri + "?" + param;
-            }
-            httpDelete.setURI(new URI(uri));
-
-            // 调用DELETE请求
-            HttpResponse httpResponse = httpClient.execute(httpDelete);
-
-            // 返回处理结果状态
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
-            if (statusCode == 200) {
-                result = EntityUtils.toString(httpResponse.getEntity(), charset);
-            }
-        } catch (ClientProtocolException e) {
-            logger.error("ClientProtocolException：", e);
-        } catch (IOException e) {
-            logger.error("IOException：", e);
-        } catch (URISyntaxException e) {
-            logger.error("URISyntaxException：", e);
-        }
-        return result;
-    }
-
-
-    /**
-     * 私密连接工厂（单例）
-     *
-     * @since v2.3.8
-     */
-    private volatile static ConnectionSocketFactory connectionSocketFactory;
-
-    private static ConnectionSocketFactory getConnectionSocketFactory() {
+  private static ConnectionSocketFactory getConnectionSocketFactory() {
+    if (connectionSocketFactory == null) {
+      synchronized (HttpClientUtils.class) {
         if (connectionSocketFactory == null) {
-            synchronized (HttpClientUtils.class) {
-                if (connectionSocketFactory == null) {
-                    try {
-                        SSLContext sslContext = SSLContext.getInstance("TLS");
-                        sslContext.init(null, new TrustManager[]{new TrustManager()}, null);
+          try {
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, new TrustManager[] {
+                new TrustManager()
+            }, null);
 
-                        connectionSocketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
-                    } catch (NoSuchAlgorithmException e) {
-                        logger.error("NoSuchAlgorithmException", e);
-                    } catch (KeyManagementException e) {
-                        logger.error("KeyManagementException", e);
-                    }
-                }
-            }
+            connectionSocketFactory = new SSLConnectionSocketFactory(sslContext, NoopHostnameVerifier.INSTANCE);
+          } catch (NoSuchAlgorithmException e) {
+            logger.error("NoSuchAlgorithmException", e);
+          } catch (KeyManagementException e) {
+            logger.error("KeyManagementException", e);
+          }
         }
-        return connectionSocketFactory;
+      }
+    }
+    return connectionSocketFactory;
+  }
+
+  /**
+   * 处理用户请求
+   *
+   * @param request
+   * @return
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月12日 下午3:29:04
+   * @deprecated 已废弃，请使用 HttpClientSender 进行调用
+   */
+  @Deprecated
+  public static ResponseMessage doRequest(HttpUriRequest request) {
+    if (null == request) {
+      throw new IllegalArgumentException("HttpUriRequest must not be null");
+    }
+    if (null == request.getURI()) {
+      throw new IllegalArgumentException("HttpUriRequest URI must not be null");
+    }
+
+    // 设置全局的标准cookie策略
+    RequestConfig config = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT).setExpectContinueEnabled(true)
+        .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
+        .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
+    // 创建可用Scheme
+    Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
+        .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
+    // 创建ConnectionManager
+    PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+    // 设置可关闭的httpclient
+    CloseableHttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
+
+    ResponseMessage responseMessage = null;
+    try {
+      // 发起用户请求
+      CloseableHttpResponse httpResponse = httpClient.execute(request);
+      // 处理结果返回码
+      int statusCode = httpResponse.getStatusLine().getStatusCode();
+      // 返回结果
+      String entity = EntityUtils.toString(httpResponse.getEntity());
+      responseMessage = new ResponseMessage(statusCode, entity);
+    } catch (ClientProtocolException e) {
+      logger.error("ClientProtocolException：", e);
+      responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
+    } catch (IOException e) {
+      logger.error("IOException：", e);
+      responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
+    } finally {
+      try {
+        httpClient.close();
+      } catch (IOException e) {
+        logger.error("IOException：", e);
+      }
+    }
+    return responseMessage;
+  }
+
+  /**
+   * 处理用户请求
+   *
+   * @param request
+   * @param callBack
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月11日 上午11:17:59
+   * @deprecated 已废弃，请使用 HttpClientSender 进行调用
+   */
+  @Deprecated
+  public static void doRequest(HttpUriRequest request, ResponseCallBack callBack) {
+    if (null == request) {
+      throw new IllegalArgumentException("HttpUriRequest must not be null");
+    }
+    if (null == request.getURI()) {
+      throw new IllegalArgumentException("HttpUriRequest URI must not be null");
+    }
+
+    // 设置全局的标准cookie策略
+    RequestConfig config = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT).setExpectContinueEnabled(true)
+        .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
+        .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
+    // 创建可用Scheme
+    Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
+        .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
+    // 创建ConnectionManager
+    PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+    // 设置可关闭的httpclient
+    CloseableHttpClient httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).setDefaultRequestConfig(config).build();
+
+    try {
+      // 发起用户请求
+      CloseableHttpResponse httpResponse = httpClient.execute(request);
+
+      // 是否将处理结果返回
+      if (null != callBack) {
+        // 返回码
+        int statusCode = httpResponse.getStatusLine().getStatusCode();
+        // 返回结果
+        String result = EntityUtils.toString(httpResponse.getEntity(), Charset.forName("UTF-8"));
+        // 响应回调
+        callBack.response(statusCode, result);
+      }
+    } catch (ClientProtocolException e) {
+      logger.error("ClientProtocolException：", e);
+      if (null != callBack) {
+        callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
+      }
+    } catch (IOException e) {
+      logger.error("IOException：", e);
+      if (null != callBack) {
+        callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
+      }
+    } finally {
+      try {
+        httpClient.close();
+      } catch (IOException e) {
+        logger.error("IOException：", e);
+      }
+    }
+  }
+
+  /**
+   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2022-04-19 18:21:42
+   * @version v2.5.2
+   */
+  public static class HttpClientSender {
+
+    private RequestConfig requestConfig;
+    /**
+     * 可关闭的httpclient
+     */
+    private CloseableHttpClient httpClient;
+
+    public HttpClientSender() {
+      // 设置全局的标准cookie策略
+      requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT).setExpectContinueEnabled(true)
+          .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
+          .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
+      // 创建可用Scheme
+      Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
+          .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
+      // 创建ConnectionManager
+      PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+      // 设置可关闭的httpclient
+      httpClient = HttpClientBuilder.create().setConnectionManager(connectionManager).setDefaultRequestConfig(requestConfig).build();
     }
 
     /**
      * 处理用户请求
      *
-     * @param request
+     * @param request http请求
      * @return
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月12日 下午3:29:04
-     * @deprecated 已废弃，请使用 HttpClientSender 进行调用
      */
-    @Deprecated
-    public static ResponseMessage doRequest(HttpUriRequest request) {
-        if (null == request) {
-            throw new IllegalArgumentException("HttpUriRequest must not be null");
-        }
-        if (null == request.getURI()) {
-            throw new IllegalArgumentException("HttpUriRequest URI must not be null");
-        }
+    public ResponseMessage doRequest(HttpRequestBase request) {
+      if (null == request) {
+        throw new IllegalArgumentException("HttpUriRequest must not be null");
+      }
+      if (null == request.getURI()) {
+        throw new IllegalArgumentException("HttpUriRequest URI must not be null");
+      }
 
-        // 设置全局的标准cookie策略
-        RequestConfig config = RequestConfig.custom()
-                .setCookieSpec(CookieSpecs.STANDARD_STRICT)
-                .setExpectContinueEnabled(true)
-                .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
-                .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
-                .setConnectTimeout(30 * 1000)
-                .setSocketTimeout(30 * 1000)
-                .setConnectionRequestTimeout(30 * 1000)
-                .build();
-        // 创建可用Scheme
-        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
-                .register(Scheme.HTTPS.name(), getConnectionSocketFactory())
-                .build();
-        // 创建ConnectionManager
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
-                socketFactoryRegistry);
-        // 设置可关闭的httpclient
-        CloseableHttpClient httpClient = HttpClientBuilder.create()
-                .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(config)
-                .build();
+      CloseableHttpResponse httpResponse = null;
+      HttpEntity httpEntity = null;
+      ResponseMessage responseMessage = null;
+      try {
+        request.setConfig(requestConfig);
 
-        ResponseMessage responseMessage = null;
-        try {
-            // 发起用户请求
-            CloseableHttpResponse httpResponse = httpClient.execute(request);
-            // 处理结果返回码
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
-            // 返回结果
-            String entity = EntityUtils.toString(httpResponse.getEntity());
-            responseMessage = new ResponseMessage(statusCode, entity);
-        } catch (ClientProtocolException e) {
-            logger.error("ClientProtocolException：", e);
-            responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
-        } catch (IOException e) {
-            logger.error("IOException：", e);
-            responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                logger.error("IOException：", e);
-            }
+        // 发起用户请求
+        httpResponse = httpClient.execute(request);
+        // 处理结果返回码
+        int statusCode = httpResponse.getStatusLine().getStatusCode();
+        // 返回结果
+        httpEntity = httpResponse.getEntity();
+        responseMessage = new ResponseMessage(statusCode, EntityUtils.toString(httpEntity, Charset.forName("UTF-8")));
+      } catch (ClientProtocolException e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+      } catch (IOException e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+      } catch (Exception e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+      } catch (Throwable e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+      } finally {
+        // 释放资源
+        if (httpResponse != null) {
+          try {
+            httpResponse.close();
+          } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+          }
         }
-        return responseMessage;
+        if (httpEntity != null) {
+          try {
+            // 释放所有由httpEntity所持有的资源
+            EntityUtils.consume(httpEntity);
+          } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+          }
+        }
+        request.releaseConnection();
+      }
+      return responseMessage;
     }
 
     /**
      * 处理用户请求
      *
-     * @param request
-     * @param callBack
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月11日 上午11:17:59
-     * @deprecated 已废弃，请使用 HttpClientSender 进行调用
+     * @param request  http请求
+     * @param callBack 请求回调
      */
-    @Deprecated
-    public static void doRequest(HttpUriRequest request, ResponseCallBack callBack) {
-        if (null == request) {
-            throw new IllegalArgumentException("HttpUriRequest must not be null");
-        }
-        if (null == request.getURI()) {
-            throw new IllegalArgumentException("HttpUriRequest URI must not be null");
-        }
+    public void doRequest(HttpRequestBase request, ResponseCallBack callBack) {
+      if (null == request) {
+        throw new IllegalArgumentException("HttpUriRequest must not be null");
+      }
+      if (null == request.getURI()) {
+        throw new IllegalArgumentException("HttpUriRequest URI must not be null");
+      }
 
-        // 设置全局的标准cookie策略
-        RequestConfig config = RequestConfig.custom()
-                .setCookieSpec(CookieSpecs.STANDARD_STRICT)
-                .setExpectContinueEnabled(true)
-                .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
-                .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
-                .setConnectTimeout(30 * 1000)
-                .setSocketTimeout(30 * 1000)
-                .setConnectionRequestTimeout(30 * 1000)
-                .build();
-        // 创建可用Scheme
-        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-                .register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
-                .register(Scheme.HTTPS.name(), getConnectionSocketFactory())
-                .build();
-        // 创建ConnectionManager
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
-                socketFactoryRegistry);
-        // 设置可关闭的httpclient
-        CloseableHttpClient httpClient = HttpClientBuilder.create()
-                .setConnectionManager(connectionManager)
-                .setDefaultRequestConfig(config)
-                .build();
+      CloseableHttpResponse httpResponse = null;
+      HttpEntity httpEntity = null;
+      try {
+        request.setConfig(requestConfig);
 
-        try {
-            // 发起用户请求
-            CloseableHttpResponse httpResponse = httpClient.execute(request);
+        // 发起用户请求
+        httpResponse = httpClient.execute(request);
+        // 处理结果返回码
+        int statusCode = httpResponse.getStatusLine().getStatusCode();
+        // 返回结果
+        httpEntity = httpResponse.getEntity();
 
-            // 是否将处理结果返回
-            if (null != callBack) {
-                // 返回码
-                int statusCode = httpResponse.getStatusLine().getStatusCode();
-                // 返回结果
-                String result = EntityUtils.toString(httpResponse.getEntity(), Charset.forName("UTF-8"));
-                // 响应回调
-                callBack.response(statusCode, result);
-            }
-        } catch (ClientProtocolException e) {
-            logger.error("ClientProtocolException：", e);
-            if (null != callBack) {
-                callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
-            }
-        } catch (IOException e) {
-            logger.error("IOException：", e);
-            if (null != callBack) {
-                callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.toString());
-            }
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                logger.error("IOException：", e);
-            }
+        // 是否将处理结果返回
+        if (null != callBack) {
+          // 响应回调
+          callBack.response(statusCode, EntityUtils.toString(httpResponse.getEntity(), Charset.forName("UTF-8")));
         }
+      } catch (ClientProtocolException e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        if (null != callBack) {
+          callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+        }
+      } catch (IOException e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        if (null != callBack) {
+          callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+        }
+      } catch (Exception e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        if (null != callBack) {
+          callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+        }
+      } catch (Throwable e) {
+        logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
+        if (null != callBack) {
+          callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
+        }
+      } finally {
+        // 释放资源
+        if (httpResponse != null) {
+          try {
+            httpResponse.close();
+          } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+          }
+        }
+        if (httpEntity != null) {
+          try {
+            // 释放所有由httpEntity所持有的资源
+            EntityUtils.consume(httpEntity);
+          } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+          }
+        }
+        request.releaseConnection();
+      }
     }
 
-
-    /**
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2022-04-19 18:21:42
-     * @version v2.5.2
-     */
-    public static class HttpClientSender {
-
-        private RequestConfig requestConfig;
-        /**
-         * 可关闭的httpclient
-         */
-        private CloseableHttpClient httpClient;
-
-        public HttpClientSender() {
-            // 设置全局的标准cookie策略
-            requestConfig = RequestConfig.custom()
-                    .setCookieSpec(CookieSpecs.STANDARD_STRICT)
-                    .setExpectContinueEnabled(true)
-                    .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST))
-                    .setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
-                    .setConnectTimeout(30 * 1000)
-                    .setSocketTimeout(30 * 1000)
-                    .setConnectionRequestTimeout(30 * 1000)
-                    .build();
-            // 创建可用Scheme
-            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create()
-                    .register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
-                    .register(Scheme.HTTPS.name(), getConnectionSocketFactory())
-                    .build();
-            // 创建ConnectionManager
-            PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(
-                    socketFactoryRegistry);
-            // 设置可关闭的httpclient
-            httpClient = HttpClientBuilder.create()
-                    .setConnectionManager(connectionManager)
-                    .setDefaultRequestConfig(requestConfig)
-                    .build();
-        }
-
-        /**
-         * 处理用户请求
-         *
-         * @param request http请求
-         * @return
-         */
-        public ResponseMessage doRequest(HttpRequestBase request) {
-            if (null == request) {
-                throw new IllegalArgumentException("HttpUriRequest must not be null");
-            }
-            if (null == request.getURI()) {
-                throw new IllegalArgumentException("HttpUriRequest URI must not be null");
-            }
-
-            CloseableHttpResponse httpResponse = null;
-            HttpEntity httpEntity = null;
-            ResponseMessage responseMessage = null;
-            try {
-                request.setConfig(requestConfig);
-
-                // 发起用户请求
-                httpResponse = httpClient.execute(request);
-                // 处理结果返回码
-                int statusCode = httpResponse.getStatusLine().getStatusCode();
-                // 返回结果
-                httpEntity = httpResponse.getEntity();
-                responseMessage = new ResponseMessage(statusCode, EntityUtils.toString(httpEntity, Charset.forName("UTF-8")));
-            } catch (ClientProtocolException e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-            } catch (IOException e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-            } catch (Exception e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-            } catch (Throwable e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                responseMessage = new ResponseMessage(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-            } finally {
-                // 释放资源
-                if (httpResponse != null) {
-                    try {
-                        httpResponse.close();
-                    } catch (IOException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-                if (httpEntity != null) {
-                    try {
-                        // 释放所有由httpEntity所持有的资源
-                        EntityUtils.consume(httpEntity);
-                    } catch (IOException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-                request.releaseConnection();
-            }
-            return responseMessage;
-        }
-
-        /**
-         * 处理用户请求
-         *
-         * @param request  http请求
-         * @param callBack 请求回调
-         */
-        public void doRequest(HttpRequestBase request, ResponseCallBack callBack) {
-            if (null == request) {
-                throw new IllegalArgumentException("HttpUriRequest must not be null");
-            }
-            if (null == request.getURI()) {
-                throw new IllegalArgumentException("HttpUriRequest URI must not be null");
-            }
-
-            CloseableHttpResponse httpResponse = null;
-            HttpEntity httpEntity = null;
-            try {
-                request.setConfig(requestConfig);
-
-                // 发起用户请求
-                httpResponse = httpClient.execute(request);
-                // 处理结果返回码
-                int statusCode = httpResponse.getStatusLine().getStatusCode();
-                // 返回结果
-                httpEntity = httpResponse.getEntity();
-
-                // 是否将处理结果返回
-                if (null != callBack) {
-                    // 响应回调
-                    callBack.response(statusCode, EntityUtils.toString(httpResponse.getEntity(), Charset.forName("UTF-8")));
-                }
-            } catch (ClientProtocolException e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                if (null != callBack) {
-                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-                }
-            } catch (IOException e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                if (null != callBack) {
-                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-                }
-            } catch (Exception e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                if (null != callBack) {
-                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-                }
-            } catch (Throwable e) {
-                logger.error("url={}, method={} 请求失败：", request.getURI(), request.getMethod(), e);
-                if (null != callBack) {
-                    callBack.response(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionUtils.getStackTrace(e));
-                }
-            } finally {
-                // 释放资源
-                if (httpResponse != null) {
-                    try {
-                        httpResponse.close();
-                    } catch (IOException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-                if (httpEntity != null) {
-                    try {
-                        // 释放所有由httpEntity所持有的资源
-                        EntityUtils.consume(httpEntity);
-                    } catch (IOException e) {
-                        logger.error(e.getMessage(), e);
-                    }
-                }
-                request.releaseConnection();
-            }
-        }
-
-    }
+  }
 }

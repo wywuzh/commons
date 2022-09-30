@@ -15,10 +15,11 @@
  */
 package com.github.wywuzh.commons.core.util;
 
-import ma.glasnost.orika.impl.ConfigurableMapper;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import ma.glasnost.orika.impl.ConfigurableMapper;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 
 /**
  * 类BeanMapper的实现描述：bean对象拷贝
@@ -31,9 +32,9 @@ import org.springframework.stereotype.Component;
 @Scope(value = "prototype")
 public class BeanMapper extends ConfigurableMapper {
 
-    @Override
-    protected void configureFactoryBuilder(DefaultMapperFactory.Builder factoryBuilder) {
-        factoryBuilder.mapNulls(false);
-    }
+  @Override
+  protected void configureFactoryBuilder(DefaultMapperFactory.Builder factoryBuilder) {
+    factoryBuilder.mapNulls(false);
+  }
 
 }

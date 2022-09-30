@@ -28,15 +28,15 @@ import com.github.wywuzh.commons.core.validator.Validate;
  */
 public class ValidateTime extends Validate {
 
-    public static final String PATTERN_TIME = "(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9]))?$";
+  public static final String PATTERN_TIME = "(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9]))?$";
 
-    @Override
-    protected PatternType getPatternType() {
-        return PatternType.PATTERN_TIME;
-    }
+  @Override
+  protected PatternType getPatternType() {
+    return PatternType.PATTERN_TIME;
+  }
 
-    public static void main(String[] args) {
-        ValidateTime validateTime = new ValidateTime();
-        System.out.println(validateTime.matches("12:59:59"));
-    }
+  public static void main(String[] args) {
+    ValidateTime validateTime = new ValidateTime();
+    System.out.println(validateTime.matches("12:59:59"));
+  }
 }

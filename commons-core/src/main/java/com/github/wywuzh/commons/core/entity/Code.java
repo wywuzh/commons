@@ -24,18 +24,18 @@ package com.github.wywuzh.commons.core.entity;
  */
 public interface Code extends Entity {
 
-    /**
-     * 编码（采用32位的UUID值）
-     *
-     * @author 伍章红 2015-8-19 上午11:30:01
-     * @return
-     */
-    public String getCode();
+  /**
+   * 编码（采用32位的UUID值）
+   *
+   * @author 伍章红 2015-8-19 上午11:30:01
+   * @return
+   */
+  public String getCode();
 
-    /**
-     * @author 伍章红 2015-8-19 上午11:29:57
-     * @param code
-     */
-    public void setCode(String code);
+  /**
+   * @author 伍章红 2015-8-19 上午11:29:57
+   * @param code
+   */
+  public void setCode(String code);
 
 }

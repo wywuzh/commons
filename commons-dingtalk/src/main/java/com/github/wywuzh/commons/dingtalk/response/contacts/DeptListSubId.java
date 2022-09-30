@@ -16,10 +16,11 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * 类DeptListSubId的实现描述：子部门ID列表
@@ -30,11 +31,11 @@ import java.util.List;
  */
 @Data
 public class DeptListSubId implements Serializable {
-    private static final long serialVersionUID = -789678474360999293L;
+  private static final long serialVersionUID = -789678474360999293L;
 
-    /**
-     * 子部门列表
-     */
-    @SerializedName(value = "dept_id_list")
-    private List<Long> deptIdList;
+  /**
+   * 子部门列表
+   */
+  @SerializedName(value = "dept_id_list")
+  private List<Long> deptIdList;
 }

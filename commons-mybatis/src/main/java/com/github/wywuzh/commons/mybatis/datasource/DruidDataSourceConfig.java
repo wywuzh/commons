@@ -18,14 +18,15 @@ package com.github.wywuzh.commons.mybatis.datasource;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import com.github.wywuzh.commons.mybatis.constants.DataSourceConstants;
+
+import javax.sql.DataSource;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-
-import javax.sql.DataSource;
 
 /**
  * 类DruidDataSourceConfig的实现描述：Alibaba Druid 数据源配置
@@ -38,19 +39,19 @@ import javax.sql.DataSource;
 @ConditionalOnClass(DruidDataSource.class)
 public class DruidDataSourceConfig {
 
-    @Primary
-    @Bean(name = DataSourceConstants.BEAN_NAME_WRITE, initMethod = "init", destroyMethod = "close")
-    @ConfigurationProperties(DataSourceConstants.PROPERTIES_PREFIX_WRITE)
-    @ConditionalOnMissingBean(name = DataSourceConstants.BEAN_NAME_WRITE)
-    public DataSource writeDataSource() {
-        return DruidDataSourceBuilder.create().build();
-    }
+  @Primary
+  @Bean(name = DataSourceConstants.BEAN_NAME_WRITE, initMethod = "init", destroyMethod = "close")
+  @ConfigurationProperties(DataSourceConstants.PROPERTIES_PREFIX_WRITE)
+  @ConditionalOnMissingBean(name = DataSourceConstants.BEAN_NAME_WRITE)
+  public DataSource writeDataSource() {
+    return DruidDataSourceBuilder.create().build();
+  }
 
-    @Bean(name = DataSourceConstants.BEAN_NAME_READ, initMethod = "init", destroyMethod = "close")
-    @ConfigurationProperties(DataSourceConstants.PROPERTIES_PREFIX_READ)
-    @ConditionalOnMissingBean(name = DataSourceConstants.BEAN_NAME_READ)
-    public DataSource readDataSource() {
-        return DruidDataSourceBuilder.create().build();
-    }
+  @Bean(name = DataSourceConstants.BEAN_NAME_READ, initMethod = "init", destroyMethod = "close")
+  @ConfigurationProperties(DataSourceConstants.PROPERTIES_PREFIX_READ)
+  @ConditionalOnMissingBean(name = DataSourceConstants.BEAN_NAME_READ)
+  public DataSource readDataSource() {
+    return DruidDataSourceBuilder.create().build();
+  }
 
 }

@@ -18,6 +18,9 @@ package com.github.wywuzh.commons.core.json.jsonlib;
 import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * 类JsonDateValueProcessor.java的实现描述：java.util.Date对象转换为json工具类
  * <p>
@@ -29,53 +32,54 @@ import net.sf.json.processors.JsonValueProcessor;
  * @since JDK 1.7
  */
 public class JsonDateValueProcessor implements JsonValueProcessor {
+  private final Logger logger = LoggerFactory.getLogger(JsonDateValueProcessor.class);
 
-    @Deprecated
-    String PATTERN_DATETIME = "yyyy-MM-dd HH:mm:ss";
+  @Deprecated
+  String PATTERN_DATETIME = "yyyy-MM-dd HH:mm:ss";
 
-    @Deprecated
-    String PATTERN_DATE = "yyyy-MM-dd";
+  @Deprecated
+  String PATTERN_DATE = "yyyy-MM-dd";
 
-    @Override
-    public Object processArrayValue(Object value, JsonConfig jsonConfig) {
-        return process(value);
+  @Override
+  public Object processArrayValue(Object value, JsonConfig jsonConfig) {
+    return process(value);
+  }
+
+  @Override
+  public Object processObjectValue(String key, Object value, JsonConfig jsonConfig) {
+    return process(value);
+  }
+
+  private Object process(Object value) {
+    try {
+      if (null == value) {
+        return null;
+      }
+
+      if (value instanceof java.util.Date) {
+
+        return ((java.util.Date) value).getTime();
+      } else if (value instanceof java.sql.Date) {
+        return ((java.sql.Date) value).getTime();
+      } else if (value instanceof java.sql.Timestamp) {
+        return ((java.sql.Timestamp) value).getTime();
+      }
+
+      // if (value instanceof java.util.Date) {
+      //
+      // return DateUtil
+      // .format((java.util.Date) value, PATTERN_DATETIME);
+      // } else if (value instanceof java.sql.Date) {
+      // return DateUtil.format((java.sql.Date) value, PATTERN_DATE);
+      // } else if (value instanceof java.sql.Timestamp) {
+      // return DateUtil.format(new java.util.Date(
+      // ((java.sql.Timestamp) value).getTime()),
+      // PATTERN_DATETIME);
+      // }
+      return value.toString();
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
+      return null;
     }
-
-    @Override
-    public Object processObjectValue(String key, Object value, JsonConfig jsonConfig) {
-        return process(value);
-    }
-
-    private Object process(Object value) {
-        try {
-            if (null == value) {
-                return null;
-            }
-
-            if (value instanceof java.util.Date) {
-
-                return ((java.util.Date) value).getTime();
-            } else if (value instanceof java.sql.Date) {
-                return ((java.sql.Date) value).getTime();
-            } else if (value instanceof java.sql.Timestamp) {
-                return ((java.sql.Timestamp) value).getTime();
-            }
-
-            // if (value instanceof java.util.Date) {
-            //
-            // return DateUtil
-            // .format((java.util.Date) value, PATTERN_DATETIME);
-            // } else if (value instanceof java.sql.Date) {
-            // return DateUtil.format((java.sql.Date) value, PATTERN_DATE);
-            // } else if (value instanceof java.sql.Timestamp) {
-            // return DateUtil.format(new java.util.Date(
-            // ((java.sql.Timestamp) value).getTime()),
-            // PATTERN_DATETIME);
-            // }
-            return value.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+  }
 }

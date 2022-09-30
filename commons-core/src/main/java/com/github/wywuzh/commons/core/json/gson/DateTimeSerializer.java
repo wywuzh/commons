@@ -33,26 +33,25 @@ import java.lang.reflect.Type;
  */
 public class DateTimeSerializer implements TypeSerializer<java.util.Date> {
 
-    @Override
-    public Type getType() {
-        return java.util.Date.class;
-    }
+  @Override
+  public Type getType() {
+    return java.util.Date.class;
+  }
 
-    @Override
-    public JsonElement serialize(java.util.Date value, Type typeOfSrc, JsonSerializationContext context) {
-        // 对象转换为json时调用，实现JsonDeserializer接口
-        return new JsonPrimitive(value.getTime());
-    }
+  @Override
+  public JsonElement serialize(java.util.Date value, Type typeOfSrc, JsonSerializationContext context) {
+    // 对象转换为json时调用，实现JsonDeserializer接口
+    return new JsonPrimitive(value.getTime());
+  }
 
-    @Override
-    public java.util.Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
-        // json转换为对象时调用，实现JsonSerializer接口
-        long value = json.getAsLong();
-        if (value == 0) {
-            return null;
-        }
-        return new java.util.Date(value);
+  @Override
+  public java.util.Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    // json转换为对象时调用，实现JsonSerializer接口
+    long value = json.getAsLong();
+    if (value == 0) {
+      return null;
     }
+    return new java.util.Date(value);
+  }
 
 }

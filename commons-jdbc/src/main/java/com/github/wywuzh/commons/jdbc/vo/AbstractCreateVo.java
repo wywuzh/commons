@@ -25,34 +25,34 @@ import com.github.wywuzh.commons.core.entity.Created;
  * @since JDK 1.7
  */
 public abstract class AbstractCreateVo extends AbstractVo implements Created {
-    private static final long serialVersionUID = 6471105541415695396L;
+  private static final long serialVersionUID = 6471105541415695396L;
 
-    /**
-     * 创建人
-     */
-    private String createUser;
-    /**
-     * 创建时间
-     */
-    private java.util.Date createTime;
+  /**
+   * 创建人
+   */
+  private String createUser;
+  /**
+   * 创建时间
+   */
+  private java.util.Date createTime;
 
-    @Override
-    public String getCreateUser() {
-        return createUser;
-    }
+  @Override
+  public String getCreateUser() {
+    return createUser;
+  }
 
-    @Override
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
+  @Override
+  public void setCreateUser(String createUser) {
+    this.createUser = createUser;
+  }
 
-    @Override
-    public java.util.Date getCreateTime() {
-        return createTime;
-    }
+  @Override
+  public java.util.Date getCreateTime() {
+    return createTime;
+  }
 
-    @Override
-    public void setCreateTime(java.util.Date createTime) {
-        this.createTime = createTime;
-    }
+  @Override
+  public void setCreateTime(java.util.Date createTime) {
+    this.createTime = createTime;
+  }
 }

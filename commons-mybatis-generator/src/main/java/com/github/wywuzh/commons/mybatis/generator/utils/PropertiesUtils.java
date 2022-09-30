@@ -15,9 +15,9 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.utils;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Properties;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 类Properties的实现描述：Properties属性工具类
@@ -28,17 +28,17 @@ import java.util.Properties;
  */
 public class PropertiesUtils {
 
-    /**
-     * 获取属性值
-     *
-     * @param properties
-     * @param key          the hashtable key.
-     * @param defaultValue a default value.
-     * @return the value in this property list with the specified key value.
-     */
-    public static String getProperty(Properties properties, String key, String defaultValue) {
-        String val = properties.getProperty(key);
-        return StringUtils.isBlank(val) ? defaultValue : val;
-    }
+  /**
+   * 获取属性值
+   *
+   * @param properties
+   * @param key          the hashtable key.
+   * @param defaultValue a default value.
+   * @return the value in this property list with the specified key value.
+   */
+  public static String getProperty(Properties properties, String key, String defaultValue) {
+    String val = properties.getProperty(key);
+    return StringUtils.isBlank(val) ? defaultValue : val;
+  }
 
 }

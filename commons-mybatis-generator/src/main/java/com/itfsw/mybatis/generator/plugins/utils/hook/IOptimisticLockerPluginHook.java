@@ -15,30 +15,30 @@
  */
 package com.itfsw.mybatis.generator.plugins.utils.hook;
 
+import java.util.List;
+
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.dom.java.Interface;
 import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 
-import java.util.List;
-
 /**
  * ---------------------------------------------------------------------------
- *
  * ---------------------------------------------------------------------------
+ * 
  * @author: hewei
  * @time:2018/5/4 18:08
- * ---------------------------------------------------------------------------
+ *                ---------------------------------------------------------------------------
  */
 public interface IOptimisticLockerPluginHook {
-    // ========================================= method 生成 ============================================
+  // ========================================= method 生成 ============================================
 
-    boolean clientUpdateWithVersionByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+  boolean clientUpdateWithVersionByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-    boolean clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+  boolean clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-    // ========================================= sqlMap 生成 ============================================
+  // ========================================= sqlMap 生成 ============================================
 
-    boolean generateSetsSelectiveElement(List<IntrospectedColumn> columns, IntrospectedColumn versionColumn, XmlElement setsElement);
+  boolean generateSetsSelectiveElement(List<IntrospectedColumn> columns, IntrospectedColumn versionColumn, XmlElement setsElement);
 }

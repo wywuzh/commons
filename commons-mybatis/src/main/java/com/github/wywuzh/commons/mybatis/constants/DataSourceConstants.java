@@ -24,16 +24,16 @@ package com.github.wywuzh.commons.mybatis.constants;
  */
 public class DataSourceConstants {
 
-    /**
-     * Bean名称
-     */
-    public static final String BEAN_NAME_WRITE = "writeDataSource"; // 写/主
-    public static final String BEAN_NAME_READ = "readDataSource"; // 读/从
+  /**
+   * Bean名称
+   */
+  public static final String BEAN_NAME_WRITE = "writeDataSource"; // 写/主
+  public static final String BEAN_NAME_READ = "readDataSource"; // 读/从
 
-    /**
-     * 数据源属性前缀
-     */
-    public static final String PROPERTIES_PREFIX_WRITE = "spring.datasource"; // 写/主
-    public static final String PROPERTIES_PREFIX_READ = "spring.datasource.read"; // 读/从
+  /**
+   * 数据源属性前缀
+   */
+  public static final String PROPERTIES_PREFIX_WRITE = "spring.datasource"; // 写/主
+  public static final String PROPERTIES_PREFIX_READ = "spring.datasource.read"; // 读/从
 
 }

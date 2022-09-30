@@ -25,18 +25,18 @@ package com.github.wywuzh.commons.core.entity;
  */
 public interface Description extends Entity {
 
-    /**
-     * 备注信息
-     *
-     * @author 伍章红 2015-8-19 上午11:38:17
-     * @return
-     */
-    public String getDescription();
+  /**
+   * 备注信息
+   *
+   * @author 伍章红 2015-8-19 上午11:38:17
+   * @return
+   */
+  public String getDescription();
 
-    /**
-     * @author 伍章红 2015-8-19 上午11:38:23
-     * @param description
-     */
-    public void setDescription(String description);
+  /**
+   * @author 伍章红 2015-8-19 上午11:38:23
+   * @param description
+   */
+  public void setDescription(String description);
 
 }
