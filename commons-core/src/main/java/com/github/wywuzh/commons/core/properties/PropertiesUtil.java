@@ -33,107 +33,107 @@ import org.apache.commons.logging.LogFactory;
  * @since JDK 1.7
  */
 public class PropertiesUtil {
-    private static final Log logger = LogFactory.getLog(PropertiesUtil.class);
-    public static final String DEFAULT_FILE_NAME = "application.properties";
+  private static final Log logger = LogFactory.getLog(PropertiesUtil.class);
+  public static final String DEFAULT_FILE_NAME = "application.properties";
 
-    private static Properties properties = null;
+  private static Properties properties = null;
 
-    /**
-     * 初始化配置文件（属性文件采用默认设置）
-     *
-     * @return
-     */
-    public static Properties getInstance() {
-        return getInstance(DEFAULT_FILE_NAME);
+  /**
+   * 初始化配置文件（属性文件采用默认设置）
+   *
+   * @return
+   */
+  public static Properties getInstance() {
+    return getInstance(DEFAULT_FILE_NAME);
+  }
+
+  /**
+   * 初始化配置文件
+   *
+   * @param fileName
+   *                   资源文件名称
+   * @return
+   */
+  public static Properties getInstance(String fileName) {
+    Properties properties = null;
+    try {
+      Thread currentThread = Thread.currentThread();
+      InputStream inputStream = currentThread.getContextClassLoader().getResourceAsStream(fileName);
+
+      properties = new Properties();
+      properties.load(inputStream);
+    } catch (IOException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    }
+    return properties;
+  }
+
+  /**
+   * 根据指定的key获取value值。
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key在属性文件中不存在，则返回null
+   * </pre>
+   *
+   * @param key
+   * @return
+   */
+  public static String getProperty(String key) {
+    if (StringUtils.isEmpty(key)) {
+      return null;
+    }
+    if (null == properties) {
+      properties = getInstance();
+    }
+    return properties.getProperty(key);
+  }
+
+  /**
+   * 根据指定的key获取value值。
+   *
+   * <pre>
+   * 说明：
+   *  1）如果传入的key为null，则返回null
+   *  2）如果指定的key不存在，则返回指定的defaultValue值
+   * </pre>
+   *
+   * @param key
+   * @param defaultValue
+   * @return
+   */
+  public static String getProperty(String key, String defaultValue) {
+    if (null == properties) {
+      properties = getInstance();
+    }
+    return properties.getProperty(key, defaultValue);
+  }
+
+  public static void main(String[] args) {
+    try {
+      Thread currentThread = Thread.currentThread();
+      InputStream resourceAsStream = currentThread.getContextClassLoader().getResourceAsStream(DEFAULT_FILE_NAME);
+
+      Properties properties = new Properties();
+      properties.load(resourceAsStream);
+
+      String property = properties.getProperty("name");
+      System.out.println(property);
+    } catch (FileNotFoundException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
+    } catch (IOException e) {
+      e.printStackTrace();
+      logger.error(e.getMessage());
     }
 
-    /**
-     * 初始化配置文件
-     *
-     * @param fileName
-     *            资源文件名称
-     * @return
-     */
-    public static Properties getInstance(String fileName) {
-        Properties properties = null;
-        try {
-            Thread currentThread = Thread.currentThread();
-            InputStream inputStream = currentThread.getContextClassLoader().getResourceAsStream(fileName);
+    System.out.println(getProperty("version2"));
+    System.out.println(getProperty("version", "1234"));
 
-            properties = new Properties();
-            properties.load(inputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
-        return properties;
-    }
+    Properties instance = getInstance();
+    System.out.println(instance.getProperty("version"));
 
-    /**
-     * 根据指定的key获取value值。
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key在属性文件中不存在，则返回null
-     * </pre>
-     *
-     * @param key
-     * @return
-     */
-    public static String getProperty(String key) {
-        if (StringUtils.isEmpty(key)) {
-            return null;
-        }
-        if (null == properties) {
-            properties = getInstance();
-        }
-        return properties.getProperty(key);
-    }
-
-    /**
-     * 根据指定的key获取value值。
-     *
-     * <pre>
-     * 说明：
-     *  1）如果传入的key为null，则返回null
-     *  2）如果指定的key不存在，则返回指定的defaultValue值
-     * </pre>
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    public static String getProperty(String key, String defaultValue) {
-        if (null == properties) {
-            properties = getInstance();
-        }
-        return properties.getProperty(key, defaultValue);
-    }
-
-    public static void main(String[] args) {
-        try {
-            Thread currentThread = Thread.currentThread();
-            InputStream resourceAsStream = currentThread.getContextClassLoader().getResourceAsStream(DEFAULT_FILE_NAME);
-
-            Properties properties = new Properties();
-            properties.load(resourceAsStream);
-
-            String property = properties.getProperty("name");
-            System.out.println(property);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        } catch (IOException e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
-
-        System.out.println(getProperty("version2"));
-        System.out.println(getProperty("version", "1234"));
-
-        Properties instance = getInstance();
-        System.out.println(instance.getProperty("version"));
-
-    }
+  }
 }

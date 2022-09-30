@@ -23,27 +23,27 @@ package com.github.wywuzh.commons.core.sql;
  * @since JDK 1.8
  */
 public class Product {
-    /**
-     * 数据库类型
-     */
-    private Type type;
-    /**
-     * 数据库版本
-     */
-    private String version;
+  /**
+   * 数据库类型
+   */
+  private Type type;
+  /**
+   * 数据库版本
+   */
+  private String version;
 
-    public Product(String name, String version) {
-        super();
-        this.type = Type.findBy(name);
-        this.version = version;
-    }
+  public Product(String name, String version) {
+    super();
+    this.type = Type.findBy(name);
+    this.version = version;
+  }
 
-    public Type getType() {
-        return type;
-    }
+  public Type getType() {
+    return type;
+  }
 
-    public String getVersion() {
-        return version;
-    }
+  public String getVersion() {
+    return version;
+  }
 
 }

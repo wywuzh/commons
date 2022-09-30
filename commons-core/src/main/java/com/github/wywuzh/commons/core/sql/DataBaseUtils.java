@@ -16,11 +16,13 @@
 package com.github.wywuzh.commons.core.sql;
 
 import com.github.wywuzh.commons.core.util.SpringBeanUtils;
-import lombok.extern.slf4j.Slf4j;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 类DataBaseUtils的实现描述：数据库工具类
@@ -32,34 +34,34 @@ import java.sql.SQLException;
 @Slf4j
 public class DataBaseUtils {
 
-    public static DataBase getDataBase() throws SQLException {
-        DataSource dataSource = SpringBeanUtils.getBean(DataSource.class);
-        if (dataSource == null) {
-            return null;
-        }
-        return new DataBase(dataSource.getConnection());
+  public static DataBase getDataBase() throws SQLException {
+    DataSource dataSource = SpringBeanUtils.getBean(DataSource.class);
+    if (dataSource == null) {
+      return null;
     }
+    return new DataBase(dataSource.getConnection());
+  }
 
-    /**
-     * 关闭<code>Connection</code>
-     *
-     * @throws SQLException
-     */
-    public static void close(Connection connection) throws SQLException {
-        if (connection != null) {
-            connection.close();
-        }
+  /**
+   * 关闭<code>Connection</code>
+   *
+   * @throws SQLException
+   */
+  public static void close(Connection connection) throws SQLException {
+    if (connection != null) {
+      connection.close();
     }
+  }
 
-    /**
-     * 关闭<code>Connection</code>，隐藏事物操作时发生的SQLException
-     */
-    public static void closeQuietly(Connection connection) {
-        try {
-            close(connection);
-        } catch (SQLException e) {
-            log.error("关闭Connection异常：", e);
-        }
+  /**
+   * 关闭<code>Connection</code>，隐藏事物操作时发生的SQLException
+   */
+  public static void closeQuietly(Connection connection) {
+    try {
+      close(connection);
+    } catch (SQLException e) {
+      log.error("关闭Connection异常：", e);
     }
+  }
 
 }

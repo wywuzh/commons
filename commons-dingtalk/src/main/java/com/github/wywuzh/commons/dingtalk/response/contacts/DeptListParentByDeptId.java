@@ -16,10 +16,11 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * 类DeptListParentByDeptId的实现描述：获取指定部门的所有父部门列表
@@ -30,11 +31,11 @@ import java.util.List;
  */
 @Data
 public class DeptListParentByDeptId implements Serializable {
-    private static final long serialVersionUID = 1682777190923721551L;
+  private static final long serialVersionUID = 1682777190923721551L;
 
-    /**
-     * 该部门的所有父部门ID列表
-     */
-    @SerializedName(value = "parent_id_list")
-    private List<Long> parentIdList;
+  /**
+   * 该部门的所有父部门ID列表
+   */
+  @SerializedName(value = "parent_id_list")
+  private List<Long> parentIdList;
 }

@@ -23,47 +23,51 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 
 /**
  * ---------------------------------------------------------------------------
- *
  * ---------------------------------------------------------------------------
+ * 
  * @author: hewei
  * @time:2018/5/7 18:51
- * ---------------------------------------------------------------------------
+ *                ---------------------------------------------------------------------------
  */
 public interface ISelectOneByExamplePluginHook {
 
-    /**
-     * selectOneByExampleWithBLOBs 接口方法生成
-     * @param method
-     * @param interfaze
-     * @param introspectedTable
-     * @return
-     */
-    boolean clientSelectOneByExampleWithBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+  /**
+   * selectOneByExampleWithBLOBs 接口方法生成
+   * 
+   * @param method
+   * @param interfaze
+   * @param introspectedTable
+   * @return
+   */
+  boolean clientSelectOneByExampleWithBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-    /**
-     * selectOneByExample 接口方法生成
-     * @param method
-     * @param interfaze
-     * @param introspectedTable
-     * @return
-     */
-    boolean clientSelectOneByExampleWithoutBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+  /**
+   * selectOneByExample 接口方法生成
+   * 
+   * @param method
+   * @param interfaze
+   * @param introspectedTable
+   * @return
+   */
+  boolean clientSelectOneByExampleWithoutBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-    /**
-     * selectOneByExample 方法sqlMap实现
-     * @param document
-     * @param element
-     * @param introspectedTable
-     * @return
-     */
-    boolean sqlMapSelectOneByExampleWithoutBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable);
+  /**
+   * selectOneByExample 方法sqlMap实现
+   * 
+   * @param document
+   * @param element
+   * @param introspectedTable
+   * @return
+   */
+  boolean sqlMapSelectOneByExampleWithoutBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable);
 
-    /**
-     * selectOneByExampleWithBLOBs 方法sqlMap实现
-     * @param document
-     * @param element
-     * @param introspectedTable
-     * @return
-     */
-    boolean sqlMapSelectOneByExampleWithBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable);
+  /**
+   * selectOneByExampleWithBLOBs 方法sqlMap实现
+   * 
+   * @param document
+   * @param element
+   * @param introspectedTable
+   * @return
+   */
+  boolean sqlMapSelectOneByExampleWithBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable);
 }

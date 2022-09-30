@@ -16,6 +16,7 @@
 package com.github.wywuzh.commons.dingtalk.response;
 
 import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,16 +30,16 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SsoAccessTokenResponse extends BaseResponse {
-    private static final long serialVersionUID = 5206585234128988288L;
+  private static final long serialVersionUID = 5206585234128988288L;
 
-    /**
-     * 获取到的凭证
-     */
-    @SerializedName(value = "access_token")
-    private String accessToken;
-    /**
-     * access_token的过期时间，单位秒
-     */
-    @SerializedName(value = "expires_in")
-    private Integer expiresIn;
+  /**
+   * 获取到的凭证
+   */
+  @SerializedName(value = "access_token")
+  private String accessToken;
+  /**
+   * access_token的过期时间，单位秒
+   */
+  @SerializedName(value = "expires_in")
+  private Integer expiresIn;
 }

@@ -16,10 +16,11 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
+
+import lombok.Data;
 
 /**
  * 类PageResult的实现描述：分页结果
@@ -30,21 +31,21 @@ import java.util.List;
  */
 @Data
 public class PageResult<T> implements Serializable {
-    private static final long serialVersionUID = -6787596888901376911L;
+  private static final long serialVersionUID = -6787596888901376911L;
 
-    /**
-     * 是否还有更多的数据
-     */
-    @SerializedName(value = "has_more")
-    private Boolean hasMore;
-    /**
-     * 下一次分页的游标，如果has_more为false，表示没有更多的分页数据
-     */
-    @SerializedName(value = "next_cursor")
-    private Long nextCursor;
-    /**
-     * 信息列表
-     */
-    @SerializedName(value = "list")
-    private List<T> list;
+  /**
+   * 是否还有更多的数据
+   */
+  @SerializedName(value = "has_more")
+  private Boolean hasMore;
+  /**
+   * 下一次分页的游标，如果has_more为false，表示没有更多的分页数据
+   */
+  @SerializedName(value = "next_cursor")
+  private Long nextCursor;
+  /**
+   * 信息列表
+   */
+  @SerializedName(value = "list")
+  private List<T> list;
 }

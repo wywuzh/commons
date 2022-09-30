@@ -24,28 +24,28 @@ package com.github.wywuzh.commons.core.codec;
  */
 public enum MessageDigestAlgorithm {
 
-    MD2("MD2"), MD5("MD5"), SHA_1("SHA-1"), SHA_256("SHA-256"), SHA_384("SHA-384"), SHA_512("SHA-512");
+  MD2("MD2"), MD5("MD5"), SHA_1("SHA-1"), SHA_256("SHA-256"), SHA_384("SHA-384"), SHA_512("SHA-512");
 
-    /**
-     * 算法类型
-     */
-    private String value;
+  /**
+   * 算法类型
+   */
+  private String value;
 
-    private MessageDigestAlgorithm(String value) {
-        this.value = value;
+  private MessageDigestAlgorithm(String value) {
+    this.value = value;
+  }
+
+  public String getValue() {
+    return value;
+  }
+
+  public static MessageDigestAlgorithm findByValue(String value) {
+    for (MessageDigestAlgorithm algorithm : values()) {
+      if (algorithm.value.equals(value)) {
+        return algorithm;
+      }
     }
-
-    public String getValue() {
-        return value;
-    }
-
-    public static MessageDigestAlgorithm findByValue(String value) {
-        for (MessageDigestAlgorithm algorithm : values()) {
-            if (algorithm.value.equals(value)) {
-                return algorithm;
-            }
-        }
-        return null;
-    }
+    return null;
+  }
 
 }

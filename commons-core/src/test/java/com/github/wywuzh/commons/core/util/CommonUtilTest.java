@@ -16,10 +16,12 @@
 package com.github.wywuzh.commons.core.util;
 
 import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
 
 import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.Test;
 
 /**
  * 类CommonUtilTest.java的实现描述：通用工具类测试
@@ -31,13 +33,13 @@ import java.util.List;
 @Slf4j
 public class CommonUtilTest {
 
-    @Test
-    public void splitContent() {
-        String content = "销售额＝含税收入(1+增值税征收率)";
-        String separator = "+-*/=()";
-        List<String> result = CommonUtil.splitContent(content, separator);
+  @Test
+  public void splitContent() {
+    String content = "销售额＝含税收入(1+增值税征收率)";
+    String separator = "+-*/=()";
+    List<String> result = CommonUtil.splitContent(content, separator);
 
-        log.info("处理结果：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(result));
-    }
+    log.info("处理结果：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(result));
+  }
 
 }

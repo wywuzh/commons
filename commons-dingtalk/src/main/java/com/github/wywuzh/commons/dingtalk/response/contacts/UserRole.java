@@ -16,9 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类UserRole的实现描述：角色列表
@@ -29,21 +30,21 @@ import java.io.Serializable;
  */
 @Data
 public class UserRole implements Serializable {
-    private static final long serialVersionUID = -1813026990096327864L;
+  private static final long serialVersionUID = -1813026990096327864L;
 
-    /**
-     * 角色ID
-     */
-    @SerializedName(value = "id")
-    private Long id;
-    /**
-     * 角色名称
-     */
-    @SerializedName(value = "name")
-    private String name;
-    /**
-     * 角色组名称
-     */
-    @SerializedName(value = "group_name")
-    private String groupName;
+  /**
+   * 角色ID
+   */
+  @SerializedName(value = "id")
+  private Long id;
+  /**
+   * 角色名称
+   */
+  @SerializedName(value = "name")
+  private String name;
+  /**
+   * 角色组名称
+   */
+  @SerializedName(value = "group_name")
+  private String groupName;
 }

@@ -16,6 +16,7 @@
 package com.github.wywuzh.commons.dingtalk.response.message;
 
 import com.google.gson.annotations.SerializedName;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -29,11 +30,11 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AsyncsendV2Response extends MessageResponse {
-    private static final long serialVersionUID = 8787270197031658182L;
+  private static final long serialVersionUID = 8787270197031658182L;
 
-    /**
-     * 创建的异步发送任务ID
-     */
-    @SerializedName(value = "task_id")
-    private String taskId;
+  /**
+   * 创建的异步发送任务ID
+   */
+  @SerializedName(value = "task_id")
+  private String taskId;
 }

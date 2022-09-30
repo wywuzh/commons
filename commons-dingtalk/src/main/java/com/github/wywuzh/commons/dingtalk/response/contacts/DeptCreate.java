@@ -16,9 +16,10 @@
 package com.github.wywuzh.commons.dingtalk.response.contacts;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Data;
 
 import java.io.Serializable;
+
+import lombok.Data;
 
 /**
  * 类DeptCreate的实现描述：部门创建返回结果
@@ -29,11 +30,11 @@ import java.io.Serializable;
  */
 @Data
 public class DeptCreate implements Serializable {
-    private static final long serialVersionUID = -7226293396930599649L;
+  private static final long serialVersionUID = -7226293396930599649L;
 
-    /**
-     * 部门ID
-     */
-    @SerializedName(value = "dept_id")
-    private Long deptId;
+  /**
+   * 部门ID
+   */
+  @SerializedName(value = "dept_id")
+  private Long deptId;
 }

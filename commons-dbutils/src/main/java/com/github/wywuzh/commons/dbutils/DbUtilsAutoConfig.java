@@ -16,15 +16,17 @@
 package com.github.wywuzh.commons.dbutils;
 
 import com.github.wywuzh.commons.dbutils.repository.BasicRepository;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * 类DbUtilsAutoConfig的实现描述：DbUtils Auto Configuration
@@ -35,32 +37,32 @@ import java.sql.SQLException;
  */
 @Configuration
 public class DbUtilsAutoConfig {
-    private final Logger logger = LoggerFactory.getLogger(DbUtilsAutoConfig.class);
+  private final Logger logger = LoggerFactory.getLogger(DbUtilsAutoConfig.class);
 
-    @Bean
-    @ConditionalOnMissingBean
-    public BasicRepository basicRepository(DataSource dataSource) throws SQLException {
-        BasicRepository basicRepository = new BasicRepository();
-        basicRepository.setDataSource(dataSource);
+  @Bean
+  @ConditionalOnMissingBean
+  public BasicRepository basicRepository(DataSource dataSource) throws SQLException {
+    BasicRepository basicRepository = new BasicRepository();
+    basicRepository.setDataSource(dataSource);
 
-        init(dataSource);
-        return basicRepository;
+    init(dataSource);
+    return basicRepository;
+  }
+
+  public void init(DataSource dataSource) throws SQLException {
+    Connection connection = null;
+    try {
+      JdbcUtils.setDataSource(dataSource);
+      connection = dataSource.getConnection();
+      JdbcUtils.setAutoCommit(connection.getAutoCommit());
+    } catch (SQLException e) {
+      logger.error(e.getMessage(), e);
+      throw e;
+    } finally {
+      if (connection != null) {
+        connection.close();
+      }
     }
-
-    public void init(DataSource dataSource) throws SQLException {
-        Connection connection = null;
-        try {
-            JdbcUtils.setDataSource(dataSource);
-            connection = dataSource.getConnection();
-            JdbcUtils.setAutoCommit(connection.getAutoCommit());
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw e;
-        } finally {
-            if (connection != null) {
-                connection.close();
-            }
-        }
-    }
+  }
 
 }
