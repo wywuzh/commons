@@ -870,7 +870,7 @@
                         <dependency>
                             <groupId>com.github.wywuzh</groupId>
                             <artifactId>commons-build-tools</artifactId>
-                            <version>${project.version}</version>
+                            <version>${revision}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
