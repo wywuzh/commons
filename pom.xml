@@ -81,8 +81,8 @@
         <spring-cloud.version>2021.0.4</spring-cloud.version>
 
         <log4j2.version>2.19.0</log4j2.version>
-        <logback.version>1.4.1</logback.version>
-        <slf4j.version>2.0.2</slf4j.version>
+        <logback.version>1.2.11</logback.version>
+        <slf4j.version>1.7.36</slf4j.version>
         <jackson-bom.version>2.13.4</jackson-bom.version>
         <json-lib.version>2.4</json-lib.version>
         <fastjson.version>2.0.14</fastjson.version>
