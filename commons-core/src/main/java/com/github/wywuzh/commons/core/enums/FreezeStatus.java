@@ -23,31 +23,31 @@ package com.github.wywuzh.commons.core.enums;
  * @since JDK 1.7
  */
 public enum FreezeStatus {
-  /**
-   * 解冻（未冻结）
-   */
-  UNFREEZE("0"),
-  /**
-   * 冻结
-   */
-  FREEZE("1");
+    /**
+     * 解冻（未冻结）
+     */
+    UNFREEZE("0"),
+    /**
+     * 冻结
+     */
+    FREEZE("1");
 
-  private String status;
+    private String status;
 
-  private FreezeStatus(String status) {
-    this.status = status;
-  }
-
-  public String getStatus() {
-    return status;
-  }
-
-  public static FreezeStatus findByStatus(String status) {
-    if ("0".equals(status)) {
-      return UNFREEZE;
-    } else if ("1".equals(status)) {
-      return FREEZE;
+    private FreezeStatus(String status) {
+        this.status = status;
     }
-    return null;
-  }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public static FreezeStatus findByStatus(String status) {
+        if ("0".equals(status)) {
+            return UNFREEZE;
+        } else if ("1".equals(status)) {
+            return FREEZE;
+        }
+        return null;
+    }
 }

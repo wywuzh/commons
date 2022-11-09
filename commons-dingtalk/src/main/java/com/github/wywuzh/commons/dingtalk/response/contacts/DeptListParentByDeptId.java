@@ -31,11 +31,11 @@ import lombok.Data;
  */
 @Data
 public class DeptListParentByDeptId implements Serializable {
-  private static final long serialVersionUID = 1682777190923721551L;
+    private static final long serialVersionUID = 1682777190923721551L;
 
-  /**
-   * 该部门的所有父部门ID列表
-   */
-  @SerializedName(value = "parent_id_list")
-  private List<Long> parentIdList;
+    /**
+     * 该部门的所有父部门ID列表
+     */
+    @SerializedName(value = "parent_id_list")
+    private List<Long> parentIdList;
 }

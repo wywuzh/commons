@@ -38,98 +38,98 @@ import org.apache.commons.logging.LogFactory;
  * @since JDK 1.7.0_71
  */
 public class PropertyResourceBundleUtil {
-  private static final Log logger = LogFactory.getLog(PropertyResourceBundleUtil.class);
+    private static final Log logger = LogFactory.getLog(PropertyResourceBundleUtil.class);
 
-  public static final String DEFAULT_FILE_NAME = "application.properties";
+    public static final String DEFAULT_FILE_NAME = "application.properties";
 
-  private static ResourceBundle resourceBundle = null;
+    private static ResourceBundle resourceBundle = null;
 
-  /**
-   * 初始化配置文件（属性文件采用默认设置）
-   *
-   * @return
-   */
-  public static ResourceBundle getInstance() {
-    logger.info("初始化配置文件（属性文件采用默认设置）");
-    return getInstance(DEFAULT_FILE_NAME);
-  }
-
-  /**
-   * 初始化配置文件
-   *
-   * @return
-   */
-  public static ResourceBundle getInstance(String fileName) {
-    logger.info("初始化配置文件（属性文件采用默认设置）");
-    ResourceBundle resourceBundle = null;
-    try {
-      Thread currentThread = Thread.currentThread();
-      InputStream resourceAsStream = currentThread.getContextClassLoader().getResourceAsStream(fileName);
-      resourceBundle = new PropertyResourceBundle(resourceAsStream);
-    } catch (IOException e) {
-      e.printStackTrace();
-      logger.error(e.getMessage());
-    }
-    return resourceBundle;
-  }
-
-  /**
-   * 根据指定的key获取value值。
-   *
-   * <pre>
-   * 说明：
-   *  1）如果传入的key为null，则返回null
-   *  2）如果指定的key在属性文件中不存在，则返回null
-   * </pre>
-   *
-   * @param key
-   * @return
-   */
-  public static String getString(String key) {
-    if (StringUtils.isEmpty(key)) {
-      return null;
+    /**
+     * 初始化配置文件（属性文件采用默认设置）
+     *
+     * @return
+     */
+    public static ResourceBundle getInstance() {
+        logger.info("初始化配置文件（属性文件采用默认设置）");
+        return getInstance(DEFAULT_FILE_NAME);
     }
 
-    if (null == resourceBundle) {
-      resourceBundle = getInstance();
+    /**
+     * 初始化配置文件
+     *
+     * @return
+     */
+    public static ResourceBundle getInstance(String fileName) {
+        logger.info("初始化配置文件（属性文件采用默认设置）");
+        ResourceBundle resourceBundle = null;
+        try {
+            Thread currentThread = Thread.currentThread();
+            InputStream resourceAsStream = currentThread.getContextClassLoader().getResourceAsStream(fileName);
+            resourceBundle = new PropertyResourceBundle(resourceAsStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+        return resourceBundle;
     }
 
-    if (resourceBundle.containsKey(key)) {
-      return resourceBundle.getString(key);
-    }
-    return null;
-  }
+    /**
+     * 根据指定的key获取value值。
+     *
+     * <pre>
+     * 说明：
+     *  1）如果传入的key为null，则返回null
+     *  2）如果指定的key在属性文件中不存在，则返回null
+     * </pre>
+     *
+     * @param key
+     * @return
+     */
+    public static String getString(String key) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
 
-  /**
-   * 根据指定的key获取value值。
-   *
-   * <pre>
-   * 说明：
-   *  1）如果传入的key为null，则返回null
-   *  2）如果指定的key不存在，则返回指定的defaultValue值
-   * </pre>
-   *
-   * @param key
-   * @param defaultValue
-   * @return
-   */
-  public static String getString(String key, String defaultValue) {
-    if (StringUtils.isEmpty(key)) {
-      return null;
+        if (null == resourceBundle) {
+            resourceBundle = getInstance();
+        }
+
+        if (resourceBundle.containsKey(key)) {
+            return resourceBundle.getString(key);
+        }
+        return null;
     }
 
-    if (null == resourceBundle) {
-      resourceBundle = getInstance();
+    /**
+     * 根据指定的key获取value值。
+     *
+     * <pre>
+     * 说明：
+     *  1）如果传入的key为null，则返回null
+     *  2）如果指定的key不存在，则返回指定的defaultValue值
+     * </pre>
+     *
+     * @param key
+     * @param defaultValue
+     * @return
+     */
+    public static String getString(String key, String defaultValue) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+
+        if (null == resourceBundle) {
+            resourceBundle = getInstance();
+        }
+
+        if (resourceBundle.containsKey(key)) {
+            return resourceBundle.getString(key);
+        }
+        return defaultValue;
     }
 
-    if (resourceBundle.containsKey(key)) {
-      return resourceBundle.getString(key);
+    public static void main(String[] args) {
+        ResourceBundle resourceBundle = getInstance();
+        System.out.println(resourceBundle.getString("version"));
     }
-    return defaultValue;
-  }
-
-  public static void main(String[] args) {
-    ResourceBundle resourceBundle = getInstance();
-    System.out.println(resourceBundle.getString("version"));
-  }
 }

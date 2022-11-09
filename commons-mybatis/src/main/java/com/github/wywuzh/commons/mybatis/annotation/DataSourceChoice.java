@@ -31,6 +31,6 @@ import java.lang.annotation.*;
 @Documented
 public @interface DataSourceChoice {
 
-  DataSourceType value() default DataSourceType.WRITE;
+    DataSourceType value() default DataSourceType.WRITE;
 
 }

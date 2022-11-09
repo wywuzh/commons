@@ -24,5 +24,5 @@ package com.itfsw.mybatis.generator.plugins.utils;
  *                 ---------------------------------------------------------------------------
  */
 public enum EnumModelType {
-  MODEL_PRIMARY_KEY, MODEL_BASE_RECORD, MODEL_RECORD_WITH_BLOBS
+    MODEL_PRIMARY_KEY, MODEL_BASE_RECORD, MODEL_RECORD_WITH_BLOBS
 }

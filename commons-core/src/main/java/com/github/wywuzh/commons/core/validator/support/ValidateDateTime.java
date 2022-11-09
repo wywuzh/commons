@@ -28,9 +28,9 @@ import com.github.wywuzh.commons.core.validator.Validate;
  */
 public class ValidateDateTime extends Validate {
 
-  @Override
-  protected PatternType getPatternType() {
-    return PatternType.PATTERN_DATE_TIME;
-  }
+    @Override
+    protected PatternType getPatternType() {
+        return PatternType.PATTERN_DATE_TIME;
+    }
 
 }

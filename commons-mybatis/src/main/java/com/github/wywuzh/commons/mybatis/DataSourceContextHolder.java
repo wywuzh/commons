@@ -23,17 +23,17 @@ package com.github.wywuzh.commons.mybatis;
  * @since JDK 1.8
  */
 public class DataSourceContextHolder {
-  public static final ThreadLocal<String> CONTEXT_HOLDER = new ThreadLocal<>();
+    public static final ThreadLocal<String> CONTEXT_HOLDER = new ThreadLocal<>();
 
-  public static void setDataSource(String value) {
-    CONTEXT_HOLDER.set(value);
-  }
+    public static void setDataSource(String value) {
+        CONTEXT_HOLDER.set(value);
+    }
 
-  public static String getDataSource() {
-    return CONTEXT_HOLDER.get();
-  }
+    public static String getDataSource() {
+        return CONTEXT_HOLDER.get();
+    }
 
-  public static void clearDataSource() {
-    CONTEXT_HOLDER.remove();
-  }
+    public static void clearDataSource() {
+        CONTEXT_HOLDER.remove();
+    }
 }

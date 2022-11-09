@@ -30,17 +30,17 @@ import lombok.Data;
  */
 @Data
 public class DeptLeader implements Serializable {
-  private static final long serialVersionUID = 2434639785386751509L;
+    private static final long serialVersionUID = 2434639785386751509L;
 
-  /**
-   * 部门ID
-   */
-  @SerializedName(value = "dept_id")
-  private Long deptId;
-  /**
-   * 是否是领导：true=是, false=不是
-   */
-  @SerializedName(value = "leader")
-  private Boolean leader;
+    /**
+     * 部门ID
+     */
+    @SerializedName(value = "dept_id")
+    private Long deptId;
+    /**
+     * 是否是领导：true=是, false=不是
+     */
+    @SerializedName(value = "leader")
+    private Boolean leader;
 
 }

@@ -23,5 +23,5 @@ package com.github.wywuzh.commons.dbutils.annotation;
  */
 public enum Conversion {
 
-  UPPER_CASE, LOWER_CASE, NONE;
+    UPPER_CASE, LOWER_CASE, NONE;
 }

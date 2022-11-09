@@ -25,28 +25,28 @@ import org.apache.commons.logging.LogFactory;
  * @since JDK 1.6.0_20
  */
 public class BankUtil {
-  private static final Log logger = LogFactory.getLog(BankUtil.class);
+    private static final Log logger = LogFactory.getLog(BankUtil.class);
 
-  /**
-   * 将传入的银行卡号转换成每四位一格空格分隔的形式输出
-   *
-   * <pre>
-   * 如传入的银行卡号为6222020200102027979，输出时则为6222 0202 0010 2027 979
-   * </pre>
-   *
-   * @param cardId 银行卡号
-   * @return
-   */
-  public static String convert4BankCardId(String cardId) {
-    StringBuffer card = new StringBuffer();
-    for (int i = 0; i < cardId.length(); i++) {
-      // 每四位加一个空格
-      if (i != 0 && i % 4 == 0) {
-        card.append(" ");
-      }
-      card.append(cardId.substring(i, i + 1));
+    /**
+     * 将传入的银行卡号转换成每四位一格空格分隔的形式输出
+     *
+     * <pre>
+     * 如传入的银行卡号为6222020200102027979，输出时则为6222 0202 0010 2027 979
+     * </pre>
+     *
+     * @param cardId 银行卡号
+     * @return
+     */
+    public static String convert4BankCardId(String cardId) {
+        StringBuffer card = new StringBuffer();
+        for (int i = 0; i < cardId.length(); i++) {
+            // 每四位加一个空格
+            if (i != 0 && i % 4 == 0) {
+                card.append(" ");
+            }
+            card.append(cardId.substring(i, i + 1));
+        }
+        return card.toString();
     }
-    return card.toString();
-  }
 
 }

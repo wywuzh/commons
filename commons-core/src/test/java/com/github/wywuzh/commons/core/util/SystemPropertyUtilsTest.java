@@ -27,13 +27,13 @@ import java.util.Properties;
  */
 public class SystemPropertyUtilsTest {
 
-  public static void main(String[] args) {
-    Properties properties = System.getProperties();
-    Enumeration<?> propertyNames = properties.propertyNames();
-    while (propertyNames.hasMoreElements()) {
-      String propertyName = (String) propertyNames.nextElement();
-      System.out.println(String.format("属性名=%s, 属性值=%s", propertyName, properties.getProperty(propertyName)));
+    public static void main(String[] args) {
+        Properties properties = System.getProperties();
+        Enumeration<?> propertyNames = properties.propertyNames();
+        while (propertyNames.hasMoreElements()) {
+            String propertyName = (String) propertyNames.nextElement();
+            System.out.println(String.format("属性名=%s, 属性值=%s", propertyName, properties.getProperty(propertyName)));
+        }
     }
-  }
 
 }

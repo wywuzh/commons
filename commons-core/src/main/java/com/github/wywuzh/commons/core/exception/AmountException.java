@@ -23,21 +23,21 @@ package com.github.wywuzh.commons.core.exception;
  * @since JDK 1.7
  */
 public class AmountException extends FrameException {
-  private static final long serialVersionUID = 7889065518700211013L;
+    private static final long serialVersionUID = 7889065518700211013L;
 
-  public AmountException() {
-    super();
-  }
+    public AmountException() {
+        super();
+    }
 
-  public AmountException(String message) {
-    super(message);
-  }
+    public AmountException(String message) {
+        super(message);
+    }
 
-  public AmountException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public AmountException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public AmountException(Throwable cause) {
-    super(cause);
-  }
+    public AmountException(Throwable cause) {
+        super(cause);
+    }
 }

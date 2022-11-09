@@ -27,42 +27,42 @@ import java.util.List;
  * @since JDK 1.8
  */
 public class PaginationObject<R extends Serializable, P extends Serializable> extends PaginationParameter<P> implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 行记录总数
-   */
-  public long rowCount;
-  /**
-   * 分页结果集
-   */
-  public List<R> resultList = new ArrayList<R>();
+    /**
+     * 行记录总数
+     */
+    public long rowCount;
+    /**
+     * 分页结果集
+     */
+    public List<R> resultList = new ArrayList<R>();
 
-  public PaginationObject() {
-    super();
-  }
+    public PaginationObject() {
+        super();
+    }
 
-  public PaginationObject(long rowCount, List<R> resultList) {
-    super();
-    this.rowCount = rowCount;
-    this.resultList = resultList;
-  }
+    public PaginationObject(long rowCount, List<R> resultList) {
+        super();
+        this.rowCount = rowCount;
+        this.resultList = resultList;
+    }
 
-  @Override
-  public long getRowCount() {
-    return rowCount;
-  }
+    @Override
+    public long getRowCount() {
+        return rowCount;
+    }
 
-  public void setRowCount(long rowCount) {
-    this.rowCount = rowCount;
-  }
+    public void setRowCount(long rowCount) {
+        this.rowCount = rowCount;
+    }
 
-  public List<R> getResultList() {
-    return resultList;
-  }
+    public List<R> getResultList() {
+        return resultList;
+    }
 
-  public void setResultList(List<R> resultList) {
-    this.resultList = resultList;
-  }
+    public void setResultList(List<R> resultList) {
+        this.resultList = resultList;
+    }
 
 }

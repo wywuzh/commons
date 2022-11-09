@@ -41,114 +41,114 @@ import org.mybatis.generator.internal.util.StringUtility;
  */
 public class IntrospectedTableTools {
 
-  /**
-   * 设置DomainObjectName和MapperName
-   * 
-   * @param introspectedTable
-   * @param context
-   * @param domainObjectName
-   */
-  public static void setDomainObjectName(IntrospectedTable introspectedTable, Context context, String domainObjectName)
-      throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-    // 配置信息（没啥用）
-    introspectedTable.getTableConfiguration().setDomainObjectName(domainObjectName);
+    /**
+     * 设置DomainObjectName和MapperName
+     * 
+     * @param introspectedTable
+     * @param context
+     * @param domainObjectName
+     */
+    public static void setDomainObjectName(IntrospectedTable introspectedTable, Context context, String domainObjectName)
+            throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        // 配置信息（没啥用）
+        introspectedTable.getTableConfiguration().setDomainObjectName(domainObjectName);
 
-    // FullyQualifiedTable修正
-    Field domainObjectNameField = FullyQualifiedTable.class.getDeclaredField("domainObjectName");
-    domainObjectNameField.setAccessible(true);
-    domainObjectNameField.set(introspectedTable.getFullyQualifiedTable(), domainObjectName);
+        // FullyQualifiedTable修正
+        Field domainObjectNameField = FullyQualifiedTable.class.getDeclaredField("domainObjectName");
+        domainObjectNameField.setAccessible(true);
+        domainObjectNameField.set(introspectedTable.getFullyQualifiedTable(), domainObjectName);
 
-    // 重新修正introspectedTable属性信息
-    Method calculateJavaClientAttributes = IntrospectedTable.class.getDeclaredMethod("calculateJavaClientAttributes");
-    calculateJavaClientAttributes.setAccessible(true);
-    calculateJavaClientAttributes.invoke(introspectedTable);
+        // 重新修正introspectedTable属性信息
+        Method calculateJavaClientAttributes = IntrospectedTable.class.getDeclaredMethod("calculateJavaClientAttributes");
+        calculateJavaClientAttributes.setAccessible(true);
+        calculateJavaClientAttributes.invoke(introspectedTable);
 
-    Method calculateModelAttributes = IntrospectedTable.class.getDeclaredMethod("calculateModelAttributes");
-    calculateModelAttributes.setAccessible(true);
-    calculateModelAttributes.invoke(introspectedTable);
+        Method calculateModelAttributes = IntrospectedTable.class.getDeclaredMethod("calculateModelAttributes");
+        calculateModelAttributes.setAccessible(true);
+        calculateModelAttributes.invoke(introspectedTable);
 
-    Method calculateXmlAttributes = IntrospectedTable.class.getDeclaredMethod("calculateXmlAttributes");
-    calculateXmlAttributes.setAccessible(true);
-    calculateXmlAttributes.invoke(introspectedTable);
+        Method calculateXmlAttributes = IntrospectedTable.class.getDeclaredMethod("calculateXmlAttributes");
+        calculateXmlAttributes.setAccessible(true);
+        calculateXmlAttributes.invoke(introspectedTable);
 
-    // 注意！！ 如果配置了ExampleTargetPlugin插件，要修正Example 位置
-    PluginConfiguration configuration = PluginTools.getPluginConfiguration(context, ExampleTargetPlugin.class);
-    if (configuration != null && configuration.getProperty(ExampleTargetPlugin.PRO_TARGET_PACKAGE) != null) {
-      String exampleType = introspectedTable.getExampleType();
-      // 修改包名
-      JavaModelGeneratorConfiguration javaModelGeneratorConfiguration = context.getJavaModelGeneratorConfiguration();
-      String targetPackage = javaModelGeneratorConfiguration.getTargetPackage();
-      String newExampleType = exampleType.replace(targetPackage, configuration.getProperty(ExampleTargetPlugin.PRO_TARGET_PACKAGE));
+        // 注意！！ 如果配置了ExampleTargetPlugin插件，要修正Example 位置
+        PluginConfiguration configuration = PluginTools.getPluginConfiguration(context, ExampleTargetPlugin.class);
+        if (configuration != null && configuration.getProperty(ExampleTargetPlugin.PRO_TARGET_PACKAGE) != null) {
+            String exampleType = introspectedTable.getExampleType();
+            // 修改包名
+            JavaModelGeneratorConfiguration javaModelGeneratorConfiguration = context.getJavaModelGeneratorConfiguration();
+            String targetPackage = javaModelGeneratorConfiguration.getTargetPackage();
+            String newExampleType = exampleType.replace(targetPackage, configuration.getProperty(ExampleTargetPlugin.PRO_TARGET_PACKAGE));
 
-      introspectedTable.setExampleType(newExampleType);
-    }
-  }
-
-  /**
-   * 安全获取column 通过正则获取的name可能包含beginningDelimiter&&endingDelimiter
-   * 
-   * @param introspectedTable
-   * @param columnName
-   * @return
-   */
-  public static IntrospectedColumn safeGetColumn(IntrospectedTable introspectedTable, String columnName) {
-    // columnName
-    columnName = columnName.trim();
-    // 过滤
-    String beginningDelimiter = introspectedTable.getContext().getBeginningDelimiter();
-    if (StringUtility.stringHasValue(beginningDelimiter)) {
-      columnName = columnName.replaceFirst("^" + beginningDelimiter, "");
-    }
-    String endingDelimiter = introspectedTable.getContext().getEndingDelimiter();
-    if (StringUtility.stringHasValue(endingDelimiter)) {
-      columnName = columnName.replaceFirst(endingDelimiter + "$", "");
+            introspectedTable.setExampleType(newExampleType);
+        }
     }
 
-    return introspectedTable.getColumn(columnName);
-  }
+    /**
+     * 安全获取column 通过正则获取的name可能包含beginningDelimiter&&endingDelimiter
+     * 
+     * @param introspectedTable
+     * @param columnName
+     * @return
+     */
+    public static IntrospectedColumn safeGetColumn(IntrospectedTable introspectedTable, String columnName) {
+        // columnName
+        columnName = columnName.trim();
+        // 过滤
+        String beginningDelimiter = introspectedTable.getContext().getBeginningDelimiter();
+        if (StringUtility.stringHasValue(beginningDelimiter)) {
+            columnName = columnName.replaceFirst("^" + beginningDelimiter, "");
+        }
+        String endingDelimiter = introspectedTable.getContext().getEndingDelimiter();
+        if (StringUtility.stringHasValue(endingDelimiter)) {
+            columnName = columnName.replaceFirst(endingDelimiter + "$", "");
+        }
 
-  /**
-   * 获取生成model baseRecord的列
-   * 
-   * @param introspectedTable
-   * @return
-   */
-  public static List<IntrospectedColumn> getModelBaseRecordClomns(IntrospectedTable introspectedTable) {
-    List<IntrospectedColumn> introspectedColumns;
-    if (includePrimaryKeyColumns(introspectedTable)) {
-      if (includeBLOBColumns(introspectedTable)) {
-        introspectedColumns = introspectedTable.getAllColumns();
-      } else {
-        introspectedColumns = introspectedTable.getNonBLOBColumns();
-      }
-    } else {
-      if (includeBLOBColumns(introspectedTable)) {
-        introspectedColumns = introspectedTable.getNonPrimaryKeyColumns();
-      } else {
-        introspectedColumns = introspectedTable.getBaseColumns();
-      }
+        return introspectedTable.getColumn(columnName);
     }
 
-    return introspectedColumns;
-  }
+    /**
+     * 获取生成model baseRecord的列
+     * 
+     * @param introspectedTable
+     * @return
+     */
+    public static List<IntrospectedColumn> getModelBaseRecordClomns(IntrospectedTable introspectedTable) {
+        List<IntrospectedColumn> introspectedColumns;
+        if (includePrimaryKeyColumns(introspectedTable)) {
+            if (includeBLOBColumns(introspectedTable)) {
+                introspectedColumns = introspectedTable.getAllColumns();
+            } else {
+                introspectedColumns = introspectedTable.getNonBLOBColumns();
+            }
+        } else {
+            if (includeBLOBColumns(introspectedTable)) {
+                introspectedColumns = introspectedTable.getNonPrimaryKeyColumns();
+            } else {
+                introspectedColumns = introspectedTable.getBaseColumns();
+            }
+        }
 
-  /**
-   * 是否有primaryKey 列
-   * 
-   * @param introspectedTable
-   * @return
-   */
-  public static boolean includePrimaryKeyColumns(IntrospectedTable introspectedTable) {
-    return !introspectedTable.getRules().generatePrimaryKeyClass() && introspectedTable.hasPrimaryKeyColumns();
-  }
+        return introspectedColumns;
+    }
 
-  /**
-   * 是否有 blob 列
-   * 
-   * @param introspectedTable
-   * @return
-   */
-  public static boolean includeBLOBColumns(IntrospectedTable introspectedTable) {
-    return !introspectedTable.getRules().generateRecordWithBLOBsClass() && introspectedTable.hasBLOBColumns();
-  }
+    /**
+     * 是否有primaryKey 列
+     * 
+     * @param introspectedTable
+     * @return
+     */
+    public static boolean includePrimaryKeyColumns(IntrospectedTable introspectedTable) {
+        return !introspectedTable.getRules().generatePrimaryKeyClass() && introspectedTable.hasPrimaryKeyColumns();
+    }
+
+    /**
+     * 是否有 blob 列
+     * 
+     * @param introspectedTable
+     * @return
+     */
+    public static boolean includeBLOBColumns(IntrospectedTable introspectedTable) {
+        return !introspectedTable.getRules().generateRecordWithBLOBsClass() && introspectedTable.hasBLOBColumns();
+    }
 }

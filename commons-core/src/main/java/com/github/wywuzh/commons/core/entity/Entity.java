@@ -27,25 +27,25 @@ import java.io.Serializable;
  */
 public interface Entity extends Serializable {
 
-  /**
-   * @author 伍章红 2015-8-19 上午10:43:36
-   * @return
-   */
-  @Override
-  public int hashCode();
+    /**
+     * @author 伍章红 2015-8-19 上午10:43:36
+     * @return
+     */
+    @Override
+    public int hashCode();
 
-  /**
-   * @author 伍章红 2015-8-19 上午10:43:37
-   * @param obj
-   * @return
-   */
-  @Override
-  public boolean equals(Object obj);
+    /**
+     * @author 伍章红 2015-8-19 上午10:43:37
+     * @param obj
+     * @return
+     */
+    @Override
+    public boolean equals(Object obj);
 
-  /**
-   * @author 伍章红 2015-8-19 上午10:43:38
-   * @return
-   */
-  @Override
-  public String toString();
+    /**
+     * @author 伍章红 2015-8-19 上午10:43:38
+     * @return
+     */
+    @Override
+    public String toString();
 }

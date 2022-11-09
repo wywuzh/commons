@@ -27,82 +27,82 @@ import java.util.List;
  * @since JDK 1.7.0_71
  */
 public abstract class ReturnBase implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 返回结果编码
-   */
-  private ReturnCode returnCode;
-  /**
-   * 返回结果消息
-   */
-  private String message;
-  /**
-   * 错误信息
-   */
-  private List<Error> errors;
+    /**
+     * 返回结果编码
+     */
+    private ReturnCode returnCode;
+    /**
+     * 返回结果消息
+     */
+    private String message;
+    /**
+     * 错误信息
+     */
+    private List<Error> errors;
 
-  public ReturnBase() {
-    super();
-  }
-
-  public ReturnBase(ReturnCode returnCode) {
-    super();
-    this.returnCode = returnCode;
-  }
-
-  public ReturnBase(ReturnCode returnCode, String message) {
-    super();
-    this.returnCode = returnCode;
-    this.message = message;
-  }
-
-  public ReturnCode getReturnCode() {
-    return returnCode;
-  }
-
-  public void setReturnCode(ReturnCode returnCode) {
-    this.returnCode = returnCode;
-  }
-
-  public String getMessage() {
-    return message;
-  }
-
-  public void setMessage(String message) {
-    this.message = message;
-  }
-
-  public List<Error> getErrors() {
-    return errors;
-  }
-
-  public void setErrors(List<Error> errors) {
-    this.errors = errors;
-  }
-
-  public void addError(Error error) {
-    if (errors == null) {
-      errors = new ArrayList<Error>();
+    public ReturnBase() {
+        super();
     }
-    errors.add(error);
-  }
 
-  public void addError(String field, String message) {
-    if (errors == null) {
-      errors = new ArrayList<Error>();
+    public ReturnBase(ReturnCode returnCode) {
+        super();
+        this.returnCode = returnCode;
     }
-    errors.add(new Error(field, message));
-  }
 
-  public void addError(String code, String field, String message) {
-    if (errors == null) {
-      errors = new ArrayList<Error>();
+    public ReturnBase(ReturnCode returnCode, String message) {
+        super();
+        this.returnCode = returnCode;
+        this.message = message;
     }
-    errors.add(new Error(code, field, message));
-  }
 
-  @Override
-  public abstract String toString();
+    public ReturnCode getReturnCode() {
+        return returnCode;
+    }
+
+    public void setReturnCode(ReturnCode returnCode) {
+        this.returnCode = returnCode;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<Error> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<Error> errors) {
+        this.errors = errors;
+    }
+
+    public void addError(Error error) {
+        if (errors == null) {
+            errors = new ArrayList<Error>();
+        }
+        errors.add(error);
+    }
+
+    public void addError(String field, String message) {
+        if (errors == null) {
+            errors = new ArrayList<Error>();
+        }
+        errors.add(new Error(field, message));
+    }
+
+    public void addError(String code, String field, String message) {
+        if (errors == null) {
+            errors = new ArrayList<Error>();
+        }
+        errors.add(new Error(code, field, message));
+    }
+
+    @Override
+    public abstract String toString();
 
 }

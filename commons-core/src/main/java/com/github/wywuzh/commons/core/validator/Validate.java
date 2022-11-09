@@ -29,52 +29,52 @@ import org.springframework.util.Assert;
  */
 public abstract class Validate {
 
-  /**
-   * 返回校验规则对象
-   *
-   * @param pattern
-   *                  校验规则
-   * @return
-   */
-  public Pattern pattern(String pattern) {
-    Assert.notNull(pattern, "pattern must not be null");
+    /**
+     * 返回校验规则对象
+     *
+     * @param pattern
+     *                    校验规则
+     * @return
+     */
+    public Pattern pattern(String pattern) {
+        Assert.notNull(pattern, "pattern must not be null");
 
-    return Pattern.compile(pattern);
-  }
+        return Pattern.compile(pattern);
+    }
 
-  /**
-   * 验证
-   *
-   * @param pattern
-   *                  校验规则
-   * @param object
-   *                  需要进行验证的对象
-   * @return true or false
-   */
-  public boolean matches(String pattern, Object object) {
-    Assert.notNull(pattern, "pattern must not be null");
-    Assert.notNull(object, "object must not be null");
+    /**
+     * 验证
+     *
+     * @param pattern
+     *                    校验规则
+     * @param object
+     *                    需要进行验证的对象
+     * @return true or false
+     */
+    public boolean matches(String pattern, Object object) {
+        Assert.notNull(pattern, "pattern must not be null");
+        Assert.notNull(object, "object must not be null");
 
-    Pattern compile = this.pattern(pattern);
-    Matcher matcher = compile.matcher(object.toString());
-    return matcher.matches();
-  }
+        Pattern compile = this.pattern(pattern);
+        Matcher matcher = compile.matcher(object.toString());
+        return matcher.matches();
+    }
 
-  /**
-   * 验证
-   *
-   * @param object
-   *                 需要进行验证的对象
-   * @return true or false
-   */
-  public boolean matches(Object object) {
-    return this.matches(getPatternType().getPattern(), object);
-  }
+    /**
+     * 验证
+     *
+     * @param object
+     *                   需要进行验证的对象
+     * @return true or false
+     */
+    public boolean matches(Object object) {
+        return this.matches(getPatternType().getPattern(), object);
+    }
 
-  /**
-   * 获取验证类型
-   *
-   * @return 验证类型
-   */
-  protected abstract PatternType getPatternType();
+    /**
+     * 获取验证类型
+     *
+     * @return 验证类型
+     */
+    protected abstract PatternType getPatternType();
 }
