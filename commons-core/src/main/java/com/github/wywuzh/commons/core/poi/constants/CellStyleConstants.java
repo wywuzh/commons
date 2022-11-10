@@ -75,4 +75,15 @@ public class CellStyleConstants {
      */
     public static final String HEADER_STYLE_REQUIRED_FONT_COLOR = "cell_style.header.required.font.color";
 
+    // ============ 单元格格式
+    public static final String STYLE_FORMAT_String = "TEXT"; // 字符
+    public static final String STYLE_FORMAT_Percent = "0.00%"; // 百分比
+    public static final String STYLE_FORMAT_Integer = "0"; // 整型数值
+    public static final String STYLE_FORMAT_BigDecimal = "0.00"; // 2位小数
+    public static final String STYLE_FORMAT_Money = "###,##0.00"; // 金额，保留2位小数
+    public static final String STYLE_FORMAT_Accounting = "_ * #,##0.00_ ;_ * -#,##0.00_ ;_ * \"-\"??_ ;_ @_ "; // 会计专用，保留2位小数
+    public static final String STYLE_FORMAT_Date = "yyyy-MM-dd"; // 日期：yyyy-MM-dd格式
+    public static final String STYLE_FORMAT_Time = "hh:mm:ss"; // 时间：HH:mm:ss格式
+    public static final String STYLE_FORMAT_DateTime = "yyyy-MM-dd hh:mm:ss"; // 日期时间：yyyy-MM-dd HH:mm:ss格式
+
 }

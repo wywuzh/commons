@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -43,6 +44,7 @@ import org.springframework.util.Assert;
 import com.github.wywuzh.commons.core.common.ContentType;
 import com.github.wywuzh.commons.core.math.CalculationUtils;
 import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
 import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
 import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
 import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
@@ -435,7 +437,8 @@ public class ExcelUtils {
 
                     Object realValue = getRealValue(data, columnName);
                     // todo 字段
-                    cell.setCellValue(String.valueOf(realValue));
+                    // cell.setCellValue(String.valueOf(realValue));
+                    setCellValue(workbook, cell, data, columnName, realValue);
                     setCellStyle(workbook, cell, contentStyle, data, columnName);
 
                     if (columnLengths != null && columnLengths.length > 0) {
@@ -458,9 +461,15 @@ public class ExcelUtils {
         return sheet;
     }
 
-    private static void setCellStyle(Workbook workbook, Cell cell, CellStyle cellStyle, Object data, String columnName) {
-        cellStyle.setDataFormat(getCellDateFormat(workbook, data, columnName));
-        cell.setCellStyle(cellStyle);
+    private static void setCellStyle(Workbook workbook, Cell cell, CellStyle defaultCellStyle, Object data, String columnName) {
+        short cellDateFormat = getCellDateFormat(workbook, data, columnName);
+        if (cellDateFormat != -1) {
+            CellStyle cellStyle = createContentStyle(workbook);
+            cellStyle.setDataFormat(cellDateFormat);
+            cell.setCellStyle(cellStyle);
+        } else {
+            cell.setCellStyle(defaultCellStyle);
+        }
     }
 
     private static short getCellDateFormat(Workbook workbook, Object data, String columnName) {
@@ -483,39 +492,48 @@ public class ExcelUtils {
         if (excelCell == null) {
             return -1;
         }
-        Short dataFormat = getCellDateFormat(workbook, excelCell.cellType());
-        if (dataFormat != null) {
-            return dataFormat;
+        Short dataFormat = -1;
+        // [v2.7.0]优先使用用户自定义单元格格式
+        // 更多单元格格式可参考：org.apache.poi.ss.usermodel.BuiltinFormats._formats
+        if (StringUtils.isNotBlank(excelCell.format())) {
+            dataFormat = workbook.createDataFormat().getFormat(excelCell.format());
         }
-        return -1;
+        if (dataFormat != -1) {
+            // 系统预设单元格格式
+            dataFormat = getCellDateFormat(workbook, excelCell.cellType());
+        }
+        return dataFormat;
     }
 
     private static short getCellDateFormat(Workbook workbook, CellTypeEnum cellTypeEnum) {
         if (CellTypeEnum.String.equals(cellTypeEnum)) { // 字符串文本
             DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat("TEXT");
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_String);
         } else if (CellTypeEnum.Percent.equals(cellTypeEnum)) { // 百分比
             DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat("0.00%");
-        } else if (CellTypeEnum.Integer.equals(cellTypeEnum)) { // 数值
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Percent);
+        } else if (CellTypeEnum.Integer.equals(cellTypeEnum)) { // 整型数值
             DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat("###,##0");
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Integer);
         } else if (CellTypeEnum.BigDecimal.equals(cellTypeEnum)) { // 数值，保留2位小数
             DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat("###,##0.00");
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_BigDecimal);
         } else if (CellTypeEnum.Money.equals(cellTypeEnum)) { // 金额
             DataFormat dataFormat = workbook.createDataFormat();
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Money);
+        } else if (CellTypeEnum.Accounting.equals(cellTypeEnum)) { // 会计专用
+            DataFormat dataFormat = workbook.createDataFormat();
             // 金额格式：会计专用格式
-            return dataFormat.getFormat("_ * #,##0.00_ ;_ * -#,##0.00_ ;_ * \"-\"??_ ;_ @_ ");
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Accounting);
         } else if (CellTypeEnum.Date.equals(cellTypeEnum)) { // 日期
             DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat("yyyy-MM-dd");
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Date);
         } else if (CellTypeEnum.Time.equals(cellTypeEnum)) { // 时间
             DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat("hh:mm:ss");
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Time);
         } else if (CellTypeEnum.DateTime.equals(cellTypeEnum)) { // 日期时间
             DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat("yyyy-MM-dd hh:mm:ss");
+            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_DateTime);
         }
         return -1;
     }
@@ -552,6 +570,85 @@ public class ExcelUtils {
         }
 
         return fieldMethod;
+    }
+
+    private static ExcelCell getExcelCell(Object data, String columnName) {
+        // 取到columnName对应的实际字段/方法
+        Object realField = getRealField(data, columnName);
+        ExcelCell excelCell = null;
+        if (realField instanceof Field) {
+            excelCell = ((Field) realField).getAnnotation(ExcelCell.class);
+        } else if (realField instanceof Method) {
+            excelCell = ((Method) realField).getAnnotation(ExcelCell.class);
+        }
+        return excelCell;
+    }
+
+    private static CellTypeEnum getCellTypeEnum(Object data, String columnName) {
+        ExcelCell excelCell = getExcelCell(data, columnName);
+        CellTypeEnum cellTypeEnum = null;
+        if (excelCell != null) {
+            cellTypeEnum = excelCell.cellType();
+        }
+        return cellTypeEnum;
+    }
+
+    /**
+     * 设置单元格值
+     *
+     * @param workbook   工作簿对象
+     * @param cell       单元格
+     * @param data       数据行
+     * @param columnName 字段名
+     * @param realValue  字段值
+     * @since v2.7.0
+     */
+    private static void setCellValue(Workbook workbook, Cell cell, Object data, String columnName, Object realValue) {
+        if (realValue == null) {
+            cell.setCellValue("");
+            return;
+        }
+        // 取到columnName对应的实际字段/方法
+        Object realField = getRealField(data, columnName);
+        ExcelCell excelCell = null;
+        if (realField instanceof Field) {
+            excelCell = ((Field) realField).getAnnotation(ExcelCell.class);
+        } else if (realField instanceof Method) {
+            excelCell = ((Method) realField).getAnnotation(ExcelCell.class);
+        }
+        CellTypeEnum cellTypeEnum = null;
+        if (excelCell != null) {
+            cellTypeEnum = excelCell.cellType();
+        }
+
+        if (realValue instanceof Date) {
+            // 进行转换
+            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_DATE_TIME);
+            // 将属性值存入单元格
+            cell.setCellValue(dateValue);
+        } else if (realValue instanceof java.sql.Date) {
+            // 进行转换
+            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_DATE);
+            // 将属性值存入单元格
+            cell.setCellValue(dateValue);
+        } else if (realValue instanceof java.sql.Time) {
+            // 进行转换
+            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_TIME);
+            // 将属性值存入单元格
+            cell.setCellValue(dateValue);
+        } else if (realValue instanceof BigDecimal || realValue instanceof Float || realValue instanceof Double) {
+            if (realValue.toString().matches("^(-?\\d+)(\\.\\d+)?$")) { // 数值型
+                // 将属性值存入单元格
+                cell.setCellValue(new BigDecimal(realValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            } else if (realValue.toString().matches("^[-\\+]?[\\d]*$")) { // 整数
+                // 将属性值存入单元格
+                cell.setCellValue(new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
+            }
+        } else if (realValue instanceof Byte || realValue instanceof Short || realValue instanceof Integer || realValue instanceof Long) {
+            cell.setCellValue(new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP).longValue());
+        } else {
+            cell.setCellValue(realValue.toString());
+        }
     }
 
     @Deprecated
@@ -596,37 +693,12 @@ public class ExcelUtils {
         if (realValue == null) {
             return realValue;
         }
-        // 取到columnName对应的实际字段/方法
-        Object realField = getRealField(data, columnName);
-        CellTypeEnum cellTypeEnum = null;
-        if (realField != null) {
-            ExcelCell excelCell = null;
-            if (realField instanceof Field) {
-                excelCell = ((Field) realField).getAnnotation(ExcelCell.class);
-            } else if (realField instanceof Method) {
-                excelCell = ((Method) realField).getAnnotation(ExcelCell.class);
-            }
-            if (excelCell != null) {
-                cellTypeEnum = excelCell.cellType();
-            }
-        }
-        if (realValue instanceof Date) {
-            String pattern = DateUtils.PATTERN_DATE_TIME;
-            if (CellTypeEnum.DateTime.equals(cellTypeEnum)) {
-                pattern = DateUtils.PATTERN_DATE_TIME;
-            } else if (CellTypeEnum.Date.equals(cellTypeEnum)) {
-                pattern = DateUtils.PATTERN_DATE;
-            } else if (CellTypeEnum.Time.equals(cellTypeEnum)) {
-                pattern = DateUtils.PATTERN_TIME;
-            }
-            // 进行转换
-            String dateValue = DateUtils.format((Date) realValue, pattern);
-            // 将属性值存入单元格
-            return dateValue;
+
+        if (realValue instanceof java.util.Date) {
+            return getRealValueForDate(data, columnName, realValue);
         } else if (realValue instanceof java.sql.Date) {
             // 进行转换
             String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_DATE);
-            // 将属性值存入单元格
             return dateValue;
         } else if (realValue instanceof java.sql.Time) {
             // 进行转换
@@ -634,17 +706,73 @@ public class ExcelUtils {
             // 将属性值存入单元格
             return dateValue;
         } else if (realValue instanceof BigDecimal || realValue instanceof Float || realValue instanceof Double) {
-            if (realValue.toString().matches("^(-?\\d+)(\\.\\d+)?$")) { // 数值型
-                // 将属性值存入单元格
-                return new BigDecimal(realValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
-            } else if (realValue.toString().matches("^[-\\+]?[\\d]*$")) { // 整数
-                // 将属性值存入单元格
-                return new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP);
-            }
+            return getRealValueForNumber(data, columnName, realValue);
         } else if (realValue instanceof Byte || realValue instanceof Short || realValue instanceof Integer || realValue instanceof Long) {
             return new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP).longValue();
         }
         return realValue.toString();
+    }
+
+    private static Object getRealValueForDate(Object data, String columnName, Object realValue) {
+        ExcelCell excelCell = getExcelCell(data, columnName);
+        CellTypeEnum cellTypeEnum = null;
+        if (excelCell != null) {
+            cellTypeEnum = excelCell.cellType();
+        }
+
+        String pattern = null;
+        if (CellTypeEnum.DateTime.equals(cellTypeEnum)) {
+            pattern = DateUtils.PATTERN_DATE_TIME;
+        } else if (CellTypeEnum.Date.equals(cellTypeEnum)) {
+            pattern = DateUtils.PATTERN_DATE;
+        } else if (CellTypeEnum.Time.equals(cellTypeEnum)) {
+            pattern = DateUtils.PATTERN_TIME;
+        }
+        if (excelCell != null && StringUtils.isNotBlank(excelCell.format())) {
+            pattern = excelCell.format();
+        }
+        // 注：优先使用@ExcelCell注解中format指定的格式，然后使用cellType指定的字段类型，如果都未指定则取默认格式
+        // 优先级别：format > cellType > 默认
+        if (StringUtils.isBlank(pattern)) {
+            pattern = DateUtils.PATTERN_DATE_TIME;
+        }
+        // 进行转换
+        String dateValue = DateUtils.format((Date) realValue, pattern);
+        return dateValue;
+    }
+
+    private static Object getRealValueForNumber(Object data, String columnName, Object realValue) {
+        ExcelCell excelCell = getExcelCell(data, columnName);
+        CellTypeEnum cellTypeEnum = null;
+        if (excelCell != null) {
+            cellTypeEnum = excelCell.cellType();
+        }
+
+        String pattern = null;
+        if (CellTypeEnum.BigDecimal.equals(cellTypeEnum)) { // 2位小数
+            pattern = CellStyleConstants.STYLE_FORMAT_BigDecimal;
+        } else if (CellTypeEnum.Integer.equals(cellTypeEnum)) { // 整型数值
+            pattern = CellStyleConstants.STYLE_FORMAT_Integer;
+        } else if (CellTypeEnum.Money.equals(cellTypeEnum)) { // 金额，保留2位小数
+            pattern = CellStyleConstants.STYLE_FORMAT_Money;
+        }
+        if (excelCell != null && StringUtils.isNotBlank(excelCell.format())) {
+            pattern = excelCell.format();
+        }
+        // 注：优先使用@ExcelCell注解中format指定的格式，然后使用cellType指定的字段类型，如果都未指定则取默认格式
+        // 优先级别：format > cellType > 默认
+        if (StringUtils.isNotBlank(pattern)) {
+            return new DecimalFormat(pattern).format(new BigDecimal(realValue.toString()));
+        }
+
+        if (realValue.toString().matches("^(-?\\d+)(\\.\\d+)?$")) { // 数值型
+            // 将属性值存入单元格
+            return new BigDecimal(realValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP);
+        } else if (realValue.toString().matches("^[-\\+]?[\\d]*$")) { // 整数
+            // 将属性值存入单元格
+            return new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP);
+        }
+        return new BigDecimal(realValue.toString());
     }
 
     /**

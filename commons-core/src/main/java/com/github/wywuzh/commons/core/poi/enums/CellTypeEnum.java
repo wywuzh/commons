@@ -26,9 +26,10 @@ public enum CellTypeEnum {
 
     Undefined, // 未知
     String, // 字符
-    Integer, // 数值
+    Integer, // 整型数值
     BigDecimal, // 2位小数
-    Money, // 金额
+    Money, // 金额，保留2位小数
+    Accounting, // 会计专用
     Percent, // 百分比
     Date, // 日期：yyyy-MM-dd格式
     Time, // 时间：HH:mm:ss格式

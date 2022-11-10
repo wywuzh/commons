@@ -17,12 +17,14 @@ package com.github.wywuzh.commons.core.poi;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import org.apache.poi.ss.usermodel.*;
 import org.junit.Test;
 
 import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
 import com.github.wywuzh.commons.core.poi.entity.User;
 import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
 
@@ -72,6 +74,12 @@ public class ExcelUtilsTest {
 //        System.setProperty("cell_style.header.background.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
 //        // 字体颜色：白色
 //        System.setProperty("cell_style.header.font.color", String.valueOf(IndexedColors.WHITE.index));
+    }
+
+    @Test
+    public void decimalFormat() {
+        DecimalFormat decimalFormat = new DecimalFormat(CellStyleConstants.STYLE_FORMAT_Accounting);
+        System.out.println(decimalFormat.format(new BigDecimal(1000000)));
     }
 
     @Test

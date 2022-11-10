@@ -56,7 +56,7 @@ public class User {
     /**
      * 出生日期
      */
-    @ExcelCell(value = "出生日期", cellType = CellTypeEnum.Date)
+    @ExcelCell(value = "出生日期", cellType = CellTypeEnum.DateTime)
     private Date birthdate;
     /**
      * 资产

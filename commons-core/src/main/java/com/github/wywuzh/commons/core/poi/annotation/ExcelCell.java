@@ -15,12 +15,12 @@
  */
 package com.github.wywuzh.commons.core.poi.annotation;
 
-import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
 
 /**
  * 类ExcelCell的实现描述：Excel列
@@ -43,6 +43,14 @@ public @interface ExcelCell {
      * @return
      */
     CellTypeEnum cellType() default CellTypeEnum.Undefined;
+
+    /**
+     * 单元格列数据格式
+     *
+     * @return
+     * @since v2.7.0
+     */
+    String format() default "";
 
     /**
      * 列索引，从0开始
