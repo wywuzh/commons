@@ -26,39 +26,39 @@ import org.apache.commons.lang3.StringUtils;
  */
 public enum Language {
 
-  zh_CN("zh_CN", "中文"), en_US("en_US", "英文"),;
+    zh_CN("zh_CN", "中文"), en_US("en_US", "英文"),;
 
-  /**
-   * 语言
-   */
-  private String lang;
-  /**
-   * 语言描述
-   */
-  private String desc;
+    /**
+     * 语言
+     */
+    private String lang;
+    /**
+     * 语言描述
+     */
+    private String desc;
 
-  Language(String lang, String desc) {
-    this.lang = lang;
-    this.desc = desc;
-  }
-
-  public String getLang() {
-    return lang;
-  }
-
-  public String getDesc() {
-    return desc;
-  }
-
-  public static Language findByLang(String lang) {
-    if (StringUtils.isBlank(lang)) {
-      return null;
+    Language(String lang, String desc) {
+        this.lang = lang;
+        this.desc = desc;
     }
-    for (Language item : values()) {
-      if (StringUtils.equalsIgnoreCase(item.lang, lang)) {
-        return item;
-      }
+
+    public String getLang() {
+        return lang;
     }
-    return null;
-  }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public static Language findByLang(String lang) {
+        if (StringUtils.isBlank(lang)) {
+            return null;
+        }
+        for (Language item : values()) {
+            if (StringUtils.equalsIgnoreCase(item.lang, lang)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }

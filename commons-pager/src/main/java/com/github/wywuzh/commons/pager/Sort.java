@@ -25,41 +25,41 @@ import java.io.Serializable;
  * @since JDK 1.8
  */
 public class Sort implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 排序字段名
-   */
-  private String sort;
-  /**
-   * 排序类型
-   */
-  private Order order;
+    /**
+     * 排序字段名
+     */
+    private String sort;
+    /**
+     * 排序类型
+     */
+    private Order order;
 
-  public Sort() {
-    super();
-  }
+    public Sort() {
+        super();
+    }
 
-  public Sort(String sort, Order order) {
-    super();
-    this.sort = sort;
-    this.order = order;
-  }
+    public Sort(String sort, Order order) {
+        super();
+        this.sort = sort;
+        this.order = order;
+    }
 
-  public String getSort() {
-    return sort;
-  }
+    public String getSort() {
+        return sort;
+    }
 
-  public void setSort(String sort) {
-    this.sort = sort;
-  }
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
 
-  public Order getOrder() {
-    return order;
-  }
+    public Order getOrder() {
+        return order;
+    }
 
-  public void setOrder(Order order) {
-    this.order = order;
-  }
+    public void setOrder(Order order) {
+        this.order = order;
+    }
 
 }

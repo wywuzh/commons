@@ -28,9 +28,9 @@ import com.github.wywuzh.commons.core.validator.Validate;
  */
 public class ValidateNumber extends Validate {
 
-  @Override
-  protected PatternType getPatternType() {
-    return PatternType.PATTERN_NUMBER;
-  }
+    @Override
+    protected PatternType getPatternType() {
+        return PatternType.PATTERN_NUMBER;
+    }
 
 }

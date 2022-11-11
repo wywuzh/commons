@@ -24,20 +24,20 @@ package com.github.wywuzh.commons.dingtalk.exception;
  */
 public class DingtalkException extends RuntimeException {
 
-  public DingtalkException() {
-    super();
-  }
+    public DingtalkException() {
+        super();
+    }
 
-  public DingtalkException(String message) {
-    super(message);
-  }
+    public DingtalkException(String message) {
+        super(message);
+    }
 
-  public DingtalkException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public DingtalkException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public DingtalkException(Throwable cause) {
-    super(cause);
-  }
+    public DingtalkException(Throwable cause) {
+        super(cause);
+    }
 
 }

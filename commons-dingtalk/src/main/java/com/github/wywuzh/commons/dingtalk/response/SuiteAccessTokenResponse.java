@@ -30,18 +30,18 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class SuiteAccessTokenResponse extends BaseResponse {
-  private static final long serialVersionUID = -4364817866794670941L;
+    private static final long serialVersionUID = -4364817866794670941L;
 
-  /**
-   * 应用套件的凭证
-   */
-  @SerializedName(value = "suite_access_token")
-  private String suiteAccessToken;
-  /**
-   * 应用套件凭证的过期时间，单位秒
-   * <p>
-   * 说明：suite_access_token有效期为7200秒，过期之前建议服务端做定时器主动更新，而不是依赖钉钉的定时推送。
-   */
-  @SerializedName(value = "expires_in")
-  private Integer expiresIn;
+    /**
+     * 应用套件的凭证
+     */
+    @SerializedName(value = "suite_access_token")
+    private String suiteAccessToken;
+    /**
+     * 应用套件凭证的过期时间，单位秒
+     * <p>
+     * 说明：suite_access_token有效期为7200秒，过期之前建议服务端做定时器主动更新，而不是依赖钉钉的定时推送。
+     */
+    @SerializedName(value = "expires_in")
+    private Integer expiresIn;
 }

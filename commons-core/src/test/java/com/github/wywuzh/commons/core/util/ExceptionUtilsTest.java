@@ -29,18 +29,18 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @Slf4j
 public class ExceptionUtilsTest {
 
-  public static void throwException() {
-    throw new IllegalArgumentException("方法不可用！");
-  }
-
-  public static void main(String[] args) {
-    try {
-      throwException();
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-      log.info(ExceptionUtils.getMessage(e));
-      log.info(ExceptionUtils.getStackTrace(e));
+    public static void throwException() {
+        throw new IllegalArgumentException("方法不可用！");
     }
-  }
+
+    public static void main(String[] args) {
+        try {
+            throwException();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.info(ExceptionUtils.getMessage(e));
+            log.info(ExceptionUtils.getStackTrace(e));
+        }
+    }
 
 }

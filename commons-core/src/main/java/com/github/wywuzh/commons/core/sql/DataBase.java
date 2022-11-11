@@ -30,57 +30,57 @@ import org.slf4j.LoggerFactory;
  * @since JDK 1.8
  */
 public class DataBase {
-  private final Logger logger = LoggerFactory.getLogger(DataBase.class);
+    private final Logger logger = LoggerFactory.getLogger(DataBase.class);
 
-  private Connection connection;
-  private DatabaseMetaData metaData;
-  private Product product;
+    private Connection connection;
+    private DatabaseMetaData metaData;
+    private Product product;
 
-  public DataBase() {
-  }
-
-  public DataBase(Connection connection) {
-    this.connection = connection;
-    try {
-      this.metaData = connection.getMetaData();
-      this.product = new Product(metaData.getDatabaseProductName(), metaData.getDatabaseProductVersion());
-    } catch (SQLException e) {
-      logger.error(e.getMessage(), e);
+    public DataBase() {
     }
-  }
 
-  public Connection getConnection() {
-    return connection;
-  }
-
-  public DatabaseMetaData getMetaData() {
-    return metaData;
-  }
-
-  public String getSchema() throws SQLException {
-    return connection.getCatalog();
-  }
-
-  public Product getProduct() {
-    return product;
-  }
-
-  public String getDriverClass() throws SQLException {
-    return metaData.getDriverName();
-  }
-
-  public String getJdbcUrl() throws SQLException {
-    return metaData.getURL();
-  }
-
-  public String getUsername() throws SQLException {
-    return metaData.getUserName();
-  }
-
-  public void close() throws SQLException {
-    if (this.connection != null) {
-      connection.close();
+    public DataBase(Connection connection) {
+        this.connection = connection;
+        try {
+            this.metaData = connection.getMetaData();
+            this.product = new Product(metaData.getDatabaseProductName(), metaData.getDatabaseProductVersion());
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+        }
     }
-  }
+
+    public Connection getConnection() {
+        return connection;
+    }
+
+    public DatabaseMetaData getMetaData() {
+        return metaData;
+    }
+
+    public String getSchema() throws SQLException {
+        return connection.getCatalog();
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public String getDriverClass() throws SQLException {
+        return metaData.getDriverName();
+    }
+
+    public String getJdbcUrl() throws SQLException {
+        return metaData.getURL();
+    }
+
+    public String getUsername() throws SQLException {
+        return metaData.getUserName();
+    }
+
+    public void close() throws SQLException {
+        if (this.connection != null) {
+            connection.close();
+        }
+    }
 
 }

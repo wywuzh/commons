@@ -33,27 +33,27 @@ import org.apache.commons.logging.LogFactory;
  * @since JDK 1.7.0_71
  */
 public class CompositeConfiguration extends AbstractConfiguration {
-  private static final Log logger = LogFactory.getLog(CompositeConfiguration.class);
+    private static final Log logger = LogFactory.getLog(CompositeConfiguration.class);
 
-  private static final String DEFAULT_PATHNAME = "application.properties";
+    private static final String DEFAULT_PATHNAME = "application.properties";
 
-  @Override
-  public Configuration getInstance() {
-    return getInstance(DEFAULT_PATHNAME);
-  }
-
-  @Override
-  public Configuration getInstance(String fileName) {
-    org.apache.commons.configuration.CompositeConfiguration configuration = null;
-    try {
-      Thread currentThread = Thread.currentThread();
-      URL resource = currentThread.getContextClassLoader().getResource(fileName);
-      configuration = new org.apache.commons.configuration.CompositeConfiguration();
-      configuration.addConfiguration(new PropertiesConfiguration(resource));
-    } catch (ConfigurationException e) {
-      logger.error(e.getMessage(), e);
+    @Override
+    public Configuration getInstance() {
+        return getInstance(DEFAULT_PATHNAME);
     }
-    return configuration;
-  }
+
+    @Override
+    public Configuration getInstance(String fileName) {
+        org.apache.commons.configuration.CompositeConfiguration configuration = null;
+        try {
+            Thread currentThread = Thread.currentThread();
+            URL resource = currentThread.getContextClassLoader().getResource(fileName);
+            configuration = new org.apache.commons.configuration.CompositeConfiguration();
+            configuration.addConfiguration(new PropertiesConfiguration(resource));
+        } catch (ConfigurationException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return configuration;
+    }
 
 }

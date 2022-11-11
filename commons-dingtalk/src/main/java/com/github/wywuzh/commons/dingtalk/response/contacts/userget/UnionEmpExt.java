@@ -31,21 +31,21 @@ import lombok.Data;
  */
 @Data
 public class UnionEmpExt implements Serializable {
-  private static final long serialVersionUID = 4638842738336975141L;
+    private static final long serialVersionUID = 4638842738336975141L;
 
-  /**
-   * 员工的userid
-   */
-  @SerializedName(value = "userid")
-  private String userid;
-  /**
-   * 关联映射关系
-   */
-  @SerializedName(value = "union_emp_map_list")
-  private List<UnionEmpMapVo> unionEmpMapList;
-  /**
-   * 当前用户所属的组织的企业corpid
-   */
-  @SerializedName(value = "corp_id")
-  private String corp_id;
+    /**
+     * 员工的userid
+     */
+    @SerializedName(value = "userid")
+    private String userid;
+    /**
+     * 关联映射关系
+     */
+    @SerializedName(value = "union_emp_map_list")
+    private List<UnionEmpMapVo> unionEmpMapList;
+    /**
+     * 当前用户所属的组织的企业corpid
+     */
+    @SerializedName(value = "corp_id")
+    private String corp_id;
 }
