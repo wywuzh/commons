@@ -31,39 +31,39 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SpringBeanUtils implements ApplicationContextAware {
-  private static ApplicationContext APPLICATION_CONTEXT;
+    private static ApplicationContext APPLICATION_CONTEXT;
 
-  @Override
-  public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-    APPLICATION_CONTEXT = applicationContext;
-  }
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        APPLICATION_CONTEXT = applicationContext;
+    }
 
-  public static ApplicationContext getApplicationContext() {
-    return APPLICATION_CONTEXT;
-  }
+    public static ApplicationContext getApplicationContext() {
+        return APPLICATION_CONTEXT;
+    }
 
-  public static Object getBean(String name) {
-    return APPLICATION_CONTEXT.getBean(name);
-  }
+    public static Object getBean(String name) {
+        return APPLICATION_CONTEXT.getBean(name);
+    }
 
-  public static <T> T getBean(String name, Class<T> requiredType) {
-    return APPLICATION_CONTEXT.getBean(name, requiredType);
-  }
+    public static <T> T getBean(String name, Class<T> requiredType) {
+        return APPLICATION_CONTEXT.getBean(name, requiredType);
+    }
 
-  public static Object getBean(String name, Object... args) {
-    return APPLICATION_CONTEXT.getBean(name, args);
-  }
+    public static Object getBean(String name, Object... args) {
+        return APPLICATION_CONTEXT.getBean(name, args);
+    }
 
-  public static <T> T getBean(Class<T> requiredType) {
-    return APPLICATION_CONTEXT.getBean(requiredType);
-  }
+    public static <T> T getBean(Class<T> requiredType) {
+        return APPLICATION_CONTEXT.getBean(requiredType);
+    }
 
-  public static boolean containsBean(String beanName) {
-    return APPLICATION_CONTEXT.containsBean(beanName);
-  }
+    public static boolean containsBean(String beanName) {
+        return APPLICATION_CONTEXT.containsBean(beanName);
+    }
 
-  public static <T> Map<String, T> getBeansOfType(Class<T> requiredType) {
-    return APPLICATION_CONTEXT.getBeansOfType(requiredType);
-  }
+    public static <T> Map<String, T> getBeansOfType(Class<T> requiredType) {
+        return APPLICATION_CONTEXT.getBeansOfType(requiredType);
+    }
 
 }

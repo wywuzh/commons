@@ -88,7 +88,7 @@
         <jackson-bom.version>2.13.4</jackson-bom.version>
         <commons-codec.version>1.15</commons-codec.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <spring-kafka.version>2.9.2</spring-kafka.version>
+        <spring-kafka.version>2.8.10</spring-kafka.version>
         -->
 
         <json-lib.version>2.4</json-lib.version>
@@ -163,7 +163,7 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- Maven插件配置 -->
-        <formatter.config>eclipse_codeformat_2space.xml</formatter.config>
+        <formatter.config>eclipse_codeformat_4space.xml</formatter.config>
         <impsort.groups>au,com,de,java,javassist,javax,lombok,mockit,net,ognl,org</impsort.groups>
     </properties>
 

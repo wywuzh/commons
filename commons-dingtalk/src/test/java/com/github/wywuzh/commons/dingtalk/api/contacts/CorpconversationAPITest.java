@@ -33,19 +33,19 @@ import org.junit.Test;
 @Slf4j
 public class CorpconversationAPITest extends AbstractTest {
 
-  @Test
-  public void create() {
-    CorpconversationAPI deptV2API = new CorpconversationAPI(apiConfig);
+    @Test
+    public void create() {
+        CorpconversationAPI deptV2API = new CorpconversationAPI(apiConfig);
 
-    AsyncsendV2Request request = new AsyncsendV2Request();
-    request.setAgentId(AGENT_ID);
+        AsyncsendV2Request request = new AsyncsendV2Request();
+        request.setAgentId(AGENT_ID);
 
-    // 创建部门 deptId=457162465
+        // 创建部门 deptId=457162465
 //        DepartmentCreateRequest request = new DepartmentCreateRequest();
 //        request.setName("mall");
 //        request.setParentId(1L);
-    deptV2API.asyncsendV2(request);
+        deptV2API.asyncsendV2(request);
 //        log.info("创建部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
-  }
+    }
 
 }

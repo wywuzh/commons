@@ -30,26 +30,26 @@ import org.springframework.util.Assert;
 @Component
 public class CallableExecutor<T> {
 
-  @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-  public T callable(Callable<T> callable) {
-    Assert.notNull(callable, "Callable must be not null");
-    ExecutorService executorService = Executors.newFixedThreadPool(10);
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public T callable(Callable<T> callable) {
+        Assert.notNull(callable, "Callable must be not null");
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-    T executeResult = null;
-    try {
-      ExecutorCompletionService<T> completionService = new ExecutorCompletionService<T>(executorService);
+        T executeResult = null;
+        try {
+            ExecutorCompletionService<T> completionService = new ExecutorCompletionService<T>(executorService);
 
-      Future<T> future = completionService.submit(callable);
-      executeResult = future.get();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } catch (ExecutionException e) {
-      e.printStackTrace();
-    } finally {
-      executorService.shutdown();
+            Future<T> future = completionService.submit(callable);
+            executeResult = future.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } finally {
+            executorService.shutdown();
+        }
+
+        return executeResult;
     }
-
-    return executeResult;
-  }
 
 }

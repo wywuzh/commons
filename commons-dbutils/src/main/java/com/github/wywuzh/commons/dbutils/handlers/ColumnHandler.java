@@ -29,43 +29,43 @@ import org.apache.commons.dbutils.ResultSetHandler;
  */
 public class ColumnHandler<T> implements ResultSetHandler<T> {
 
-  /**
-   * 字段索引，索引从1开始
-   */
-  private final int columnIndex;
+    /**
+     * 字段索引，索引从1开始
+     */
+    private final int columnIndex;
 
-  /**
-   * 字段名称
-   */
-  private final String columnName;
+    /**
+     * 字段名称
+     */
+    private final String columnName;
 
-  public ColumnHandler(int columnIndex) {
-    this(columnIndex, null);
-  }
-
-  public ColumnHandler(String columnName) {
-    this(1, columnName);
-  }
-
-  public ColumnHandler(int columnIndex, String columnName) {
-    super();
-    this.columnIndex = columnIndex;
-    this.columnName = columnName;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public T handle(ResultSet rs) throws SQLException {
-    // ResultSet对象代表sql语句执行的结果集，维护指向其当前数据行的光标。
-    // 每调用一次next()方法，光标向下移动一行。最初它位于第一行之前，因此我们第一次应当调用next()方法使第一行成为当前行。
-    // 随着每次调用next()将导致光标向下移动一行。在ResultSet对象及其父辈statement对象关闭之前，光标一直保持有效。
-    if (!rs.next()) {
-      return null;
+    public ColumnHandler(int columnIndex) {
+        this(columnIndex, null);
     }
-    if (this.columnName == null) {
-      return (T) rs.getObject(this.columnIndex);
+
+    public ColumnHandler(String columnName) {
+        this(1, columnName);
     }
-    return (T) rs.getObject(this.columnName);
-  }
+
+    public ColumnHandler(int columnIndex, String columnName) {
+        super();
+        this.columnIndex = columnIndex;
+        this.columnName = columnName;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public T handle(ResultSet rs) throws SQLException {
+        // ResultSet对象代表sql语句执行的结果集，维护指向其当前数据行的光标。
+        // 每调用一次next()方法，光标向下移动一行。最初它位于第一行之前，因此我们第一次应当调用next()方法使第一行成为当前行。
+        // 随着每次调用next()将导致光标向下移动一行。在ResultSet对象及其父辈statement对象关闭之前，光标一直保持有效。
+        if (!rs.next()) {
+            return null;
+        }
+        if (this.columnName == null) {
+            return (T) rs.getObject(this.columnIndex);
+        }
+        return (T) rs.getObject(this.columnName);
+    }
 
 }

@@ -31,56 +31,56 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  *                 ---------------------------------------------------------------------------
  */
 public interface ILogicalDeletePluginHook {
-  /**
-   * logicalDeleteByExample
-   * 
-   * @param method
-   * @param interfaze
-   * @param introspectedTable
-   * @return
-   */
-  boolean clientLogicalDeleteByExampleMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+    /**
+     * logicalDeleteByExample
+     * 
+     * @param method
+     * @param interfaze
+     * @param introspectedTable
+     * @return
+     */
+    boolean clientLogicalDeleteByExampleMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-  /**
-   * logicalDeleteByPrimaryKey
-   * 
-   * @param method
-   * @param interfaze
-   * @param introspectedTable
-   * @return
-   */
-  boolean clientLogicalDeleteByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+    /**
+     * logicalDeleteByPrimaryKey
+     * 
+     * @param method
+     * @param interfaze
+     * @param introspectedTable
+     * @return
+     */
+    boolean clientLogicalDeleteByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-  /**
-   * logicalDeleteByExample
-   * 
-   * @param document
-   * @param element
-   * @param logicalDeleteColumn
-   * @param logicalDeleteValue
-   * @param introspectedTable
-   * @return
-   */
-  boolean sqlMapLogicalDeleteByExampleElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue, IntrospectedTable introspectedTable);
+    /**
+     * logicalDeleteByExample
+     * 
+     * @param document
+     * @param element
+     * @param logicalDeleteColumn
+     * @param logicalDeleteValue
+     * @param introspectedTable
+     * @return
+     */
+    boolean sqlMapLogicalDeleteByExampleElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue, IntrospectedTable introspectedTable);
 
-  /**
-   * logicalDeleteByPrimaryKey
-   * 
-   * @param document
-   * @param element
-   * @param logicalDeleteColumn
-   * @param logicalDeleteValue
-   * @param introspectedTable
-   * @return
-   */
-  boolean sqlMapLogicalDeleteByPrimaryKeyElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue,
-      IntrospectedTable introspectedTable);
+    /**
+     * logicalDeleteByPrimaryKey
+     * 
+     * @param document
+     * @param element
+     * @param logicalDeleteColumn
+     * @param logicalDeleteValue
+     * @param introspectedTable
+     * @return
+     */
+    boolean sqlMapLogicalDeleteByPrimaryKeyElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue,
+            IntrospectedTable introspectedTable);
 
-  /**
-   * 逻辑删除枚举是否生成
-   * 
-   * @param logicalDeleteColumn
-   * @return
-   */
-  boolean logicalDeleteEnumGenerated(IntrospectedColumn logicalDeleteColumn);
+    /**
+     * 逻辑删除枚举是否生成
+     * 
+     * @param logicalDeleteColumn
+     * @return
+     */
+    boolean logicalDeleteEnumGenerated(IntrospectedColumn logicalDeleteColumn);
 }

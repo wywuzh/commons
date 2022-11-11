@@ -24,34 +24,34 @@ package com.github.wywuzh.commons.core.entity;
  */
 public interface Created extends Entity {
 
-  /**
-   * 创建人编码（统一指向账户编码）
-   *
-   * @author 伍章红 2015-8-19 上午11:42:35
-   * @return
-   */
-  public String getCreateUser();
+    /**
+     * 创建人编码（统一指向账户编码）
+     *
+     * @author 伍章红 2015-8-19 上午11:42:35
+     * @return
+     */
+    public String getCreateUser();
 
-  /**
-   * @author 伍章红 2015-8-19 上午11:44:09
-   * @param createUser
-   *                     创建人编码（统一指向账户编码）
-   */
-  public void setCreateUser(String createUser);
+    /**
+     * @author 伍章红 2015-8-19 上午11:44:09
+     * @param createUser
+     *                       创建人编码（统一指向账户编码）
+     */
+    public void setCreateUser(String createUser);
 
-  /**
-   * 创建时间
-   *
-   * @author 伍章红 2015-8-19 上午11:42:40
-   * @return
-   */
-  public java.util.Date getCreateTime();
+    /**
+     * 创建时间
+     *
+     * @author 伍章红 2015-8-19 上午11:42:40
+     * @return
+     */
+    public java.util.Date getCreateTime();
 
-  /**
-   * @author 伍章红 2015-8-19 上午11:44:11
-   * @param createTime
-   *                     创建时间
-   */
-  public void setCreateTime(java.util.Date createTime);
+    /**
+     * @author 伍章红 2015-8-19 上午11:44:11
+     * @param createTime
+     *                       创建时间
+     */
+    public void setCreateTime(java.util.Date createTime);
 
 }

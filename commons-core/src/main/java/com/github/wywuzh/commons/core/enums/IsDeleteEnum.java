@@ -23,24 +23,24 @@ package com.github.wywuzh.commons.core.enums;
  * @since JDK 1.8
  */
 public enum IsDeleteEnum {
-  TRUE(1), FALSE(0);
+    TRUE(1), FALSE(0);
 
-  private Integer value;
+    private Integer value;
 
-  IsDeleteEnum(Integer value) {
-    this.value = value;
-  }
-
-  public Integer getValue() {
-    return value;
-  }
-
-  public static IsDeleteEnum findByValue(Integer value) {
-    if (value == 0) {
-      return IsDeleteEnum.FALSE;
-    } else if (value == 1) {
-      return IsDeleteEnum.TRUE;
+    IsDeleteEnum(Integer value) {
+        this.value = value;
     }
-    return null;
-  }
+
+    public Integer getValue() {
+        return value;
+    }
+
+    public static IsDeleteEnum findByValue(Integer value) {
+        if (value == 0) {
+            return IsDeleteEnum.FALSE;
+        } else if (value == 1) {
+            return IsDeleteEnum.TRUE;
+        }
+        return null;
+    }
 }

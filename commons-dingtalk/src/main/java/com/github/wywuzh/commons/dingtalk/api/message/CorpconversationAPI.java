@@ -39,24 +39,24 @@ import org.apache.http.HttpStatus;
 @Slf4j
 public class CorpconversationAPI extends BaseAPI {
 
-  public CorpconversationAPI(ApiConfig apiConfig) {
-    super(apiConfig);
-  }
-
-  /**
-   * 发送工作通知
-   *
-   * @param request 请求
-   */
-  public AsyncsendV2Response asyncsendV2(AsyncsendV2Request request) {
-    ResponseMessage responseMessage = doPost(URLContent.URL_MESSAGE_CORPCONVERSATION_ASYNCSEND_V2, request);
-    if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
-      log.warn("请求调用失败，请检查URL是否正确！{}", responseMessage);
-      throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+    public CorpconversationAPI(ApiConfig apiConfig) {
+        super(apiConfig);
     }
-    // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
-    AsyncsendV2Response response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<AsyncsendV2Response>() {
-    }.getType());
-    return response;
-  }
+
+    /**
+     * 发送工作通知
+     *
+     * @param request 请求
+     */
+    public AsyncsendV2Response asyncsendV2(AsyncsendV2Request request) {
+        ResponseMessage responseMessage = doPost(URLContent.URL_MESSAGE_CORPCONVERSATION_ASYNCSEND_V2, request);
+        if (HttpStatus.SC_OK != responseMessage.getStatusCode()) {
+            log.warn("请求调用失败，请检查URL是否正确！{}", responseMessage);
+            throw new DingtalkException("请求调用失败，请检查URL是否正确！");
+        }
+        // 注：当一个类的子类嵌套级别超过2层时，需要改用gson工具类进行解析，否则可能会解析失败
+        AsyncsendV2Response response = GsonUtil.parse(responseMessage.getResult(), new TypeToken<AsyncsendV2Response>() {
+        }.getType());
+        return response;
+    }
 }

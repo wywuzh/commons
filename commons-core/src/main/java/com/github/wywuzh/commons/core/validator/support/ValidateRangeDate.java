@@ -33,26 +33,26 @@ import org.springframework.util.Assert;
  */
 public class ValidateRangeDate extends ValidateDate {
 
-  private final java.util.Date startDate;
-  private final java.util.Date endDate;
+    private final java.util.Date startDate;
+    private final java.util.Date endDate;
 
-  public ValidateRangeDate(Date startDate, Date endDate) {
-    super();
-    this.startDate = startDate;
-    this.endDate = endDate;
-  }
+    public ValidateRangeDate(Date startDate, Date endDate) {
+        super();
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
-  public boolean validate() {
-    Assert.notNull(startDate, "startDate must not be null");
-    Assert.notNull(endDate, "endDate must not be null");
+    public boolean validate() {
+        Assert.notNull(startDate, "startDate must not be null");
+        Assert.notNull(endDate, "endDate must not be null");
 
-    return startDate.before(endDate);
-  }
+        return startDate.before(endDate);
+    }
 
-  public static void main(String[] args) {
-    Date startDate = DateUtils.parse("2014-12-12 00:00:00");
-    Date endDate = DateUtils.parse("2014-12-13 00:00:00");
-    ValidateRangeDate rangeDate = new ValidateRangeDate(startDate, endDate);
-    System.out.println(rangeDate.validate());
-  }
+    public static void main(String[] args) {
+        Date startDate = DateUtils.parse("2014-12-12 00:00:00");
+        Date endDate = DateUtils.parse("2014-12-13 00:00:00");
+        ValidateRangeDate rangeDate = new ValidateRangeDate(startDate, endDate);
+        System.out.println(rangeDate.validate());
+    }
 }

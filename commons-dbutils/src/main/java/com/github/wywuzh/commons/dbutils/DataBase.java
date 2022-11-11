@@ -30,46 +30,46 @@ import java.sql.SQLException;
 @Deprecated
 public class DataBase {
 
-  private Connection connection;
-  private DatabaseMetaData metaData;
-  private Product product;
+    private Connection connection;
+    private DatabaseMetaData metaData;
+    private Product product;
 
-  public DataBase(Connection connection) {
-    this.connection = connection;
-    try {
-      this.metaData = connection.getMetaData();
-      this.product = new Product(metaData.getDatabaseProductName(), metaData.getDatabaseProductVersion());
-    } catch (SQLException e) {
-      e.printStackTrace();
+    public DataBase(Connection connection) {
+        this.connection = connection;
+        try {
+            this.metaData = connection.getMetaData();
+            this.product = new Product(metaData.getDatabaseProductName(), metaData.getDatabaseProductVersion());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-  }
 
-  public Connection getConnection() {
-    return connection;
-  }
+    public Connection getConnection() {
+        return connection;
+    }
 
-  public DatabaseMetaData getMetaData() {
-    return metaData;
-  }
+    public DatabaseMetaData getMetaData() {
+        return metaData;
+    }
 
-  public String getSchema() throws SQLException {
-    return connection.getCatalog();
-  }
+    public String getSchema() throws SQLException {
+        return connection.getCatalog();
+    }
 
-  public Product getProduct() {
-    return product;
-  }
+    public Product getProduct() {
+        return product;
+    }
 
-  public String getDriverClass() throws SQLException {
-    return metaData.getDriverName();
-  }
+    public String getDriverClass() throws SQLException {
+        return metaData.getDriverName();
+    }
 
-  public String getJdbcUrl() throws SQLException {
-    return metaData.getURL();
-  }
+    public String getJdbcUrl() throws SQLException {
+        return metaData.getURL();
+    }
 
-  public String getUsername() throws SQLException {
-    return metaData.getUserName();
-  }
+    public String getUsername() throws SQLException {
+        return metaData.getUserName();
+    }
 
 }

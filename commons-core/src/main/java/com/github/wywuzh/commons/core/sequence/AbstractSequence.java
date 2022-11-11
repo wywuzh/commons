@@ -29,73 +29,73 @@ import java.util.Date;
  */
 public abstract class AbstractSequence {
 
-  /**
-   * 当前数字
-   */
-  private long currentNumber;
-  /**
-   * 最后一次时间
-   */
-  private String lastTime;
+    /**
+     * 当前数字
+     */
+    private long currentNumber;
+    /**
+     * 最后一次时间
+     */
+    private String lastTime;
 
-  public synchronized String getCode() {
-    String currentTime = getCurrentTime();
-    if (currentTime.equals(lastTime)) {
-      currentNumber++;
-    } else {
-      // 时间改变，回到起点
-      currentNumber = 1;
-      lastTime = currentTime;
+    public synchronized String getCode() {
+        String currentTime = getCurrentTime();
+        if (currentTime.equals(lastTime)) {
+            currentNumber++;
+        } else {
+            // 时间改变，回到起点
+            currentNumber = 1;
+            lastTime = currentTime;
+        }
+        return new StringBuffer().append(getFirstPart()).append(getSecondPart()).append(getThreePart()).toString();
     }
-    return new StringBuffer().append(getFirstPart()).append(getSecondPart()).append(getThreePart()).toString();
-  }
 
-  /**
-   * 获取当前时间
-   *
-   * @return
-   */
-  private String getCurrentTime() {
-    return DateUtils.format(new Date(), datePattern());
-  }
+    /**
+     * 获取当前时间
+     *
+     * @return
+     */
+    private String getCurrentTime() {
+        return DateUtils.format(new Date(), datePattern());
+    }
 
-  /**
-   * 第一部分
-   *
-   * @return
-   */
-  protected abstract Object getFirstPart();
+    /**
+     * 第一部分
+     *
+     * @return
+     */
+    protected abstract Object getFirstPart();
 
-  /**
-   * 第二部分
-   *
-   * @return
-   */
-  private String getSecondPart() {
-    return lastTime;
-  }
+    /**
+     * 第二部分
+     *
+     * @return
+     */
+    private String getSecondPart() {
+        return lastTime;
+    }
 
-  /**
-   * 第三部分
-   *
-   * @return
-   */
-  private String getThreePart() {
-    return StringHelper.fillZero(getThreePartLength(), currentNumber);
-  }
+    /**
+     * 第三部分
+     *
+     * @return
+     */
+    private String getThreePart() {
+        return StringHelper.fillZero(getThreePartLength(), currentNumber);
+    }
 
-  /**
-   * 时间格式
-   *
-   * @return
-   */
-  protected abstract String datePattern();
+    /**
+     * 时间格式
+     *
+     * @return
+     */
+    protected abstract String datePattern();
 
-  /**
-   * 指定第三部分值长度
-   *
-   * @return
-   */
-  protected abstract int getThreePartLength();
+    /**
+     * 指定第三部分值长度
+     *
+     * @return
+     */
+    protected abstract int getThreePartLength();
 
 }

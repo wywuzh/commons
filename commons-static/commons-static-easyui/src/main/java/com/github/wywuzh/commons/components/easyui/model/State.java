@@ -24,23 +24,23 @@ package com.github.wywuzh.commons.components.easyui.model;
  */
 public enum State {
 
-  /**
-   * 展开节点
-   */
-  OPEN("OPEN"),
-  /**
-   * 关闭节点
-   */
-  CLOSED("CLOSED");
+    /**
+     * 展开节点
+     */
+    OPEN("OPEN"),
+    /**
+     * 关闭节点
+     */
+    CLOSED("CLOSED");
 
-  private String value;
+    private String value;
 
-  private State(String value) {
-    this.value = value;
-  }
+    private State(String value) {
+        this.value = value;
+    }
 
-  public String getValue() {
-    return value.toLowerCase();
-  }
+    public String getValue() {
+        return value.toLowerCase();
+    }
 
 }

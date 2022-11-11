@@ -26,21 +26,21 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
  *                 ---------------------------------------------------------------------------
  */
 public class SpecTypeArgumentsFullyQualifiedJavaType extends FullyQualifiedJavaType {
-  private String fullTypeSpecification;
+    private String fullTypeSpecification;
 
-  /**
-   * Use this constructor to construct a generic type with the specified type parameters.
-   * 
-   * @param fullTypeSpecification the full type specification
-   */
-  public SpecTypeArgumentsFullyQualifiedJavaType(String fullTypeSpecification) {
-    super("");
+    /**
+     * Use this constructor to construct a generic type with the specified type parameters.
+     * 
+     * @param fullTypeSpecification the full type specification
+     */
+    public SpecTypeArgumentsFullyQualifiedJavaType(String fullTypeSpecification) {
+        super("");
 
-    this.fullTypeSpecification = fullTypeSpecification;
-  }
+        this.fullTypeSpecification = fullTypeSpecification;
+    }
 
-  @Override
-  public String getShortName() {
-    return this.fullTypeSpecification.substring(1, this.fullTypeSpecification.length() - 1);
-  }
+    @Override
+    public String getShortName() {
+        return this.fullTypeSpecification.substring(1, this.fullTypeSpecification.length() - 1);
+    }
 }

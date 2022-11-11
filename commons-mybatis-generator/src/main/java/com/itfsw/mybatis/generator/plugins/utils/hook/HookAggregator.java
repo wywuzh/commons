@@ -41,374 +41,374 @@ import org.slf4j.LoggerFactory;
  *                 ---------------------------------------------------------------------------
  */
 public class HookAggregator implements IUpsertPluginHook, IModelBuilderPluginHook, IIncrementsPluginHook, IIncrementPluginHook, IOptimisticLockerPluginHook, ISelectOneByExamplePluginHook,
-    ITableConfigurationHook, ILombokPluginHook, ILogicalDeletePluginHook, IModelColumnPluginHook, ISelectSelectivePluginHook {
+        ITableConfigurationHook, ILombokPluginHook, ILogicalDeletePluginHook, IModelColumnPluginHook, ISelectSelectivePluginHook {
 
-  protected static final Logger logger = LoggerFactory.getLogger(BasePlugin.class);
-  private final static HookAggregator instance = new HookAggregator();
-  private Context context;
+    protected static final Logger logger = LoggerFactory.getLogger(BasePlugin.class);
+    private final static HookAggregator instance = new HookAggregator();
+    private Context context;
 
-  /**
-   * constructor
-   */
-  public HookAggregator() {
-  }
+    /**
+     * constructor
+     */
+    public HookAggregator() {
+    }
 
-  /**
-   * Getter method for property <tt>instance</tt>.
-   * 
-   * @return property value of instance
-   * @author hewei
-   */
-  public static HookAggregator getInstance() {
-    return instance;
-  }
+    /**
+     * Getter method for property <tt>instance</tt>.
+     * 
+     * @return property value of instance
+     * @author hewei
+     */
+    public static HookAggregator getInstance() {
+        return instance;
+    }
 
-  /**
-   * Setter method for property <tt>context</tt>.
-   * 
-   * @param context value to be assigned to property context
-   * @author hewei
-   */
-  public void setContext(Context context) {
-    this.context = context;
-  }
+    /**
+     * Setter method for property <tt>context</tt>.
+     * 
+     * @param context value to be assigned to property context
+     * @author hewei
+     */
+    public void setContext(Context context) {
+        this.context = context;
+    }
 
-  /**
-   * 获取插件
-   * 
-   * @param clazz
-   * @param <T>
-   * @return
-   */
-  private <T> List<T> getPlugins(Class<T> clazz) {
-    List list = new ArrayList();
-    // 反射获取插件列表，不能用单例去弄，不然因为类释放的问题而导致测试用例出问题
-    try {
-      List<Plugin> plugins = (List<Plugin>) BeanUtils.getProperty(this.context.getPlugins(), "plugins");
-      for (Plugin plugin : plugins) {
-        if (clazz.isInstance(plugin)) {
-          list.add(plugin);
+    /**
+     * 获取插件
+     * 
+     * @param clazz
+     * @param <T>
+     * @return
+     */
+    private <T> List<T> getPlugins(Class<T> clazz) {
+        List list = new ArrayList();
+        // 反射获取插件列表，不能用单例去弄，不然因为类释放的问题而导致测试用例出问题
+        try {
+            List<Plugin> plugins = (List<Plugin>) BeanUtils.getProperty(this.context.getPlugins(), "plugins");
+            for (Plugin plugin : plugins) {
+                if (clazz.isInstance(plugin)) {
+                    list.add(plugin);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("获取插件列表失败！", e);
         }
-      }
-    } catch (Exception e) {
-      logger.error("获取插件列表失败！", e);
+        return list;
     }
-    return list;
-  }
 
-  // ============================================= IIncrementsPluginHook ==============================================
+    // ============================================= IIncrementsPluginHook ==============================================
 
-  @Override
-  public List<Element> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma) {
-    if (this.getPlugins(IIncrementsPluginHook.class).isEmpty()) {
-      return new ArrayList<>();
-    } else {
-      return this.getPlugins(IIncrementsPluginHook.class).get(0).incrementSetElementGenerated(introspectedColumn, prefix, hasComma);
+    @Override
+    public List<Element> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma) {
+        if (this.getPlugins(IIncrementsPluginHook.class).isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return this.getPlugins(IIncrementsPluginHook.class).get(0).incrementSetElementGenerated(introspectedColumn, prefix, hasComma);
+        }
     }
-  }
 
-  @Override
-  public List<XmlElement> incrementSetsWithSelectiveEnhancedPluginElementGenerated(List<IntrospectedColumn> columns) {
-    if (this.getPlugins(IIncrementsPluginHook.class).isEmpty()) {
-      return null;
-    } else {
-      return this.getPlugins(IIncrementsPluginHook.class).get(0).incrementSetsWithSelectiveEnhancedPluginElementGenerated(columns);
+    @Override
+    public List<XmlElement> incrementSetsWithSelectiveEnhancedPluginElementGenerated(List<IntrospectedColumn> columns) {
+        if (this.getPlugins(IIncrementsPluginHook.class).isEmpty()) {
+            return null;
+        } else {
+            return this.getPlugins(IIncrementsPluginHook.class).get(0).incrementSetsWithSelectiveEnhancedPluginElementGenerated(columns);
+        }
     }
-  }
 
-  // ============================================= IIncrementPluginHook ==============================================
+    // ============================================= IIncrementPluginHook ==============================================
 
-  @Override
-  public XmlElement generateIncrementSet(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma) {
-    if (this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
-      return null;
-    } else {
-      return this.getPlugins(IIncrementPluginHook.class).get(0).generateIncrementSet(introspectedColumn, prefix, hasComma);
+    @Override
+    public XmlElement generateIncrementSet(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma) {
+        if (this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
+            return null;
+        } else {
+            return this.getPlugins(IIncrementPluginHook.class).get(0).generateIncrementSet(introspectedColumn, prefix, hasComma);
+        }
     }
-  }
 
-  @Override
-  public XmlElement generateIncrementSetSelective(IntrospectedColumn introspectedColumn, String prefix) {
-    if (this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
-      return null;
-    } else {
-      return this.getPlugins(IIncrementPluginHook.class).get(0).generateIncrementSetSelective(introspectedColumn, prefix);
+    @Override
+    public XmlElement generateIncrementSetSelective(IntrospectedColumn introspectedColumn, String prefix) {
+        if (this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
+            return null;
+        } else {
+            return this.getPlugins(IIncrementPluginHook.class).get(0).generateIncrementSetSelective(introspectedColumn, prefix);
+        }
     }
-  }
 
-  @Override
-  public boolean supportIncrement(IntrospectedColumn column) {
-    if (!this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
-      return this.getPlugins(IIncrementPluginHook.class).get(0).supportIncrement(column);
-    } else if (!this.getPlugins(IIncrementsPluginHook.class).isEmpty()) {
-      return this.getPlugins(IIncrementsPluginHook.class).get(0).supportIncrement(column);
-    }
-    return false;
-  }
-
-  @Override
-  public List<XmlElement> generateIncrementSetForSelectiveEnhancedPlugin(List<IntrospectedColumn> columns) {
-    if (!this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
-      return this.getPlugins(IIncrementPluginHook.class).get(0).generateIncrementSetForSelectiveEnhancedPlugin(columns);
-    }
-    return null;
-  }
-
-  // ============================================ IModelBuilderPluginHook =============================================
-
-  @Override
-  public boolean modelBuilderClassGenerated(TopLevelClass topLevelClass, InnerClass builderClass, List<IntrospectedColumn> columns, IntrospectedTable introspectedTable) {
-    for (IModelBuilderPluginHook plugin : this.getPlugins(IModelBuilderPluginHook.class)) {
-      if (!plugin.modelBuilderClassGenerated(topLevelClass, builderClass, columns, introspectedTable)) {
+    @Override
+    public boolean supportIncrement(IntrospectedColumn column) {
+        if (!this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
+            return this.getPlugins(IIncrementPluginHook.class).get(0).supportIncrement(column);
+        } else if (!this.getPlugins(IIncrementsPluginHook.class).isEmpty()) {
+            return this.getPlugins(IIncrementsPluginHook.class).get(0).supportIncrement(column);
+        }
         return false;
-      }
     }
-    return true;
-  }
 
-  @Override
-  public boolean modelBuilderSetterMethodGenerated(Method method, TopLevelClass topLevelClass, InnerClass builderClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable) {
-    for (IModelBuilderPluginHook plugin : this.getPlugins(IModelBuilderPluginHook.class)) {
-      if (!plugin.modelBuilderSetterMethodGenerated(method, topLevelClass, builderClass, introspectedColumn, introspectedTable)) {
-        return false;
-      }
+    @Override
+    public List<XmlElement> generateIncrementSetForSelectiveEnhancedPlugin(List<IntrospectedColumn> columns) {
+        if (!this.getPlugins(IIncrementPluginHook.class).isEmpty()) {
+            return this.getPlugins(IIncrementPluginHook.class).get(0).generateIncrementSetForSelectiveEnhancedPlugin(columns);
+        }
+        return null;
     }
-    return true;
-  }
 
-  // ================================================= IUpsertPluginHook ===============================================
+    // ============================================ IModelBuilderPluginHook =============================================
 
-  @Override
-  public boolean clientUpsertSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
-      if (!plugin.clientUpsertSelectiveMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean clientUpsertByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
-      if (!plugin.clientUpsertByExampleSelectiveMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean sqlMapUpsertSelectiveElementGenerated(XmlElement element, List<IntrospectedColumn> columns, XmlElement insertColumnsEle, XmlElement insertValuesEle, XmlElement setsEle,
-      IntrospectedTable introspectedTable) {
-    for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
-      if (!plugin.sqlMapUpsertSelectiveElementGenerated(element, columns, insertColumnsEle, insertValuesEle, setsEle, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean sqlMapUpsertByExampleSelectiveElementGenerated(XmlElement element, List<IntrospectedColumn> columns, XmlElement insertColumnsEle, XmlElement insertValuesEle, XmlElement setsEle,
-      IntrospectedTable introspectedTable) {
-    for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
-      if (!plugin.sqlMapUpsertByExampleSelectiveElementGenerated(element, columns, insertColumnsEle, insertValuesEle, setsEle, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  // ================================================= IOptimisticLockerPluginHook ===============================================
-
-  @Override
-  public boolean clientUpdateWithVersionByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (IOptimisticLockerPluginHook plugin : this.getPlugins(IOptimisticLockerPluginHook.class)) {
-      if (!plugin.clientUpdateWithVersionByExampleSelectiveMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (IOptimisticLockerPluginHook plugin : this.getPlugins(IOptimisticLockerPluginHook.class)) {
-      if (!plugin.clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean generateSetsSelectiveElement(List<IntrospectedColumn> columns, IntrospectedColumn versionColumn, XmlElement setsElement) {
-    if (this.getPlugins(IOptimisticLockerPluginHook.class).isEmpty()) {
-      return false;
-    } else {
-      return this.getPlugins(IOptimisticLockerPluginHook.class).get(0).generateSetsSelectiveElement(columns, versionColumn, setsElement);
-    }
-  }
-
-  // ============================================= ISelectOneByExamplePluginHook ==============================================
-
-  @Override
-  public boolean clientSelectOneByExampleWithBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
-      if (!plugin.clientSelectOneByExampleWithBLOBsMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean clientSelectOneByExampleWithoutBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
-      if (!plugin.clientSelectOneByExampleWithoutBLOBsMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean sqlMapSelectOneByExampleWithoutBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable) {
-    for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
-      if (!plugin.sqlMapSelectOneByExampleWithoutBLOBsElementGenerated(document, element, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean sqlMapSelectOneByExampleWithBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable) {
-    for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
-      if (!plugin.sqlMapSelectOneByExampleWithBLOBsElementGenerated(document, element, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  // ============================================= ITableConfigurationHook ==============================================
-
-  @Override
-  public void tableConfiguration(IntrospectedTable introspectedTable) {
-    if (!this.getPlugins(ITableConfigurationHook.class).isEmpty()) {
-      this.getPlugins(ITableConfigurationHook.class).get(0).tableConfiguration(introspectedTable);
-    }
-  }
-
-  // ============================================= ILogicalDeletePluginHook ==============================================
-
-  @Override
-  public boolean clientLogicalDeleteByExampleMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
-      if (!plugin.clientLogicalDeleteByExampleMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean clientLogicalDeleteByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
-    for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
-      if (!plugin.clientLogicalDeleteByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean sqlMapLogicalDeleteByExampleElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue,
-      IntrospectedTable introspectedTable) {
-    for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
-      if (!plugin.sqlMapLogicalDeleteByExampleElementGenerated(document, element, logicalDeleteColumn, logicalDeleteValue, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean sqlMapLogicalDeleteByPrimaryKeyElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue,
-      IntrospectedTable introspectedTable) {
-    for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
-      if (!plugin.sqlMapLogicalDeleteByPrimaryKeyElementGenerated(document, element, logicalDeleteColumn, logicalDeleteValue, introspectedTable)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  @Override
-  public boolean logicalDeleteEnumGenerated(IntrospectedColumn logicalDeleteColumn) {
-    for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
-      if (plugin.logicalDeleteEnumGenerated(logicalDeleteColumn)) {
+    @Override
+    public boolean modelBuilderClassGenerated(TopLevelClass topLevelClass, InnerClass builderClass, List<IntrospectedColumn> columns, IntrospectedTable introspectedTable) {
+        for (IModelBuilderPluginHook plugin : this.getPlugins(IModelBuilderPluginHook.class)) {
+            if (!plugin.modelBuilderClassGenerated(topLevelClass, builderClass, columns, introspectedTable)) {
+                return false;
+            }
+        }
         return true;
-      }
     }
-    return false;
-  }
 
-  // ============================================= ILombokPluginHook ==============================================
+    @Override
+    public boolean modelBuilderSetterMethodGenerated(Method method, TopLevelClass topLevelClass, InnerClass builderClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable) {
+        for (IModelBuilderPluginHook plugin : this.getPlugins(IModelBuilderPluginHook.class)) {
+            if (!plugin.modelBuilderSetterMethodGenerated(method, topLevelClass, builderClass, introspectedColumn, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-  @Override
-  public boolean modelBaseRecordBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-    for (ILombokPluginHook plugin : this.getPlugins(ILombokPluginHook.class)) {
-      if (!plugin.modelBaseRecordBuilderClassGenerated(topLevelClass, introspectedTable)) {
+    // ================================================= IUpsertPluginHook ===============================================
+
+    @Override
+    public boolean clientUpsertSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
+            if (!plugin.clientUpsertSelectiveMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean clientUpsertByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
+            if (!plugin.clientUpsertByExampleSelectiveMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapUpsertSelectiveElementGenerated(XmlElement element, List<IntrospectedColumn> columns, XmlElement insertColumnsEle, XmlElement insertValuesEle, XmlElement setsEle,
+            IntrospectedTable introspectedTable) {
+        for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
+            if (!plugin.sqlMapUpsertSelectiveElementGenerated(element, columns, insertColumnsEle, insertValuesEle, setsEle, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapUpsertByExampleSelectiveElementGenerated(XmlElement element, List<IntrospectedColumn> columns, XmlElement insertColumnsEle, XmlElement insertValuesEle, XmlElement setsEle,
+            IntrospectedTable introspectedTable) {
+        for (IUpsertPluginHook plugin : this.getPlugins(IUpsertPluginHook.class)) {
+            if (!plugin.sqlMapUpsertByExampleSelectiveElementGenerated(element, columns, insertColumnsEle, insertValuesEle, setsEle, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // ================================================= IOptimisticLockerPluginHook ===============================================
+
+    @Override
+    public boolean clientUpdateWithVersionByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (IOptimisticLockerPluginHook plugin : this.getPlugins(IOptimisticLockerPluginHook.class)) {
+            if (!plugin.clientUpdateWithVersionByExampleSelectiveMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (IOptimisticLockerPluginHook plugin : this.getPlugins(IOptimisticLockerPluginHook.class)) {
+            if (!plugin.clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean generateSetsSelectiveElement(List<IntrospectedColumn> columns, IntrospectedColumn versionColumn, XmlElement setsElement) {
+        if (this.getPlugins(IOptimisticLockerPluginHook.class).isEmpty()) {
+            return false;
+        } else {
+            return this.getPlugins(IOptimisticLockerPluginHook.class).get(0).generateSetsSelectiveElement(columns, versionColumn, setsElement);
+        }
+    }
+
+    // ============================================= ISelectOneByExamplePluginHook ==============================================
+
+    @Override
+    public boolean clientSelectOneByExampleWithBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
+            if (!plugin.clientSelectOneByExampleWithBLOBsMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean clientSelectOneByExampleWithoutBLOBsMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
+            if (!plugin.clientSelectOneByExampleWithoutBLOBsMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapSelectOneByExampleWithoutBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable) {
+        for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
+            if (!plugin.sqlMapSelectOneByExampleWithoutBLOBsElementGenerated(document, element, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapSelectOneByExampleWithBLOBsElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable) {
+        for (ISelectOneByExamplePluginHook plugin : this.getPlugins(ISelectOneByExamplePluginHook.class)) {
+            if (!plugin.sqlMapSelectOneByExampleWithBLOBsElementGenerated(document, element, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // ============================================= ITableConfigurationHook ==============================================
+
+    @Override
+    public void tableConfiguration(IntrospectedTable introspectedTable) {
+        if (!this.getPlugins(ITableConfigurationHook.class).isEmpty()) {
+            this.getPlugins(ITableConfigurationHook.class).get(0).tableConfiguration(introspectedTable);
+        }
+    }
+
+    // ============================================= ILogicalDeletePluginHook ==============================================
+
+    @Override
+    public boolean clientLogicalDeleteByExampleMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
+            if (!plugin.clientLogicalDeleteByExampleMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean clientLogicalDeleteByPrimaryKeyMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable) {
+        for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
+            if (!plugin.clientLogicalDeleteByPrimaryKeyMethodGenerated(method, interfaze, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapLogicalDeleteByExampleElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue,
+            IntrospectedTable introspectedTable) {
+        for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
+            if (!plugin.sqlMapLogicalDeleteByExampleElementGenerated(document, element, logicalDeleteColumn, logicalDeleteValue, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean sqlMapLogicalDeleteByPrimaryKeyElementGenerated(Document document, XmlElement element, IntrospectedColumn logicalDeleteColumn, String logicalDeleteValue,
+            IntrospectedTable introspectedTable) {
+        for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
+            if (!plugin.sqlMapLogicalDeleteByPrimaryKeyElementGenerated(document, element, logicalDeleteColumn, logicalDeleteValue, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean logicalDeleteEnumGenerated(IntrospectedColumn logicalDeleteColumn) {
+        for (ILogicalDeletePluginHook plugin : this.getPlugins(ILogicalDeletePluginHook.class)) {
+            if (plugin.logicalDeleteEnumGenerated(logicalDeleteColumn)) {
+                return true;
+            }
+        }
         return false;
-      }
     }
-    return true;
-  }
 
-  @Override
-  public boolean modelPrimaryKeyBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-    for (ILombokPluginHook plugin : this.getPlugins(ILombokPluginHook.class)) {
-      if (!plugin.modelPrimaryKeyBuilderClassGenerated(topLevelClass, introspectedTable)) {
-        return false;
-      }
+    // ============================================= ILombokPluginHook ==============================================
+
+    @Override
+    public boolean modelBaseRecordBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        for (ILombokPluginHook plugin : this.getPlugins(ILombokPluginHook.class)) {
+            if (!plugin.modelBaseRecordBuilderClassGenerated(topLevelClass, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-  }
 
-  @Override
-  public boolean modelRecordWithBLOBsBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-    for (ILombokPluginHook plugin : this.getPlugins(ILombokPluginHook.class)) {
-      if (!plugin.modelRecordWithBLOBsBuilderClassGenerated(topLevelClass, introspectedTable)) {
-        return false;
-      }
+    @Override
+    public boolean modelPrimaryKeyBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        for (ILombokPluginHook plugin : this.getPlugins(ILombokPluginHook.class)) {
+            if (!plugin.modelPrimaryKeyBuilderClassGenerated(topLevelClass, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-  }
 
-  // ============================================= ISelectSelectivePluginHook ==============================================
-
-  @Override
-  public boolean sqlMapSelectByExampleSelectiveElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable) {
-    for (ISelectSelectivePluginHook plugin : this.getPlugins(ISelectSelectivePluginHook.class)) {
-      if (!plugin.sqlMapSelectByExampleSelectiveElementGenerated(document, element, introspectedTable)) {
-        return false;
-      }
+    @Override
+    public boolean modelRecordWithBLOBsBuilderClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        for (ILombokPluginHook plugin : this.getPlugins(ILombokPluginHook.class)) {
+            if (!plugin.modelRecordWithBLOBsBuilderClassGenerated(topLevelClass, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-  }
 
-  // ============================================= IModelColumnPluginHook ==============================================
+    // ============================================= ISelectSelectivePluginHook ==============================================
 
-  @Override
-  public boolean modelColumnEnumGenerated(InnerEnum innerEnum, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
-    for (IModelColumnPluginHook plugin : this.getPlugins(IModelColumnPluginHook.class)) {
-      if (!plugin.modelColumnEnumGenerated(innerEnum, topLevelClass, introspectedTable)) {
-        return false;
-      }
+    @Override
+    public boolean sqlMapSelectByExampleSelectiveElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable) {
+        for (ISelectSelectivePluginHook plugin : this.getPlugins(ISelectSelectivePluginHook.class)) {
+            if (!plugin.sqlMapSelectByExampleSelectiveElementGenerated(document, element, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
     }
-    return true;
-  }
+
+    // ============================================= IModelColumnPluginHook ==============================================
+
+    @Override
+    public boolean modelColumnEnumGenerated(InnerEnum innerEnum, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        for (IModelColumnPluginHook plugin : this.getPlugins(IModelColumnPluginHook.class)) {
+            if (!plugin.modelColumnEnumGenerated(innerEnum, topLevelClass, introspectedTable)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

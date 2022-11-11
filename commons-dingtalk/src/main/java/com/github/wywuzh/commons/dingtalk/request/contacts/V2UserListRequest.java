@@ -28,6 +28,6 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class V2UserListRequest extends UserListsimpleRequest {
-  private static final long serialVersionUID = 2115787223281135652L;
+    private static final long serialVersionUID = 2115787223281135652L;
 
 }
