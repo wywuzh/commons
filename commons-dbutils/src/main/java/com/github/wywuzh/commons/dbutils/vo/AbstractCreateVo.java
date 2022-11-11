@@ -27,31 +27,31 @@ import java.util.Date;
  * @since JDK 1.7
  */
 public abstract class AbstractCreateVo extends AbstractVo implements Created {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 创建人
-   */
-  private String createUser;
-  /**
-   * 创建时间
-   */
-  private Date createTime;
+    /**
+     * 创建人
+     */
+    private String createUser;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
-  public String getCreateUser() {
-    return createUser;
-  }
+    public String getCreateUser() {
+        return createUser;
+    }
 
-  public void setCreateUser(String createUser) {
-    this.createUser = createUser;
-  }
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
-  public Date getCreateTime() {
-    return createTime;
-  }
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
 }

@@ -30,12 +30,12 @@ import lombok.Data;
  */
 @Data
 public class UserGetByMobile implements Serializable {
-  private static final long serialVersionUID = -2409453649718773300L;
+    private static final long serialVersionUID = -2409453649718773300L;
 
-  /**
-   * 员工的userid
-   */
-  @SerializedName(value = "userid")
-  private String userid;
+    /**
+     * 员工的userid
+     */
+    @SerializedName(value = "userid")
+    private String userid;
 
 }

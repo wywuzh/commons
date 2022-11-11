@@ -29,5 +29,5 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  */
 public interface ISelectSelectivePluginHook {
 
-  boolean sqlMapSelectByExampleSelectiveElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable);
+    boolean sqlMapSelectByExampleSelectiveElementGenerated(Document document, XmlElement element, IntrospectedTable introspectedTable);
 }

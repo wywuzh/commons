@@ -30,29 +30,29 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  *                 ---------------------------------------------------------------------------
  */
 public interface IIncrementsPluginHook {
-  /**
-   * 生成增量操作节点
-   * 
-   * @param introspectedColumn
-   * @param prefix
-   * @param hasComma
-   * @return
-   */
-  List<Element> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma);
+    /**
+     * 生成增量操作节点
+     * 
+     * @param introspectedColumn
+     * @param prefix
+     * @param hasComma
+     * @return
+     */
+    List<Element> incrementSetElementGenerated(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma);
 
-  /**
-   * 生成增量操作节点(SelectiveEnhancedPlugin)
-   * 
-   * @param columns
-   * @return
-   */
-  List<XmlElement> incrementSetsWithSelectiveEnhancedPluginElementGenerated(List<IntrospectedColumn> columns);
+    /**
+     * 生成增量操作节点(SelectiveEnhancedPlugin)
+     * 
+     * @param columns
+     * @return
+     */
+    List<XmlElement> incrementSetsWithSelectiveEnhancedPluginElementGenerated(List<IntrospectedColumn> columns);
 
-  /**
-   * 是否支持increment
-   * 
-   * @param column
-   * @return
-   */
-  boolean supportIncrement(IntrospectedColumn column);
+    /**
+     * 是否支持increment
+     * 
+     * @param column
+     * @return
+     */
+    boolean supportIncrement(IntrospectedColumn column);
 }

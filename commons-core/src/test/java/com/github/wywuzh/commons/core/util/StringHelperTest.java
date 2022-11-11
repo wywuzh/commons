@@ -27,13 +27,13 @@ import org.slf4j.LoggerFactory;
  * @since JDK 1.8
  */
 public class StringHelperTest {
-  private final Logger logger = LoggerFactory.getLogger(StringHelperTest.class);
+    private final Logger logger = LoggerFactory.getLogger(StringHelperTest.class);
 
-  @Test
-  public void lengthTest() {
-    String content = "是否启用JSR303标准注解验证";
-    int length = StringHelper.length(content);
-    logger.info("{} --> {}", content, length);
-  }
+    @Test
+    public void lengthTest() {
+        String content = "是否启用JSR303标准注解验证";
+        int length = StringHelper.length(content);
+        logger.info("{} --> {}", content, length);
+    }
 
 }

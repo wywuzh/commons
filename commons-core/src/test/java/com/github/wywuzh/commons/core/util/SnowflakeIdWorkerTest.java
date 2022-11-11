@@ -31,24 +31,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SnowflakeIdWorkerTest {
 
-  public static void main(String[] args) {
-    SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker();
-    long nextId = snowflakeIdWorker.nextId();
-    log.info("idWorker.nextId={}, 长度={}", nextId, String.valueOf(nextId).length());
-    String nextIdHex = String.format("%x", nextId);
-    log.info("idWorker.nextIdHex={}, 长度={}", nextIdHex, nextIdHex.length());
-    nextIdHex = SnowflakeIdWorker.nextIdHex();
-    log.info("idWorker.nextIdHex={}, 长度={}", nextIdHex, nextIdHex.length());
+    public static void main(String[] args) {
+        SnowflakeIdWorker snowflakeIdWorker = new SnowflakeIdWorker();
+        long nextId = snowflakeIdWorker.nextId();
+        log.info("idWorker.nextId={}, 长度={}", nextId, String.valueOf(nextId).length());
+        String nextIdHex = String.format("%x", nextId);
+        log.info("idWorker.nextIdHex={}, 长度={}", nextIdHex, nextIdHex.length());
+        nextIdHex = SnowflakeIdWorker.nextIdHex();
+        log.info("idWorker.nextIdHex={}, 长度={}", nextIdHex, nextIdHex.length());
 
-    long nextLongId = 1002579559079514112L;
-    log.info("nextLongId={}, 长度={}", nextLongId, String.valueOf(nextId).length());
-    String nextLongIdHex = String.format("%x", nextLongId);
-    log.info("nextLongIdHex={}, 长度={}", nextLongIdHex, nextLongIdHex.length());
+        long nextLongId = 1002579559079514112L;
+        log.info("nextLongId={}, 长度={}", nextLongId, String.valueOf(nextId).length());
+        String nextLongIdHex = String.format("%x", nextLongId);
+        log.info("nextLongIdHex={}, 长度={}", nextLongIdHex, nextLongIdHex.length());
 
-    final long twepoch = 1288834974657L;
-    log.info("开始时间:{}", DateUtils.format(new Date(twepoch), DateUtils.PATTERN_DATE_TIME));
+        final long twepoch = 1288834974657L;
+        log.info("开始时间:{}", DateUtils.format(new Date(twepoch), DateUtils.PATTERN_DATE_TIME));
 
-    log.info("开始时间戳:{}", DateUtils.parse("2015-01-01", DateUtils.PATTERN_DATE).getTime());
-  }
+        log.info("开始时间戳:{}", DateUtils.parse("2015-01-01", DateUtils.PATTERN_DATE).getTime());
+    }
 
 }

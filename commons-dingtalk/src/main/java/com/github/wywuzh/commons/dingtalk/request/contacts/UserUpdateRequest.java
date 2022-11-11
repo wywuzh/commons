@@ -31,14 +31,14 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class UserUpdateRequest extends UserCreateRequest {
-  private static final long serialVersionUID = 5738700162274534575L;
+    private static final long serialVersionUID = 5738700162274534575L;
 
-  /**
-   * 通讯录语言：
-   * zh_CN：中文
-   * en_US：英文
-   */
-  @SerializedName(value = "language")
-  private String language = Language.zh_CN.getLang();
+    /**
+     * 通讯录语言：
+     * zh_CN：中文
+     * en_US：英文
+     */
+    @SerializedName(value = "language")
+    private String language = Language.zh_CN.getLang();
 
 }

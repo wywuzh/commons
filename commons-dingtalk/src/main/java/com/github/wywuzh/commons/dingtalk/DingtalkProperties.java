@@ -30,17 +30,17 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "dingtalk")
 public class DingtalkProperties {
 
-  /**
-   * 应用的agentId
-   */
-  private String agentId;
-  /**
-   * 应用的唯一标识key
-   */
-  private String appKey;
-  /**
-   * 应用的密钥
-   */
-  private String appSecret;
+    /**
+     * 应用的agentId
+     */
+    private String agentId;
+    /**
+     * 应用的唯一标识key
+     */
+    private String appKey;
+    /**
+     * 应用的密钥
+     */
+    private String appSecret;
 
 }

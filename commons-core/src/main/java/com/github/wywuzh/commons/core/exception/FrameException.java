@@ -23,22 +23,22 @@ package com.github.wywuzh.commons.core.exception;
  * @since JDK 1.7
  */
 public class FrameException extends RuntimeException {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  public FrameException() {
-    super();
-  }
+    public FrameException() {
+        super();
+    }
 
-  public FrameException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public FrameException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public FrameException(String message) {
-    super(message);
-  }
+    public FrameException(String message) {
+        super(message);
+    }
 
-  public FrameException(Throwable cause) {
-    super(cause);
-  }
+    public FrameException(Throwable cause) {
+        super(cause);
+    }
 
 }

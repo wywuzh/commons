@@ -30,43 +30,43 @@ import org.apache.poi.ss.usermodel.Sheet;
  */
 public class CustomFreezeRowColHandler extends AbstractSheetWriteHandler {
 
-  /**
-   * 要冻结的列，从0开始
-   */
-  private Integer colSplit;
-  /**
-   * 要冻结的行，从0开始
-   */
-  private Integer rowSplit;
-  /**
-   * 右边区域[可见]的首列序号，从0开始
-   */
-  private Integer leftmostColumn;
-  /**
-   * 下边区域[可见]的首行序号，从0开始
-   */
-  private Integer topRow;
+    /**
+     * 要冻结的列，从0开始
+     */
+    private Integer colSplit;
+    /**
+     * 要冻结的行，从0开始
+     */
+    private Integer rowSplit;
+    /**
+     * 右边区域[可见]的首列序号，从0开始
+     */
+    private Integer leftmostColumn;
+    /**
+     * 下边区域[可见]的首行序号，从0开始
+     */
+    private Integer topRow;
 
-  public CustomFreezeRowColHandler() {
-    this(0, 1, 0, 1);
-  }
+    public CustomFreezeRowColHandler() {
+        this(0, 1, 0, 1);
+    }
 
-  public CustomFreezeRowColHandler(int colSplit, int rowSplit) {
-    this(colSplit, rowSplit, colSplit, rowSplit);
-  }
+    public CustomFreezeRowColHandler(int colSplit, int rowSplit) {
+        this(colSplit, rowSplit, colSplit, rowSplit);
+    }
 
-  public CustomFreezeRowColHandler(int colSplit, int rowSplit, int leftmostColumn, int topRow) {
-    this.colSplit = colSplit;
-    this.rowSplit = rowSplit;
-    this.leftmostColumn = leftmostColumn;
-    this.topRow = topRow;
-  }
+    public CustomFreezeRowColHandler(int colSplit, int rowSplit, int leftmostColumn, int topRow) {
+        this.colSplit = colSplit;
+        this.rowSplit = rowSplit;
+        this.leftmostColumn = leftmostColumn;
+        this.topRow = topRow;
+    }
 
-  @Override
-  public void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
-    Sheet sheet = writeSheetHolder.getSheet();
+    @Override
+    public void afterSheetCreate(WriteWorkbookHolder writeWorkbookHolder, WriteSheetHolder writeSheetHolder) {
+        Sheet sheet = writeSheetHolder.getSheet();
 
-    // 冻结行列
-    sheet.createFreezePane(colSplit, rowSplit, leftmostColumn, topRow);
-  }
+        // 冻结行列
+        sheet.createFreezePane(colSplit, rowSplit, leftmostColumn, topRow);
+    }
 }

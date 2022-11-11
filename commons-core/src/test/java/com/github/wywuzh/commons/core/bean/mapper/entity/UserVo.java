@@ -29,33 +29,33 @@ import lombok.Data;
 @Data
 public class UserVo {
 
-  /**
-   * 用户名
-   */
-  private String username;
-  /**
-   * 昵称
-   */
-  private String nickname;
-  /**
-   * 邮箱
-   */
-  private String email;
-  /**
-   * 手机号
-   */
-  private String mobile;
-  /**
-   * 性别
-   */
-  private String sex;
-  /**
-   * 出生日期
-   */
-  private Date birthdate;
-  /**
-   * 出生日期
-   */
-  private String birthdateFormat;
+    /**
+     * 用户名
+     */
+    private String username;
+    /**
+     * 昵称
+     */
+    private String nickname;
+    /**
+     * 邮箱
+     */
+    private String email;
+    /**
+     * 手机号
+     */
+    private String mobile;
+    /**
+     * 性别
+     */
+    private String sex;
+    /**
+     * 出生日期
+     */
+    private Date birthdate;
+    /**
+     * 出生日期
+     */
+    private String birthdateFormat;
 
 }

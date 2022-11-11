@@ -28,13 +28,13 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
  *                ---------------------------------------------------------------------------
  */
 public interface IModelColumnPluginHook {
-  /**
-   * Model Column 枚举生成
-   * 
-   * @param innerEnum
-   * @param topLevelClass
-   * @param introspectedTable
-   * @return
-   */
-  boolean modelColumnEnumGenerated(InnerEnum innerEnum, TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
+    /**
+     * Model Column 枚举生成
+     * 
+     * @param innerEnum
+     * @param topLevelClass
+     * @param introspectedTable
+     * @return
+     */
+    boolean modelColumnEnumGenerated(InnerEnum innerEnum, TopLevelClass topLevelClass, IntrospectedTable introspectedTable);
 }

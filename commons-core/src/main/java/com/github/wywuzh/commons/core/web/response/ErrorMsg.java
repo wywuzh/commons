@@ -26,55 +26,55 @@ import java.io.Serializable;
  */
 public class ErrorMsg implements Serializable {
 
-  /**
-   * 错误编码：01=参数错误
-   */
-  private String code;
-  /**
-   * 错误字段
-   */
-  private String field;
-  /**
-   * 错误信息
-   */
-  private String message;
+    /**
+     * 错误编码：01=参数错误
+     */
+    private String code;
+    /**
+     * 错误字段
+     */
+    private String field;
+    /**
+     * 错误信息
+     */
+    private String message;
 
-  public ErrorMsg() {
-  }
+    public ErrorMsg() {
+    }
 
-  public ErrorMsg(String field, String message) {
-    this.code = "01";
-    this.field = field;
-    this.message = message;
-  }
+    public ErrorMsg(String field, String message) {
+        this.code = "01";
+        this.field = field;
+        this.message = message;
+    }
 
-  public ErrorMsg(String code, String field, String message) {
-    this.code = code;
-    this.field = field;
-    this.message = message;
-  }
+    public ErrorMsg(String code, String field, String message) {
+        this.code = code;
+        this.field = field;
+        this.message = message;
+    }
 
-  public String getCode() {
-    return code;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-  public String getField() {
-    return field;
-  }
+    public String getField() {
+        return field;
+    }
 
-  public void setField(String field) {
-    this.field = field;
-  }
+    public void setField(String field) {
+        this.field = field;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

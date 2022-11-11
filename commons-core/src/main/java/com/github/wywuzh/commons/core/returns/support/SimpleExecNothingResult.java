@@ -26,27 +26,27 @@ import com.github.wywuzh.commons.core.returns.ReturnCode;
  * @since JDK 1.7.0_71
  */
 public class SimpleExecNothingResult extends ReturnBase {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  public SimpleExecNothingResult() {
-    super();
-  }
+    public SimpleExecNothingResult() {
+        super();
+    }
 
-  public SimpleExecNothingResult(ReturnCode returnCode, String message) {
-    super(returnCode, message);
-  }
+    public SimpleExecNothingResult(ReturnCode returnCode, String message) {
+        super(returnCode, message);
+    }
 
-  public SimpleExecNothingResult(ReturnCode returnCode) {
-    super(returnCode);
-  }
+    public SimpleExecNothingResult(ReturnCode returnCode) {
+        super(returnCode);
+    }
 
-  @Override
-  public String toString() {
-    StringBuilder result = new StringBuilder("SimpleExecResult [");
-    result.append("returnCode=").append(getReturnCode()).append(",");
-    result.append("message=").append(getMessage());
-    result.append("]");
-    return result.toString();
-  }
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("SimpleExecResult [");
+        result.append("returnCode=").append(getReturnCode()).append(",");
+        result.append("message=").append(getMessage());
+        result.append("]");
+        return result.toString();
+    }
 
 }

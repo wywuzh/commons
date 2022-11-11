@@ -28,17 +28,17 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class PropertiesUtils {
 
-  /**
-   * 获取属性值
-   *
-   * @param properties
-   * @param key          the hashtable key.
-   * @param defaultValue a default value.
-   * @return the value in this property list with the specified key value.
-   */
-  public static String getProperty(Properties properties, String key, String defaultValue) {
-    String val = properties.getProperty(key);
-    return StringUtils.isBlank(val) ? defaultValue : val;
-  }
+    /**
+     * 获取属性值
+     *
+     * @param properties
+     * @param key          the hashtable key.
+     * @param defaultValue a default value.
+     * @return the value in this property list with the specified key value.
+     */
+    public static String getProperty(Properties properties, String key, String defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : val;
+    }
 
 }

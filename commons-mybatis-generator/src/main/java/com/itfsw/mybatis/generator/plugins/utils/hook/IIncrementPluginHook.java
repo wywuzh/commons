@@ -29,38 +29,38 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  *                 ---------------------------------------------------------------------------
  */
 public interface IIncrementPluginHook {
-  /**
-   * 生成增量操作节点
-   * 
-   * @param introspectedColumn
-   * @param prefix
-   * @param hasComma
-   * @return
-   */
-  XmlElement generateIncrementSet(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma);
+    /**
+     * 生成增量操作节点
+     * 
+     * @param introspectedColumn
+     * @param prefix
+     * @param hasComma
+     * @return
+     */
+    XmlElement generateIncrementSet(IntrospectedColumn introspectedColumn, String prefix, boolean hasComma);
 
-  /**
-   * 生成增量操作节点
-   * 
-   * @param introspectedColumn
-   * @param prefix
-   * @return
-   */
-  XmlElement generateIncrementSetSelective(IntrospectedColumn introspectedColumn, String prefix);
+    /**
+     * 生成增量操作节点
+     * 
+     * @param introspectedColumn
+     * @param prefix
+     * @return
+     */
+    XmlElement generateIncrementSetSelective(IntrospectedColumn introspectedColumn, String prefix);
 
-  /**
-   * 生成增量操作节点(SelectiveEnhancedPlugin)
-   * 
-   * @param columns
-   * @return
-   */
-  List<XmlElement> generateIncrementSetForSelectiveEnhancedPlugin(List<IntrospectedColumn> columns);
+    /**
+     * 生成增量操作节点(SelectiveEnhancedPlugin)
+     * 
+     * @param columns
+     * @return
+     */
+    List<XmlElement> generateIncrementSetForSelectiveEnhancedPlugin(List<IntrospectedColumn> columns);
 
-  /**
-   * 是否支持increment
-   * 
-   * @param column
-   * @return
-   */
-  boolean supportIncrement(IntrospectedColumn column);
+    /**
+     * 是否支持increment
+     * 
+     * @param column
+     * @return
+     */
+    boolean supportIncrement(IntrospectedColumn column);
 }

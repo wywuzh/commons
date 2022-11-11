@@ -26,31 +26,31 @@ package com.github.wywuzh.commons.core.enums;
 @Deprecated
 public enum SystemFlag {
 
-  /**
-   *
-   */
-  TRUE("1"),
-  /**
-   *
-   */
-  FALSE("0");
+    /**
+     *
+     */
+    TRUE("1"),
+    /**
+     *
+     */
+    FALSE("0");
 
-  private String value;
+    private String value;
 
-  private SystemFlag(String value) {
-    this.value = value;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public static SystemFlag findByValue(String value) {
-    if ("0".equals(value)) {
-      return FALSE;
-    } else if ("1".equals(value)) {
-      return TRUE;
+    private SystemFlag(String value) {
+        this.value = value;
     }
-    return null;
-  }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static SystemFlag findByValue(String value) {
+        if ("0".equals(value)) {
+            return FALSE;
+        } else if ("1".equals(value)) {
+            return TRUE;
+        }
+        return null;
+    }
 }
