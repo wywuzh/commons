@@ -27,35 +27,35 @@ import java.util.Date;
  * @since JDK 1.7
  */
 public abstract class AbstractCreateEntity extends AbstractEntity implements Created {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 创建人
-   */
-  private String createUser;
-  /**
-   * 创建时间
-   */
-  private Date createTime;
+    /**
+     * 创建人
+     */
+    private String createUser;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
 
-  @Override
-  public String getCreateUser() {
-    return createUser;
-  }
+    @Override
+    public String getCreateUser() {
+        return createUser;
+    }
 
-  @Override
-  public void setCreateUser(String createUser) {
-    this.createUser = createUser;
-  }
+    @Override
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
-  @Override
-  public Date getCreateTime() {
-    return createTime;
-  }
+    @Override
+    public Date getCreateTime() {
+        return createTime;
+    }
 
-  @Override
-  public void setCreateTime(Date createTime) {
-    this.createTime = createTime;
-  }
+    @Override
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
 
 }

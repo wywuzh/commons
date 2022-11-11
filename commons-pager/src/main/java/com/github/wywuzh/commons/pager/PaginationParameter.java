@@ -28,63 +28,63 @@ import org.springframework.util.CollectionUtils;
  * @since JDK 1.8
  */
 public class PaginationParameter<P extends Serializable> extends PageImpl implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 查询条件
-   */
-  private P vo;
+    /**
+     * 查询条件
+     */
+    private P vo;
 
-  /**
-   * 排序字段
-   */
-  private List<Sort> sorts;
+    /**
+     * 排序字段
+     */
+    private List<Sort> sorts;
 
-  public PaginationParameter() {
-    super();
-  }
-
-  public PaginationParameter(int pageNo, int pageSize) {
-    super(pageNo, pageSize);
-  }
-
-  public P getVo() {
-    return vo;
-  }
-
-  public void setVo(P vo) {
-    this.vo = vo;
-  }
-
-  @Override
-  public long getRowCount() {
-    return 0;
-  }
-
-  @Override
-  public List<Sort> getSorts() {
-    return sorts;
-  }
-
-  public void setSorts(List<Sort> sorts) {
-    this.sorts = sorts;
-  }
-
-  /**
-   * 生成排序sql
-   *
-   * @return 排序sql
-   * @since v2.3.7
-   */
-  public String generateOrderSql() {
-    List<Sort> sorts = this.getSorts();
-    if (CollectionUtils.isEmpty(sorts)) {
-      return "";
+    public PaginationParameter() {
+        super();
     }
-    StringBuilder orderSql = new StringBuilder(" order by ");
-    for (Sort sort : sorts) {
-      orderSql.append(sort.getOrder()).append(" ").append(sort.getOrder().getValue());
+
+    public PaginationParameter(int pageNo, int pageSize) {
+        super(pageNo, pageSize);
     }
-    return orderSql.toString();
-  }
+
+    public P getVo() {
+        return vo;
+    }
+
+    public void setVo(P vo) {
+        this.vo = vo;
+    }
+
+    @Override
+    public long getRowCount() {
+        return 0;
+    }
+
+    @Override
+    public List<Sort> getSorts() {
+        return sorts;
+    }
+
+    public void setSorts(List<Sort> sorts) {
+        this.sorts = sorts;
+    }
+
+    /**
+     * 生成排序sql
+     *
+     * @return 排序sql
+     * @since v2.3.7
+     */
+    public String generateOrderSql() {
+        List<Sort> sorts = this.getSorts();
+        if (CollectionUtils.isEmpty(sorts)) {
+            return "";
+        }
+        StringBuilder orderSql = new StringBuilder(" order by ");
+        for (Sort sort : sorts) {
+            orderSql.append(sort.getOrder()).append(" ").append(sort.getOrder().getValue());
+        }
+        return orderSql.toString();
+    }
 }

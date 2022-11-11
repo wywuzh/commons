@@ -51,75 +51,75 @@ import org.slf4j.LoggerFactory;
  */
 @Slf4j
 public class MapStructTest {
-  private final Logger logger = LoggerFactory.getLogger(MapStructTest.class);
+    private final Logger logger = LoggerFactory.getLogger(MapStructTest.class);
 
-  // 单个对象映射
-  @Test
-  public void UserToUserVo() {
-    User user = new User();
-    user.setUsername("wywuzh");
-    user.setNick("那家伙！！");
-    user.setEmail("wywuzh@163.com");
-    user.setMobile("18500000000");
-    user.setSex("男");
-    user.setBirthdate(new Date());
+    // 单个对象映射
+    @Test
+    public void UserToUserVo() {
+        User user = new User();
+        user.setUsername("wywuzh");
+        user.setNick("那家伙！！");
+        user.setEmail("wywuzh@163.com");
+        user.setMobile("18500000000");
+        user.setSex("男");
+        user.setBirthdate(new Date());
 
-    UserVo userVo = BeanMapperFactory.MAPPER_FACTORY.UserToUserVo(user);
-    log.info("转换结果：{}", userVo);
-  }
+        UserVo userVo = BeanMapperFactory.MAPPER_FACTORY.UserToUserVo(user);
+        log.info("转换结果：{}", userVo);
+    }
 
-  // 对象集合映射
-  @Test
-  public void UserToUserVos() {
-    User user = new User();
-    user.setUsername("wywuzh");
-    user.setNick("那家伙！！");
-    user.setEmail("wywuzh@163.com");
-    user.setMobile("18500000000");
-    user.setSex("男");
-    user.setBirthdate(new Date());
-    List<User> list = new ArrayList<>();
-    list.add(user);
+    // 对象集合映射
+    @Test
+    public void UserToUserVos() {
+        User user = new User();
+        user.setUsername("wywuzh");
+        user.setNick("那家伙！！");
+        user.setEmail("wywuzh@163.com");
+        user.setMobile("18500000000");
+        user.setSex("男");
+        user.setBirthdate(new Date());
+        List<User> list = new ArrayList<>();
+        list.add(user);
 
-    List<UserVo> userVoList = BeanMapperFactory.MAPPER_FACTORY.UserToUserVos(list);
-    log.info("转换结果：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(userVoList));
-  }
+        List<UserVo> userVoList = BeanMapperFactory.MAPPER_FACTORY.UserToUserVos(list);
+        log.info("转换结果：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(userVoList));
+    }
 
-  @Test
-  public void Inverse() {
-    User user = new User();
-    user.setUsername("wywuzh");
-    user.setNick("那家伙！！");
-    user.setEmail("wywuzh@163.com");
-    user.setMobile("18500000000");
-    user.setSex("男");
-    user.setBirthdate(new Date());
+    @Test
+    public void Inverse() {
+        User user = new User();
+        user.setUsername("wywuzh");
+        user.setNick("那家伙！！");
+        user.setEmail("wywuzh@163.com");
+        user.setMobile("18500000000");
+        user.setSex("男");
+        user.setBirthdate(new Date());
 
-    UserVo userVo = BeanMapperFactory.MAPPER_FACTORY.UserToUserVo(user);
-    log.info("转换结果：{}", userVo);
+        UserVo userVo = BeanMapperFactory.MAPPER_FACTORY.UserToUserVo(user);
+        log.info("转换结果：{}", userVo);
 
-    // Inverse 反转
-    userVo.setBirthdateFormat("2020-03-01 01:01:01");
-    User inverse = BeanMapperFactory.MAPPER_FACTORY.UserVoToUser(userVo);
-    log.info("反转结果：{}", inverse);
-  }
+        // Inverse 反转
+        userVo.setBirthdateFormat("2020-03-01 01:01:01");
+        User inverse = BeanMapperFactory.MAPPER_FACTORY.UserVoToUser(userVo);
+        log.info("反转结果：{}", inverse);
+    }
 
-  @Mapper
-  public static interface BeanMapperFactory {
-    BeanMapperFactory MAPPER_FACTORY = Mappers.getMapper(BeanMapperFactory.class);
+    @Mapper
+    public static interface BeanMapperFactory {
+        BeanMapperFactory MAPPER_FACTORY = Mappers.getMapper(BeanMapperFactory.class);
 
-    @Mappings({
-        @Mapping(source = "nick", target = "nickname"), // //属性名不一致映射
-        @Mapping(target = "birthdateFormat", expression = "java(com.github.wywuzh.commons.core.util.DateUtils.format(user.getBirthdate(), com.github.wywuzh.commons.core.util.DateUtils.PATTERN_DATE_TIME))")
-    })
-    public UserVo UserToUserVo(User user);
+        @Mappings({
+                @Mapping(source = "nick", target = "nickname"), // //属性名不一致映射
+                @Mapping(target = "birthdateFormat", expression = "java(com.github.wywuzh.commons.core.util.DateUtils.format(user.getBirthdate(), com.github.wywuzh.commons.core.util.DateUtils.PATTERN_DATE_TIME))")
+        })
+        public UserVo UserToUserVo(User user);
 
-    public List<UserVo> UserToUserVos(List<User> list);
+        public List<UserVo> UserToUserVos(List<User> list);
 
-    @Mappings({
-        @Mapping(source = "nickname", target = "nick") // //属性名不一致映射
-    })
-    @InheritInverseConfiguration // Inverse反转
-    public User UserVoToUser(UserVo userVo);
-  }
+        @Mappings({
+                @Mapping(source = "nickname", target = "nick") // //属性名不一致映射
+        })
+        @InheritInverseConfiguration // Inverse反转
+        public User UserVoToUser(UserVo userVo);
+    }
 }

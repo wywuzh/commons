@@ -39,76 +39,76 @@ import org.slf4j.LoggerFactory;
  * @since JDK 1.8
  */
 public class CustomCellWriteHandler extends AbstractColumnWidthStyleStrategy {
-  private final Logger LOGGER = LoggerFactory.getLogger(CustomCellWriteHandler.class);
+    private final Logger LOGGER = LoggerFactory.getLogger(CustomCellWriteHandler.class);
 
-  /**
-   * 列的长度
-   */
-  private Integer[] columnLengths;
-  /**
-   * key=sheetNo, value=Map&lt;columnIndex,maxColumnWidth&gt;
-   */
-  private Map<Integer, Map<Integer, Integer>> CACHE = new HashMap<>();
+    /**
+     * 列的长度
+     */
+    private Integer[] columnLengths;
+    /**
+     * key=sheetNo, value=Map&lt;columnIndex,maxColumnWidth&gt;
+     */
+    private Map<Integer, Map<Integer, Integer>> CACHE = new HashMap<>();
 
-  public CustomCellWriteHandler() {
-  }
-
-  public CustomCellWriteHandler(Integer[] columnLengths) {
-    this.columnLengths = columnLengths;
-  }
-
-  @Override
-  protected void setColumnWidth(WriteSheetHolder writeSheetHolder, List<WriteCellData<?>> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
-    boolean needSetWidth = isHead || !CollectionUtils.isEmpty(cellDataList);
-    if (!needSetWidth) {
-      return;
+    public CustomCellWriteHandler() {
     }
-    // 列索引，从0开始
-    int columnIndex = cell.getColumnIndex();
-    if (columnLengths != null && columnLengths.length > 0) {
-      writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnLengths[columnIndex] * 30);
-    } else {
-      Map<Integer, Integer> maxColumnWidthMap = CACHE.get(writeSheetHolder.getSheetNo());
-      if (maxColumnWidthMap == null) {
-        maxColumnWidthMap = new HashMap<>();
-        CACHE.put(writeSheetHolder.getSheetNo(), maxColumnWidthMap);
-      }
 
-      Integer columnWidth = this.dataLength(cellDataList, cell, isHead);
-      if (columnWidth >= 0) {
-        if (columnWidth > 255) {
-          columnWidth = 255;
-        }
-
-        Integer maxColumnWidth = maxColumnWidthMap.get(columnIndex);
-        if (maxColumnWidth == null || columnWidth > maxColumnWidth) {
-          maxColumnWidthMap.put(columnIndex, columnWidth);
-          writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnWidth * 256);
-        }
-      }
+    public CustomCellWriteHandler(Integer[] columnLengths) {
+        this.columnLengths = columnLengths;
     }
-  }
 
-  private Integer dataLength(List<WriteCellData<?>> cellDataList, Cell cell, Boolean isHead) {
-    if (isHead) {
-      return cell.getStringCellValue().getBytes().length;
-    } else {
-      CellData cellData = cellDataList.get(0);
-      CellDataTypeEnum type = cellData.getType();
-      if (type == null) {
-        return -1;
-      } else {
-        switch (type) {
-        case STRING:
-          return cellData.getStringValue().getBytes().length;
-        case BOOLEAN:
-          return cellData.getBooleanValue().toString().getBytes().length;
-        case NUMBER:
-          return cellData.getNumberValue().toString().getBytes().length;
-        default:
-          return -1;
+    @Override
+    protected void setColumnWidth(WriteSheetHolder writeSheetHolder, List<WriteCellData<?>> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
+        boolean needSetWidth = isHead || !CollectionUtils.isEmpty(cellDataList);
+        if (!needSetWidth) {
+            return;
         }
-      }
+        // 列索引，从0开始
+        int columnIndex = cell.getColumnIndex();
+        if (columnLengths != null && columnLengths.length > 0) {
+            writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnLengths[columnIndex] * 30);
+        } else {
+            Map<Integer, Integer> maxColumnWidthMap = CACHE.get(writeSheetHolder.getSheetNo());
+            if (maxColumnWidthMap == null) {
+                maxColumnWidthMap = new HashMap<>();
+                CACHE.put(writeSheetHolder.getSheetNo(), maxColumnWidthMap);
+            }
+
+            Integer columnWidth = this.dataLength(cellDataList, cell, isHead);
+            if (columnWidth >= 0) {
+                if (columnWidth > 255) {
+                    columnWidth = 255;
+                }
+
+                Integer maxColumnWidth = maxColumnWidthMap.get(columnIndex);
+                if (maxColumnWidth == null || columnWidth > maxColumnWidth) {
+                    maxColumnWidthMap.put(columnIndex, columnWidth);
+                    writeSheetHolder.getSheet().setColumnWidth(columnIndex, columnWidth * 256);
+                }
+            }
+        }
     }
-  }
+
+    private Integer dataLength(List<WriteCellData<?>> cellDataList, Cell cell, Boolean isHead) {
+        if (isHead) {
+            return cell.getStringCellValue().getBytes().length;
+        } else {
+            CellData cellData = cellDataList.get(0);
+            CellDataTypeEnum type = cellData.getType();
+            if (type == null) {
+                return -1;
+            } else {
+                switch (type) {
+                case STRING:
+                    return cellData.getStringValue().getBytes().length;
+                case BOOLEAN:
+                    return cellData.getBooleanValue().toString().getBytes().length;
+                case NUMBER:
+                    return cellData.getNumberValue().toString().getBytes().length;
+                default:
+                    return -1;
+                }
+            }
+        }
+    }
 }

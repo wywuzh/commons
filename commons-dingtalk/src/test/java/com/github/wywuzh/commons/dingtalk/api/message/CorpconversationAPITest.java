@@ -36,52 +36,52 @@ import org.junit.Test;
 @Slf4j
 public class CorpconversationAPITest extends AbstractTest {
 
-  @Test
-  public void asyncsendV2ForVoice() {
-    CorpconversationAPI corpconversationAPI = new CorpconversationAPI(apiConfig);
+    @Test
+    public void asyncsendV2ForVoice() {
+        CorpconversationAPI corpconversationAPI = new CorpconversationAPI(apiConfig);
 
-    // 创建部门 deptId=457162465
-    AsyncsendV2Request request = new AsyncsendV2Request();
-    request.setAgentId(AGENT_ID);
-    request.setDeptIdList(null);
-    request.setToAllUser(false);
-    request.setUseridList("manager8283");
+        // 创建部门 deptId=457162465
+        AsyncsendV2Request request = new AsyncsendV2Request();
+        request.setAgentId(AGENT_ID);
+        request.setDeptIdList(null);
+        request.setToAllUser(false);
+        request.setUseridList("manager8283");
 
-    Msg msg = new Msg();
-    msg.setMsgType(MsgType.text);
-    Msg.Voice voice = new Msg.Voice();
-    voice.setDuration(null);
-    voice.setMediaId(null);
-    request.setMsg(msg);
+        Msg msg = new Msg();
+        msg.setMsgType(MsgType.text);
+        Msg.Voice voice = new Msg.Voice();
+        voice.setDuration(null);
+        voice.setMediaId(null);
+        request.setMsg(msg);
 
-    log.info("请求条件：{}", GsonUtil.format(request));
+        log.info("请求条件：{}", GsonUtil.format(request));
 
-    AsyncsendV2Response response = corpconversationAPI.asyncsendV2(request);
-    log.info("发送文本消息结果：{}", GsonUtil.format(response));
-  }
+        AsyncsendV2Response response = corpconversationAPI.asyncsendV2(request);
+        log.info("发送文本消息结果：{}", GsonUtil.format(response));
+    }
 
-  @Test
-  public void asyncsendV2ForText() {
-    CorpconversationAPI corpconversationAPI = new CorpconversationAPI(apiConfig);
+    @Test
+    public void asyncsendV2ForText() {
+        CorpconversationAPI corpconversationAPI = new CorpconversationAPI(apiConfig);
 
-    // 创建部门 deptId=457162465
-    AsyncsendV2Request request = new AsyncsendV2Request();
-    request.setAgentId(AGENT_ID);
-    request.setDeptIdList(null);
-    request.setToAllUser(false);
-    request.setUseridList("manager8283");
+        // 创建部门 deptId=457162465
+        AsyncsendV2Request request = new AsyncsendV2Request();
+        request.setAgentId(AGENT_ID);
+        request.setDeptIdList(null);
+        request.setToAllUser(false);
+        request.setUseridList("manager8283");
 
-    Msg msg = new Msg();
-    msg.setMsgType(MsgType.text);
-    Msg.Text text = new Msg.Text();
-    text.setContent("12345");
-    msg.setText(text);
-    request.setMsg(msg);
+        Msg msg = new Msg();
+        msg.setMsgType(MsgType.text);
+        Msg.Text text = new Msg.Text();
+        text.setContent("12345");
+        msg.setText(text);
+        request.setMsg(msg);
 
-    log.info("请求条件：{}", GsonUtil.format(request));
+        log.info("请求条件：{}", GsonUtil.format(request));
 
-    AsyncsendV2Response response = corpconversationAPI.asyncsendV2(request);
-    log.info("发送文本消息结果：{}", GsonUtil.format(response));
-  }
+        AsyncsendV2Response response = corpconversationAPI.asyncsendV2(request);
+        log.info("发送文本消息结果：{}", GsonUtil.format(response));
+    }
 
 }

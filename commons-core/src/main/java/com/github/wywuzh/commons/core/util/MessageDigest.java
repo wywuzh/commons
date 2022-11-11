@@ -28,81 +28,81 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @since JDK 1.6
  */
 public class MessageDigest {
-  protected static final String KEY_MD5 = "MD5";
-  protected static final String KEY_SHA = "SHA";
-  protected static final String KEY_SHA256 = "SHA-256";
-  protected static final String KEY_SHA512 = "SHA-512";
-  protected static final String CHARSET_GBK = "GBK";
+    protected static final String KEY_MD5 = "MD5";
+    protected static final String KEY_SHA = "SHA";
+    protected static final String KEY_SHA256 = "SHA-256";
+    protected static final String KEY_SHA512 = "SHA-512";
+    protected static final String CHARSET_GBK = "GBK";
 
-  private static final String CHARSET_UTF8 = "UTF-8";
+    private static final String CHARSET_UTF8 = "UTF-8";
 
-  /**
-   * MD5密码加密算法
-   *
-   * @param mess
-   * @return String
-   * @throws Exception
-   */
-  public static String getMD5(String mess) throws Exception {
-    java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_MD5);
-    md.update(mess.getBytes(CHARSET_UTF8));
-    byte[] digest = md.digest();
-    return byte2hex(digest);
-  }
-
-  /**
-   * SHA密码加密算法
-   *
-   * @param mess
-   * @return String
-   * @throws Exception
-   */
-  public static String getSHA(String mess) throws Exception {
-    java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_SHA);
-    md.update(mess.getBytes(CHARSET_UTF8));
-    byte[] digest = md.digest();
-    return byte2hex(digest);
-  }
-
-  /**
-   * 将二进制转为字符串
-   *
-   * @param buff
-   * @return String
-   */
-  private static String byte2hex(byte[] buff) {
-    StringBuffer sb = new StringBuffer();
-    for (int i = 0; i < buff.length; i++) {
-      String hex = Integer.toHexString(buff[i] & 0xFF);
-      if (hex.length() == 1) {
-        hex = "0" + hex;
-      }
-      sb.append(hex.toLowerCase());
-    }
-    return sb.toString();
-  }
-
-  public static String digest() {
-    return null;
-  }
-
-  @SuppressWarnings("unused")
-  public static void main(String[] args) {
-    try {
-      System.out.println(getMD5("000000"));
-      System.out.println(DigestUtils.md5Hex("000000"));
-    } catch (Exception e) {
-      e.printStackTrace();
+    /**
+     * MD5密码加密算法
+     *
+     * @param mess
+     * @return String
+     * @throws Exception
+     */
+    public static String getMD5(String mess) throws Exception {
+        java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_MD5);
+        md.update(mess.getBytes(CHARSET_UTF8));
+        byte[] digest = md.digest();
+        return byte2hex(digest);
     }
 
-    try {
-      KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
-      SecureRandom secure = new SecureRandom();
-      secure.setSeed("123456".getBytes());
-    } catch (Exception e) {
-      e.printStackTrace();
+    /**
+     * SHA密码加密算法
+     *
+     * @param mess
+     * @return String
+     * @throws Exception
+     */
+    public static String getSHA(String mess) throws Exception {
+        java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_SHA);
+        md.update(mess.getBytes(CHARSET_UTF8));
+        byte[] digest = md.digest();
+        return byte2hex(digest);
     }
 
-    System.out.println(DigestUtils.sha1Hex("admin123456"));
-  }
+    /**
+     * 将二进制转为字符串
+     *
+     * @param buff
+     * @return String
+     */
+    private static String byte2hex(byte[] buff) {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < buff.length; i++) {
+            String hex = Integer.toHexString(buff[i] & 0xFF);
+            if (hex.length() == 1) {
+                hex = "0" + hex;
+            }
+            sb.append(hex.toLowerCase());
+        }
+        return sb.toString();
+    }
+
+    public static String digest() {
+        return null;
+    }
+
+    @SuppressWarnings("unused")
+    public static void main(String[] args) {
+        try {
+            System.out.println(getMD5("000000"));
+            System.out.println(DigestUtils.md5Hex("000000"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
+            SecureRandom secure = new SecureRandom();
+            secure.setSeed("123456".getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(DigestUtils.sha1Hex("admin123456"));
+    }
 }

@@ -32,26 +32,26 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
  *                 ---------------------------------------------------------------------------
  */
 public interface IModelBuilderPluginHook {
-  /**
-   * Model builder class 生成
-   * 
-   * @param topLevelClass
-   * @param builderClass
-   * @param columns
-   * @param introspectedTable
-   * @return
-   */
-  boolean modelBuilderClassGenerated(TopLevelClass topLevelClass, InnerClass builderClass, List<IntrospectedColumn> columns, IntrospectedTable introspectedTable);
+    /**
+     * Model builder class 生成
+     * 
+     * @param topLevelClass
+     * @param builderClass
+     * @param columns
+     * @param introspectedTable
+     * @return
+     */
+    boolean modelBuilderClassGenerated(TopLevelClass topLevelClass, InnerClass builderClass, List<IntrospectedColumn> columns, IntrospectedTable introspectedTable);
 
-  /**
-   * Model builder set 方法生成
-   * 
-   * @param method
-   * @param topLevelClass
-   * @param builderClass
-   * @param introspectedColumn
-   * @param introspectedTable
-   * @return
-   */
-  boolean modelBuilderSetterMethodGenerated(Method method, TopLevelClass topLevelClass, InnerClass builderClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable);
+    /**
+     * Model builder set 方法生成
+     * 
+     * @param method
+     * @param topLevelClass
+     * @param builderClass
+     * @param introspectedColumn
+     * @param introspectedTable
+     * @return
+     */
+    boolean modelBuilderSetterMethodGenerated(Method method, TopLevelClass topLevelClass, InnerClass builderClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable);
 }

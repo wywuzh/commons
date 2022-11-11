@@ -24,43 +24,43 @@ package com.github.wywuzh.commons.core.returns;
  */
 public enum ReturnCode {
 
-  /**
-   * 请求成功
-   */
-  SUCCESS("SUCCESS"),
-  /**
-   * 请求失败
-   */
-  FAIL("FAIL"),
-  /**
-   * 请求错误
-   */
-  ERROR("ERROR"),
-  /**
-   * 请求异常
-   */
-  EXCEPTION("EXCEPTION");
+    /**
+     * 请求成功
+     */
+    SUCCESS("SUCCESS"),
+    /**
+     * 请求失败
+     */
+    FAIL("FAIL"),
+    /**
+     * 请求错误
+     */
+    ERROR("ERROR"),
+    /**
+     * 请求异常
+     */
+    EXCEPTION("EXCEPTION");
 
-  private String code;
+    private String code;
 
-  private ReturnCode(String code) {
-    this.code = code;
-  }
-
-  public String getCode() {
-    return code;
-  }
-
-  public static ReturnCode findByCode(String code) {
-    if ("SUCCESS".equals(code)) {
-      return SUCCESS;
-    } else if ("FAIL".equals(code)) {
-      return FAIL;
-    } else if ("ERROR".equals(code)) {
-      return ERROR;
-    } else if ("EXCEPTION".equals(code)) {
-      return EXCEPTION;
+    private ReturnCode(String code) {
+        this.code = code;
     }
-    return null;
-  }
+
+    public String getCode() {
+        return code;
+    }
+
+    public static ReturnCode findByCode(String code) {
+        if ("SUCCESS".equals(code)) {
+            return SUCCESS;
+        } else if ("FAIL".equals(code)) {
+            return FAIL;
+        } else if ("ERROR".equals(code)) {
+            return ERROR;
+        } else if ("EXCEPTION".equals(code)) {
+            return EXCEPTION;
+        }
+        return null;
+    }
 }

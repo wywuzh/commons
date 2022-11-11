@@ -31,21 +31,21 @@ import lombok.Data;
  */
 @Data
 public class DeptListParentByUser implements Serializable {
-  private static final long serialVersionUID = -3808409834439675788L;
-
-  /**
-   * 父部门列表集合
-   */
-  @SerializedName(value = "parent_list")
-  private List<DeptParent> parentList;
-
-  @Data
-  public static class DeptParent implements Serializable {
+    private static final long serialVersionUID = -3808409834439675788L;
 
     /**
-     * 父部门列表
+     * 父部门列表集合
      */
-    @SerializedName(value = "parent_dept_id_list")
-    private List<Long> parentDeptIdList;
-  }
+    @SerializedName(value = "parent_list")
+    private List<DeptParent> parentList;
+
+    @Data
+    public static class DeptParent implements Serializable {
+
+        /**
+         * 父部门列表
+         */
+        @SerializedName(value = "parent_dept_id_list")
+        private List<Long> parentDeptIdList;
+    }
 }

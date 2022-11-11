@@ -26,19 +26,19 @@ import java.io.Serializable;
  */
 public interface IBaseUIModel {
 
-  /**
-   * 关联目标对象，作为扩展属性使用，提供前台组件引用
-   *
-   * @author 伍章红 2015年11月10日 下午5:18:52
-   * @return
-   */
-  public Serializable getTarget();
+    /**
+     * 关联目标对象，作为扩展属性使用，提供前台组件引用
+     *
+     * @author 伍章红 2015年11月10日 下午5:18:52
+     * @return
+     */
+    public Serializable getTarget();
 
-  /**
-   * 关联目标对象，作为扩展属性使用，提供前台组件引用
-   *
-   * @author 伍章红 2015年11月10日 下午5:18:54
-   * @param target
-   */
-  public void setTarget(Serializable target);
+    /**
+     * 关联目标对象，作为扩展属性使用，提供前台组件引用
+     *
+     * @author 伍章红 2015年11月10日 下午5:18:54
+     * @param target
+     */
+    public void setTarget(Serializable target);
 }

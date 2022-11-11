@@ -29,23 +29,23 @@ import java.sql.Timestamp;
  */
 public class TimestampSerializer implements TypeSerializer<Timestamp> {
 
-  @Override
-  public Type getType() {
-    return java.sql.Timestamp.class;
-  }
-
-  @Override
-  public JsonElement serialize(Timestamp src, Type typeOfSrc, JsonSerializationContext context) {
-    return new JsonPrimitive(src.getTime());
-  }
-
-  @Override
-  public Timestamp deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-    long time = json.getAsLong();
-    if (time == 0) {
-      return null;
+    @Override
+    public Type getType() {
+        return java.sql.Timestamp.class;
     }
-    return new Timestamp(time);
-  }
+
+    @Override
+    public JsonElement serialize(Timestamp src, Type typeOfSrc, JsonSerializationContext context) {
+        return new JsonPrimitive(src.getTime());
+    }
+
+    @Override
+    public Timestamp deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        long time = json.getAsLong();
+        if (time == 0) {
+            return null;
+        }
+        return new Timestamp(time);
+    }
 
 }

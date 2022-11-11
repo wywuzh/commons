@@ -80,22 +80,27 @@
 
         <spring-cloud.version>2021.0.3</spring-cloud.version>
 
+        <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
+        <!--
         <log4j2.version>2.17.2</log4j2.version>
         <logback.version>1.2.11</logback.version>
         <slf4j.version>1.7.36</slf4j.version>
         <jackson-bom.version>2.13.3</jackson-bom.version>
+        <commons-codec.version>1.15</commons-codec.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <spring-kafka.version>2.8.7</spring-kafka.version>
+        -->
+
         <json-lib.version>2.4</json-lib.version>
         <fastjson.version>2.0.8</fastjson.version>
         <dom4j.version>2.1.3</dom4j.version>
 
-        <commons-codec.version>1.15</commons-codec.version>
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-compress.version>1.21</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-configuration2.version>2.7</commons-configuration2.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <commons-validator.version>1.7</commons-validator.version>
         <commons-net.version>3.8.0</commons-net.version>
@@ -122,7 +127,6 @@
         <mybatis-plus.version>3.5.1</mybatis-plus.version>
         <druid.version>1.2.11</druid.version>
 
-        <spring-kafka.version>2.8.7</spring-kafka.version>
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.0.1</curator_version>
         <dubbo.version>3.0.9</dubbo.version>
@@ -159,7 +163,7 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- Maven插件配置 -->
-        <formatter.config>eclipse_codeformat_2space.xml</formatter.config>
+        <formatter.config>eclipse_codeformat_4space.xml</formatter.config>
         <impsort.groups>au,com,de,java,javassist,javax,lombok,mockit,net,ognl,org</impsort.groups>
     </properties>
 

@@ -35,39 +35,39 @@ import org.junit.Test;
 @Slf4j
 public class TokenAPITest {
 
-  @Test
-  public void getCorpToken() {
-    String accessKey = "XXX";
-    String accessSecret = "XXX";
-    String suiteTicket = "XXX";
-    String signature = "XXX";
-    String authCorpid = "XXX";
-    AccessTokenResponse accessTokenResponse = TokenAPI.getCorpToken(accessKey, accessSecret, suiteTicket, signature, authCorpid);
-    log.info("获取第三方企业应用的access_token：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(accessTokenResponse));
-  }
+    @Test
+    public void getCorpToken() {
+        String accessKey = "XXX";
+        String accessSecret = "XXX";
+        String suiteTicket = "XXX";
+        String signature = "XXX";
+        String authCorpid = "XXX";
+        AccessTokenResponse accessTokenResponse = TokenAPI.getCorpToken(accessKey, accessSecret, suiteTicket, signature, authCorpid);
+        log.info("获取第三方企业应用的access_token：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(accessTokenResponse));
+    }
 
-  @Test
-  public void getSuiteToken() {
-    String suiteKey = "XXX";
-    String suiteSecret = "XXX";
-    String suiteTicket = "XXX";
-    SuiteAccessTokenResponse suiteAccessTokenResponse = TokenAPI.getSuiteToken(suiteKey, suiteSecret, suiteTicket);
-    log.info("获取第三方企业应用的suite_ticket：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(suiteAccessTokenResponse));
-  }
+    @Test
+    public void getSuiteToken() {
+        String suiteKey = "XXX";
+        String suiteSecret = "XXX";
+        String suiteTicket = "XXX";
+        SuiteAccessTokenResponse suiteAccessTokenResponse = TokenAPI.getSuiteToken(suiteKey, suiteSecret, suiteTicket);
+        log.info("获取第三方企业应用的suite_ticket：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(suiteAccessTokenResponse));
+    }
 
-  @Test
-  public void getJsapiTicket() {
-    String accessToken = "XXX";
-    JsapiTicketResponse jsapiTicketResponse = TokenAPI.getJsapiTicket(accessToken);
-    log.info("获取jsapi_ticket：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(jsapiTicketResponse));
-  }
+    @Test
+    public void getJsapiTicket() {
+        String accessToken = "XXX";
+        JsapiTicketResponse jsapiTicketResponse = TokenAPI.getJsapiTicket(accessToken);
+        log.info("获取jsapi_ticket：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(jsapiTicketResponse));
+    }
 
-  @Test
-  public void ssoGettoken() {
-    String corpId = "XXX";
-    String corpSecret = "XXX";
-    SsoAccessTokenResponse ssoAccessTokenResponse = TokenAPI.ssoGettoken(corpId, corpSecret);
-    log.info("获取微应用后台免登的access_token：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(ssoAccessTokenResponse));
-  }
+    @Test
+    public void ssoGettoken() {
+        String corpId = "XXX";
+        String corpSecret = "XXX";
+        SsoAccessTokenResponse ssoAccessTokenResponse = TokenAPI.ssoGettoken(corpId, corpSecret);
+        log.info("获取微应用后台免登的access_token：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(ssoAccessTokenResponse));
+    }
 
 }

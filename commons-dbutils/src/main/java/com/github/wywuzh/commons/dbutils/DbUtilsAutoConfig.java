@@ -37,32 +37,32 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class DbUtilsAutoConfig {
-  private final Logger logger = LoggerFactory.getLogger(DbUtilsAutoConfig.class);
+    private final Logger logger = LoggerFactory.getLogger(DbUtilsAutoConfig.class);
 
-  @Bean
-  @ConditionalOnMissingBean
-  public BasicRepository basicRepository(DataSource dataSource) throws SQLException {
-    BasicRepository basicRepository = new BasicRepository();
-    basicRepository.setDataSource(dataSource);
+    @Bean
+    @ConditionalOnMissingBean
+    public BasicRepository basicRepository(DataSource dataSource) throws SQLException {
+        BasicRepository basicRepository = new BasicRepository();
+        basicRepository.setDataSource(dataSource);
 
-    init(dataSource);
-    return basicRepository;
-  }
-
-  public void init(DataSource dataSource) throws SQLException {
-    Connection connection = null;
-    try {
-      JdbcUtils.setDataSource(dataSource);
-      connection = dataSource.getConnection();
-      JdbcUtils.setAutoCommit(connection.getAutoCommit());
-    } catch (SQLException e) {
-      logger.error(e.getMessage(), e);
-      throw e;
-    } finally {
-      if (connection != null) {
-        connection.close();
-      }
+        init(dataSource);
+        return basicRepository;
     }
-  }
+
+    public void init(DataSource dataSource) throws SQLException {
+        Connection connection = null;
+        try {
+            JdbcUtils.setDataSource(dataSource);
+            connection = dataSource.getConnection();
+            JdbcUtils.setAutoCommit(connection.getAutoCommit());
+        } catch (SQLException e) {
+            logger.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+        }
+    }
 
 }

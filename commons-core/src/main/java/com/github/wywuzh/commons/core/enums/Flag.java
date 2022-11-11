@@ -24,38 +24,38 @@ package com.github.wywuzh.commons.core.enums;
  */
 public enum Flag {
 
-  TRUE("1", true), FALSE("0", false);
+    TRUE("1", true), FALSE("0", false);
 
-  private String value;
-  private boolean flag;
+    private String value;
+    private boolean flag;
 
-  private Flag(String value, boolean flag) {
-    this.value = value;
-    this.flag = flag;
-  }
-
-  public String getValue() {
-    return value;
-  }
-
-  public boolean isFlag() {
-    return flag;
-  }
-
-  public static Flag findByValue(String value) {
-    if ("0".equals(value)) {
-      return FALSE;
-    } else if ("1".equals(value)) {
-      return TRUE;
+    private Flag(String value, boolean flag) {
+        this.value = value;
+        this.flag = flag;
     }
-    return null;
-  }
 
-  public static Flag getFlag(boolean flag) {
-    if (flag) {
-      return TRUE;
-    } else {
-      return FALSE;
+    public String getValue() {
+        return value;
     }
-  }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public static Flag findByValue(String value) {
+        if ("0".equals(value)) {
+            return FALSE;
+        } else if ("1".equals(value)) {
+            return TRUE;
+        }
+        return null;
+    }
+
+    public static Flag getFlag(boolean flag) {
+        if (flag) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
 }
