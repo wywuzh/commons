@@ -31,11 +31,11 @@ import lombok.Data;
  */
 @Data
 public class ListUserByDept implements Serializable {
-  private static final long serialVersionUID = 885614848684180527L;
+    private static final long serialVersionUID = 885614848684180527L;
 
-  /**
-   * 指定部门的userid列表
-   */
-  @SerializedName(value = "userid_list")
-  public List<String> useridList;
+    /**
+     * 指定部门的userid列表
+     */
+    @SerializedName(value = "userid_list")
+    public List<String> useridList;
 }

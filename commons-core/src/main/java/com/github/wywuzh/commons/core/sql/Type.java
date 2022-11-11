@@ -23,24 +23,24 @@ package com.github.wywuzh.commons.core.sql;
  * @since JDK 1.8
  */
 public enum Type {
-  MySQL("MySQL"), Oracle("Oracle"), UNKNOW(""),;
+    MySQL("MySQL"), Oracle("Oracle"), UNKNOW(""),;
 
-  private String name;
+    private String name;
 
-  private Type(String name) {
-    this.name = name;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public static Type findBy(String name) {
-    for (Type type : values()) {
-      if (type.name.equals(name)) {
-        return type;
-      }
+    private Type(String name) {
+        this.name = name;
     }
-    return UNKNOW;
-  }
+
+    public String getName() {
+        return name;
+    }
+
+    public static Type findBy(String name) {
+        for (Type type : values()) {
+            if (type.name.equals(name)) {
+                return type;
+            }
+        }
+        return UNKNOW;
+    }
 }

@@ -34,33 +34,33 @@ import org.springframework.util.Assert;
  * @since JDK 1.8
  */
 public abstract class BaseAPI {
-  protected final Logger logger = LoggerFactory.getLogger(getClass());
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-  protected final ApiConfig apiConfig;
+    protected final ApiConfig apiConfig;
 
-  public BaseAPI(ApiConfig apiConfig) {
-    this.apiConfig = apiConfig;
-  }
+    public BaseAPI(ApiConfig apiConfig) {
+        this.apiConfig = apiConfig;
+    }
 
-  protected ResponseMessage doGet(String url, Map<String, String> queryParams) {
-    Assert.notNull(url, "url must not be null");
+    protected ResponseMessage doGet(String url, Map<String, String> queryParams) {
+        Assert.notNull(url, "url must not be null");
 
-    String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
-    return HttpClientUtils.doGet(getUrl, queryParams);
-  }
+        String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
+        return HttpClientUtils.doGet(getUrl, queryParams);
+    }
 
-  protected ResponseMessage doPost(String url, Map<String, String> requestParams) {
-    Assert.notNull(url, "url must not be null");
+    protected ResponseMessage doPost(String url, Map<String, String> requestParams) {
+        Assert.notNull(url, "url must not be null");
 
-    String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
-    return HttpClientUtils.doPost(getUrl, requestParams);
-  }
+        String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
+        return HttpClientUtils.doPost(getUrl, requestParams);
+    }
 
-  protected ResponseMessage doPost(String url, Object requestParams) {
-    Assert.notNull(url, "url must not be null");
+    protected ResponseMessage doPost(String url, Object requestParams) {
+        Assert.notNull(url, "url must not be null");
 
-    String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
-    return HttpClientUtils.doPost(getUrl, requestParams, null, Charset.forName("UTF-8"));
-  }
+        String getUrl = url.replace("#ACCESS_TOKEN", apiConfig.getAccessToken());
+        return HttpClientUtils.doPost(getUrl, requestParams, null, Charset.forName("UTF-8"));
+    }
 
 }

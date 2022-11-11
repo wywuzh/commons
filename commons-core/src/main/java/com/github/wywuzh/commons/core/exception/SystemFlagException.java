@@ -23,22 +23,22 @@ package com.github.wywuzh.commons.core.exception;
  * @since JDK 1.7
  */
 public class SystemFlagException extends FrameException {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  public SystemFlagException() {
-    super();
-  }
+    public SystemFlagException() {
+        super();
+    }
 
-  public SystemFlagException(String message, Throwable cause) {
-    super(message, cause);
-  }
+    public SystemFlagException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-  public SystemFlagException(String message) {
-    super(message);
-  }
+    public SystemFlagException(String message) {
+        super(message);
+    }
 
-  public SystemFlagException(Throwable cause) {
-    super(cause);
-  }
+    public SystemFlagException(Throwable cause) {
+        super(cause);
+    }
 
 }

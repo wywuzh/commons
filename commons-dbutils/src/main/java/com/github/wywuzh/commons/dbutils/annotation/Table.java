@@ -35,17 +35,17 @@ import java.lang.annotation.Target;
 @Documented
 public @interface Table {
 
-  /**
-   * 表名
-   *
-   * @return 表名
-   */
-  String name();
+    /**
+     * 表名
+     *
+     * @return 表名
+     */
+    String name();
 
-  /**
-   * 数据库名
-   *
-   * @return 数据库名
-   */
-  String schema() default "";
+    /**
+     * 数据库名
+     *
+     * @return 数据库名
+     */
+    String schema() default "";
 }

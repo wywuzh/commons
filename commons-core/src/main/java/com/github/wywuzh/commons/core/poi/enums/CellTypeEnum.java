@@ -24,6 +24,16 @@ package com.github.wywuzh.commons.core.poi.enums;
  */
 public enum CellTypeEnum {
 
-  Undefined, String, Integer, BigDecimal, Money, Percent, Date, Time, DateTime;
+    Undefined, // 未知
+    String, // 字符
+    Integer, // 整型数值
+    BigDecimal, // 2位小数
+    Money, // 金额，保留2位小数
+    Accounting, // 会计专用
+    Percent, // 百分比
+    Date, // 日期：yyyy-MM-dd格式
+    Time, // 时间：HH:mm:ss格式
+    DateTime, // 日期时间：yyyy-MM-dd HH:mm:ss格式
+    ;
 
 }

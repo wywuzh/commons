@@ -70,97 +70,97 @@ public class UserV2APITest extends AbstractTest {
 ////        ContactsResponse<UserGet> response = JsonMapper.buildNonNullMapper().fromJson(result, clazz, classes);
 //    }
 
-  @Test
-  public void create() {
-    UserV2API userV2API = new UserV2API(apiConfig);
+    @Test
+    public void create() {
+        UserV2API userV2API = new UserV2API(apiConfig);
 
-    // 创建用户 userid=103559512720455311
-    UserCreateRequest request = new UserCreateRequest();
-    request.setMobile("18576689629");
-    request.setName("伍章红");
-    request.setDeptIdList("457359137");
-    ContactsResponse<UserCreate> response = userV2API.create(request);
-    log.info("创建用户：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
-  }
+        // 创建用户 userid=103559512720455311
+        UserCreateRequest request = new UserCreateRequest();
+        request.setMobile("18576689629");
+        request.setName("伍章红");
+        request.setDeptIdList("457359137");
+        ContactsResponse<UserCreate> response = userV2API.create(request);
+        log.info("创建用户：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
 
-  @Test
-  public void update() {
-    UserV2API userV2API = new UserV2API(apiConfig);
+    @Test
+    public void update() {
+        UserV2API userV2API = new UserV2API(apiConfig);
 
-    // 创建用户 userid=103559512720455311
-    UserUpdateRequest request = new UserUpdateRequest();
-    request.setUserid("103559512720455311");
-    request.setMobile("18576689629");
-    request.setName("伍章红");
-    request.setLanguage("zh_CN");
-    request.setDeptIdList("457359137");
-    BaseResponse response = userV2API.update(request);
-    log.info("更新用户信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
-  }
+        // 创建用户 userid=103559512720455311
+        UserUpdateRequest request = new UserUpdateRequest();
+        request.setUserid("103559512720455311");
+        request.setMobile("18576689629");
+        request.setName("伍章红");
+        request.setLanguage("zh_CN");
+        request.setDeptIdList("457359137");
+        BaseResponse response = userV2API.update(request);
+        log.info("更新用户信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
 
-  @Test
-  public void get() {
-    UserV2API userV2API = new UserV2API(apiConfig);
-    // 根据userid获取用户详情
-    String userid = "manager8283"; // userid=manager8283
-    ContactsResponse<UserGet> get = userV2API.get(userid, Language.zh_CN);
-    log.info("根据userid获取用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(get));
-  }
+    @Test
+    public void get() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+        // 根据userid获取用户详情
+        String userid = "manager8283"; // userid=manager8283
+        ContactsResponse<UserGet> get = userV2API.get(userid, Language.zh_CN);
+        log.info("根据userid获取用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(get));
+    }
 
-  @Test
-  public void listSimple() {
-    UserV2API userV2API = new UserV2API(apiConfig);
-    UserListsimpleRequest request = new UserListsimpleRequest();
-    // 部门ID，根部门ID为1
-    request.setDeptId(1L);
-    // 分页查询的游标，最开始传0
-    request.setCursor(0L);
-    request.setSize(20L);
+    @Test
+    public void listSimple() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+        UserListsimpleRequest request = new UserListsimpleRequest();
+        // 部门ID，根部门ID为1
+        request.setDeptId(1L);
+        // 分页查询的游标，最开始传0
+        request.setCursor(0L);
+        request.setSize(20L);
 
-    ContactsResponse<PageResult<ListUserSimple>> response = userV2API.listSimple(request);
-    log.info("获取部门用户基础信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
-  }
+        ContactsResponse<PageResult<ListUserSimple>> response = userV2API.listSimple(request);
+        log.info("获取部门用户基础信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
 
-  @Test
-  public void listId() {
-    UserV2API userV2API = new UserV2API(apiConfig);
-    Long deptId = 1L;
-    ContactsResponse<ListUserByDept> listId = userV2API.listId(deptId);
-    log.info("获取部门用户userid列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(listId));
-  }
+    @Test
+    public void listId() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+        Long deptId = 1L;
+        ContactsResponse<ListUserByDept> listId = userV2API.listId(deptId);
+        log.info("获取部门用户userid列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(listId));
+    }
 
-  @Test
-  public void v2UserList() {
-    UserV2API userV2API = new UserV2API(apiConfig);
-    V2UserListRequest request = new V2UserListRequest();
-    // 部门ID，根部门ID为1
-    request.setDeptId(1L);
-    // 分页查询的游标，最开始传0
-    request.setCursor(0L);
-    request.setSize(20L);
+    @Test
+    public void v2UserList() {
+        UserV2API userV2API = new UserV2API(apiConfig);
+        V2UserListRequest request = new V2UserListRequest();
+        // 部门ID，根部门ID为1
+        request.setDeptId(1L);
+        // 分页查询的游标，最开始传0
+        request.setCursor(0L);
+        request.setSize(20L);
 
-    ContactsResponse<PageResult<ListUserSimple>> response = userV2API.v2UserList(request);
-    log.info("获取部门用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
-  }
+        ContactsResponse<PageResult<ListUserSimple>> response = userV2API.v2UserList(request);
+        log.info("获取部门用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+    }
 
-  @Test
-  public void getByMobile() {
-    UserV2API userV2API = new UserV2API(apiConfig);
+    @Test
+    public void getByMobile() {
+        UserV2API userV2API = new UserV2API(apiConfig);
 
-    // 根据手机号获取userid
-    String mobile = "14706660503"; // userid=manager8283
-    ContactsResponse<UserGetByMobile> getByMobile = userV2API.getByMobile(mobile);
-    log.info("根据手机号获取用户信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(getByMobile));
-  }
+        // 根据手机号获取userid
+        String mobile = "14706660503"; // userid=manager8283
+        ContactsResponse<UserGetByMobile> getByMobile = userV2API.getByMobile(mobile);
+        log.info("根据手机号获取用户信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(getByMobile));
+    }
 
-  @Test
-  public void getByUnionID() {
-    UserV2API userV2API = new UserV2API(apiConfig);
+    @Test
+    public void getByUnionID() {
+        UserV2API userV2API = new UserV2API(apiConfig);
 
-    // 根据unionid获取用户userid
-    String unionID = "VKxwWW2JCj2V3oBOcwiiDLAiEiE";
-    ContactsResponse<UserGetByUnionid> getByUnionId = userV2API.getByUnionid(unionID);
-    log.info("根据unionid获取用户userid：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(getByUnionId));
-  }
+        // 根据unionid获取用户userid
+        String unionID = "VKxwWW2JCj2V3oBOcwiiDLAiEiE";
+        ContactsResponse<UserGetByUnionid> getByUnionId = userV2API.getByUnionid(unionID);
+        log.info("根据unionid获取用户userid：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(getByUnionId));
+    }
 
 }

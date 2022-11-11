@@ -34,21 +34,21 @@ import org.slf4j.LoggerFactory;
  * @since JDK 1.8
  */
 public class UIComponent {
-  private static final Logger LOGGER = LoggerFactory.getLogger(UIComponent.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UIComponent.class);
 
-  public static List<Map<String, Object>> transformTree(List<Tree> treeList) throws IllegalAccessException, IntrospectionException, InvocationTargetException {
-    List<Map<String, Object>> resultMap = new ArrayList<Map<String, Object>>(treeList.size());
-    for (Tree tree : treeList) {
-      try {
-        Map<String, Object> map = BeanUtils.convertBeanToMap(tree);
-        map.put("parentId", tree.getParentId());
-        resultMap.add(map);
-      } catch (Exception e) {
-        LOGGER.error(e.getMessage(), e);
-        throw e;
-      }
+    public static List<Map<String, Object>> transformTree(List<Tree> treeList) throws IllegalAccessException, IntrospectionException, InvocationTargetException {
+        List<Map<String, Object>> resultMap = new ArrayList<Map<String, Object>>(treeList.size());
+        for (Tree tree : treeList) {
+            try {
+                Map<String, Object> map = BeanUtils.convertBeanToMap(tree);
+                map.put("parentId", tree.getParentId());
+                resultMap.add(map);
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+                throw e;
+            }
+        }
+        return resultMap;
     }
-    return resultMap;
-  }
 
 }

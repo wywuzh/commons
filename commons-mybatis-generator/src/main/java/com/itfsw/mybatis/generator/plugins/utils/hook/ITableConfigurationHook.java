@@ -26,10 +26,10 @@ import org.mybatis.generator.api.IntrospectedTable;
  *                 ---------------------------------------------------------------------------
  */
 public interface ITableConfigurationHook {
-  /**
-   * 表配置
-   * 
-   * @param introspectedTable
-   */
-  void tableConfiguration(IntrospectedTable introspectedTable);
+    /**
+     * 表配置
+     * 
+     * @param introspectedTable
+     */
+    void tableConfiguration(IntrospectedTable introspectedTable);
 }

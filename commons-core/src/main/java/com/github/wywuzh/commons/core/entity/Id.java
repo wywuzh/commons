@@ -25,18 +25,18 @@ package com.github.wywuzh.commons.core.entity;
  */
 public interface Id extends Entity {
 
-  /**
-   * 主键id，自增
-   *
-   * @author 伍章红 2015-8-19 上午11:26:24
-   * @return
-   */
-  public Long getId();
+    /**
+     * 主键id，自增
+     *
+     * @author 伍章红 2015-8-19 上午11:26:24
+     * @return
+     */
+    public Long getId();
 
-  /**
-   * @author 伍章红 2015-8-19 上午11:26:29
-   * @param id
-   */
-  public void setId(Long id);
+    /**
+     * @author 伍章红 2015-8-19 上午11:26:29
+     * @param id
+     */
+    public void setId(Long id);
 
 }

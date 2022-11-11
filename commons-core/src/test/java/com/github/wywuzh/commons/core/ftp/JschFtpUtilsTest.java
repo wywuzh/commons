@@ -33,22 +33,22 @@ import org.junit.Test;
 @Slf4j
 public class JschFtpUtilsTest {
 
-  @Test
-  public void uploadFile() {
-    String host = "10.0.43.32";
-    int port = 60777;
-    String username = "root";
-    String password = "12345678";
-    String path = "/www/tools/";
-    String localFile = "D:\\test.txt";
-    String remoteFile = "test.txt";
-    try {
-      JschFtpUtils.uploadFile(host, port, username, password, path, localFile, remoteFile);
-    } catch (IOException e) {
-      log.error(e.getMessage(), e);
-    } catch (JSchException e) {
-      log.error(e.getMessage(), e);
+    @Test
+    public void uploadFile() {
+        String host = "10.0.43.32";
+        int port = 60777;
+        String username = "root";
+        String password = "12345678";
+        String path = "/www/tools/";
+        String localFile = "D:\\test.txt";
+        String remoteFile = "test.txt";
+        try {
+            JschFtpUtils.uploadFile(host, port, username, password, path, localFile, remoteFile);
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
+        } catch (JSchException e) {
+            log.error(e.getMessage(), e);
+        }
     }
-  }
 
 }

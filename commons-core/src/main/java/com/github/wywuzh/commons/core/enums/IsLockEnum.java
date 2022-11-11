@@ -23,24 +23,24 @@ package com.github.wywuzh.commons.core.enums;
  * @since JDK 1.8
  */
 public enum IsLockEnum {
-  TRUE(1), FALSE(0);
+    TRUE(1), FALSE(0);
 
-  private Integer value;
+    private Integer value;
 
-  IsLockEnum(Integer value) {
-    this.value = value;
-  }
-
-  public Integer getValue() {
-    return value;
-  }
-
-  public static IsLockEnum findByValue(Integer value) {
-    if (value == 0) {
-      return IsLockEnum.FALSE;
-    } else if (value == 1) {
-      return IsLockEnum.TRUE;
+    IsLockEnum(Integer value) {
+        this.value = value;
     }
-    return null;
-  }
+
+    public Integer getValue() {
+        return value;
+    }
+
+    public static IsLockEnum findByValue(Integer value) {
+        if (value == 0) {
+            return IsLockEnum.FALSE;
+        } else if (value == 1) {
+            return IsLockEnum.TRUE;
+        }
+        return null;
+    }
 }

@@ -25,31 +25,31 @@ package com.github.wywuzh.commons.core.entity;
  */
 public interface Updated extends Entity {
 
-  /**
-   * 修改人编码（统一指向账户编码）
-   *
-   * @author 伍章红 2015-8-19 上午11:53:34
-   * @return
-   */
-  public String getUpdateUser();
+    /**
+     * 修改人编码（统一指向账户编码）
+     *
+     * @author 伍章红 2015-8-19 上午11:53:34
+     * @return
+     */
+    public String getUpdateUser();
 
-  /**
-   * @author 伍章红 2015-8-19 上午11:53:45
-   * @param updateUser
-   */
-  public void setUpdateUser(String updateUser);
+    /**
+     * @author 伍章红 2015-8-19 上午11:53:45
+     * @param updateUser
+     */
+    public void setUpdateUser(String updateUser);
 
-  /**
-   * 修改时间
-   *
-   * @author 伍章红 2015-8-19 上午11:53:40
-   * @return
-   */
-  public java.util.Date getUpdateTime();
+    /**
+     * 修改时间
+     *
+     * @author 伍章红 2015-8-19 上午11:53:40
+     * @return
+     */
+    public java.util.Date getUpdateTime();
 
-  /**
-   * @author 伍章红 2015-8-19 上午11:53:48
-   * @param updateTime
-   */
-  public void setUpdateTime(java.util.Date updateTime);
+    /**
+     * @author 伍章红 2015-8-19 上午11:53:48
+     * @param updateTime
+     */
+    public void setUpdateTime(java.util.Date updateTime);
 }

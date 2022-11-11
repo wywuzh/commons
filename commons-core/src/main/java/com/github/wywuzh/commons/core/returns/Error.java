@@ -27,62 +27,62 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @since JDK 1.7
  */
 public class Error implements Serializable {
-  private static final long serialVersionUID = 7475908929063980528L;
+    private static final long serialVersionUID = 7475908929063980528L;
 
-  /**
-   * 错误编码
-   */
-  private String code;
-  /**
-   * 错误字段
-   */
-  private String field;
-  /**
-   * 错误信息
-   */
-  private String message;
+    /**
+     * 错误编码
+     */
+    private String code;
+    /**
+     * 错误字段
+     */
+    private String field;
+    /**
+     * 错误信息
+     */
+    private String message;
 
-  public Error() {
-  }
+    public Error() {
+    }
 
-  public Error(String field, String message) {
-    this.code = "01";
-    this.field = field;
-    this.message = message;
-  }
+    public Error(String field, String message) {
+        this.code = "01";
+        this.field = field;
+        this.message = message;
+    }
 
-  public Error(String code, String field, String message) {
-    this.code = code;
-    this.field = field;
-    this.message = message;
-  }
+    public Error(String code, String field, String message) {
+        this.code = code;
+        this.field = field;
+        this.message = message;
+    }
 
-  public String getCode() {
-    return code;
-  }
+    public String getCode() {
+        return code;
+    }
 
-  public void setCode(String code) {
-    this.code = code;
-  }
+    public void setCode(String code) {
+        this.code = code;
+    }
 
-  public String getField() {
-    return field;
-  }
+    public String getField() {
+        return field;
+    }
 
-  public void setField(String field) {
-    this.field = field;
-  }
+    public void setField(String field) {
+        this.field = field;
+    }
 
-  public String getMessage() {
-    return message;
-  }
+    public String getMessage() {
+        return message;
+    }
 
-  public void setMessage(String message) {
-    this.message = message;
-  }
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-  @Override
-  public String toString() {
-    return ToStringBuilder.reflectionToString(this);
-  }
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }

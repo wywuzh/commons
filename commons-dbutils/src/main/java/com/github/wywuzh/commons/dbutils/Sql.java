@@ -24,29 +24,29 @@ package com.github.wywuzh.commons.dbutils;
  */
 public final class Sql {
 
-  /**
-   * 新增数据
-   */
-  public static final String INSERT = "INSERT INTO {0}({1}) VALUES({2})";
-  /**
-   * 修改数据
-   */
-  public static final String UPDATE = "UPDATE {0} SET {1} WHERE 1=1 {2}";
-  /**
-   * 删除数据
-   */
-  public static final String DELETE = "DELETE FROM {0} WHERE 1=1 {1}";
-  /**
-   * 查询数据
-   */
-  public static final String QUERY = "SELECT {0} FROM {1} WHERE 1=1 {2}";
-  /**
-   * 查询字段别名
-   */
-  public static final String QUERY_AS = " AS ";
-  /**
-   * 调用存储过程
-   */
-  public static final String CALL = "call {0}({1})";
+    /**
+     * 新增数据
+     */
+    public static final String INSERT = "INSERT INTO {0}({1}) VALUES({2})";
+    /**
+     * 修改数据
+     */
+    public static final String UPDATE = "UPDATE {0} SET {1} WHERE 1=1 {2}";
+    /**
+     * 删除数据
+     */
+    public static final String DELETE = "DELETE FROM {0} WHERE 1=1 {1}";
+    /**
+     * 查询数据
+     */
+    public static final String QUERY = "SELECT {0} FROM {1} WHERE 1=1 {2}";
+    /**
+     * 查询字段别名
+     */
+    public static final String QUERY_AS = " AS ";
+    /**
+     * 调用存储过程
+     */
+    public static final String CALL = "call {0}({1})";
 
 }

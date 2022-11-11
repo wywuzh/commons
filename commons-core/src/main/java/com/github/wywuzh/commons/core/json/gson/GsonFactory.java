@@ -32,144 +32,144 @@ import java.util.List;
  */
 public class GsonFactory {
 
-  /**
-   * 得到GsonBuilder对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @return
-   */
-  public static GsonBuilder getGsonBuilder() {
-    return new GsonBuilder();
-  }
-
-  /**
-   * 得到GsonBuilder对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @param clazz
-   *                         需要转换的类的Class
-   * @param typeSerializer
-   *                         类型转换器接口
-   * @return
-   */
-  public static <T> GsonBuilder getGsonBuilder(Class<TypeSerializer<T>> clazz, TypeSerializer<T> typeSerializer) {
-    GsonBuilder gsonBuilder = getGsonBuilder();
-    gsonBuilder.registerTypeAdapter(clazz, typeSerializer);
-    return gsonBuilder;
-  }
-
-  /**
-   * 得到GsonBuilder对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @param type
-   *                         需要转换的类的Type
-   * @param typeSerializer
-   *                         类型转换器接口
-   * @return
-   */
-  public static <T> GsonBuilder getGsonBuilder(Type type, TypeSerializer<T> typeSerializer) {
-    GsonBuilder gsonBuilder = getGsonBuilder();
-    gsonBuilder.registerTypeAdapter(type, typeSerializer);
-    return gsonBuilder;
-  }
-
-  /**
-   * 得到GsonBuilder对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @param list
-   *               类型转换器接口集合
-   * @return
-   */
-  public static <T> GsonBuilder getGsonBuilder(List<? extends TypeSerializer<T>> list) {
-    GsonBuilder gsonBuilder = getGsonBuilder();
-    for (TypeSerializer<T> serializer : list) {
-      gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
+    /**
+     * 得到GsonBuilder对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @return
+     */
+    public static GsonBuilder getGsonBuilder() {
+        return new GsonBuilder();
     }
-    return gsonBuilder;
-  }
 
-  /**
-   * 得到GsonBuilder对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @param serializers
-   *                      类型转换器接口数组
-   * @return
-   */
-  public static <T> GsonBuilder getGsonBuilder(TypeSerializer<T>[] serializers) {
-    if (null == serializers || serializers.length == 0) {
-      return getGsonBuilder();
+    /**
+     * 得到GsonBuilder对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @param clazz
+     *                           需要转换的类的Class
+     * @param typeSerializer
+     *                           类型转换器接口
+     * @return
+     */
+    public static <T> GsonBuilder getGsonBuilder(Class<TypeSerializer<T>> clazz, TypeSerializer<T> typeSerializer) {
+        GsonBuilder gsonBuilder = getGsonBuilder();
+        gsonBuilder.registerTypeAdapter(clazz, typeSerializer);
+        return gsonBuilder;
     }
-    return getGsonBuilder(Arrays.asList(serializers));
-  }
 
-  /**
-   * 得到Gson对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @return
-   */
-  public static Gson getGson() {
-    return getGsonBuilder().create();
-  }
-
-  /**
-   * 得到Gson对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @param omitNull
-   *                   是否忽略value值为null的属性
-   * @return
-   */
-  public static Gson getGson(boolean omitNull) {
-    GsonBuilder gsonBuilder = getGsonBuilder();
-    if (!omitNull) {
-      gsonBuilder.serializeNulls();
+    /**
+     * 得到GsonBuilder对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @param type
+     *                           需要转换的类的Type
+     * @param typeSerializer
+     *                           类型转换器接口
+     * @return
+     */
+    public static <T> GsonBuilder getGsonBuilder(Type type, TypeSerializer<T> typeSerializer) {
+        GsonBuilder gsonBuilder = getGsonBuilder();
+        gsonBuilder.registerTypeAdapter(type, typeSerializer);
+        return gsonBuilder;
     }
-    return gsonBuilder.create();
-  }
 
-  /**
-   * 得到Gson对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @param serializers
-   *                      类型转换器接口数组
-   * @return
-   */
-  public static <T> Gson getGson(TypeSerializer<T>[] serializers) {
-    return getGsonBuilder(serializers).create();
-  }
-
-  /**
-   * 得到Gson对象示例
-   *
-   * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-   * @param serializers
-   *                      类型转换器接口数组
-   * @param omitNull
-   *                      是否忽略value值为null的属性
-   * @return
-   */
-  public static <T> Gson getGson(TypeSerializer<T>[] serializers, boolean omitNull) {
-    GsonBuilder gsonBuilder = getGsonBuilder(serializers);
-    if (!omitNull) {
-      gsonBuilder.serializeNulls();
+    /**
+     * 得到GsonBuilder对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @param list
+     *                 类型转换器接口集合
+     * @return
+     */
+    public static <T> GsonBuilder getGsonBuilder(List<? extends TypeSerializer<T>> list) {
+        GsonBuilder gsonBuilder = getGsonBuilder();
+        for (TypeSerializer<T> serializer : list) {
+            gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
+        }
+        return gsonBuilder;
     }
-    return gsonBuilder.create();
-  }
 
-  public static JsonElement getJsonElement(String json) throws JsonSyntaxException {
-    return JsonParser.parseString(json);
-  }
+    /**
+     * 得到GsonBuilder对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @param serializers
+     *                        类型转换器接口数组
+     * @return
+     */
+    public static <T> GsonBuilder getGsonBuilder(TypeSerializer<T>[] serializers) {
+        if (null == serializers || serializers.length == 0) {
+            return getGsonBuilder();
+        }
+        return getGsonBuilder(Arrays.asList(serializers));
+    }
 
-  public static JsonElement getJsonElement(Reader json) throws JsonIOException, JsonSyntaxException {
-    return JsonParser.parseReader(json);
-  }
+    /**
+     * 得到Gson对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @return
+     */
+    public static Gson getGson() {
+        return getGsonBuilder().create();
+    }
 
-  public static JsonElement getJsonElement(JsonReader json) throws JsonIOException, JsonSyntaxException {
-    return JsonParser.parseReader(json);
-  }
+    /**
+     * 得到Gson对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @param omitNull
+     *                     是否忽略value值为null的属性
+     * @return
+     */
+    public static Gson getGson(boolean omitNull) {
+        GsonBuilder gsonBuilder = getGsonBuilder();
+        if (!omitNull) {
+            gsonBuilder.serializeNulls();
+        }
+        return gsonBuilder.create();
+    }
+
+    /**
+     * 得到Gson对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @param serializers
+     *                        类型转换器接口数组
+     * @return
+     */
+    public static <T> Gson getGson(TypeSerializer<T>[] serializers) {
+        return getGsonBuilder(serializers).create();
+    }
+
+    /**
+     * 得到Gson对象示例
+     *
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
+     * @param serializers
+     *                        类型转换器接口数组
+     * @param omitNull
+     *                        是否忽略value值为null的属性
+     * @return
+     */
+    public static <T> Gson getGson(TypeSerializer<T>[] serializers, boolean omitNull) {
+        GsonBuilder gsonBuilder = getGsonBuilder(serializers);
+        if (!omitNull) {
+            gsonBuilder.serializeNulls();
+        }
+        return gsonBuilder.create();
+    }
+
+    public static JsonElement getJsonElement(String json) throws JsonSyntaxException {
+        return JsonParser.parseString(json);
+    }
+
+    public static JsonElement getJsonElement(Reader json) throws JsonIOException, JsonSyntaxException {
+        return JsonParser.parseReader(json);
+    }
+
+    public static JsonElement getJsonElement(JsonReader json) throws JsonIOException, JsonSyntaxException {
+        return JsonParser.parseReader(json);
+    }
 }

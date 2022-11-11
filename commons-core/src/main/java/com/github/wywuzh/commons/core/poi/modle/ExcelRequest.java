@@ -28,106 +28,106 @@ import java.util.Map;
  * @since JDK 1.8
  */
 public class ExcelRequest implements Serializable {
-  private static final long serialVersionUID = -4416704498235565697L;
+    private static final long serialVersionUID = -4416704498235565697L;
 
-  private String sheetName;
-  /**
-   * 列名/字段名
-   */
-  private String[] columns;
-  /**
-   * 列的标题
-   */
-  private String[] columnTitles;
-  /**
-   * 列的长度
-   */
-  private Integer[] columnLengths;
+    private String sheetName;
+    /**
+     * 列名/字段名
+     */
+    private String[] columns;
+    /**
+     * 列的标题
+     */
+    private String[] columnTitles;
+    /**
+     * 列的长度
+     */
+    private Integer[] columnLengths;
 
-  /**
-   * 必填字段
-   */
-  private List<String> requiredColumnTitles;
-  /**
-   * 字段有效性验证：key=column字段，value=column字段下拉框列表数据（验证数据）
-   */
-  private Map<String, String[]> columnValidation;
+    /**
+     * 必填字段
+     */
+    private List<String> requiredColumnTitles;
+    /**
+     * 字段有效性验证：key=column字段，value=column字段下拉框列表数据（验证数据）
+     */
+    private Map<String, String[]> columnValidation;
 
-  /**
-   * 请求数据
-   */
-  private Collection<?> dataColl;
-  /**
-   * 提示信息。注意：该信息不为空时，会占据第一行，标题行会变为第二行
-   *
-   * @since v2.4.8
-   */
-  private String tips;
+    /**
+     * 请求数据
+     */
+    private Collection<?> dataColl;
+    /**
+     * 提示信息。注意：该信息不为空时，会占据第一行，标题行会变为第二行
+     *
+     * @since v2.4.8
+     */
+    private String tips;
 
-  public ExcelRequest() {
-  }
+    public ExcelRequest() {
+    }
 
-  public String getSheetName() {
-    return sheetName;
-  }
+    public String getSheetName() {
+        return sheetName;
+    }
 
-  public void setSheetName(String sheetName) {
-    this.sheetName = sheetName;
-  }
+    public void setSheetName(String sheetName) {
+        this.sheetName = sheetName;
+    }
 
-  public String[] getColumns() {
-    return columns;
-  }
+    public String[] getColumns() {
+        return columns;
+    }
 
-  public void setColumns(String[] columns) {
-    this.columns = columns;
-  }
+    public void setColumns(String[] columns) {
+        this.columns = columns;
+    }
 
-  public String[] getColumnTitles() {
-    return columnTitles;
-  }
+    public String[] getColumnTitles() {
+        return columnTitles;
+    }
 
-  public void setColumnTitles(String[] columnTitles) {
-    this.columnTitles = columnTitles;
-  }
+    public void setColumnTitles(String[] columnTitles) {
+        this.columnTitles = columnTitles;
+    }
 
-  public Integer[] getColumnLengths() {
-    return columnLengths;
-  }
+    public Integer[] getColumnLengths() {
+        return columnLengths;
+    }
 
-  public void setColumnLengths(Integer[] columnLengths) {
-    this.columnLengths = columnLengths;
-  }
+    public void setColumnLengths(Integer[] columnLengths) {
+        this.columnLengths = columnLengths;
+    }
 
-  public List<String> getRequiredColumnTitles() {
-    return requiredColumnTitles;
-  }
+    public List<String> getRequiredColumnTitles() {
+        return requiredColumnTitles;
+    }
 
-  public void setRequiredColumnTitles(List<String> requiredColumnTitles) {
-    this.requiredColumnTitles = requiredColumnTitles;
-  }
+    public void setRequiredColumnTitles(List<String> requiredColumnTitles) {
+        this.requiredColumnTitles = requiredColumnTitles;
+    }
 
-  public Map<String, String[]> getColumnValidation() {
-    return columnValidation;
-  }
+    public Map<String, String[]> getColumnValidation() {
+        return columnValidation;
+    }
 
-  public void setColumnValidation(Map<String, String[]> columnValidation) {
-    this.columnValidation = columnValidation;
-  }
+    public void setColumnValidation(Map<String, String[]> columnValidation) {
+        this.columnValidation = columnValidation;
+    }
 
-  public Collection<?> getDataColl() {
-    return dataColl;
-  }
+    public Collection<?> getDataColl() {
+        return dataColl;
+    }
 
-  public void setDataColl(Collection<?> dataColl) {
-    this.dataColl = dataColl;
-  }
+    public void setDataColl(Collection<?> dataColl) {
+        this.dataColl = dataColl;
+    }
 
-  public String getTips() {
-    return tips;
-  }
+    public String getTips() {
+        return tips;
+    }
 
-  public void setTips(String tips) {
-    this.tips = tips;
-  }
+    public void setTips(String tips) {
+        this.tips = tips;
+    }
 }

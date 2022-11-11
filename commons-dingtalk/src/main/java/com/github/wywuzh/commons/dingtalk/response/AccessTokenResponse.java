@@ -30,24 +30,24 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 public class AccessTokenResponse extends BaseResponse {
-  private static final long serialVersionUID = -8122654296338669728L;
+    private static final long serialVersionUID = -8122654296338669728L;
 
-  /**
-   * 生成的access_token
-   *
-   * <pre>
-   * 注意 在使用access_token时，请注意：
-   * 1. access_token的有效期为7200秒（2小时），有效期内重复获取会返回相同结果并自动续期，过期后获取会返回新的access_token。
-   * 2. 开发者需要缓存access_token，用于后续接口的调用。因为每个应用的access_token是彼此独立的，所以进行缓存时需要区分应用来进行存储。
-   * 3. 不能频繁调用gettoken接口，否则会受到频率拦截。
-   * </pre>
-   */
-  @SerializedName(value = "access_token")
-  private String accessToken;
-  /**
-   * access_token的过期时间，单位秒
-   */
-  @SerializedName(value = "expires_in")
-  private Integer expiresIn;
+    /**
+     * 生成的access_token
+     *
+     * <pre>
+     * 注意 在使用access_token时，请注意：
+     * 1. access_token的有效期为7200秒（2小时），有效期内重复获取会返回相同结果并自动续期，过期后获取会返回新的access_token。
+     * 2. 开发者需要缓存access_token，用于后续接口的调用。因为每个应用的access_token是彼此独立的，所以进行缓存时需要区分应用来进行存储。
+     * 3. 不能频繁调用gettoken接口，否则会受到频率拦截。
+     * </pre>
+     */
+    @SerializedName(value = "access_token")
+    private String accessToken;
+    /**
+     * access_token的过期时间，单位秒
+     */
+    @SerializedName(value = "expires_in")
+    private Integer expiresIn;
 
 }

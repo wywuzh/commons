@@ -28,53 +28,53 @@ import java.util.List;
  * @since JDK 1.7.0_71
  */
 public class SimpleQueryResult<T> extends ReturnBase {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 查询数据总数
-   */
-  private long total;
-  /**
-   * 查询数据结果
-   */
-  private List<T> entityList;
+    /**
+     * 查询数据总数
+     */
+    private long total;
+    /**
+     * 查询数据结果
+     */
+    private List<T> entityList;
 
-  public SimpleQueryResult() {
-    super();
-  }
+    public SimpleQueryResult() {
+        super();
+    }
 
-  public SimpleQueryResult(ReturnCode returnCode) {
-    super(returnCode);
-  }
+    public SimpleQueryResult(ReturnCode returnCode) {
+        super(returnCode);
+    }
 
-  public SimpleQueryResult(ReturnCode returnCode, String message) {
-    super(returnCode, message);
-  }
+    public SimpleQueryResult(ReturnCode returnCode, String message) {
+        super(returnCode, message);
+    }
 
-  public long getTotal() {
-    return total;
-  }
+    public long getTotal() {
+        return total;
+    }
 
-  public void setTotal(long total) {
-    this.total = total;
-  }
+    public void setTotal(long total) {
+        this.total = total;
+    }
 
-  public List<T> getEntityList() {
-    return entityList;
-  }
+    public List<T> getEntityList() {
+        return entityList;
+    }
 
-  public void setEntityList(List<T> entityList) {
-    this.entityList = entityList;
-  }
+    public void setEntityList(List<T> entityList) {
+        this.entityList = entityList;
+    }
 
-  @Override
-  public String toString() {
-    StringBuilder result = new StringBuilder("SimpleQueryResult [");
-    result.append("returnCode=").append(getReturnCode()).append(",");
-    result.append("message=").append(getMessage()).append(",");
-    result.append("total=").append(total).append(",");
-    result.append("entityList=").append(entityList);
-    result.append("]");
-    return result.toString();
-  }
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("SimpleQueryResult [");
+        result.append("returnCode=").append(getReturnCode()).append(",");
+        result.append("message=").append(getMessage()).append(",");
+        result.append("total=").append(total).append(",");
+        result.append("entityList=").append(entityList);
+        result.append("]");
+        return result.toString();
+    }
 }
