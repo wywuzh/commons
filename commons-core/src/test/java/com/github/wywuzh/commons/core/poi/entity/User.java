@@ -61,7 +61,7 @@ public class User {
     /**
      * 资产
      */
-    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.Money)
+    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.BigDecimal, format = "￥###,##0.00")
     private BigDecimal balance;
 
 }

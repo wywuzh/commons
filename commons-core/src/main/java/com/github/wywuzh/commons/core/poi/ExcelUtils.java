@@ -436,11 +436,12 @@ public class ExcelUtils {
                     String columnName = columns[k];
 
                     Object realValue = getRealValue(data, columnName);
-                    // todo 字段
-                    // cell.setCellValue(String.valueOf(realValue));
+                    // 设置cell列字段值
                     setCellValue(workbook, cell, data, columnName, realValue);
+                    // 设置cell列style样式
                     setCellStyle(workbook, cell, contentStyle, data, columnName);
 
+                    // 列宽有设置时以设置为准，否则通过字段值长度计算列宽
                     if (columnLengths != null && columnLengths.length > 0) {
                         maxLength[k] = columnLengths[k] * 30;
                     } else {
@@ -498,7 +499,7 @@ public class ExcelUtils {
         if (StringUtils.isNotBlank(excelCell.format())) {
             dataFormat = workbook.createDataFormat().getFormat(excelCell.format());
         }
-        if (dataFormat != -1) {
+        if (dataFormat == -1) {
             // 系统预设单元格格式
             dataFormat = getCellDateFormat(workbook, excelCell.cellType());
         }
@@ -608,47 +609,7 @@ public class ExcelUtils {
             cell.setCellValue("");
             return;
         }
-        // 取到columnName对应的实际字段/方法
-        Object realField = getRealField(data, columnName);
-        ExcelCell excelCell = null;
-        if (realField instanceof Field) {
-            excelCell = ((Field) realField).getAnnotation(ExcelCell.class);
-        } else if (realField instanceof Method) {
-            excelCell = ((Method) realField).getAnnotation(ExcelCell.class);
-        }
-        CellTypeEnum cellTypeEnum = null;
-        if (excelCell != null) {
-            cellTypeEnum = excelCell.cellType();
-        }
-
-        if (realValue instanceof Date) {
-            // 进行转换
-            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_DATE_TIME);
-            // 将属性值存入单元格
-            cell.setCellValue(dateValue);
-        } else if (realValue instanceof java.sql.Date) {
-            // 进行转换
-            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_DATE);
-            // 将属性值存入单元格
-            cell.setCellValue(dateValue);
-        } else if (realValue instanceof java.sql.Time) {
-            // 进行转换
-            String dateValue = DateUtils.format((Date) realValue, DateUtils.PATTERN_TIME);
-            // 将属性值存入单元格
-            cell.setCellValue(dateValue);
-        } else if (realValue instanceof BigDecimal || realValue instanceof Float || realValue instanceof Double) {
-            if (realValue.toString().matches("^(-?\\d+)(\\.\\d+)?$")) { // 数值型
-                // 将属性值存入单元格
-                cell.setCellValue(new BigDecimal(realValue.toString()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
-            } else if (realValue.toString().matches("^[-\\+]?[\\d]*$")) { // 整数
-                // 将属性值存入单元格
-                cell.setCellValue(new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP).doubleValue());
-            }
-        } else if (realValue instanceof Byte || realValue instanceof Short || realValue instanceof Integer || realValue instanceof Long) {
-            cell.setCellValue(new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP).longValue());
-        } else {
-            cell.setCellValue(realValue.toString());
-        }
+        cell.setCellValue(String.valueOf(realValue));
     }
 
     @Deprecated
