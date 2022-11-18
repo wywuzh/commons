@@ -15,11 +15,11 @@
  */
 package com.github.wywuzh.commons.core.poi.entity;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
 import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 import lombok.Data;
 
@@ -36,22 +36,27 @@ public class User {
     /**
      * 用户名
      */
+    @ExcelCell(value = "用户名")
     private String username;
     /**
      * 昵称
      */
+    @ExcelCell(value = "昵称")
     private String nick;
     /**
      * 邮箱
      */
+    @ExcelCell(value = "邮箱")
     private String email;
     /**
      * 手机号
      */
+    @ExcelCell(value = "手机号")
     private String mobile;
     /**
      * 性别
      */
+    @ExcelCell(value = "性别")
     private String sex;
     /**
      * 出生日期

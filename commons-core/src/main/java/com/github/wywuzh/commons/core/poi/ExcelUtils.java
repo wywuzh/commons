@@ -15,6 +15,18 @@
  */
 package com.github.wywuzh.commons.core.poi;
 
+import cn.hutool.core.annotation.AnnotationUtil;
+import com.github.wywuzh.commons.core.common.ContentType;
+import com.github.wywuzh.commons.core.math.CalculationUtils;
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
+import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
+import com.github.wywuzh.commons.core.reflect.ReflectUtils;
+import com.github.wywuzh.commons.core.util.DateUtils;
+import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -29,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.AnnotationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -40,17 +53,6 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-
-import com.github.wywuzh.commons.core.common.ContentType;
-import com.github.wywuzh.commons.core.math.CalculationUtils;
-import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
-import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
-import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
-import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
-import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
-import com.github.wywuzh.commons.core.reflect.ReflectUtils;
-import com.github.wywuzh.commons.core.util.DateUtils;
-import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
 
 /**
  * 类ExcelUtils的实现描述：Excel 工具
@@ -1095,7 +1097,7 @@ public class ExcelUtils {
 
         List<T> resultList = new LinkedList<>();
         try {
-            // 解析需要读取的字段，如果 columns 为空，就以 clazz 类中ExcelCell标记的字段为准
+            // 解析需要读取的字段，如果 columns 为空，就以 clazz 类中 @ExcelCell 注解标记的字段为准
             columns = transformRealColumns(clazz, columns);
             Assert.notEmpty(columns, "columns must not be empty");
 
@@ -1106,6 +1108,7 @@ public class ExcelUtils {
                 Sheet sheet = workbook.getSheetAt(i);
                 // 检查sheet是否隐藏，如果是则不读取数据
                 if (sheet == null || StringUtils.contains(sheet.getSheetName(), "hiddenSheet") || workbook.isSheetHidden(i) || workbook.isSheetVeryHidden(i)) {
+                    LOGGER.warn("sheetName={} 该sheet页为隐藏sheet，不读取该sheet页数据！", sheet.getSheetName());
                     continue;
                 }
                 resultList.addAll(getSheetData(workbook, sheet, clazz, columns, startRow));
@@ -1118,7 +1121,7 @@ public class ExcelUtils {
     }
 
     /**
-     * 解析需要读取的字段，如果 columns 为空，就以 clazz 类中ExcelCell标记的字段为准
+     * 解析需要读取的字段，如果 columns 为空，就以 clazz 类中 @ExcelCell 注解标记的字段为准
      *
      * @param clazz   目标类
      * @param columns 需要读取的字段
@@ -1128,6 +1131,7 @@ public class ExcelUtils {
         if (columns != null && columns.length != 0) {
             return columns;
         }
+
         List<String> columnList = new LinkedList<>();
         for (Field field : FieldUtils.getAllFieldsList(clazz)) {
             String fieldName = field.getName();
