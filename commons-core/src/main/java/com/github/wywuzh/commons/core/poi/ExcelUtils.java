@@ -15,18 +15,6 @@
  */
 package com.github.wywuzh.commons.core.poi;
 
-import cn.hutool.core.annotation.AnnotationUtil;
-import com.github.wywuzh.commons.core.common.ContentType;
-import com.github.wywuzh.commons.core.math.CalculationUtils;
-import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
-import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
-import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
-import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
-import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
-import com.github.wywuzh.commons.core.reflect.ReflectUtils;
-import com.github.wywuzh.commons.core.util.DateUtils;
-import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
-
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -41,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.AnnotationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -53,6 +40,19 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+
+import com.github.wywuzh.commons.core.common.ContentType;
+import com.github.wywuzh.commons.core.math.CalculationUtils;
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+import com.github.wywuzh.commons.core.poi.modle.ExcelCellField;
+import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
+import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
+import com.github.wywuzh.commons.core.reflect.ReflectUtils;
+import com.github.wywuzh.commons.core.util.DateUtils;
+import com.github.wywuzh.commons.core.util.SortUtils;
+import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
 
 /**
  * 类ExcelUtils的实现描述：Excel 工具
@@ -197,16 +197,16 @@ public class ExcelUtils {
         // 创建workbook
         Workbook workbook = createWorkbook(fileName);
         for (int i = 0; i < sheetNames.length; i++) {
-            ExcelRequest excelRequest = new ExcelRequest();
-            excelRequest.setSheetName(sheetNames[i]);
-            excelRequest.setColumns(sheetColumnNames[i]);
-            excelRequest.setColumnTitles(sheetColumnComments[i]);
-            excelRequest.setDataColl(dataColl[i]);
+            ExcelExportRequest excelExportRequest = new ExcelExportRequest();
+            excelExportRequest.setSheetName(sheetNames[i]);
+            excelExportRequest.setColumns(sheetColumnNames[i]);
+            excelExportRequest.setColumnTitles(sheetColumnComments[i]);
+            excelExportRequest.setDataColl(dataColl[i]);
 
             // 创建sheet
-            Sheet sheet = createSheet(workbook, excelRequest);
+            Sheet sheet = createSheet(workbook, excelExportRequest);
             // 写入内容
-            writeData(workbook, sheet, excelRequest);
+            writeData(workbook, sheet, excelExportRequest);
         }
 
         workbook.write(outputStream);
@@ -217,12 +217,12 @@ public class ExcelUtils {
     /**
      * 导出数据
      *
-     * @param request      请求信息
-     * @param response     响应信息
-     * @param fileName     导出文件名，注意需要包含文件后缀
-     * @param excelRequest 导出数据请求条件
+     * @param request            请求信息
+     * @param response           响应信息
+     * @param fileName           导出文件名，注意需要包含文件后缀
+     * @param excelExportRequest 导出数据请求条件
      */
-    public static void exportData(HttpServletRequest request, HttpServletResponse response, String fileName, ExcelRequest excelRequest)
+    public static void exportData(HttpServletRequest request, HttpServletResponse response, String fileName, ExcelExportRequest excelExportRequest)
             throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         OutputStream outputStream = response.getOutputStream();
         response.reset();
@@ -240,9 +240,9 @@ public class ExcelUtils {
         // 创建workbook
         Workbook workbook = createWorkbook(fileName);
         // 创建sheet
-        Sheet sheet = createSheet(workbook, excelRequest);
+        Sheet sheet = createSheet(workbook, excelExportRequest);
         // 写入内容
-        writeData(workbook, sheet, excelRequest);
+        writeData(workbook, sheet, excelExportRequest);
 
         workbook.write(outputStream);
         outputStream.flush();
@@ -265,13 +265,13 @@ public class ExcelUtils {
     /**
      * 创建sheet
      *
-     * @param workbook     工作簿
-     * @param excelRequest Excel请求
+     * @param workbook           工作簿
+     * @param excelExportRequest Excel导出请求
      * @return
      * @since 2.3.6
      */
-    public static Sheet createSheet(Workbook workbook, ExcelRequest excelRequest) {
-        String sheetName = excelRequest.getSheetName();
+    public static Sheet createSheet(Workbook workbook, ExcelExportRequest excelExportRequest) {
+        String sheetName = excelExportRequest.getSheetName();
         if (StringUtils.isEmpty(sheetName)) {
             sheetName = workbook.getNumberOfSheets() > 1 ? "sheet" + (workbook.getNumberOfSheets() + 1) : "sheet";
         }
@@ -306,30 +306,30 @@ public class ExcelUtils {
      */
     public static <T> void writeData(Workbook workbook, Sheet sheet, String[] sheetColumnNames, String[] sheetColumnComments, Collection<T> dataColl)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        ExcelRequest excelRequest = new ExcelRequest();
-        excelRequest.setColumns(sheetColumnNames);
-        excelRequest.setColumnTitles(sheetColumnComments);
-        excelRequest.setDataColl(dataColl);
+        ExcelExportRequest excelExportRequest = new ExcelExportRequest();
+        excelExportRequest.setColumns(sheetColumnNames);
+        excelExportRequest.setColumnTitles(sheetColumnComments);
+        excelExportRequest.setDataColl(dataColl);
 
         // 写入内容
-        writeData(workbook, sheet, excelRequest);
+        writeData(workbook, sheet, excelExportRequest);
     }
 
     /**
      * 写入数据
      *
-     * @param workbook     工作簿
-     * @param sheet        写入数据的目标sheet
-     * @param excelRequest Excel请求
+     * @param workbook           工作簿
+     * @param sheet              写入数据的目标sheet
+     * @param excelExportRequest Excel导出请求
      * @return
      * @throws NoSuchMethodException
      * @throws IllegalAccessException
      * @throws InvocationTargetException
      */
-    public static Sheet writeData(Workbook workbook, Sheet sheet, ExcelRequest excelRequest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        Assert.notNull(excelRequest, "excelRequest must not be null");
-        Assert.notEmpty(excelRequest.getColumns(), "columns must not be empty");
-        Assert.notEmpty(excelRequest.getColumnTitles(), "columnTitles must not be empty");
+    public static Sheet writeData(Workbook workbook, Sheet sheet, ExcelExportRequest excelExportRequest) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        Assert.notNull(excelExportRequest, "excelRequest must not be null");
+        Assert.notEmpty(excelExportRequest.getColumns(), "columns must not be empty");
+        Assert.notEmpty(excelExportRequest.getColumnTitles(), "columnTitles must not be empty");
 
         // 生成头部列(单元格)样式
         CellStyle headerStyle = createHeaderStyle(workbook);
@@ -337,10 +337,10 @@ public class ExcelUtils {
         // 生成内容列(单元格)样式
         CellStyle contentStyle = createContentStyle(workbook);
 
-        String[] columns = excelRequest.getColumns();
-        String[] columnTitles = excelRequest.getColumnTitles();
-        Integer[] columnLengths = excelRequest.getColumnLengths();
-        List<String> requiredColumnTitles = excelRequest.getRequiredColumnTitles();
+        String[] columns = excelExportRequest.getColumns();
+        String[] columnTitles = excelExportRequest.getColumnTitles();
+        Integer[] columnLengths = excelExportRequest.getColumnLengths();
+        List<String> requiredColumnTitles = excelExportRequest.getRequiredColumnTitles();
         if (CollectionUtils.isNotEmpty(requiredColumnTitles)) {
             requiredHeaderStyle = createHeaderStyleForRequired(workbook);
         }
@@ -349,17 +349,17 @@ public class ExcelUtils {
 
         // 数据开始行
         int firstRowNumber = 1;
-        if (StringUtils.isNotBlank(excelRequest.getTips())) {
+        if (StringUtils.isNotBlank(excelExportRequest.getTips())) {
             firstRowNumber = 2;
             Row tipsRow = sheet.createRow(0);
             // 第一行添加提示信息
             Cell cell = tipsRow.createCell(0);
-            cell.setCellValue(excelRequest.getTips());
+            cell.setCellValue(excelExportRequest.getTips());
             cell.setCellStyle(createHeaderStyleForTips(workbook));
             // 合并单元格，合并的列与导出列保持一致
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, columns.length - 1));
             // 设置第一行高度
-            int length = StringUtils.split(excelRequest.getTips(), "\n").length;
+            int length = StringUtils.split(excelExportRequest.getTips(), "\n").length;
             tipsRow.setHeightInPoints(length * 18);
             // 设置自动换行
             cell.getCellStyle().setWrapText(true);
@@ -368,7 +368,7 @@ public class ExcelUtils {
         // 因为POI自动列宽计算的是String.length长度，在中文环境下会有问题，所以自行处理
         int[] maxLength = new int[columnTitles.length];
 
-        Map<String, String[]> columnValidation = excelRequest.getColumnValidation();
+        Map<String, String[]> columnValidation = excelExportRequest.getColumnValidation();
 
         // 标题行
         Row headerRow = sheet.createRow(firstRowNumber - 1);
@@ -419,8 +419,8 @@ public class ExcelUtils {
         sheet.createFreezePane(0, firstRowNumber);
 
         // 输入值
-        if (excelRequest.getDataColl() != null) {
-            Iterator<?> iterator = excelRequest.getDataColl().iterator();
+        if (excelExportRequest.getDataColl() != null) {
+            Iterator<?> iterator = excelExportRequest.getDataColl().iterator();
             int index = firstRowNumber;
             while (iterator.hasNext()) {
                 Object data = iterator.next();
@@ -1132,9 +1132,30 @@ public class ExcelUtils {
             return columns;
         }
 
+        List<Field> fieldList = FieldUtils.getFieldsListWithAnnotation(clazz, ExcelCell.class);
+        if (CollectionUtils.isEmpty(fieldList)) {
+            return columns;
+        }
+        List<ExcelCellField> excelCellFieldList = new ArrayList<>(fieldList.size());
+        for (Field field : fieldList) {
+            ExcelCell excelCell = field.getAnnotation(ExcelCell.class);
+
+            ExcelCellField excelCellField = new ExcelCellField();
+            excelCellField.setFieldName(field.getName());
+            excelCellField.setFieldTitle(excelCell.value());
+            excelCellField.setIndex(excelCell.index());
+            excelCellField.setSortNo(excelCell.sort());
+            excelCellField.setFormat(excelCell.format());
+            excelCellFieldList.add(excelCellField);
+        }
+        // 排序：索引、排序、字段标题
+        SortUtils.sort(excelCellFieldList, new String[] {
+                "index"/* , "sortNo", "fieldTitle" */
+        });
+
         List<String> columnList = new LinkedList<>();
-        for (Field field : FieldUtils.getAllFieldsList(clazz)) {
-            String fieldName = field.getName();
+        for (ExcelCellField excelCellField : excelCellFieldList) {
+            String fieldName = excelCellField.getFieldName();
             columnList.add(fieldName);
         }
         return columnList.toArray(new String[0]);
