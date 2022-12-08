@@ -96,6 +96,7 @@
         <dom4j.version>2.1.3</dom4j.version>
 
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <commons-collections.version>3.2.2</commons-collections.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-compress.version>1.21</commons-compress.version>
         <commons-configuration.version>1.10</commons-configuration.version>
@@ -135,7 +136,7 @@
         <alibaba-dingtalk-service-sdk.version>2.0.0</alibaba-dingtalk-service-sdk.version>
 
         <webjars.jquery.version>3.6.0</webjars.jquery.version>
-        <webjars.jquery-ui.version>1.13.0</webjars.jquery-ui.version>
+        <webjars.jquery-ui.version>1.13.1</webjars.jquery-ui.version>
         <webjars.jquery-mobile.version>1.4.5</webjars.jquery-mobile.version>
         <webjars.jquery-form.version>4.2.2</webjars.jquery-form.version>
         <webjars.bootstrap.version>5.1.3</webjars.bootstrap.version>
@@ -265,6 +266,11 @@
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
                 <version>${commons-beanutils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>${commons-collections.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
