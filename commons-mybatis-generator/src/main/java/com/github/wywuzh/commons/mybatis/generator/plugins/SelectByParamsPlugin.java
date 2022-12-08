@@ -16,6 +16,7 @@
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
 import com.github.wywuzh.commons.core.util.StringHelper;
+import com.github.wywuzh.commons.mybatis.generator.constant.PropertyConstants;
 import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
@@ -36,7 +37,7 @@ import org.mybatis.generator.config.TableConfiguration;
 
 /**
  * 类SelectByParamsPlugin的实现描述：自定义select查询插件
- * 
+ *
  * <pre class="code">
  * <strong>enableLogicDelete使用方式</strong>：
  * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在
@@ -85,26 +86,8 @@ import org.mybatis.generator.config.TableConfiguration;
  * @version v2.1.1
  * @since JDK 1.8
  */
-public class SelectByParamsPlugin extends BasePlugin {
+public abstract class SelectByParamsPlugin extends BasePlugin {
 
-    /**
-     * 表是否开启逻辑删除
-     *
-     * @since 2.3.6
-     */
-    public static final String ENABLE_LOGIC_DELETE = "enableLogicDelete";
-    /**
-     * 逻辑删除字段。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件。
-     *
-     * @since 2.3.6
-     */
-    public static final String LOGIC_DELETE_FIELD = "logicDeleteField";
-    /**
-     * 排除数据sql，即剔除已删除数据的sql
-     *
-     * @since 2.3.6
-     */
-    public static final String EXCLUDE_DELETED_SQL = "excludeDeletedSql";
     /**
      * 表是否开启逻辑删除，默认为true
      *
@@ -156,26 +139,40 @@ public class SelectByParamsPlugin extends BasePlugin {
      */
     public static final String CONDITIONS_NOT_IN_COLUMNS = "conditionsNotInColumns";
 
+    /**
+     * 查询插件
+     *
+     * @since v2.7.0
+     */
+    protected SelectByParamsPlugin selectPlugin;
+
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
 
         // v2.3.6
         // 表是否开启逻辑删除，默认为true
-        String enableLogicDelete = super.getProperties().getProperty(ENABLE_LOGIC_DELETE);
+        String enableLogicDelete = super.getProperties().getProperty(PropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
         if (StringUtils.isNotBlank(enableLogicDelete)) {
             this.enableLogicDelete = Boolean.valueOf(enableLogicDelete);
         }
         // 逻辑删除字段
-        String logicDeleteField = super.getProperties().getProperty(LOGIC_DELETE_FIELD);
+        String logicDeleteField = super.getProperties().getProperty(PropertyConstants.PROPERTY_LOGIC_DELETE_FIELD);
         if (StringUtils.isNotBlank(enableLogicDelete)) {
             this.logicDeleteField = logicDeleteField;
         }
         // 排除数据sql，即剔除已删除数据的sql
-        String excludeDeletedSql = super.getProperties().getProperty(EXCLUDE_DELETED_SQL);
+        String excludeDeletedSql = super.getProperties().getProperty(PropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
         if (StringUtils.isNotBlank(excludeDeletedSql)) {
             this.excludeDeletedSql = excludeDeletedSql;
         }
+
+//        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+//        if (StringUtils.containsAny(driverClass, new String[]{DRIVER_MySQL, DRIVER_MySQL6, DRIVER_MariaDB})) {
+//            selectPlugin = new MySQLSelectByParamsPlugin();
+//        }else if (StringUtils.containsAny(driverClass, new String[]{DRIVER_ORACLE_OLD, DRIVER_ORACLE})) {
+//            selectPlugin = new OracleSelectByParamsPlugin();
+//        }
     }
 
     /**
@@ -185,9 +182,9 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      * @since 2.3.6
      */
-    private boolean enableLogicDelete(TableConfiguration tableConfiguration) {
+    protected boolean enableLogicDelete(TableConfiguration tableConfiguration) {
         // 如果在<table>中有配置，以该配置为准，否则读取全局配置
-        String enableLogicDelete = tableConfiguration.getProperty(ENABLE_LOGIC_DELETE);
+        String enableLogicDelete = tableConfiguration.getProperty(PropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
         if (StringUtils.isNotBlank(enableLogicDelete)) {
             return Boolean.valueOf(enableLogicDelete);
         }
@@ -201,9 +198,9 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      * @since 2.3.6
      */
-    private String excludeDeletedSql(TableConfiguration tableConfiguration) {
+    protected String excludeDeletedSql(TableConfiguration tableConfiguration) {
         // 如果在<table>中有配置，以该配置为准，否则读取全局配置
-        String excludeDeletedSql = tableConfiguration.getProperty(EXCLUDE_DELETED_SQL);
+        String excludeDeletedSql = tableConfiguration.getProperty(PropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
         if (StringUtils.isNotBlank(excludeDeletedSql)) {
             return excludeDeletedSql;
         }
@@ -322,14 +319,15 @@ public class SelectByParamsPlugin extends BasePlugin {
         // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
         commentGenerator.addComment(selectPagerEle);
 
-        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
-        if (DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass) || DRIVER_ORACLE.equalsIgnoreCase(driverClass)) {
-            // 生成Oracle分页查询SQL
-            generateOraclePager(document, introspectedTable, selectPagerEle, includeConditionsEle);
-        } else {
-            // 生成MySQL分页查询SQL
-            generateMySQLPager(document, introspectedTable, selectPagerEle, includeConditionsEle);
-        }
+        generateSqlMapForPager(document, introspectedTable, selectPagerEle, includeConditionsEle);
+//        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+//        if (DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass) || DRIVER_ORACLE.equalsIgnoreCase(driverClass)) {
+//            // 生成Oracle分页查询SQL
+//            generateOraclePager(document, introspectedTable, selectPagerEle, includeConditionsEle);
+//        } else {
+//            // 生成MySQL分页查询SQL
+//            generateMySQLPager(document, introspectedTable, selectPagerEle, includeConditionsEle);
+//        }
         document.getRootElement().addElement(selectPagerEle);
 
         // 4. 生成where条件
@@ -337,6 +335,18 @@ public class SelectByParamsPlugin extends BasePlugin {
         return true;
     }
 
+    /**
+     * xml映射器文件sql：分页
+     *
+     * @param document
+     * @param introspectedTable    table表信息
+     * @param selectPagerEle       分页查询节点
+     * @param includeConditionsEle 引入where条件
+     * @since v2.7.0
+     */
+    protected abstract void generateSqlMapForPager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle);
+
+    @Deprecated
     private void generateMySQLPager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle) {
         // select条件
         Element selectWhereElement = getSelectWhereElement(introspectedTable);
@@ -355,6 +365,7 @@ public class SelectByParamsPlugin extends BasePlugin {
         selectPagerEle.addElement(new TextElement("limit #{offset}, #{pageSize}"));
     }
 
+    @Deprecated
     private void generateOraclePager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle) {
         // select条件
         Element selectWhereElement = getSelectWhereElement(introspectedTable);
@@ -385,7 +396,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      * @since 2.3.6
      */
-    private Element getSelectWhereElement(IntrospectedTable introspectedTable) {
+    protected Element getSelectWhereElement(IntrospectedTable introspectedTable) {
         // 表是否开启逻辑删除，默认为true
         boolean enableLogicDelete = enableLogicDelete(introspectedTable.getTableConfiguration());
         // 排除数据sql，即剔除已删除数据的sql
@@ -410,7 +421,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      * @since 2.3.6
      */
-    private XmlElement generateConditionsElement(IntrospectedTable introspectedTable) {
+    protected XmlElement generateConditionsElement(IntrospectedTable introspectedTable) {
         XmlElement conditionsElement = new XmlElement("sql");
         conditionsElement.addAttribute(new Attribute("id", WHERE_CONDITION));
         // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
@@ -470,7 +481,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @param rootElement       父节点
      * @since 2.3.6
      */
-    private void addElementForAppendConditions(IntrospectedTable introspectedTable, XmlElement rootElement) {
+    protected void addElementForAppendConditions(IntrospectedTable introspectedTable, XmlElement rootElement) {
         TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
 
         // 开启Like模糊查询
@@ -538,7 +549,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @param columnName   表字段名
      * @param javaProperty Java字段名
      */
-    private void addElementForLike(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+    protected void addElementForLike(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
         // 获取字段类型
         int columnJdbcType = introspectedColumn.getJdbcType();
         JdbcType jdbcType = JdbcType.forCode(columnJdbcType);
@@ -558,25 +569,35 @@ public class SelectByParamsPlugin extends BasePlugin {
         mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
 
         javaProperty = "#{" + javaProperty + "}";
-        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
-        if (DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass) || DRIVER_ORACLE.equalsIgnoreCase(driverClass)) {
-            // 生成Oracle模糊查询SQL
-            String likeSql = " like '%'||" + javaProperty + "||'%'";
-            mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
-        } else {
-            // 生成MySQL模糊查询SQL
-            String likeSql = " like concat('%'," + javaProperty + ",'%')";
-            mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
-        }
+//        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
+//        if (DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass) || DRIVER_ORACLE.equalsIgnoreCase(driverClass)) {
+//            // 生成Oracle模糊查询SQL
+//            String likeSql = " like '%'||" + javaProperty + "||'%'";
+//            mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
+//        } else {
+//            // 生成MySQL模糊查询SQL
+//            String likeSql = " like concat('%'," + javaProperty + ",'%')";
+//            mapKeyIfElement.addElement(new TextElement("and " + columnName + likeSql));
+//        }
+        mapKeyIfElement.addElement(new TextElement("and " + columnName + resolveDbLikeSql(javaProperty)));
         whereElement.addElement(mapKeyIfElement);
     }
+
+    /**
+     * 生成模糊查询SQL
+     *
+     * @param javaProperty java属性
+     * @return
+     * @since v2.7.0
+     */
+    protected abstract String resolveDbLikeSql(String javaProperty);
 
     /**
      * @param whereElement
      * @param columnName   表字段名
      * @param javaProperty Java字段名
      */
-    private void addElementForIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+    protected void addElementForIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
         // 第二步：添加map中key的空判断
         XmlElement mapKeyIfElement = new XmlElement("if");
         mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + ".size &gt; 0"));
@@ -601,7 +622,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @param columnName   表字段名
      * @param javaProperty Java字段名
      */
-    private void addElementForNotIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
+    protected void addElementForNotIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
         // 第二步：添加map中key的空判断
         XmlElement mapKeyIfElement = new XmlElement("if");
         mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + ".size &gt; 0"));
@@ -627,7 +648,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @param tableConfiguration
      * @return
      */
-    private List<String> getConditionsLikeColumns(TableConfiguration tableConfiguration) {
+    protected List<String> getConditionsLikeColumns(TableConfiguration tableConfiguration) {
         List<String> resultList = new LinkedList<>();
 
         String conditionsLikeColumns = tableConfiguration.getProperty(CONDITIONS_LIKE_COLUMNS);
@@ -652,7 +673,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @param tableConfiguration
      * @return
      */
-    private List<String> getConditionsForeachInColumns(TableConfiguration tableConfiguration) {
+    protected List<String> getConditionsForeachInColumns(TableConfiguration tableConfiguration) {
         List<String> resultList = new LinkedList<>();
 
         String conditionsForeachInColumns = tableConfiguration.getProperty(CONDITIONS_FOREACH_IN_COLUMNS);
@@ -678,7 +699,7 @@ public class SelectByParamsPlugin extends BasePlugin {
      * @return
      * @since v2.4.5
      */
-    private List<String> getConditionsNotInColumns(TableConfiguration tableConfiguration) {
+    protected List<String> getConditionsNotInColumns(TableConfiguration tableConfiguration) {
         List<String> resultList = new LinkedList<>();
 
         String conditionsNotInColumns = tableConfiguration.getProperty(CONDITIONS_NOT_IN_COLUMNS);
@@ -697,7 +718,7 @@ public class SelectByParamsPlugin extends BasePlugin {
         return resultList;
     }
 
-    private XmlElement generateSortElement(IntrospectedTable introspectedTable) {
+    protected XmlElement generateSortElement(IntrospectedTable introspectedTable) {
         XmlElement sortRootElement = new XmlElement("if");
         sortRootElement.addAttribute(new Attribute("test", "map != null and map.sorts != null and map.sorts.size &gt; 0"));
         sortRootElement.addElement(new TextElement("order by"));
