@@ -21,13 +21,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 类ExcelRequest的实现描述：请求数据
+ * 类ExcelRequest的实现描述：导出请求数据
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2020-05-29 10:55:10
  * @version v2.2.6
  * @since JDK 1.8
  */
-public class ExcelRequest implements Serializable {
+public class ExcelExportRequest implements Serializable {
     private static final long serialVersionUID = -4416704498235565697L;
 
     private String sheetName;
@@ -64,7 +64,7 @@ public class ExcelRequest implements Serializable {
      */
     private String tips;
 
-    public ExcelRequest() {
+    public ExcelExportRequest() {
     }
 
     public String getSheetName() {
