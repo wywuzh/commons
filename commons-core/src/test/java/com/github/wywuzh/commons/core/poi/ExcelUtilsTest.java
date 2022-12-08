@@ -15,20 +15,23 @@
  */
 package com.github.wywuzh.commons.core.poi;
 
-import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
-import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
-import com.github.wywuzh.commons.core.poi.entity.User;
-import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
-
 import java.io.*;
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import lombok.extern.slf4j.Slf4j;
-
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.junit.Test;
+
+import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
+import com.github.wywuzh.commons.core.poi.entity.User;
+import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 类ExcelUtilsTest的实现描述：Excel 工具
@@ -103,7 +106,7 @@ public class ExcelUtilsTest {
         user.setMobile("14700000000");
         user.setSex("男");
         user.setBirthdate(new Date());
-        user.setBalance(new BigDecimal("0"));
+        user.setBalance(new BigDecimal("100000000000"));
         dataColl.add(user);
 
         Map<String, String[]> columnValidation = new HashMap<>();
@@ -112,14 +115,14 @@ public class ExcelUtilsTest {
         };
         columnValidation.put("性别", genders);
 
-        ExcelRequest excelRequest = new ExcelRequest();
-        excelRequest.setColumns(columns);
-        excelRequest.setColumnTitles(columnTitles);
-        excelRequest.setColumnLengths(columnLengths);
-        excelRequest.setRequiredColumnTitles(requiredColumnTitles);
-        excelRequest.setDataColl(dataColl);
-        excelRequest.setColumnValidation(columnValidation);
-        excelRequest.setTips("注：用户信息不能删除！");
+        ExcelExportRequest excelExportRequest = new ExcelExportRequest();
+        excelExportRequest.setColumns(columns);
+        excelExportRequest.setColumnTitles(columnTitles);
+        excelExportRequest.setColumnLengths(columnLengths);
+        excelExportRequest.setRequiredColumnTitles(requiredColumnTitles);
+        excelExportRequest.setDataColl(dataColl);
+        excelExportRequest.setColumnValidation(columnValidation);
+        excelExportRequest.setTips("注：用户信息不能删除！");
 
         OutputStream outputStream = null;
         try {
@@ -132,9 +135,9 @@ public class ExcelUtilsTest {
             // 创建workbook
             Workbook workbook = ExcelUtils.createWorkbook(fileName);
             // 创建sheet
-            Sheet sheet = ExcelUtils.createSheet(workbook, excelRequest);
+            Sheet sheet = ExcelUtils.createSheet(workbook, excelExportRequest);
             // 写入内容
-            ExcelUtils.writeData(workbook, sheet, excelRequest);
+            ExcelUtils.writeData(workbook, sheet, excelExportRequest);
 
             workbook.write(outputStream);
             outputStream.flush();
@@ -155,11 +158,11 @@ public class ExcelUtilsTest {
     public void importTest() throws Exception {
         InputStream inputStream = null;
         try {
-            inputStream = new FileInputStream(new File("D:\\data\\用户信息.xlsx"));
+            inputStream = new FileInputStream(new File("D:\\data\\用户信息1668666946221.xlsx"));
             String[] columns = {
                     "username", "nick", "email", "mobile", "sex"
             };
-            List<User> dataColl = ExcelUtils.importData(inputStream, User.class, columns, 2);
+            List<User> dataColl = ExcelUtils.importData(inputStream, User.class, null, 2);
             log.info("导入结果:{}", JsonMapper.buildNonEmptyMapper().toJson(dataColl));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
@@ -168,6 +171,12 @@ public class ExcelUtilsTest {
                 inputStream.close();
             }
         }
+    }
+
+    @Test
+    public void getFieldsListWithAnnotation() {
+        List<Field> fieldList = FieldUtils.getFieldsListWithAnnotation(User.class, ExcelCell.class);
+        log.info("字段：{}", fieldList);
     }
 
 }

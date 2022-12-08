@@ -60,4 +60,12 @@ public @interface ExcelCell {
      */
     int index() default 0;
 
+    /**
+     * 排序，从0开始
+     *
+     * @return
+     * @since v2.7.0
+     */
+    int sort() default 0;
+
 }

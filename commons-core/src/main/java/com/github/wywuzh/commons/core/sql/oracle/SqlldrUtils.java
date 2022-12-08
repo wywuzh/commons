@@ -37,7 +37,7 @@ import sun.awt.OSInfo;
 
 /**
  * 类SqlldrUtils的实现描述：SQL*LOADER工具
- * 
+ *
  * <pre>
  * 参考：
  * https://blog.csdn.net/cqc18951/article/details/100236316
@@ -251,8 +251,15 @@ public class SqlldrUtils {
             }
             if (field.getType() == String.class) {
                 // html转义符
-                value = String.valueOf(value).replaceAll("\"", "“").replaceAll("'", "‘").replaceAll("\n", "char(10)") // ascii码换行
-                        .replaceAll("\r", "char(13)"); // ascii码回车
+                value = String.valueOf(value)
+                        // 双引号
+                        .replaceAll("\"", "“")
+                        // 单引号
+                        .replaceAll("'", "‘")
+                        // ascii码换行
+                        .replaceAll("\n", "char(10)")
+                        // ascii码回车
+                        .replaceAll("\r", "char(13)");
                 value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, value, Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
             } else if (field.getType() == java.util.Date.class) {
                 value = StringUtils.join(Constants.SEPARATE_DOUBLE_QUOTATION_MARK, DateUtils.format((Date) value, DateUtils.PATTERN_DATE_TIME), Constants.SEPARATE_DOUBLE_QUOTATION_MARK);
