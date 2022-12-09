@@ -157,12 +157,12 @@
 
         <!-- Maven插件 -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
-        <flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
-        <formatter.version note="Stay with 2.16.0 for jdk 8 support for time being">2.16.0</formatter.version>
-        <impsort.version>1.6.2</impsort.version>
+        <flatten-maven-plugin.version>1.3.0</flatten-maven-plugin.version>
+        <formatter-maven-plugin.version>2.21.0</formatter-maven-plugin.version>
+        <impsort-maven-plugin.version>1.6.2</impsort-maven-plugin.version>
         <build-tools.version>1.2.7</build-tools.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
-        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <!-- Maven插件配置 -->
         <formatter.config>eclipse_codeformat_4space.xml</formatter.config>
         <impsort.groups>au,com,de,java,javassist,javax,lombok,mockit,net,ognl,org</impsort.groups>
@@ -808,7 +808,7 @@
                         <header>${project.basedir}/license.txt</header>
                         <!-- 排除文件：不需要添加版权信息的文件 -->
                         <excludes>
-                            <exclude>src/main/java/com/itfsw/**</exclude>
+                            <exclude>**/itfsw/**</exclude>
                             <exclude>.editorconfig</exclude>
                             <exclude>.gitignore</exclude>
                             <exclude>**/META-INF/**</exclude>
@@ -870,7 +870,7 @@
                 <plugin>
                     <groupId>net.revelc.code.formatter</groupId>
                     <artifactId>formatter-maven-plugin</artifactId>
-                    <version>${formatter.version}</version>
+                    <version>${formatter-maven-plugin.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.github.hazendaz</groupId>
@@ -887,7 +887,7 @@
                 <plugin>
                     <groupId>net.revelc.code</groupId>
                     <artifactId>impsort-maven-plugin</artifactId>
-                    <version>${impsort.version}</version>
+                    <version>${impsort-maven-plugin.version}</version>
                     <configuration>
                         <groups>${impsort.groups}</groups>
                         <staticGroups>java,*</staticGroups>

@@ -19,7 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * 类OSPlatform的实现描述：操作系统平台枚举类
- * 
+ *
  * <pre>
  * 参考：
  * https://blog.csdn.net/fangchao2011/article/details/88785637

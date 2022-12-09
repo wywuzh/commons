@@ -38,7 +38,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 /**
  * 类BatchUpdatePlugin的实现描述：批量更新SQL插件
- * 
+ *
  * <pre class="code">
  * <strong>enableMergeInto使用方式</strong>：
  * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在

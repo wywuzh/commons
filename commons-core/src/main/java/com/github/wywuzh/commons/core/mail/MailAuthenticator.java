@@ -15,15 +15,15 @@
  */
 package com.github.wywuzh.commons.core.mail;
 
-import javax.mail.Authenticator;
-import javax.mail.PasswordAuthentication;
+import jakarta.mail.Authenticator;
+import jakarta.mail.PasswordAuthentication;
 
 /**
  * 类MailAuthenticator.java的实现描述：服务器邮箱登录验证
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:50:57
  * @version v1.0.0
- * @see javax.mail.Authenticator
+ * @see jakarta.mail.Authenticator
  * @since JDK 1.7
  */
 public class MailAuthenticator extends Authenticator {

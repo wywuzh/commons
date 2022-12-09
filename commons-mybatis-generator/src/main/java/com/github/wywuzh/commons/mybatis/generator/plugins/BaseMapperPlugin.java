@@ -32,7 +32,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 /**
  * 类BaseMapperPlugin的实现描述：BaseMapper基类插件。参考网址：https://blog.csdn.net/u011781521/article/details/78697775
- * 
+ *
  * <pre class="code">
  * 使用方式：
  * 1. 添加&lt;plugin&gt;

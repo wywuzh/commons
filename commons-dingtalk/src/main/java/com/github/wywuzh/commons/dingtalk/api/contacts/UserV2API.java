@@ -231,7 +231,7 @@ public class UserV2API extends BaseAPI {
 
     /**
      * 根据unionid获取用户userid
-     * 
+     *
      * <pre>
      * 注意：unionid是员工在当前开发者企业账号范围内的唯一标识，由系统生成：
      * 1. 同一个企业员工，在不同的开发者企业账号下，unionid是不相同的。

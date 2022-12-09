@@ -51,7 +51,7 @@ public class UserListsimpleRequest extends BaseRequest {
     private Long size = 10L;
     /**
      * 部门成员的排序规则：
-     * 
+     *
      * <pre>
      * <strong>entry_asc</strong>：代表按照进入部门的时间升序。
      * <strong>entry_desc</strong>：代表按照进入部门的时间降序。
@@ -69,7 +69,7 @@ public class UserListsimpleRequest extends BaseRequest {
     private Boolean containAccessLimit;
     /**
      * 通讯录语言
-     * 
+     *
      * <pre>
      * zh_CN：中文（默认值）。
      * en_US：英文。

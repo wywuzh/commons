@@ -35,7 +35,7 @@ import org.springframework.util.Assert;
  *  电信：133,149,153,173,177,180,181,189,191,193,199
  *  虚拟运营商：162,165,167,170,171
  * </pre>
- * 
+ *
  * 手机号码段：https://m.jihaoba.com/tools/haoduan/
  *
  * @author 伍章红 2015-8-2 下午8:02:52

@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 类MapStructTest的实现描述：使用Mapstruct来进行PO与VO之间的映射
- * 
+ *
  * <pre>
  * 参考网址：
  * 1. https://blog.csdn.net/u014175005/article/details/72792839

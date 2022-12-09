@@ -25,9 +25,9 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.util.Assert;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 类FileUtils.java的实现描述：文件工具类

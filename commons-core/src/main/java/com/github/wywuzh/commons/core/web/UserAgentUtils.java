@@ -15,12 +15,11 @@
  */
 package com.github.wywuzh.commons.core.web;
 
-import javax.servlet.http.HttpServletRequest;
-
 import eu.bitwalker.useragentutils.Browser;
 import eu.bitwalker.useragentutils.DeviceType;
 import eu.bitwalker.useragentutils.UserAgent;
 import eu.bitwalker.useragentutils.Version;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * 用户代理字符串识别工具

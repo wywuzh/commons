@@ -33,7 +33,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
-import sun.awt.OSInfo;
+import cn.hutool.system.OsInfo;
+import cn.hutool.system.SystemUtil;
 
 /**
  * 类SqlldrUtils的实现描述：SQL*LOADER工具
@@ -383,11 +384,13 @@ public class SqlldrUtils {
         BufferedReader reader = null;
         try {
             String[] cmd = null;
-            if (OSInfo.OSType.WINDOWS.equals(OSInfo.getOSType())) {
+            // 当前OS的信息
+            OsInfo osInfo = SystemUtil.getOsInfo();
+            if (osInfo.isWindows()) { // Windows
                 cmd = new String[] {
                         "cmd.exe", "/C", ORACLE_HOME + "\\bin\\" + command
                 };
-            } else if (OSInfo.OSType.LINUX.equals(OSInfo.getOSType())) {
+            } else if (osInfo.isLinux()) { // Linux
                 cmd = new String[] {
                         "/bin/bash", "-c", ORACLE_HOME + "/bin/" + command
                 };

@@ -37,7 +37,7 @@ import org.mybatis.generator.config.TableConfiguration;
 
 /**
  * 类DeleteByPKPlugin的实现描述：根据主键删除数据
- * 
+ *
  * <pre class="code">
  * 使用方式：
  * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在

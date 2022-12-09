@@ -35,7 +35,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 /**
  * 类BatchInsertPlugin的实现描述：itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖
- * 
+ *
  * <pre class="code">
  * <strong>enableMergeInto使用方式</strong>：
  * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在

@@ -51,7 +51,7 @@ public class UserCreateRequest implements Serializable {
     private String mobile;
     /**
      * 是否号码隐藏：
-     * 
+     *
      * <pre>
      * true: 隐藏隐藏手机号后，手机号在个人资料页隐藏，但仍可对其发DING、发起钉钉免费商务电话。
      * false: 不隐藏
@@ -117,7 +117,7 @@ public class UserCreateRequest implements Serializable {
     private Map<String, String> extension;
     /**
      * 是否开启高管模式：
-     * 
+     *
      * <pre>
      * true：开启。开启后，手机号码对所有员工隐藏。普通员工无法对其发DING、发起钉钉免费商务电话。高管之间不受影响。
      * false：不开启。
