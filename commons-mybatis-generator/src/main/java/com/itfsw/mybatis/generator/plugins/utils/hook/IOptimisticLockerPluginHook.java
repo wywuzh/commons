@@ -32,13 +32,13 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  *                ---------------------------------------------------------------------------
  */
 public interface IOptimisticLockerPluginHook {
-  // ========================================= method 生成 ============================================
+    // ========================================= method 生成 ============================================
 
-  boolean clientUpdateWithVersionByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+    boolean clientUpdateWithVersionByExampleSelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-  boolean clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
+    boolean clientUpdateWithVersionByPrimaryKeySelectiveMethodGenerated(Method method, Interface interfaze, IntrospectedTable introspectedTable);
 
-  // ========================================= sqlMap 生成 ============================================
+    // ========================================= sqlMap 生成 ============================================
 
-  boolean generateSetsSelectiveElement(List<IntrospectedColumn> columns, IntrospectedColumn versionColumn, XmlElement setsElement);
+    boolean generateSetsSelectiveElement(List<IntrospectedColumn> columns, IntrospectedColumn versionColumn, XmlElement setsElement);
 }

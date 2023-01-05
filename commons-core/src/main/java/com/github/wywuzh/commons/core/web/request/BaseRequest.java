@@ -26,5 +26,5 @@ import java.io.Serializable;
  */
 public abstract class BaseRequest implements Serializable {
 
-  public abstract String toString();
+    public abstract String toString();
 }

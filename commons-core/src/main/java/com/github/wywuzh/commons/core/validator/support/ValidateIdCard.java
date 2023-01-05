@@ -28,9 +28,9 @@ import com.github.wywuzh.commons.core.validator.Validate;
  */
 public class ValidateIdCard extends Validate {
 
-  @Override
-  protected PatternType getPatternType() {
-    return PatternType.PATTERN_IDCARD;
-  }
+    @Override
+    protected PatternType getPatternType() {
+        return PatternType.PATTERN_IDCARD;
+    }
 
 }

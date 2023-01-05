@@ -28,21 +28,21 @@ import org.junit.Before;
  */
 public abstract class AbstractTest {
 
-  protected ApiConfig apiConfig;
+    protected ApiConfig apiConfig;
 
-  protected final String AGENT_ID = "1087695954";
-  /**
-   * 应用的唯一标识key
-   */
-  protected final String APP_KEY = "dingziruwslmoflj5cyc";
-  /**
-   * 应用的密钥
-   */
-  protected final String APP_SECRET = "UOrFnv0IqZJf2XJobif7_jblEgF0Kn2S4-013sTfil9o7yhg59g_DynyUtdFlGCD";
+    protected final String AGENT_ID = "1087695954";
+    /**
+     * 应用的唯一标识key
+     */
+    protected final String APP_KEY = "dingziruwslmoflj5cyc";
+    /**
+     * 应用的密钥
+     */
+    protected final String APP_SECRET = "UOrFnv0IqZJf2XJobif7_jblEgF0Kn2S4-013sTfil9o7yhg59g_DynyUtdFlGCD";
 
-  @Before
-  public void init() {
-    apiConfig = new ApiConfig(AGENT_ID, APP_KEY, APP_SECRET);
-  }
+    @Before
+    public void init() {
+        apiConfig = new ApiConfig(AGENT_ID, APP_KEY, APP_SECRET);
+    }
 
 }

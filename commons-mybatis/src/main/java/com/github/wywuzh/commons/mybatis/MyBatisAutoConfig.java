@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @Import({
-    MyBatisConfig.class, TransactionConfiguration.class
+        MyBatisConfig.class, TransactionConfiguration.class
 })
 @AutoConfigureBefore(MybatisAutoConfiguration.class)
 public class MyBatisAutoConfig {

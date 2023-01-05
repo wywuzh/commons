@@ -30,11 +30,11 @@ import lombok.Data;
  */
 @Data
 public class DeptCreate implements Serializable {
-  private static final long serialVersionUID = -7226293396930599649L;
+    private static final long serialVersionUID = -7226293396930599649L;
 
-  /**
-   * 部门ID
-   */
-  @SerializedName(value = "dept_id")
-  private Long deptId;
+    /**
+     * 部门ID
+     */
+    @SerializedName(value = "dept_id")
+    private Long deptId;
 }

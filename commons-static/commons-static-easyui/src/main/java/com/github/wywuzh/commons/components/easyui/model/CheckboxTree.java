@@ -25,41 +25,41 @@ import java.io.Serializable;
  * @since JDK 1.7
  */
 public class CheckboxTree<T extends Serializable> extends Tree<T> implements Serializable {
-  private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-  /**
-   * 节点是否被选中
-   */
-  private boolean checked;
+    /**
+     * 节点是否被选中
+     */
+    private boolean checked;
 
-  public CheckboxTree() {
-    super();
-  }
+    public CheckboxTree() {
+        super();
+    }
 
-  public CheckboxTree(String id, String name, String text, String pid) {
-    super(id, name, text, pid);
-  }
+    public CheckboxTree(String id, String name, String text, String pid) {
+        super(id, name, text, pid);
+    }
 
-  public CheckboxTree(String id, String name, String text, String pid, String iconCls) {
-    super(id, name, text, pid, iconCls);
-  }
+    public CheckboxTree(String id, String name, String text, String pid, String iconCls) {
+        super(id, name, text, pid, iconCls);
+    }
 
-  public CheckboxTree(String id, String name, String text, String pid, boolean checked) {
-    super(id, name, text, pid);
-    this.checked = checked;
-  }
+    public CheckboxTree(String id, String name, String text, String pid, boolean checked) {
+        super(id, name, text, pid);
+        this.checked = checked;
+    }
 
-  public CheckboxTree(String id, String name, String text, String pid, String iconCls, boolean checked) {
-    super(id, name, text, pid, iconCls);
-    this.checked = checked;
-  }
+    public CheckboxTree(String id, String name, String text, String pid, String iconCls, boolean checked) {
+        super(id, name, text, pid, iconCls);
+        this.checked = checked;
+    }
 
-  public boolean isChecked() {
-    return checked;
-  }
+    public boolean isChecked() {
+        return checked;
+    }
 
-  public void setChecked(boolean checked) {
-    this.checked = checked;
-  }
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
 }

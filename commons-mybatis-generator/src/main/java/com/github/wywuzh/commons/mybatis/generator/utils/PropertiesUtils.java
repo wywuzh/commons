@@ -15,6 +15,7 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.utils;
 
+import java.math.BigDecimal;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
@@ -28,17 +29,121 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class PropertiesUtils {
 
-  /**
-   * 获取属性值
-   *
-   * @param properties
-   * @param key          the hashtable key.
-   * @param defaultValue a default value.
-   * @return the value in this property list with the specified key value.
-   */
-  public static String getProperty(Properties properties, String key, String defaultValue) {
-    String val = properties.getProperty(key);
-    return StringUtils.isBlank(val) ? defaultValue : val;
-  }
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static String getProperty(Properties properties, String key, String defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : val;
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static Boolean getProperty(Properties properties, String key, Boolean defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : Boolean.valueOf(val);
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static Byte getProperty(Properties properties, String key, Byte defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : Byte.valueOf(val);
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static Short getProperty(Properties properties, String key, Short defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : Short.valueOf(val);
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static Integer getProperty(Properties properties, String key, Integer defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : Integer.valueOf(val);
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static Long getProperty(Properties properties, String key, Long defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : Long.valueOf(val);
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static Double getProperty(Properties properties, String key, Double defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : Double.valueOf(val);
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static Float getProperty(Properties properties, String key, Float defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : Float.valueOf(val);
+    }
+
+    /**
+     * 获取属性值
+     *
+     * @param properties   属性配置
+     * @param key          属性名
+     * @param defaultValue 默认属性值
+     * @return the value in this property list with the specified key value.
+     */
+    public static BigDecimal getProperty(Properties properties, String key, BigDecimal defaultValue) {
+        String val = properties.getProperty(key);
+        return StringUtils.isBlank(val) ? defaultValue : new BigDecimal(val);
+    }
 
 }

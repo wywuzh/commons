@@ -28,16 +28,16 @@ import lombok.Data;
  */
 @Data
 public class Combobox implements Serializable {
-  private static final long serialVersionUID = 2200870702520865560L;
+    private static final long serialVersionUID = 2200870702520865560L;
 
-  private String id;
-  private String text;
+    private String id;
+    private String text;
 
-  public Combobox() {
-  }
+    public Combobox() {
+    }
 
-  public Combobox(String id, String text) {
-    this.id = id;
-    this.text = text;
-  }
+    public Combobox(String id, String text) {
+        this.id = id;
+        this.text = text;
+    }
 }

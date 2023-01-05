@@ -30,35 +30,35 @@ import lombok.Data;
  */
 @Data
 public class DeptBase implements Serializable {
-  private static final long serialVersionUID = -4480965933938486948L;
+    private static final long serialVersionUID = -4480965933938486948L;
 
-  /**
-   * 部门ID
-   */
-  @SerializedName(value = "dept_id")
-  private Long deptId;
-  /**
-   * 部门名称
-   */
-  @SerializedName(value = "name")
-  private String name;
-  /**
-   * 父部门ID
-   */
-  @SerializedName(value = "parent_id")
-  private Long parentId;
-  /**
-   * 是否同步创建一个关联此部门的企业群：
-   * true：创建
-   * false：不创建
-   */
-  @SerializedName(value = "create_dept_group")
-  private Boolean createDeptGroup;
-  /**
-   * 部门群已经创建后，有新人加入部门是否会自动加入该群：
-   * true：会自动入群
-   * false：不会
-   */
-  @SerializedName(value = "auto_add_user")
-  private Boolean autoAddUser;
+    /**
+     * 部门ID
+     */
+    @SerializedName(value = "dept_id")
+    private Long deptId;
+    /**
+     * 部门名称
+     */
+    @SerializedName(value = "name")
+    private String name;
+    /**
+     * 父部门ID
+     */
+    @SerializedName(value = "parent_id")
+    private Long parentId;
+    /**
+     * 是否同步创建一个关联此部门的企业群：
+     * true：创建
+     * false：不创建
+     */
+    @SerializedName(value = "create_dept_group")
+    private Boolean createDeptGroup;
+    /**
+     * 部门群已经创建后，有新人加入部门是否会自动加入该群：
+     * true：会自动入群
+     * false：不会
+     */
+    @SerializedName(value = "auto_add_user")
+    private Boolean autoAddUser;
 }

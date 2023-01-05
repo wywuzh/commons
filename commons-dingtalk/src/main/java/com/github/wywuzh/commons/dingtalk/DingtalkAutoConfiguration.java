@@ -36,27 +36,27 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(DingtalkProperties.class)
 public class DingtalkAutoConfiguration {
 
-  @Bean
-  @ConditionalOnMissingBean
-  public ApiConfig apiConfig(DingtalkProperties properties) {
-    return new ApiConfig(properties.getAgentId(), properties.getAppKey(), properties.getAppSecret());
-  }
+    @Bean
+    @ConditionalOnMissingBean
+    public ApiConfig apiConfig(DingtalkProperties properties) {
+        return new ApiConfig(properties.getAgentId(), properties.getAppKey(), properties.getAppSecret());
+    }
 
-  // contacts beans
-  @Bean
-  public UserV2API userV2API(ApiConfig apiConfig) {
-    return new UserV2API(apiConfig);
-  }
+    // contacts beans
+    @Bean
+    public UserV2API userV2API(ApiConfig apiConfig) {
+        return new UserV2API(apiConfig);
+    }
 
-  @Bean
-  public DeptV2API deptV2API(ApiConfig apiConfig) {
-    return new DeptV2API(apiConfig);
-  }
+    @Bean
+    public DeptV2API deptV2API(ApiConfig apiConfig) {
+        return new DeptV2API(apiConfig);
+    }
 
-  // message beans
-  @Bean
-  public CorpconversationAPI corpconversationAPI(ApiConfig apiConfig) {
-    return new CorpconversationAPI(apiConfig);
-  }
+    // message beans
+    @Bean
+    public CorpconversationAPI corpconversationAPI(ApiConfig apiConfig) {
+        return new CorpconversationAPI(apiConfig);
+    }
 
 }

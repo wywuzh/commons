@@ -32,9 +32,9 @@ import ma.glasnost.orika.impl.DefaultMapperFactory;
 @Scope(value = "prototype")
 public class BeanMapper extends ConfigurableMapper {
 
-  @Override
-  protected void configureFactoryBuilder(DefaultMapperFactory.Builder factoryBuilder) {
-    factoryBuilder.mapNulls(false);
-  }
+    @Override
+    protected void configureFactoryBuilder(DefaultMapperFactory.Builder factoryBuilder) {
+        factoryBuilder.mapNulls(false);
+    }
 
 }

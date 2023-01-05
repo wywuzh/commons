@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,83 +29,83 @@ package com.github.wywuzh.commons.core.os;
  */
 public class OSUtils {
 
-  public static String OS_NAME = System.getProperty("os.name").toLowerCase();
+    public static String OS_NAME = System.getProperty("os.name").toLowerCase();
 
-  public static boolean isLinux() {
-    return OS_NAME.indexOf("linux") >= 0;
-  }
+    public static boolean isLinux() {
+        return OS_NAME.indexOf("linux") >= 0;
+    }
 
-  public static boolean isMacOS() {
-    return OS_NAME.indexOf("mac") >= 0 && OS_NAME.indexOf("os") > 0 && OS_NAME.indexOf("x") < 0;
-  }
+    public static boolean isMacOS() {
+        return OS_NAME.indexOf("mac") >= 0 && OS_NAME.indexOf("os") > 0 && OS_NAME.indexOf("x") < 0;
+    }
 
-  public static boolean isMacOSX() {
-    return OS_NAME.indexOf("mac") >= 0 && OS_NAME.indexOf("os") > 0 && OS_NAME.indexOf("x") > 0;
-  }
+    public static boolean isMacOSX() {
+        return OS_NAME.indexOf("mac") >= 0 && OS_NAME.indexOf("os") > 0 && OS_NAME.indexOf("x") > 0;
+    }
 
-  public static boolean isWindows() {
-    return OS_NAME.indexOf("windows") >= 0;
-  }
+    public static boolean isWindows() {
+        return OS_NAME.indexOf("windows") >= 0;
+    }
 
-  public static boolean isOS2() {
-    return OS_NAME.indexOf("os/2") >= 0;
-  }
+    public static boolean isOS2() {
+        return OS_NAME.indexOf("os/2") >= 0;
+    }
 
-  public static boolean isSolaris() {
-    return OS_NAME.indexOf("solaris") >= 0;
-  }
+    public static boolean isSolaris() {
+        return OS_NAME.indexOf("solaris") >= 0;
+    }
 
-  public static boolean isSunOS() {
-    return OS_NAME.indexOf("sunos") >= 0;
-  }
+    public static boolean isSunOS() {
+        return OS_NAME.indexOf("sunos") >= 0;
+    }
 
-  public static boolean isMPEiX() {
-    return OS_NAME.indexOf("mpe/ix") >= 0;
-  }
+    public static boolean isMPEiX() {
+        return OS_NAME.indexOf("mpe/ix") >= 0;
+    }
 
-  public static boolean isHPUX() {
-    return OS_NAME.indexOf("hp-ux") >= 0;
-  }
+    public static boolean isHPUX() {
+        return OS_NAME.indexOf("hp-ux") >= 0;
+    }
 
-  public static boolean isAix() {
-    return OS_NAME.indexOf("aix") >= 0;
-  }
+    public static boolean isAix() {
+        return OS_NAME.indexOf("aix") >= 0;
+    }
 
-  public static boolean isOS390() {
-    return OS_NAME.indexOf("os/390") >= 0;
-  }
+    public static boolean isOS390() {
+        return OS_NAME.indexOf("os/390") >= 0;
+    }
 
-  public static boolean isFreeBSD() {
-    return OS_NAME.indexOf("freebsd") >= 0;
-  }
+    public static boolean isFreeBSD() {
+        return OS_NAME.indexOf("freebsd") >= 0;
+    }
 
-  public static boolean isIrix() {
-    return OS_NAME.indexOf("irix") >= 0;
-  }
+    public static boolean isIrix() {
+        return OS_NAME.indexOf("irix") >= 0;
+    }
 
-  public static boolean isDigitalUnix() {
-    return OS_NAME.indexOf("digital") >= 0 && OS_NAME.indexOf("unix") > 0;
-  }
+    public static boolean isDigitalUnix() {
+        return OS_NAME.indexOf("digital") >= 0 && OS_NAME.indexOf("unix") > 0;
+    }
 
-  public static boolean isNetWare() {
-    return OS_NAME.indexOf("netware") >= 0;
-  }
+    public static boolean isNetWare() {
+        return OS_NAME.indexOf("netware") >= 0;
+    }
 
-  public static boolean isOSF1() {
-    return OS_NAME.indexOf("osf1") >= 0;
-  }
+    public static boolean isOSF1() {
+        return OS_NAME.indexOf("osf1") >= 0;
+    }
 
-  public static boolean isOpenVMS() {
-    return OS_NAME.indexOf("openvms") >= 0;
-  }
+    public static boolean isOpenVMS() {
+        return OS_NAME.indexOf("openvms") >= 0;
+    }
 
-  /**
-   * 获取操作系统名字
-   *
-   * @return 操作系统名
-   */
-  public static OSPlatform getOSPlatform() {
-    return OSPlatform.findByName(OS_NAME);
-  }
+    /**
+     * 获取操作系统名字
+     *
+     * @return 操作系统名
+     */
+    public static OSPlatform getOSPlatform() {
+        return OSPlatform.findByName(OS_NAME);
+    }
 
 }

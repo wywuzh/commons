@@ -16,14 +16,20 @@
 package com.github.wywuzh.commons.core.poi;
 
 import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
 import com.github.wywuzh.commons.core.poi.entity.User;
-import com.github.wywuzh.commons.core.poi.modle.ExcelRequest;
+import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
 
 import java.io.*;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.*;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.junit.Test;
 
@@ -38,19 +44,19 @@ import org.junit.Test;
 public class ExcelUtilsTest {
 
 //    @Before
-  public void init() {
-    System.setProperty("font.name", "宋体");
-    System.setProperty("font.height", "11");
+    public void init() {
+        System.setProperty("font.name", "宋体");
+        System.setProperty("font.height", "11");
 
-    // 表头列(单元格)样式 - 表头提示信息
-    // 填充方案编码
-    System.setProperty("cell_style.header.tips.fill_pattern_type.code", String.valueOf(FillPatternType.SOLID_FOREGROUND.getCode()));
-    // 设置前景色
-    System.setProperty("cell_style.header.tips.foreground.color", String.valueOf(IndexedColors.YELLOW.getIndex()));
-    // 设置背景色
-    System.setProperty("cell_style.header.tips.background.color", String.valueOf(IndexedColors.YELLOW.getIndex()));
-    // 字体颜色
-    System.setProperty("cell_style.header.tips.font.color", String.valueOf(Font.COLOR_RED));
+        // 表头列(单元格)样式 - 表头提示信息
+        // 填充方案编码
+        System.setProperty("cell_style.header.tips.fill_pattern_type.code", String.valueOf(FillPatternType.SOLID_FOREGROUND.getCode()));
+        // 设置前景色
+        System.setProperty("cell_style.header.tips.foreground.color", String.valueOf(IndexedColors.YELLOW.getIndex()));
+        // 设置背景色
+        System.setProperty("cell_style.header.tips.background.color", String.valueOf(IndexedColors.YELLOW.getIndex()));
+        // 字体颜色
+        System.setProperty("cell_style.header.tips.font.color", String.valueOf(Font.COLOR_RED));
 
 //        // 表头列(单元格)样式 - 表头必填字段
 //        // 填充方案编码
@@ -71,92 +77,106 @@ public class ExcelUtilsTest {
 //        System.setProperty("cell_style.header.background.color", String.valueOf(IndexedColors.DARK_TEAL.getIndex()));
 //        // 字体颜色：白色
 //        System.setProperty("cell_style.header.font.color", String.valueOf(IndexedColors.WHITE.index));
-  }
+    }
 
-  @Test
-  public void exportTest() {
-    String[] columns = {
-        "username", "nick", "email", "mobile", "sex"
-    };
-    String[] columnTitles = {
-        "用户名", "昵称", "邮箱", "手机号", "性别"
-    };
-    Integer[] columnLengths = {
-        100, 125, 287, 150, 100
-    };
-    List<String> requiredColumnTitles = Arrays.asList("用户名", "邮箱", "手机号", "性别");
-    String fileName = "用户信息" + System.currentTimeMillis() + ".xlsx";
-    List<User> dataColl = new LinkedList<>();
-    User user = new User();
-    user.setUsername("wywuzh");
-    user.setNick("伍章红");
-    user.setEmail("wywuzh@163.com");
-    user.setMobile("14700000000");
-    user.setSex("男");
-    dataColl.add(user);
+    @Test
+    public void decimalFormat() {
+        DecimalFormat decimalFormat = new DecimalFormat(CellStyleConstants.STYLE_FORMAT_Accounting);
+        System.out.println(decimalFormat.format(new BigDecimal(1000000)));
+    }
 
-    Map<String, String[]> columnValidation = new HashMap<>();
-    String[] genders = {
-        "男", "女", "未知"
-    };
-    columnValidation.put("性别", genders);
+    @Test
+    public void exportTest() {
+        String[] columns = {
+                "username", "nick", "email", "mobile", "sex", "birthdate", "balance"
+        };
+        String[] columnTitles = {
+                "用户名", "昵称", "邮箱", "手机号", "性别", "出生日期", "资产余额"
+        };
+        Integer[] columnLengths = {
+                100, 125, 287, 150, 100, 120, 120
+        };
+        List<String> requiredColumnTitles = Arrays.asList("用户名", "邮箱", "手机号", "性别");
+        String fileName = "用户信息" + System.currentTimeMillis() + ".xlsx";
+        List<User> dataColl = new LinkedList<>();
+        User user = new User();
+        user.setUsername("wywuzh");
+        user.setNick("伍章红");
+        user.setEmail("wywuzh@163.com");
+        user.setMobile("14700000000");
+        user.setSex("男");
+        user.setBirthdate(new Date());
+        user.setBalance(new BigDecimal("100000000000"));
+        dataColl.add(user);
 
-    ExcelRequest excelRequest = new ExcelRequest();
-    excelRequest.setColumns(columns);
-    excelRequest.setColumnTitles(columnTitles);
-    excelRequest.setColumnLengths(columnLengths);
-    excelRequest.setRequiredColumnTitles(requiredColumnTitles);
-    excelRequest.setDataColl(dataColl);
-    excelRequest.setColumnValidation(columnValidation);
-    excelRequest.setTips("注：用户信息不能删除！");
+        Map<String, String[]> columnValidation = new HashMap<>();
+        String[] genders = {
+                "男", "女", "未知"
+        };
+        columnValidation.put("性别", genders);
 
-    OutputStream outputStream = null;
-    try {
-      File destFile = new File("D:\\data");
-      if (!destFile.exists()) {
-        destFile.mkdirs();
-      }
-      outputStream = new FileOutputStream(new File(destFile, fileName));
+        ExcelExportRequest excelExportRequest = new ExcelExportRequest();
+        excelExportRequest.setColumns(columns);
+        excelExportRequest.setColumnTitles(columnTitles);
+        excelExportRequest.setColumnLengths(columnLengths);
+        excelExportRequest.setRequiredColumnTitles(requiredColumnTitles);
+        excelExportRequest.setDataColl(dataColl);
+        excelExportRequest.setColumnValidation(columnValidation);
+        excelExportRequest.setTips("注：用户信息不能删除！");
 
-      // 创建workbook
-      Workbook workbook = ExcelUtils.createWorkbook(fileName);
-      // 创建sheet
-      Sheet sheet = ExcelUtils.createSheet(workbook, excelRequest);
-      // 写入内容
-      ExcelUtils.writeData(workbook, sheet, excelRequest);
-
-      workbook.write(outputStream);
-      outputStream.flush();
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-    } finally {
-      if (outputStream != null) {
+        OutputStream outputStream = null;
         try {
-          outputStream.close();
-        } catch (IOException e) {
-          log.error(e.getMessage(), e);
-        }
-      }
-    }
-  }
+            File destFile = new File("D:\\data");
+            if (!destFile.exists()) {
+                destFile.mkdirs();
+            }
+            outputStream = new FileOutputStream(new File(destFile, fileName));
 
-  @Test
-  public void importTest() throws Exception {
-    InputStream inputStream = null;
-    try {
-      inputStream = new FileInputStream(new File("D:\\data\\用户信息.xlsx"));
-      String[] columns = {
-          "username", "nick", "email", "mobile", "sex"
-      };
-      List<User> dataColl = ExcelUtils.importData(inputStream, User.class, columns, 2);
-      log.info("导入结果:{}", JsonMapper.buildNonEmptyMapper().toJson(dataColl));
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-    } finally {
-      if (inputStream != null) {
-        inputStream.close();
-      }
+            // 创建workbook
+            Workbook workbook = ExcelUtils.createWorkbook(fileName);
+            // 创建sheet
+            Sheet sheet = ExcelUtils.createSheet(workbook, excelExportRequest);
+            // 写入内容
+            ExcelUtils.writeData(workbook, sheet, excelExportRequest);
+
+            workbook.write(outputStream);
+            outputStream.flush();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            if (outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    log.error(e.getMessage(), e);
+                }
+            }
+        }
     }
-  }
+
+    @Test
+    public void importTest() throws Exception {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(new File("D:\\data\\用户信息1668666946221.xlsx"));
+            String[] columns = {
+                    "username", "nick", "email", "mobile", "sex"
+            };
+            List<User> dataColl = ExcelUtils.importData(inputStream, User.class, null, 2);
+            log.info("导入结果:{}", JsonMapper.buildNonEmptyMapper().toJson(dataColl));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    @Test
+    public void getFieldsListWithAnnotation() {
+        List<Field> fieldList = FieldUtils.getFieldsListWithAnnotation(User.class, ExcelCell.class);
+        log.info("字段：{}", fieldList);
+    }
 
 }

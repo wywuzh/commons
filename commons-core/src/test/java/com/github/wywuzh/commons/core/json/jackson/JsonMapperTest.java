@@ -30,22 +30,22 @@ import org.slf4j.LoggerFactory;
  * @since JDK 1.8
  */
 public class JsonMapperTest {
-  public static final Logger LOGGER = LoggerFactory.getLogger(JsonMapperTest.class);
+    public static final Logger LOGGER = LoggerFactory.getLogger(JsonMapperTest.class);
 
-  @Test
-  public void toJson() {
-    JsonMapper jsonMapper = new JsonMapper(JsonInclude.Include.ALWAYS);
-    String jsonString = jsonMapper.toJson("123");
-    LOGGER.info("转换结果：{}", jsonString);
-    Assert.assertNotNull(jsonString);
-  }
+    @Test
+    public void toJson() {
+        JsonMapper jsonMapper = new JsonMapper(JsonInclude.Include.ALWAYS);
+        String jsonString = jsonMapper.toJson("123");
+        LOGGER.info("转换结果：{}", jsonString);
+        Assert.assertNotNull(jsonString);
+    }
 
-  @Test
-  public void toJsonFormat() {
-    JsonMapper jsonMapper = new JsonMapper(JsonInclude.Include.ALWAYS);
-    String jsonString = jsonMapper.toJsonFormat("123");
-    LOGGER.info("转换结果：{}", jsonString);
-    Assert.assertNotNull(jsonString);
-  }
+    @Test
+    public void toJsonFormat() {
+        JsonMapper jsonMapper = new JsonMapper(JsonInclude.Include.ALWAYS);
+        String jsonString = jsonMapper.toJsonFormat("123");
+        LOGGER.info("转换结果：{}", jsonString);
+        Assert.assertNotNull(jsonString);
+    }
 
 }

@@ -52,111 +52,111 @@ import org.mybatis.generator.internal.util.StringUtility;
  * @since JDK 1.8
  */
 public class BaseMapperPlugin extends BasePlugin {
-  private static final String DEFAULT_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseMapper";
-  private static final String DEFAULT_DAO_SUPER_CLASS_NAME = "BaseMapper";
-  private static final String DEFAULT_EXPAND_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseExpandMapper";
-  private String daoTargetDir;
-  private String daoTargetPackage;
+    private static final String DEFAULT_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseMapper";
+    private static final String DEFAULT_DAO_SUPER_CLASS_NAME = "BaseMapper";
+    private static final String DEFAULT_EXPAND_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseExpandMapper";
+    private String daoTargetDir;
+    private String daoTargetPackage;
 
-  private String daoSuperClass;
-  private String daoSuperClassName;
+    private String daoSuperClass;
+    private String daoSuperClassName;
 
-  // 扩展
-  private String expandDaoTargetPackage;
-  private String expandDaoSuperClass;
+    // 扩展
+    private String expandDaoTargetPackage;
+    private String expandDaoSuperClass;
 
-  private ShellCallback shellCallback = null;
+    private ShellCallback shellCallback = null;
 
-  public BaseMapperPlugin() {
-    shellCallback = new DefaultShellCallback(false);
-  }
-
-  /**
-   * 验证参数是否有效
-   *
-   * @param warnings
-   * @return
-   */
-  @Override
-  public boolean validate(List<String> warnings) {
-    daoTargetDir = properties.getProperty("targetProject");
-    boolean valid = StringUtility.stringHasValue(daoTargetDir);
-
-    daoTargetPackage = properties.getProperty("targetPackage");
-    boolean valid2 = StringUtility.stringHasValue(daoTargetPackage);
-
-    daoSuperClass = properties.getProperty("daoSuperClass");
-    if (!StringUtility.stringHasValue(daoSuperClass)) {
-      daoSuperClass = DEFAULT_DAO_SUPER_CLASS;
-    }
-    daoSuperClassName = properties.getProperty("daoSuperClassName");
-    if (!StringUtility.stringHasValue(daoSuperClassName)) {
-      daoSuperClassName = DEFAULT_DAO_SUPER_CLASS_NAME;
+    public BaseMapperPlugin() {
+        shellCallback = new DefaultShellCallback(false);
     }
 
-    expandDaoTargetPackage = properties.getProperty("expandTargetPackage");
-    expandDaoSuperClass = properties.getProperty("expandDaoSuperClass");
-    if (!StringUtility.stringHasValue(expandDaoSuperClass)) {
-      expandDaoSuperClass = DEFAULT_EXPAND_DAO_SUPER_CLASS;
-    }
-    return valid && valid2;
-  }
+    /**
+     * 验证参数是否有效
+     *
+     * @param warnings
+     * @return
+     */
+    @Override
+    public boolean validate(List<String> warnings) {
+        daoTargetDir = properties.getProperty("targetProject");
+        boolean valid = StringUtility.stringHasValue(daoTargetDir);
 
-  @Override
-  public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
-    JavaFormatter javaFormatter = context.getJavaFormatter();
-    List<GeneratedJavaFile> generatedJavaFileList = new ArrayList<GeneratedJavaFile>();
-    for (GeneratedJavaFile generatedJavaFile : introspectedTable.getGeneratedJavaFiles()) {
-      CompilationUnit unit = generatedJavaFile.getCompilationUnit();
-      FullyQualifiedJavaType baseModelJavaType = unit.getType();
+        daoTargetPackage = properties.getProperty("targetPackage");
+        boolean valid2 = StringUtility.stringHasValue(daoTargetPackage);
 
-      String shortName = baseModelJavaType.getShortName();
-
-      GeneratedJavaFile mapperJavafile = null;
-
-      if (shortName.endsWith("Mapper")) { // 扩展Mapper
-        if (StringUtility.stringHasValue(expandDaoTargetPackage)) {
-          Interface mapperInterface = new Interface(expandDaoTargetPackage + "." + shortName.replace("Mapper", "ExpandMapper"));
-          mapperInterface.setVisibility(JavaVisibility.PUBLIC);
-
-          FullyQualifiedJavaType daoSuperType = new FullyQualifiedJavaType(expandDaoSuperClass);
-          mapperInterface.addImportedType(daoSuperType);
-          mapperInterface.addSuperInterface(daoSuperType);
-
-          mapperJavafile = new GeneratedJavaFile(mapperInterface, daoTargetDir, javaFormatter);
-          try {
-            File mapperDir = shellCallback.getDirectory(daoTargetDir, daoTargetPackage);
-            File mapperFile = new File(mapperDir, mapperJavafile.getFileName());
-            // 文件不存在
-            if (!mapperFile.exists()) {
-              generatedJavaFileList.add(mapperJavafile);
-            }
-          } catch (ShellException e) {
-            e.printStackTrace();
-          }
+        daoSuperClass = properties.getProperty("daoSuperClass");
+        if (!StringUtility.stringHasValue(daoSuperClass)) {
+            daoSuperClass = DEFAULT_DAO_SUPER_CLASS;
         }
-      } else if (!shortName.endsWith("Example")) { // CRUD Mapper
-        Interface mapperInterface = new Interface(daoTargetPackage + "." + shortName + "Mapper");
+        daoSuperClassName = properties.getProperty("daoSuperClassName");
+        if (!StringUtility.stringHasValue(daoSuperClassName)) {
+            daoSuperClassName = DEFAULT_DAO_SUPER_CLASS_NAME;
+        }
 
-        mapperInterface.setVisibility(JavaVisibility.PUBLIC);
-
-        // import引入依赖类
-        mapperInterface.addImportedType(baseModelJavaType);
-        mapperInterface.addImportedType(new FullyQualifiedJavaType(daoSuperClass));
-        // 继承接口设置类型
-        FullyQualifiedJavaType daoSuperType = new FullyQualifiedJavaType(daoSuperClassName);
-        // 添加泛型支持
-        daoSuperType.addTypeArgument(baseModelJavaType);
-        // 获取主键字段类型
-        List<IntrospectedColumn> primaryKeyColumns = introspectedTable.getPrimaryKeyColumns();
-        FullyQualifiedJavaType fullyQualifiedJavaType = primaryKeyColumns.get(0).getFullyQualifiedJavaType();
-        daoSuperType.addTypeArgument(fullyQualifiedJavaType);
-        mapperInterface.addSuperInterface(daoSuperType);
-
-        mapperJavafile = new GeneratedJavaFile(mapperInterface, daoTargetDir, javaFormatter);
-        generatedJavaFileList.add(mapperJavafile);
-      }
+        expandDaoTargetPackage = properties.getProperty("expandTargetPackage");
+        expandDaoSuperClass = properties.getProperty("expandDaoSuperClass");
+        if (!StringUtility.stringHasValue(expandDaoSuperClass)) {
+            expandDaoSuperClass = DEFAULT_EXPAND_DAO_SUPER_CLASS;
+        }
+        return valid && valid2;
     }
-    return generatedJavaFileList;
-  }
+
+    @Override
+    public List<GeneratedJavaFile> contextGenerateAdditionalJavaFiles(IntrospectedTable introspectedTable) {
+        JavaFormatter javaFormatter = context.getJavaFormatter();
+        List<GeneratedJavaFile> generatedJavaFileList = new ArrayList<GeneratedJavaFile>();
+        for (GeneratedJavaFile generatedJavaFile : introspectedTable.getGeneratedJavaFiles()) {
+            CompilationUnit unit = generatedJavaFile.getCompilationUnit();
+            FullyQualifiedJavaType baseModelJavaType = unit.getType();
+
+            String shortName = baseModelJavaType.getShortName();
+
+            GeneratedJavaFile mapperJavafile = null;
+
+            if (shortName.endsWith("Mapper")) { // 扩展Mapper
+                if (StringUtility.stringHasValue(expandDaoTargetPackage)) {
+                    Interface mapperInterface = new Interface(expandDaoTargetPackage + "." + shortName.replace("Mapper", "ExpandMapper"));
+                    mapperInterface.setVisibility(JavaVisibility.PUBLIC);
+
+                    FullyQualifiedJavaType daoSuperType = new FullyQualifiedJavaType(expandDaoSuperClass);
+                    mapperInterface.addImportedType(daoSuperType);
+                    mapperInterface.addSuperInterface(daoSuperType);
+
+                    mapperJavafile = new GeneratedJavaFile(mapperInterface, daoTargetDir, javaFormatter);
+                    try {
+                        File mapperDir = shellCallback.getDirectory(daoTargetDir, daoTargetPackage);
+                        File mapperFile = new File(mapperDir, mapperJavafile.getFileName());
+                        // 文件不存在
+                        if (!mapperFile.exists()) {
+                            generatedJavaFileList.add(mapperJavafile);
+                        }
+                    } catch (ShellException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else if (!shortName.endsWith("Example")) { // CRUD Mapper
+                Interface mapperInterface = new Interface(daoTargetPackage + "." + shortName + "Mapper");
+
+                mapperInterface.setVisibility(JavaVisibility.PUBLIC);
+
+                // import引入依赖类
+                mapperInterface.addImportedType(baseModelJavaType);
+                mapperInterface.addImportedType(new FullyQualifiedJavaType(daoSuperClass));
+                // 继承接口设置类型
+                FullyQualifiedJavaType daoSuperType = new FullyQualifiedJavaType(daoSuperClassName);
+                // 添加泛型支持
+                daoSuperType.addTypeArgument(baseModelJavaType);
+                // 获取主键字段类型
+                List<IntrospectedColumn> primaryKeyColumns = introspectedTable.getPrimaryKeyColumns();
+                FullyQualifiedJavaType fullyQualifiedJavaType = primaryKeyColumns.get(0).getFullyQualifiedJavaType();
+                daoSuperType.addTypeArgument(fullyQualifiedJavaType);
+                mapperInterface.addSuperInterface(daoSuperType);
+
+                mapperJavafile = new GeneratedJavaFile(mapperInterface, daoTargetDir, javaFormatter);
+                generatedJavaFileList.add(mapperJavafile);
+            }
+        }
+        return generatedJavaFileList;
+    }
 }

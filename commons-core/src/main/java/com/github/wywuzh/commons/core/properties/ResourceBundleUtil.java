@@ -36,116 +36,117 @@ import org.springframework.util.Assert;
  * @since JDK 1.7.0_71
  */
 public class ResourceBundleUtil {
-  private static final Log logger = LogFactory.getLog(ResourceBundleUtil.class);
+    private static final Log logger = LogFactory.getLog(ResourceBundleUtil.class);
 
-  public static final String DEFAULT_BASE_NAME = "application";
+    public static final String DEFAULT_BASE_NAME = "application";
 
-  private static ResourceBundle resourceBundle = null;
+    private static ResourceBundle resourceBundle = null;
 
-  /**
-   * 初始化配置文件（属性文件采用默认设置）
-   *
-   * @return
-   */
-  public static ResourceBundle getInstance() {
-    logger.info("初始化配置文件（属性文件采用默认设置）");
+    /**
+     * 初始化配置文件（属性文件采用默认设置）
+     *
+     * @return
+     */
+    public static ResourceBundle getInstance() {
+        logger.info("初始化配置文件（属性文件采用默认设置）");
 
-    return getInstance(DEFAULT_BASE_NAME);
-  }
-
-  /**
-   * 初始化配置文件
-   *
-   * @param baseName
-   * @return
-   */
-  public static ResourceBundle getInstance(String baseName) {
-    logger.info("初始化配置文件");
-    Assert.notNull(baseName, "baseName must not be null");
-
-    return ResourceBundle.getBundle(baseName, Locale.getDefault());
-  }
-
-  /**
-   * 初始化配置文件
-   *
-   * @author 伍章红 2015年12月7日 上午10:23:57
-   * @param baseName
-   * @param locale
-   * @return
-   */
-  public static ResourceBundle getInstance(String baseName, Locale locale) {
-    logger.info("初始化配置文件");
-    Assert.notNull(baseName, "baseName must not be null");
-    Assert.notNull(locale, "locale must not be null");
-
-    return ResourceBundle.getBundle(baseName, locale);
-  }
-
-  /**
-   * 根据指定的key获取value值。
-   *
-   * <pre>
-   * 说明：
-   *  1）如果传入的key为null，则返回null
-   *  2）如果指定的key在属性文件中不存在，则返回null
-   * </pre>
-   *
-   * @param key
-   * @return
-   */
-  public static String getString(String key) {
-    if (StringUtils.isEmpty(key)) {
-      return null;
-    }
-    if (null == resourceBundle) {
-      resourceBundle = getInstance();
+        return getInstance(DEFAULT_BASE_NAME);
     }
 
-    if (resourceBundle.containsKey(key)) {
-      return resourceBundle.getString(key);
-    }
-    return null;
-  }
+    /**
+     * 初始化配置文件
+     *
+     * @param baseName
+     * @return
+     */
+    public static ResourceBundle getInstance(String baseName) {
+        logger.info("初始化配置文件");
+        Assert.notNull(baseName, "baseName must not be null");
 
-  /**
-   * 根据指定的key获取value值。
-   *
-   * <pre>
-   * 说明：
-   *  1）如果传入的key为null，则返回null
-   *  2）如果指定的key不存在，则返回指定的defaultValue值
-   * </pre>
-   *
-   * @param key
-   * @param defaultValue
-   * @return
-   */
-  public static String getString(String key, String defaultValue) {
-    if (StringUtils.isEmpty(key)) {
-      return null;
-    }
-    if (null == resourceBundle) {
-      resourceBundle = getInstance();
+        return ResourceBundle.getBundle(baseName, Locale.getDefault());
     }
 
-    if (resourceBundle.containsKey(key)) {
-      return resourceBundle.getString(key);
+    /**
+     * 初始化配置文件
+     *
+     * @author 伍章红 2015年12月7日 上午10:23:57
+     * @param baseName
+     * @param locale
+     * @return
+     */
+    public static ResourceBundle getInstance(String baseName, Locale locale) {
+        logger.info("初始化配置文件");
+        Assert.notNull(baseName, "baseName must not be null");
+        Assert.notNull(locale, "locale must not be null");
+
+        return ResourceBundle.getBundle(baseName, locale);
     }
-    return defaultValue;
-  }
 
-  public static void main(String[] args) {
-    ResourceBundle resourceBundle = ResourceBundle.getBundle(DEFAULT_BASE_NAME, Locale.getDefault());
-    System.out.println(resourceBundle.getString("version"));
+    /**
+     * 根据指定的key获取value值。
+     *
+     * <pre>
+     * 说明：
+     *  1）如果传入的key为null，则返回null
+     *  2）如果指定的key在属性文件中不存在，则返回null
+     * </pre>
+     *
+     * @param key
+     * @return
+     */
+    public static String getString(String key) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+        if (null == resourceBundle) {
+            resourceBundle = getInstance();
+        }
 
-    System.out.println(getString("124"));
-    System.out.println(getString("124", "v1.0.1"));
-
-    Locale[] availableLocales = Locale.getAvailableLocales();
-    for (int i = 0; i < availableLocales.length; i++) {
-      // 属性文件命名采用 filename_语言_国家.properties 的形式
-      System.out.println(availableLocales[i].getDisplayLanguage() + "_" + availableLocales[i].getDisplayCountry() + "--" + availableLocales[i].getLanguage() + "_" + availableLocales[i].getCountry());
+        if (resourceBundle.containsKey(key)) {
+            return resourceBundle.getString(key);
+        }
+        return null;
     }
-  }
+
+    /**
+     * 根据指定的key获取value值。
+     *
+     * <pre>
+     * 说明：
+     *  1）如果传入的key为null，则返回null
+     *  2）如果指定的key不存在，则返回指定的defaultValue值
+     * </pre>
+     *
+     * @param key
+     * @param defaultValue
+     * @return
+     */
+    public static String getString(String key, String defaultValue) {
+        if (StringUtils.isEmpty(key)) {
+            return null;
+        }
+        if (null == resourceBundle) {
+            resourceBundle = getInstance();
+        }
+
+        if (resourceBundle.containsKey(key)) {
+            return resourceBundle.getString(key);
+        }
+        return defaultValue;
+    }
+
+    public static void main(String[] args) {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(DEFAULT_BASE_NAME, Locale.getDefault());
+        System.out.println(resourceBundle.getString("version"));
+
+        System.out.println(getString("124"));
+        System.out.println(getString("124", "v1.0.1"));
+
+        Locale[] availableLocales = Locale.getAvailableLocales();
+        for (int i = 0; i < availableLocales.length; i++) {
+            // 属性文件命名采用 filename_语言_国家.properties 的形式
+            System.out.println(
+                    availableLocales[i].getDisplayLanguage() + "_" + availableLocales[i].getDisplayCountry() + "--" + availableLocales[i].getLanguage() + "_" + availableLocales[i].getCountry());
+        }
+    }
 }

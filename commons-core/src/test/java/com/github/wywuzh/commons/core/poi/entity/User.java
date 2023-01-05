@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  */
 package com.github.wywuzh.commons.core.poi.entity;
 
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 import lombok.Data;
@@ -29,29 +33,40 @@ import lombok.Data;
 @Data
 public class User {
 
-  /**
-   * 用户名
-   */
-  private String username;
-  /**
-   * 昵称
-   */
-  private String nick;
-  /**
-   * 邮箱
-   */
-  private String email;
-  /**
-   * 手机号
-   */
-  private String mobile;
-  /**
-   * 性别
-   */
-  private String sex;
-  /**
-   * 出生日期
-   */
-  private Date birthdate;
+    /**
+     * 用户名
+     */
+    @ExcelCell(value = "用户名", index = 0)
+    private String username;
+    /**
+     * 昵称
+     */
+    @ExcelCell(value = "昵称", index = 1)
+    private String nick;
+    /**
+     * 邮箱
+     */
+    @ExcelCell(value = "邮箱", index = 2)
+    private String email;
+    /**
+     * 手机号
+     */
+    @ExcelCell(value = "手机号", index = 3)
+    private String mobile;
+    /**
+     * 性别
+     */
+    @ExcelCell(value = "性别", index = 4)
+    private String sex;
+    /**
+     * 出生日期
+     */
+    @ExcelCell(value = "出生日期", cellType = CellTypeEnum.DateTime, index = 5)
+    private Date birthdate;
+    /**
+     * 资产
+     */
+    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.BigDecimal, format = "￥###,##0.00", index = 6)
+    private BigDecimal balance;
 
 }

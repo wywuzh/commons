@@ -30,16 +30,16 @@ import lombok.Data;
  */
 @Data
 public class UnionEmpMapVo implements Serializable {
-  private static final long serialVersionUID = 5624368789296658808L;
+    private static final long serialVersionUID = 5624368789296658808L;
 
-  /**
-   * 关联分支组织中的员工userid
-   */
-  @SerializedName(value = "userid")
-  private String userid;
-  /**
-   * 关联分支组织的企业corpid
-   */
-  @SerializedName(value = "corp_id")
-  private String corpId;
+    /**
+     * 关联分支组织中的员工userid
+     */
+    @SerializedName(value = "userid")
+    private String userid;
+    /**
+     * 关联分支组织的企业corpid
+     */
+    @SerializedName(value = "corp_id")
+    private String corpId;
 }

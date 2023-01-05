@@ -37,11 +37,11 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 @ConditionalOnMissingBean(PlatformTransactionManager.class)
 public class TransactionConfiguration implements TransactionManagementConfigurer {
 
-  @Autowired
-  private DataSource dataSource;
+    @Autowired
+    private DataSource dataSource;
 
-  @Override
-  public PlatformTransactionManager annotationDrivenTransactionManager() {
-    return new DataSourceTransactionManager(dataSource);
-  }
+    @Override
+    public PlatformTransactionManager annotationDrivenTransactionManager() {
+        return new DataSourceTransactionManager(dataSource);
+    }
 }
