@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,23 +23,38 @@ package com.github.wywuzh.commons.core.enums;
  * @since JDK 1.8
  */
 public enum IsEnableEnum {
-    TRUE(1), FALSE(0);
+    TRUE(1, "是"), FALSE(0, "否");
 
     private Integer value;
+    private String desc;
 
-    IsEnableEnum(Integer value) {
+    IsEnableEnum(Integer value, String desc) {
         this.value = value;
+        this.desc = desc;
     }
 
     public Integer getValue() {
         return value;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
     public static IsEnableEnum findByValue(Integer value) {
-        if (value == 0) {
-            return IsEnableEnum.FALSE;
-        } else if (value == 1) {
-            return IsEnableEnum.TRUE;
+        if (FALSE.getValue().equals(value)) {
+            return FALSE;
+        } else if (TRUE.getValue().equals(value)) {
+            return TRUE;
+        }
+        return null;
+    }
+
+    public static IsEnableEnum findByDesc(String desc) {
+        if (FALSE.getDesc().equals(desc)) {
+            return FALSE;
+        } else if (TRUE.getDesc().equals(desc)) {
+            return TRUE;
         }
         return null;
     }
