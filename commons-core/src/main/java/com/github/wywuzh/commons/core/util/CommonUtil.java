@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -207,8 +207,9 @@ public class CommonUtil {
     }
 
     public static boolean isDate(String value) {
-        if (value == null || value.isEmpty())
+        if (value == null || value.isEmpty()) {
             return false;
+        }
         try {
             new SimpleDateFormat().parse(value);
             return true;
@@ -346,15 +347,15 @@ public class CommonUtil {
     /**
      * 字符串是否包含中文
      *
-     * @param str 待校验字符串
+     * @param content 待校验字符串
      * @return true 包含中文字符 false 不包含中文字符
      */
-    public static boolean isContainChinese(String str) {
-        if (StringUtils.isEmpty(str)) {
+    public static boolean isContainChinese(String content) {
+        if (StringUtils.isEmpty(content)) {
             throw new IllegalArgumentException("context is empty!");
         }
         Pattern p = Pattern.compile("[\u4E00-\u9FA5|\\！|\\，|\\。|\\（|\\）|\\《|\\》|\\“|\\”|\\？|\\：|\\；|\\【|\\】]");
-        Matcher m = p.matcher(str);
+        Matcher m = p.matcher(content);
         if (m.find()) {
             return true;
         }
@@ -470,33 +471,4 @@ public class CommonUtil {
         return fileSize.toString() + " GB";
     }
 
-    public static void main(String[] args) {
-        Set<String> firstSet = new HashSet<>();
-        firstSet.add("Java");
-        firstSet.add("DataSource");
-        firstSet.add("Web");
-        Set<String> secondSet = new HashSet<>();
-        secondSet.add("Spring");
-        secondSet.add("MyBatis");
-        secondSet.add("Spring JDBC");
-        Set<String> threeSet = new HashSet<>();
-        threeSet.add("JavaScript");
-        threeSet.add("CSS");
-        threeSet.add("HTML");
-        String join = join(firstSet, secondSet, "_");
-        System.out.println(join);
-        String[] joins = joins(firstSet, secondSet, threeSet);
-        System.out.println(Arrays.toString(joins));
-
-        // 计算公式
-        String content = "word分词不满足需求，咋办？";
-        System.out.println(isContainChinese(content));
-        // 分割计算公式：将中英文分割开
-        List<String> characters = splitEnglishCharacter(content);
-        for (String e : characters) {
-            System.out.println(e + "\t==>" + isContainChinese(e));
-        }
-        String result = StringUtils.join(characters, "");
-        System.out.println(result);
-    }
 }
