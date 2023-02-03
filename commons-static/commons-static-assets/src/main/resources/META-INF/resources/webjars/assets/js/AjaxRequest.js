@@ -16,6 +16,7 @@ var AjaxRequest = {
      * @param url 请求地址
      * @param requestParam 请求参数
      * @param successCallback 请求成功回调函数
+     * @param errorCallback 请求失败回调函数
      */
     getJSONForSync: function (url, requestParam, successCallback, errorCallback) {
         $.ajax({
@@ -43,6 +44,7 @@ var AjaxRequest = {
      * @param url 请求地址
      * @param requestParam 请求参数
      * @param successCallback 请求成功回调函数
+     * @param errorCallback 请求失败回调函数
      */
     getJSONForASync: function (url, requestParam, successCallback, errorCallback) {
         $.ajax({
@@ -136,5 +138,36 @@ var AjaxRequest = {
         $.extend(defaultOptions, options);
         // 执行请求
         $.ajax(defaultOptions);
+    },
+    /**
+     * Deferred延迟请求
+     *
+     * @param url 请求地址
+     * @param type 请求类型，默认为post
+     * @param requestParam 请求参数
+     * @since v2.7.0
+     */
+    deferredRequest: function (url, type, requestParam) {
+        var deferred = $.Deferred();
+        $.ajax({
+            url: url,
+            type: type || 'POST',
+            data: requestParam || {},
+            dataType: 'json',
+            cache: false,
+            async: true,// 是否异步请求，默认为true
+            success: function (data) {
+                // 请求成功
+                deferred.resolve(data);
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest);
+                console.log(textStatus);
+                console.log(errorThrown);
+                // 请求失败
+                deferred.reject(XMLHttpRequest, textStatus, errorThrown);
+            }
+        });
+        return deferred.promise();
     },
 };

@@ -23,23 +23,39 @@ package com.github.wywuzh.commons.core.enums;
  * @since JDK 1.8
  */
 public enum IsSystemEnum {
-    TRUE(1), FALSE(0);
+    TRUE(1, "是"),
+    FALSE(0, "否");
 
     private Integer value;
+    private String desc;
 
-    IsSystemEnum(Integer value) {
+    IsSystemEnum(Integer value, String desc) {
         this.value = value;
+        this.desc = desc;
     }
 
     public Integer getValue() {
         return value;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
     public static IsSystemEnum findByValue(Integer value) {
-        if (value == 0) {
-            return IsSystemEnum.FALSE;
-        } else if (value == 1) {
-            return IsSystemEnum.TRUE;
+        if (FALSE.getValue().equals(value)) {
+            return FALSE;
+        } else if (TRUE.getValue().equals(value)) {
+            return TRUE;
+        }
+        return null;
+    }
+
+    public static IsSystemEnum findByDesc(String desc) {
+        if (FALSE.getDesc().equals(desc)) {
+            return FALSE;
+        } else if (TRUE.getDesc().equals(desc)) {
+            return TRUE;
         }
         return null;
     }
