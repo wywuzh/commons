@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,10 @@ package com.github.wywuzh.commons.core.util;
 
 import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,6 +35,33 @@ import org.junit.Test;
  */
 @Slf4j
 public class CommonUtilTest {
+
+    @Test
+    public void join() {
+        Set<String> firstSet = new HashSet<>();
+        firstSet.add("Java");
+        firstSet.add("DataSource");
+        firstSet.add("Web");
+        Set<String> secondSet = new HashSet<>();
+        secondSet.add("Spring");
+        secondSet.add("MyBatis");
+        secondSet.add("Spring JDBC");
+        Set<String> threeSet = new HashSet<>();
+        threeSet.add("JavaScript");
+        threeSet.add("CSS");
+        threeSet.add("HTML");
+        String join = CommonUtil.join(firstSet, secondSet, "_");
+        log.info("CommonUtil.join：{}", join);
+
+        String[] joins = CommonUtil.joins(firstSet, secondSet, threeSet);
+        log.info("CommonUtil.joins：{}", Arrays.toString(joins));
+    }
+
+    @Test
+    public void isContainChinese() {
+        String content = "word分词不满足需求，咋办？";
+        System.out.println(CommonUtil.isContainChinese(content));
+    }
 
     @Test
     public void splitContent() {
