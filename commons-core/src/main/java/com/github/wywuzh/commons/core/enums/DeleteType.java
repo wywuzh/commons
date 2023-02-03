@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,26 +27,41 @@ public enum DeleteType {
     /**
      * 逻辑删除
      */
-    LOGIC("LOGIC"),
+    LOGIC("LOGIC", "逻辑删除"),
     /**
      * 物理删除
      */
-    PHYSICS("PHYSICS");
+    PHYSICS("PHYSICS", "物理删除");
 
     private String type;
+    private String desc;
 
-    private DeleteType(String type) {
+    DeleteType(String type, String desc) {
         this.type = type;
+        this.desc = desc;
     }
 
     public String getType() {
         return type;
     }
 
+    public String getDesc() {
+        return desc;
+    }
+
     public static DeleteType findByType(String type) {
-        if ("LOGIC".equals(type)) {
+        if (LOGIC.getType().equals(type)) {
             return LOGIC;
-        } else if ("PHYSICS".equals(type)) {
+        } else if (PHYSICS.getType().equals(type)) {
+            return PHYSICS;
+        }
+        return null;
+    }
+
+    public static DeleteType findByDesc(String desc) {
+        if (LOGIC.getDesc().equals(desc)) {
+            return LOGIC;
+        } else if (PHYSICS.getDesc().equals(desc)) {
             return PHYSICS;
         }
         return null;
