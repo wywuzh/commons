@@ -1,4 +1,8 @@
 ## 更新日志
+### SpringBoot/v2.7.5
+1. MySQL驱动由`mysql:mysql-connector-java`迁移至`com.mysql:mysql-connector-j`。注：`spring-boot-dependencies-2.7.8`版本已经将`mysql:mysql-connector-java`依赖彻底移除，为便于使用`com.mysql:mysql-connector-j`依赖包，`commons-mybatis`模块从`2.7.5`版本开始切换至该依赖
+
+
 ### SpringBoot/v2.7.0
 1. 工具包根目录统一调整为`com.github.wywuzh`，与groupId保持一致。若仍然打算使用`com.wuzh`目录，请使用`v2.7.0`以下的包
 2. 引入flatten-maven-plugin插件管理Maven多模块版本
