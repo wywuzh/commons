@@ -1,6 +1,6 @@
 ## 更新日志
 ### SpringBoot/v2.7.5
-1. MySQL驱动由`mysql:mysql-connector-java`迁移至`com.mysql:mysql-connector-j`。注：`spring-boot-dependencies-2.7.8`版本已经将`mysql:mysql-connector-java`依赖彻底移除，为便于使用`com.mysql:mysql-connector-j`依赖包，`commons-mybatis`模块从`2.7.5`版本开始切换至该依赖
+1. MySQL驱动由`mysql:mysql-connector-java`迁移至`com.mysql:mysql-connector-j`。注：`spring-boot-dependencies`官方从`2.7.5`版本开始引入`com.mysql:mysql-connector-j`依赖包，`2.7.8`版本彻底移除掉了`mysql:mysql-connector-java`依赖包，为便于使用`com.mysql:mysql-connector-j`依赖包，`commons-mybatis`模块从`2.7.5`版本开始切换
 
 
 ### SpringBoot/v2.7.0
