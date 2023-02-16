@@ -21,7 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * 类DataSourceAutoConfig的实现描述：多数据源配置
+ * 类DataSourceAutoConfig的实现描述：MyBatis自动配置
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2019-12-20 14:31:48
  * @version v2.2.0
