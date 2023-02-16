@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,10 @@ package com.github.wywuzh.commons.core.properties;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
-import java.util.List;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
-import org.apache.commons.configuration.SystemConfiguration;
-import org.apache.commons.configuration.XMLConfiguration;
 import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -728,26 +725,6 @@ public class CompositeConfigurationUtil {
         }
 
         return configuration.getBoolean(key, defaultValue);
-    }
-
-    public static void main(String[] args) {
-        try {
-            Thread currentThread = Thread.currentThread();
-            URL resource = currentThread.getContextClassLoader().getResource(DEFAULT_PATHNAME);
-
-            CompositeConfiguration configuration = new CompositeConfiguration();
-            configuration.addConfiguration(new SystemConfiguration());
-            configuration.addConfiguration(new PropertiesConfiguration(resource));
-            configuration.addConfiguration(new XMLConfiguration("com/wuzh/schabm/core/xml/account.xml"));
-
-            System.out.println(configuration.getString("description"));
-
-            List<Object> list = configuration.getList("accountList.account");
-            System.out.println(list);
-            System.out.println(configuration.getString("content:component-scan"));
-        } catch (ConfigurationException e) {
-            e.printStackTrace();
-        }
     }
 
 }

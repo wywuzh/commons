@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,17 +24,19 @@ package com.github.wywuzh.commons.core.enums;
  */
 public enum Flag {
 
-    TRUE("1", true), FALSE("0", false);
+    TRUE(1, true, "是"), FALSE(0, false, "否");
 
-    private String value;
+    private Integer value;
     private boolean flag;
+    private String desc;
 
-    private Flag(String value, boolean flag) {
+    Flag(Integer value, boolean flag, String desc) {
         this.value = value;
         this.flag = flag;
+        this.desc = desc;
     }
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
@@ -42,10 +44,14 @@ public enum Flag {
         return flag;
     }
 
-    public static Flag findByValue(String value) {
-        if ("0".equals(value)) {
+    public String getDesc() {
+        return desc;
+    }
+
+    public static Flag findByValue(Integer value) {
+        if (FALSE.getValue().equals(value)) {
             return FALSE;
-        } else if ("1".equals(value)) {
+        } else if (TRUE.getValue().equals(value)) {
             return TRUE;
         }
         return null;
@@ -58,4 +64,14 @@ public enum Flag {
             return FALSE;
         }
     }
+
+    public static Flag findByDesc(String desc) {
+        if (FALSE.getDesc().equals(desc)) {
+            return FALSE;
+        } else if (TRUE.getDesc().equals(desc)) {
+            return TRUE;
+        }
+        return null;
+    }
+
 }
