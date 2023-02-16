@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ public class MyBatisConfig {
     /**
      * MAPPER映射器文件存放路径
      */
-    private final String MAPPER_LOCATION = "classpath:com/wuzh/**/mapper/**/*.xml";
+    private final String MAPPER_LOCATION = "classpath:com/github/wywuzh/**/mapper/**/*.xml";
     /**
      * MAPPER接口文件存放路径
      *
@@ -71,6 +71,7 @@ public class MyBatisConfig {
     private final String TYPE_ALIASES_PACKAGE = "com.github.wywuzh.**.entity";
 
     @Bean(name = "dataSource")
+    @ConditionalOnMissingBean(name = "dataSource")
     public DataSource dataSource(@Qualifier("writeDataSource") DataSource writeDataSource, @Qualifier("readDataSource") DataSource readDataSource) {
         Map<Object, Object> targetDataSources = new HashMap<>();
         targetDataSources.put(DataSourceConstants.BEAN_NAME_WRITE, writeDataSource);
@@ -83,6 +84,7 @@ public class MyBatisConfig {
     }
 
     @Bean(name = "sqlSessionFactory")
+    @ConditionalOnMissingBean
     public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         // 设置数据源
@@ -99,6 +101,7 @@ public class MyBatisConfig {
     }
 
     @Bean
+    @ConditionalOnMissingBean
     public SqlSessionTemplate sqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
