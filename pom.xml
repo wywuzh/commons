@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2015-2022 the original author or authors.
+    Copyright 2015-2023 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
     <groupId>com.github.wywuzh</groupId>
     <artifactId>commons-parent</artifactId>
     <version>${revision}</version>
-    <name>commons-parent</name>
+    <name>commons</name>
     <packaging>pom</packaging>
     <description>项目公共组件类库</description>
     <url>http://git.oschina.net/wywuzh/commons</url>
@@ -129,7 +129,7 @@
         <druid.version>1.2.12</druid.version>
 
         <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
-        <curator_version>4.0.1</curator_version>
+        <curator_version>4.2.0</curator_version>
         <dubbo.version>3.1.1</dubbo.version>
         <shiro.version>1.9.1</shiro.version>
 
