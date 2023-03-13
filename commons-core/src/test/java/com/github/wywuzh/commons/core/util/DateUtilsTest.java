@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,13 @@ import org.junit.Test;
 @Slf4j
 public class DateUtilsTest {
 
+    @Test
+    public void parse() {
+        log.info("parse解析结果：{}", DateUtils.parse("2023-02-01", DateUtils.PATTERN_DATE, false));
+        log.info("parse解析结果：{}", DateUtils.parse("2023-02-01 18:31:00", DateUtils.PATTERN_DATE_TIME, false));
+        log.info("parse解析结果：{}", DateUtils.parse("18:31:00", DateUtils.PATTERN_TIME, false));
+    }
+
     // 根据时间类型添加num值
     @Test
     public void addNumWithType() {
@@ -42,12 +49,14 @@ public class DateUtilsTest {
         log.info("date={}, fieldType={}, num={} addNumWithType结果：{}", currentDate, fieldType, num, DateUtils.addNumWithType(currentDate, fieldType, num));
     }
 
+    // 获取传入日期当天的开始时间
     @Test
     public void getFirstDaily() {
         Date currentDate = new Date();
         log.info("date={} getFirstDaily结果：{}", currentDate, DateUtils.getFirstDaily(currentDate));
     }
 
+    // 获取上一年月
     @Test
     public void getPreYearMonth() {
         String yearMonth = "2022-03";
@@ -55,6 +64,7 @@ public class DateUtilsTest {
         log.info("{}的上一年月是：{}", yearMonth, preYearMonth);
     }
 
+    // 获取下一年月
     @Test
     public void getNextYearMonth() {
         String yearMonth = "2022-03";
@@ -62,6 +72,7 @@ public class DateUtilsTest {
         log.info("{}的下一年月是：{}", yearMonth, preYearMonth);
     }
 
+    // 计算两个日期的天数间隔
     @Test
     public void getDayInterval() {
         String startDate = "2022-01-01";
@@ -70,12 +81,21 @@ public class DateUtilsTest {
         log.info("startDate={}, endDate={} 两个日期的天数间隔：{}", startDate, endDate, dayInterval);
     }
 
+    // 计算两个日期的月份间隔
     @Test
     public void getMonthInterval() {
         String startDate = "2022-01-01";
         String endDate = "2022-03-31";
         Integer dayInterval = DateUtils.getMonthInterval(DateUtils.parse(startDate, DateUtils.PATTERN_DATE), DateUtils.parse(endDate, DateUtils.PATTERN_DATE), true);
         log.info("startDate={}, endDate={} 两个日期的月份间隔：{}", startDate, endDate, dayInterval);
+    }
+
+    // 获取指定年月下的所有日期
+    @Test
+    public void getMonthFullDay() {
+        log.info("获取{}年月下的所有日期：{}", "2023-04", DateUtils.getMonthFullDay("2023-04"));
+
+        log.info("获取{}-{}年月下的所有日期：{}", 2023, 4, DateUtils.getMonthFullDay(2023, 4));
     }
 
     public static void main(String[] args) {
