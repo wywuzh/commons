@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,7 +92,7 @@ public class DateUtils {
      * @return SimpleDateFormat实例
      */
     public static SimpleDateFormat getInstance() {
-        return threadLocal.get();
+        return getInstance(PATTERN_DATE_TIME);
     }
 
     /**
@@ -106,6 +108,8 @@ public class DateUtils {
      * @return
      */
     public static SimpleDateFormat getInstance(String pattern) {
+        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must be null");
+
         SimpleDateFormat dateFormat = threadLocal.get();
         dateFormat.applyPattern(pattern);
         return dateFormat;
@@ -136,6 +140,7 @@ public class DateUtils {
      */
     public static String format(Date date, String pattern) {
         Assert.notNull(date, "[Assertion failed] - the date argument must be null");
+        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must be null");
 
         return getInstance(pattern).format(date);
     }
@@ -147,15 +152,7 @@ public class DateUtils {
      * @return
      */
     public static Date parse(String parseDate) {
-        Assert.notBlank(parseDate);
-
-        Date date = null;
-        try {
-            date = getInstance(PATTERN_DATE_TIME).parse(parseDate);
-        } catch (ParseException e) {
-            LOGGER.error("parseDate={} 解析失败：", parseDate, e);
-        }
-        return date;
+        return parse(parseDate, PATTERN_DATE_TIME, true);
     }
 
     /**
@@ -166,13 +163,30 @@ public class DateUtils {
      * @return
      */
     public static Date parse(String parseDate, String pattern) {
-        Assert.notBlank(parseDate);
+        return parse(parseDate, pattern, true);
+    }
+
+    /**
+     * 将传入的时间字符串解析成java.util.Date时间格式
+     *
+     * @param parseDate 时间字符串
+     * @param pattern   时间格式
+     * @param quietly   是否隐藏解析失败时的异常信息。true时不抛出异常，false时会把异常信息封装为RuntimeException运行时异常抛出
+     * @return
+     * @since v2.7.0
+     */
+    public static Date parse(String parseDate, String pattern, boolean quietly) {
+        Assert.notBlank(parseDate, "[Assertion failed] - the parseDate argument must be null");
+        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must be null");
 
         Date date = null;
         try {
             date = getInstance(pattern).parse(parseDate);
         } catch (ParseException e) {
             LOGGER.error("parseDate={}, pattern={} 解析失败：", parseDate, pattern, e);
+            if (!quietly) {
+                throw new RuntimeException(e.getMessage(), e);
+            }
         }
         return date;
     }
@@ -342,7 +356,7 @@ public class DateUtils {
     /**
      * 获取传入月当月的开始时间
      *
-     * @param monthly
+     * @param monthly 月份
      * @return 如果传入参数值为空，返回空
      */
     public static Date getFirstMonthly(Date monthly) {
@@ -361,7 +375,7 @@ public class DateUtils {
     /**
      * 获取传入月当月的开始时间
      *
-     * @param monthly yyyy-MM格式
+     * @param monthly 月份，yyyy-MM格式
      * @return 如果传入参数值为空，返回空
      */
     public static Date getFirstMonthly(String monthly) {
@@ -710,6 +724,80 @@ public class DateUtils {
         Assert.notNull(endDate, "数据格式有误，必须是yyyy-MM格式");
 
         return DateUtils.getMonthInterval(startDate, endDate, includeCurrentDay);
+    }
+
+    /**
+     * 获取指定年月下的所有日期
+     *
+     * @param yearMonth 年月：yyyy-MM格式
+     * @return 年月下的所有日期
+     * @since v2.7.0
+     */
+    public static List<String> getMonthFullDay(String yearMonth) {
+        Assert.notBlank(yearMonth, "[Assertion failed] - the yearMonth argument must be null");
+
+        Date yearMonthDate = DateUtils.parse(yearMonth, DateUtils.PATTERN_YYYY_MM);
+        Assert.notNull(yearMonthDate, "数据格式有误，必须是yyyy-MM格式");
+        return getMonthFullDay(yearMonthDate);
+    }
+
+    /**
+     * 获取指定年月下的所有日期
+     *
+     * @param yearMonth 年月
+     * @return 年月下的所有日期
+     * @since v2.7.0
+     */
+    public static List<String> getMonthFullDay(Date yearMonth) {
+        Assert.notNull(yearMonth, "[Assertion failed] - the yearMonth argument must be null");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(yearMonth);
+        // 将日期设置为该月的1号
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        // 该月的最大日期
+        int maximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        List<String> monthFullDays = new LinkedList<>();
+        for (int i = 1; i <= maximum; i++) {
+            monthFullDays.add(DateUtils.format(calendar.getTime(), DateUtils.PATTERN_DATE));
+
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        return monthFullDays;
+    }
+
+    /**
+     * 获取指定年月下的所有日期
+     *
+     * @param year  年
+     * @param month 月，从1开始
+     * @return 年月下的所有日期
+     * @since v2.7.0
+     */
+    public static List<String> getMonthFullDay(int year, int month) {
+        Assert.state((year > 0), "参数year必须大于0");
+        Assert.state((month >= 1 && month <= 12), "参数month必须在1至12之间");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.clear();
+        calendar.set(Calendar.YEAR, year);
+        // 月从0开始
+        calendar.set(Calendar.MONTH, month - 1);
+        // 将日期设置为该月的1号
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        // 该月的最大日期
+        int maximum = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        List<String> monthFullDays = new LinkedList<>();
+        for (int i = 1; i <= maximum; i++) {
+            monthFullDays.add(DateUtils.format(calendar.getTime(), DateUtils.PATTERN_DATE));
+
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+        }
+        return monthFullDays;
     }
 
 }
