@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2015-2022 the original author or authors.
+    Copyright 2015-2023 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>commons-static-assets</artifactId>
-    <name>commons-static-assets</name>
+    <name>commons :: static :: Assets</name>
     <packaging>jar</packaging>
     <description>自定义资源工具</description>
 

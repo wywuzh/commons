@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2015-2022 the original author or authors.
+    Copyright 2015-2023 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>commons-jdbc</artifactId>
+    <name>commons :: Spring Framework JDBC</name>
     <packaging>jar</packaging>
     <description>Spring JDBC工具类库，旨在对Spring JDBC进行简单封装，降低Spring JDBC使用的复杂度，提高重复性代码的可重用度，尽可能地减少编码工作量。</description>
     <url>http://git.oschina.net/wywuzh/commons</url>
