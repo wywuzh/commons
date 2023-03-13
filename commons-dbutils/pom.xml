@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-    Copyright 2015-2022 the original author or authors.
+    Copyright 2015-2023 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>commons-dbutils</artifactId>
-    <name>${project.artifactId}</name>
+    <name>commons :: Apache DbUtils</name>
     <packaging>jar</packaging>
     <description>基于Apache commons-dbutils进行二次封装处理的JDBC工具类库</description>
 
