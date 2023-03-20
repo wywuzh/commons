@@ -23,7 +23,7 @@ import org.mybatis.generator.api.dom.java.TypeParameter;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/5/7 18:14
  *                ---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ import org.mybatis.generator.api.dom.java.TypeParameter;
 public class JavaElementTools {
     /**
      * clone
-     * 
+     *
      * @param method
      * @return
      */
@@ -64,7 +64,7 @@ public class JavaElementTools {
 
     /**
      * clone
-     * 
+     *
      * @param parameter
      * @return
      */

@@ -33,7 +33,7 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
  * ---------------------------------------------------------------------------
  * constructorBased 官方 bug 修正插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/7/28 11:05
  *                 ---------------------------------------------------------------------------
@@ -42,7 +42,7 @@ public class ConstructorBasedBugFixPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return

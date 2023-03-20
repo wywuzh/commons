@@ -36,7 +36,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * 乐观锁插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/4/26 10:24
  *                 ---------------------------------------------------------------------------
@@ -219,7 +219,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * Model builder set 方法生成
-     * 
+     *
      * @param method
      * @param topLevelClass
      * @param builderClass
@@ -248,7 +248,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * Model builder class 生成
-     * 
+     *
      * @param topLevelClass
      * @param builderClass
      * @param columns
@@ -412,7 +412,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 生成版本判断节点
-     * 
+     *
      * @return
      */
     private String generateVersionEleStr() {
@@ -431,7 +431,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 替换Example 方法
-     * 
+     *
      * @param introspectedTable
      * @param method
      * @param interfaze
@@ -454,7 +454,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 替换Example 方法
-     * 
+     *
      * @param introspectedTable
      * @param method
      * @param interfaze
@@ -480,7 +480,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 替换主键 方法
-     * 
+     *
      * @param introspectedTable
      * @param method
      * @param interfaze
@@ -506,7 +506,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 替换主键 方法
-     * 
+     *
      * @param introspectedTable
      * @param method
      * @param interfaze
@@ -532,7 +532,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 替换Example
-     * 
+     *
      * @param introspectedTable
      * @param element
      * @param id
@@ -562,7 +562,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 替换 主键查询
-     * 
+     *
      * @param introspectedTable
      * @param element
      * @param id
@@ -627,7 +627,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 生成update sql map
-     * 
+     *
      * @param introspectedTable
      * @param columns
      * @param id
@@ -699,7 +699,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 生成LogicalDelete sql map
-     * 
+     *
      * @param introspectedTable
      * @param id
      * @param logicalDeleteColumn
@@ -761,7 +761,7 @@ public class OptimisticLockerPlugin extends BasePlugin implements IModelBuilderP
 
     /**
      * 生成版本号set节点
-     * 
+     *
      * @param selective
      * @return
      */

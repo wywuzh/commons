@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/4/27 11:33
  *                 ---------------------------------------------------------------------------
@@ -55,7 +55,7 @@ public class HookAggregator implements IUpsertPluginHook, IModelBuilderPluginHoo
 
     /**
      * Getter method for property <tt>instance</tt>.
-     * 
+     *
      * @return property value of instance
      * @author hewei
      */
@@ -65,7 +65,7 @@ public class HookAggregator implements IUpsertPluginHook, IModelBuilderPluginHoo
 
     /**
      * Setter method for property <tt>context</tt>.
-     * 
+     *
      * @param context value to be assigned to property context
      * @author hewei
      */
@@ -75,7 +75,7 @@ public class HookAggregator implements IUpsertPluginHook, IModelBuilderPluginHoo
 
     /**
      * 获取插件
-     * 
+     *
      * @param clazz
      * @param <T>
      * @return

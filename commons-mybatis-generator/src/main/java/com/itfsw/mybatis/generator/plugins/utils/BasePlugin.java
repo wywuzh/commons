@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  * ---------------------------------------------------------------------------
  * 基础plugin
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/4/28 13:57
  * @author <a mailto="wywuzh@163.com">伍章红</a> 2020-01-09 09:47
@@ -62,7 +62,7 @@ public class BasePlugin extends PluginAdapter {
 
     /**
      * Set the context under which this plugin is running.
-     * 
+     *
      * @param context the new context
      */
     @Override
@@ -122,7 +122,7 @@ public class BasePlugin extends PluginAdapter {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param introspectedTable
      */
     @Override

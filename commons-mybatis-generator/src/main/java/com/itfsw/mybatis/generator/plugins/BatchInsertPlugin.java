@@ -34,7 +34,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * 批量插入插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/1/13 9:33
  *                 ---------------------------------------------------------------------------
@@ -82,7 +82,7 @@ public class BatchInsertPlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param interfaze
      * @param topLevelClass
      * @param introspectedTable
@@ -117,7 +117,7 @@ public class BatchInsertPlugin extends BasePlugin {
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param document
      * @param introspectedTable
      * @return
@@ -215,7 +215,7 @@ public class BatchInsertPlugin extends BasePlugin {
 
     /**
      * 生成insert selective 增强的插入语句
-     * 
+     *
      * @param introspectedTable
      * @return
      */

@@ -23,7 +23,7 @@ import org.mybatis.generator.api.dom.java.InnerClass;
  * ---------------------------------------------------------------------------
  * 把InnerInterface包装成InnerClass(Mybatis Generator 没有提供内部接口实现)
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/1/12 17:40
  *                 ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class InnerInterfaceWrapperToInnerClass extends InnerClass {
 
     /**
      * Getter method for property <tt>innerInterface</tt>.
-     * 
+     *
      * @return property value of innerInterface
      * @author hewei
      */
@@ -68,7 +68,7 @@ public class InnerInterfaceWrapperToInnerClass extends InnerClass {
 
     /**
      * Setter method for property <tt>innerInterface</tt>.
-     * 
+     *
      * @param innerInterface value to be assigned to property innerInterface
      * @author hewei
      */

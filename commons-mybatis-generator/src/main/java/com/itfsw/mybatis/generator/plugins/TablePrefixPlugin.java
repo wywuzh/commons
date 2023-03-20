@@ -28,7 +28,7 @@ import org.mybatis.generator.config.TableConfiguration;
  * ---------------------------------------------------------------------------
  * table前缀，解决多数据源表重名问题插件（为Model、Mapper、Example、xml等增加前缀）
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/5/18 13:54
  *                 ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class TablePrefixPlugin extends BasePlugin {
     /**
      * 初始化阶段
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      * @return
      */

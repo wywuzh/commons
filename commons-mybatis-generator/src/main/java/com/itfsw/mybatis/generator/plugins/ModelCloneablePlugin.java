@@ -26,7 +26,7 @@ import org.mybatis.generator.api.dom.java.*;
  * ---------------------------------------------------------------------------
  * Cloneable
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/11/7 15:26
  *                 ---------------------------------------------------------------------------
@@ -34,7 +34,7 @@ import org.mybatis.generator.api.dom.java.*;
 public class ModelCloneablePlugin extends BasePlugin {
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -47,7 +47,7 @@ public class ModelCloneablePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -60,7 +60,7 @@ public class ModelCloneablePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -73,7 +73,7 @@ public class ModelCloneablePlugin extends BasePlugin {
 
     /**
      * 支持Cloneable
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      */

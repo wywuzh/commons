@@ -33,7 +33,7 @@ import java.util.Properties;
 public class CommentPlugin extends BasePlugin {
     /**
      * 模板路径，使用样例：
-     * 
+     *
      * <pre>
      * &lt;plugin type="com.itfsw.mybatis.generator.plugins.CommentPlugin"&gt;
      *     &lt;property name="template" value="src/main/resources/mybatis-comment.ftl" /&gt;

@@ -35,7 +35,7 @@ import org.mybatis.generator.internal.util.JavaBeansUtil;
  * ---------------------------------------------------------------------------
  * 增加Model Builder方法
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2016/12/28 14:56
  *                  ---------------------------------------------------------------------------
@@ -46,7 +46,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -63,7 +63,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -77,7 +77,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -116,7 +116,7 @@ public class ModelBuilderPlugin extends BasePlugin implements ILombokPluginHook 
 
     /**
      * 生成ModelBuilder
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @param columns

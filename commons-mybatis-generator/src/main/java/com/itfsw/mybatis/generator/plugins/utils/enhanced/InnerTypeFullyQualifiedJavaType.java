@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/8/2 16:55
  *                ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ public class InnerTypeFullyQualifiedJavaType extends FullyQualifiedJavaType {
 
     /**
      * Use this constructor to construct a generic type with the specified type parameters.
-     * 
+     *
      * @param fullTypeSpecification the full type specification
      */
     public InnerTypeFullyQualifiedJavaType(String fullTypeSpecification) {

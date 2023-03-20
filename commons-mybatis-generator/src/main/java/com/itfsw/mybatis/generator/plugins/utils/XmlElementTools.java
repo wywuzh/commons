@@ -27,7 +27,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/5/2 17:52
  *                ---------------------------------------------------------------------------
@@ -35,7 +35,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 public class XmlElementTools {
     /**
      * 获取属性
-     * 
+     *
      * @param element
      * @param name
      */
@@ -52,7 +52,7 @@ public class XmlElementTools {
 
     /**
      * 移除属性
-     * 
+     *
      * @param element
      * @param name
      */
@@ -68,7 +68,7 @@ public class XmlElementTools {
 
     /**
      * 替换属性
-     * 
+     *
      * @param element
      * @param attribute
      */
@@ -79,7 +79,7 @@ public class XmlElementTools {
 
     /**
      * xmlElement 替换
-     * 
+     *
      * @param srcEle
      * @param destEle
      */
@@ -93,7 +93,7 @@ public class XmlElementTools {
 
     /**
      * 查找指定xml节点下指定节点名称的元素
-     * 
+     *
      * @param xmlElement
      * @param name
      * @return
@@ -114,7 +114,7 @@ public class XmlElementTools {
 
     /**
      * 查询指定xml下所有text xml 节点
-     * 
+     *
      * @param xmlElement
      * @return
      */
@@ -132,7 +132,7 @@ public class XmlElementTools {
 
     /**
      * 拷贝
-     * 
+     *
      * @param element
      * @return
      */
@@ -153,7 +153,7 @@ public class XmlElementTools {
 
     /**
      * 拷贝
-     * 
+     *
      * @param attribute
      * @return
      */
@@ -163,7 +163,7 @@ public class XmlElementTools {
 
     /**
      * 拷贝
-     * 
+     *
      * @param textElement
      * @return
      */

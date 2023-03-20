@@ -42,7 +42,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * Selective 增强插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/4/20 15:39
  *                 ---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
     /**
      * insertSelective 方法生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -94,7 +94,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
     /**
      * updateByExampleSelective
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -123,7 +123,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
     /**
      * updateByPrimaryKeySelective
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -156,7 +156,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
     /**
      * insertSelective
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -204,7 +204,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
     /**
      * updateByExampleSelective
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -237,7 +237,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
     /**
      * updateByPrimaryKeySelective
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -271,7 +271,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * upsertSelective 方法
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -291,7 +291,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * upsertByExampleSelective 方法
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -309,7 +309,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * upsertSelective xml
-     * 
+     *
      * @param element
      * @param columns
      * @param insertColumnsEle
@@ -344,7 +344,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * upsertByExampleSelective xml
-     * 
+     *
      * @param element
      * @param columns
      * @param insertColumnsEle
@@ -409,7 +409,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * insert column selective
-     * 
+     *
      * @param columns
      * @return
      */
@@ -444,7 +444,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * insert column selective
-     * 
+     *
      * @param columns
      * @return
      */
@@ -454,7 +454,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * insert column selective
-     * 
+     *
      * @param columns
      * @param bracket
      * @return
@@ -486,7 +486,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * sets selective
-     * 
+     *
      * @param columns
      * @return
      */
@@ -496,7 +496,7 @@ public class SelectiveEnhancedPlugin extends BasePlugin implements IUpsertPlugin
 
     /**
      * sets selective
-     * 
+     *
      * @param columns
      * @return
      */

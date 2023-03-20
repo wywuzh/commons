@@ -24,7 +24,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/5/7 18:51
  *                ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ public interface ISelectOneByExamplePluginHook {
 
     /**
      * selectOneByExampleWithBLOBs 接口方法生成
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -43,7 +43,7 @@ public interface ISelectOneByExamplePluginHook {
 
     /**
      * selectOneByExample 接口方法生成
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -53,7 +53,7 @@ public interface ISelectOneByExamplePluginHook {
 
     /**
      * selectOneByExample 方法sqlMap实现
-     * 
+     *
      * @param document
      * @param element
      * @param introspectedTable
@@ -63,7 +63,7 @@ public interface ISelectOneByExamplePluginHook {
 
     /**
      * selectOneByExampleWithBLOBs 方法sqlMap实现
-     * 
+     *
      * @param document
      * @param element
      * @param introspectedTable

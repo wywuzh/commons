@@ -24,7 +24,7 @@ import org.mybatis.generator.api.dom.java.*;
  * ---------------------------------------------------------------------------
  * Java ele 生成工具
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/4/21 16:22
  *                 ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 生成静态常量
-     * 
+     *
      * @param fieldName  常量名称
      * @param javaType   类型
      * @param initString 初始化字段
@@ -52,7 +52,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 生成属性
-     * 
+     *
      * @param fieldName  常量名称
      * @param visibility 可见性
      * @param javaType   类型
@@ -70,7 +70,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 生成方法
-     * 
+     *
      * @param methodName 方法名
      * @param visibility 可见性
      * @param returnType 返回值类型
@@ -92,7 +92,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 生成方法实现体
-     * 
+     *
      * @param method    方法
      * @param bodyLines 方法实现行
      * @return
@@ -108,7 +108,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 生成Filed的Set方法
-     * 
+     *
      * @param field field
      * @return
      */
@@ -119,7 +119,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 生成Filed的Get方法
-     * 
+     *
      * @param field field
      * @return
      */
@@ -130,7 +130,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 获取Model没有BLOBs类时的类型
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -148,7 +148,7 @@ public class JavaElementGeneratorTools {
 
     /**
      * 获取Model有BLOBs类时的类型
-     * 
+     *
      * @param introspectedTable
      * @return
      */

@@ -20,7 +20,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/5/21 11:24
  *                 ---------------------------------------------------------------------------
@@ -28,7 +28,7 @@ import org.mybatis.generator.api.IntrospectedTable;
 public interface ITableConfigurationHook {
     /**
      * 表配置
-     * 
+     *
      * @param introspectedTable
      */
     void tableConfiguration(IntrospectedTable introspectedTable);

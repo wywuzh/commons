@@ -32,7 +32,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * 数据Model属性对应Column获取插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/1/17 11:20
  *                 ---------------------------------------------------------------------------
@@ -57,7 +57,7 @@ public class ModelColumnPlugin extends BasePlugin {
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -71,7 +71,7 @@ public class ModelColumnPlugin extends BasePlugin {
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -84,7 +84,7 @@ public class ModelColumnPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -97,7 +97,7 @@ public class ModelColumnPlugin extends BasePlugin {
 
     /**
      * 生成Column字段枚举
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return

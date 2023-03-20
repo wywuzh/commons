@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
  * ---------------------------------------------------------------------------
  * 插件工具集
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/4/20 15:43
  *                 ---------------------------------------------------------------------------
@@ -39,7 +39,7 @@ public class PluginTools {
 
     /**
      * 获取挂载
-     * 
+     *
      * @param clazz
      * @param <T>
      * @return
@@ -50,7 +50,7 @@ public class PluginTools {
 
     /**
      * 检查插件依赖
-     * 
+     *
      * @param context 上下文
      * @param plugins 插件
      * @return
@@ -66,7 +66,7 @@ public class PluginTools {
 
     /**
      * 获取插件所在位置
-     * 
+     *
      * @param context 上下文
      * @param plugin  插件
      * @return -1:未找到
@@ -85,7 +85,7 @@ public class PluginTools {
 
     /**
      * 获取插件列表
-     * 
+     *
      * @param ctx 上下文
      * @return
      */
@@ -101,7 +101,7 @@ public class PluginTools {
 
     /**
      * 获取插件配置
-     * 
+     *
      * @param context 上下文
      * @param plugin  插件
      * @return
@@ -116,7 +116,7 @@ public class PluginTools {
 
     /**
      * 版本号比较
-     * 
+     *
      * @param v1
      * @param v2
      * @return 0代表相等，1代表左边大，-1代表右边大

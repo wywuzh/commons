@@ -36,7 +36,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2019/7/4 11:01
  *                ---------------------------------------------------------------------------
@@ -75,7 +75,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param warnings
      * @return
      */
@@ -93,7 +93,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      */
     @Override
@@ -118,7 +118,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -131,7 +131,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -144,7 +144,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -157,7 +157,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -170,7 +170,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -183,7 +183,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -197,7 +197,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -211,7 +211,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
     /**
      * Model Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -224,7 +224,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -294,7 +294,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 生成增量操作节点(SelectiveEnhancedPlugin)
-     * 
+     *
      * @param columns
      * @return
      * @see SelectiveEnhancedPlugin#generateSetsSelective(List, IntrospectedColumn)
@@ -328,7 +328,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 判断是否为需要进行增量操作的column
-     * 
+     *
      * @param column
      * @return
      */
@@ -346,7 +346,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 向topLevelClass 添加必要的操作函数
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      */
@@ -362,7 +362,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 构建Increment Enum
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -422,7 +422,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 向topLevelClass 添加必要的操作函数
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      */
@@ -449,7 +449,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 有Selective代码生成
-     * 
+     *
      * @param element
      */
     private void generatedWithSelective(XmlElement element, IntrospectedTable introspectedTable, boolean hasPrefix) {
@@ -478,7 +478,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 无Selective代码生成
-     * 
+     *
      * @param xmlElement
      * @param introspectedTable
      * @param hasPrefix
@@ -505,7 +505,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 是否启用了
-     * 
+     *
      * @return
      */
     private boolean support() {
@@ -514,7 +514,7 @@ public class IncrementPlugin extends BasePlugin implements IIncrementPluginHook 
 
     /**
      * 生成Increment类
-     * 
+     *
      * @param introspectedTable
      * @return
      */

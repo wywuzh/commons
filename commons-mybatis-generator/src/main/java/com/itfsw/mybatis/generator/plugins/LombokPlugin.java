@@ -40,7 +40,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * LombokPlugin
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/10/29 14:33
  *                  ---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param warnings
      * @return
      */
@@ -85,7 +85,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -117,7 +117,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -130,7 +130,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -143,7 +143,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -156,7 +156,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param method
      * @param topLevelClass
      * @param introspectedColumn
@@ -176,7 +176,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param method
      * @param topLevelClass
      * @param introspectedColumn
@@ -196,7 +196,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 添加注解
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @param modelType
@@ -272,7 +272,7 @@ public class LombokPlugin extends BasePlugin {
 
     /**
      * 添加注解
-     * 
+     *
      * @param topLevelClass
      * @param annotation
      */

@@ -33,7 +33,7 @@ import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/6/29 13:34
  *                 ---------------------------------------------------------------------------
@@ -48,7 +48,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param warnings
      * @return
      */
@@ -66,7 +66,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      */
     @Override
@@ -141,7 +141,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param document
      * @param introspectedTable
      * @return
@@ -212,7 +212,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 生成selectOneByExampleSelective
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -222,7 +222,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 生成selectOneByExampleSelective
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -309,7 +309,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 生成Selective xml节点
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -344,7 +344,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 替换方法成withSelective
-     * 
+     *
      * @param method
      * @param name
      * @param firstAnnotation
@@ -366,7 +366,7 @@ public class SelectSelectivePlugin extends BasePlugin implements ISelectOneByExa
 
     /**
      * 获取ModelColumn type
-     * 
+     *
      * @param introspectedTable
      * @return
      */

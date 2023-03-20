@@ -20,7 +20,7 @@ import org.mybatis.generator.api.dom.java.FullyQualifiedJavaType;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/11/2 18:21
  *                 ---------------------------------------------------------------------------
@@ -30,7 +30,7 @@ public class SpecTypeArgumentsFullyQualifiedJavaType extends FullyQualifiedJavaT
 
     /**
      * Use this constructor to construct a generic type with the specified type parameters.
-     * 
+     *
      * @param fullTypeSpecification the full type specification
      */
     public SpecTypeArgumentsFullyQualifiedJavaType(String fullTypeSpecification) {

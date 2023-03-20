@@ -35,7 +35,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * 增加分页方法
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2016/12/29 18:14
  *                  ---------------------------------------------------------------------------
@@ -64,7 +64,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      */
     @Override
@@ -83,7 +83,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
     /**
      * ModelExample Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -156,7 +156,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -170,7 +170,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -191,7 +191,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
 
     /**
      * 生成limit节点
-     * 
+     *
      * @param element
      */
     private void generateLimitElement(XmlElement element) {
@@ -213,7 +213,7 @@ public class LimitPlugin extends BasePlugin implements ISelectSelectivePluginHoo
 
     /**
      * 生成limit节点
-     * 
+     *
      * @param element
      */
     private void generateLimitElementWithExample(XmlElement element) {

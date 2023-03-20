@@ -23,7 +23,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/4/28 17:50
  *                 ---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 public interface IIncrementPluginHook {
     /**
      * 生成增量操作节点
-     * 
+     *
      * @param introspectedColumn
      * @param prefix
      * @param hasComma
@@ -41,7 +41,7 @@ public interface IIncrementPluginHook {
 
     /**
      * 生成增量操作节点
-     * 
+     *
      * @param introspectedColumn
      * @param prefix
      * @return
@@ -50,7 +50,7 @@ public interface IIncrementPluginHook {
 
     /**
      * 生成增量操作节点(SelectiveEnhancedPlugin)
-     * 
+     *
      * @param columns
      * @return
      */
@@ -58,7 +58,7 @@ public interface IIncrementPluginHook {
 
     /**
      * 是否支持increment
-     * 
+     *
      * @param column
      * @return
      */

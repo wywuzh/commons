@@ -40,7 +40,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * 增量插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/6/19 15:20
  *                 ---------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param warnings
      * @return
      */
@@ -82,7 +82,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      */
     @Override
@@ -109,7 +109,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -122,7 +122,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -135,7 +135,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -148,7 +148,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -161,7 +161,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -174,7 +174,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -204,7 +204,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * Lombok Builder 生成
-     * 
+     *
      * @param topLevelClass
      * @param columns
      * @param introspectedTable
@@ -369,7 +369,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * Model builder class 生成
-     * 
+     *
      * @param topLevelClass
      * @param builderClass
      * @param columns
@@ -411,7 +411,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * Model builder set 方法生成
-     * 
+     *
      * @param method
      * @param topLevelClass
      * @param builderClass
@@ -428,7 +428,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 生成增量操作节点
-     * 
+     *
      * @param introspectedColumn
      * @param prefix
      * @param hasComma
@@ -475,7 +475,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 生成增量操作节点(SelectiveEnhancedPlugin)
-     * 
+     *
      * @param columns
      * @return
      */
@@ -507,7 +507,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 判断是否为需要进行增量操作的column
-     * 
+     *
      * @param column
      * @return
      */
@@ -525,7 +525,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 向topLevelClass 添加必要的操作函数
-     * 
+     *
      * @param topLevelClass
      * @param builderCls
      * @param introspectedTable
@@ -561,7 +561,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 生成Inc enum
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -596,7 +596,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 有Selective代码生成
-     * 
+     *
      * @param element
      */
     private void generatedWithSelective(XmlElement element, IntrospectedTable introspectedTable, boolean hasPrefix) {
@@ -627,7 +627,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 无Selective代码生成
-     * 
+     *
      * @param xmlElement
      * @param introspectedTable
      * @param hasPrefix
@@ -665,7 +665,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 获取INC Enum
-     * 
+     *
      * @param builderCls
      * @return
      */
@@ -680,7 +680,7 @@ public class IncrementsPlugin extends BasePlugin implements IModelBuilderPluginH
 
     /**
      * 是否启用了
-     * 
+     *
      * @return
      */
     private boolean support() {

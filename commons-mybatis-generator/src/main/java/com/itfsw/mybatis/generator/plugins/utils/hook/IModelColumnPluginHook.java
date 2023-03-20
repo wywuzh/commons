@@ -22,7 +22,7 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2019/7/5 14:17
  *                ---------------------------------------------------------------------------
@@ -30,7 +30,7 @@ import org.mybatis.generator.api.dom.java.TopLevelClass;
 public interface IModelColumnPluginHook {
     /**
      * Model Column 枚举生成
-     * 
+     *
      * @param innerEnum
      * @param topLevelClass
      * @param introspectedTable

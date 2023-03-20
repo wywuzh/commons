@@ -36,7 +36,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * 存在即更新插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/3/21 10:59
  *                 ---------------------------------------------------------------------------
@@ -98,7 +98,7 @@ public class UpsertPlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param interfaze
      * @param topLevelClass
      * @param introspectedTable
@@ -215,7 +215,7 @@ public class UpsertPlugin extends BasePlugin {
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param document
      * @param introspectedTable
      * @return
@@ -241,7 +241,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 批量
-     * 
+     *
      * @param document
      * @param introspectedTable
      */
@@ -318,7 +318,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 批量
-     * 
+     *
      * @param document
      * @param introspectedTable
      * @param withBLOBs
@@ -368,7 +368,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 当Selective情况
-     * 
+     *
      * @param document
      * @param introspectedTable
      */
@@ -450,7 +450,7 @@ public class UpsertPlugin extends BasePlugin {
 
     /**
      * 生成xml
-     * 
+     *
      * @param document
      * @param introspectedTable
      * @param withBLOBs
@@ -530,7 +530,7 @@ public class UpsertPlugin extends BasePlugin {
     /**
      * exists 语句
      * +635
-     * 
+     *
      * @param introspectedTable
      * @param element
      * @param values

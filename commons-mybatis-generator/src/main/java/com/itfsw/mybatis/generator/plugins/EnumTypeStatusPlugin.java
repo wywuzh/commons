@@ -36,7 +36,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * type or status enum 插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/11/27 20:36
  *                  ---------------------------------------------------------------------------
@@ -59,7 +59,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      */
     @Override
@@ -118,7 +118,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -132,7 +132,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
     /**
      * Model 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -174,7 +174,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
     /**
      * 生成对应enum
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      */
@@ -205,7 +205,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
         /**
          * 添加Enum Item
-         * 
+         *
          * @param name
          * @param comment
          * @param value
@@ -217,7 +217,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
         /**
          * 判断是否有节点
-         * 
+         *
          * @return
          */
         public boolean hasItems() {
@@ -226,7 +226,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
         /**
          * 解析注释
-         * 
+         *
          * @param remarks
          */
         public void parseRemarks(String remarks) throws CannotParseException {
@@ -255,7 +255,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
         /**
          * Getter method for property <tt>items</tt>.
-         * 
+         *
          * @return property value of items
          * @author hewei
          */
@@ -337,7 +337,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
             /**
              * Getter method for property <tt>comment</tt>.
-             * 
+             *
              * @return property value of comment
              * @author hewei
              */
@@ -347,7 +347,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
             /**
              * Getter method for property <tt>name</tt>.
-             * 
+             *
              * @return property value of name
              * @author hewei
              */
@@ -357,7 +357,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
             /**
              * Getter method for property <tt>value</tt>.
-             * 
+             *
              * @return property value of value
              * @author hewei
              */
@@ -372,7 +372,7 @@ public class EnumTypeStatusPlugin extends BasePlugin implements ILogicalDeletePl
 
             /**
              * Getter method for property <tt>value</tt>.
-             * 
+             *
              * @return property value of value
              * @author hewei
              */

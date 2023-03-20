@@ -25,7 +25,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/9/11 11:00
  *                 ---------------------------------------------------------------------------
@@ -33,7 +33,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
 public interface ILogicalDeletePluginHook {
     /**
      * logicalDeleteByExample
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -43,7 +43,7 @@ public interface ILogicalDeletePluginHook {
 
     /**
      * logicalDeleteByPrimaryKey
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -53,7 +53,7 @@ public interface ILogicalDeletePluginHook {
 
     /**
      * logicalDeleteByExample
-     * 
+     *
      * @param document
      * @param element
      * @param logicalDeleteColumn
@@ -65,7 +65,7 @@ public interface ILogicalDeletePluginHook {
 
     /**
      * logicalDeleteByPrimaryKey
-     * 
+     *
      * @param document
      * @param element
      * @param logicalDeleteColumn
@@ -78,7 +78,7 @@ public interface ILogicalDeletePluginHook {
 
     /**
      * 逻辑删除枚举是否生成
-     * 
+     *
      * @param logicalDeleteColumn
      * @return
      */

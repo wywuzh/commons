@@ -35,7 +35,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * Example 增强插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/1/16 16:28
  *                 ---------------------------------------------------------------------------
@@ -52,7 +52,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param introspectedTable
      */
     @Override
@@ -66,7 +66,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
     /**
      * ModelExample Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -117,7 +117,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 添加 createCriteria 静态方法
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      */
@@ -134,7 +134,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 添加列操作方法
-     * 
+     *
      * @param topLevelClass
      * @param innerClass
      * @param introspectedTable
@@ -161,7 +161,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 生成column操作的具体方法
-     * 
+     *
      * @param introspectedTable
      * @param introspectedColumn
      * @param nameFragment
@@ -199,7 +199,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 添加工厂方法
-     * 
+     *
      * @param topLevelClass
      * @param innerClass
      * @param introspectedTable
@@ -231,7 +231,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 增强Criteria的链式调用(when)
-     * 
+     *
      * @param topLevelClass
      * @param innerClass
      * @param introspectedTable
@@ -242,7 +242,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 增强Example的链式调用(when)
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      */
@@ -252,7 +252,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 增强链式调用(when)
-     * 
+     *
      * @param topLevelClass
      * @param clazz
      * @param introspectedTable
@@ -288,7 +288,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * 增强Criteria的链式调用，添加andIf(boolean addIf, CriteriaAdd add)方法，实现链式调用中按条件增加查询语句
-     * 
+     *
      * @param topLevelClass
      * @param innerClass
      * @param introspectedTable
@@ -324,7 +324,7 @@ public class ExampleEnhancedPlugin extends BasePlugin {
 
     /**
      * Example增强了setOrderByClause方法，新增orderBy(String orderByClause)方法直接返回example，增强链式调用，可以一路.下去了。
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      */

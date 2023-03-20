@@ -29,7 +29,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2019/7/9 14:30
  *                ---------------------------------------------------------------------------
@@ -47,7 +47,7 @@ public class MapperAnnotationPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -76,7 +76,7 @@ public class MapperAnnotationPlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param interfaze
      * @param topLevelClass
      * @param introspectedTable

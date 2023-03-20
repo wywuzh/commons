@@ -31,7 +31,7 @@ import org.mybatis.generator.config.TableConfiguration;
  * ---------------------------------------------------------------------------
  * table 重命名插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/6/6 15:18
  *                ---------------------------------------------------------------------------
@@ -69,7 +69,7 @@ public class TableRenamePlugin extends BasePlugin {
     /**
      * 初始化阶段
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      * @return
      */

@@ -38,7 +38,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * ---------------------------------------------------------------------------
  * 逻辑删除插件
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2017/1/13 14:08
  *                 ---------------------------------------------------------------------------
@@ -114,7 +114,7 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * 初始化阶段
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param introspectedTable
      * @return
      */
@@ -235,7 +235,7 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param interfaze
      * @param topLevelClass
      * @param introspectedTable
@@ -326,7 +326,7 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param document
      * @param introspectedTable
      * @return
@@ -457,7 +457,7 @@ public class LogicalDeletePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param field
      * @param topLevelClass
      * @param introspectedColumn
@@ -504,7 +504,7 @@ public class LogicalDeletePlugin extends BasePlugin {
     /**
      * ModelExample Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param topLevelClass
      * @param introspectedTable
      * @return
@@ -563,7 +563,7 @@ public class LogicalDeletePlugin extends BasePlugin {
 
     /**
      * 获取逻辑删除枚举
-     * 
+     *
      * @param delete
      * @return
      */
@@ -578,7 +578,7 @@ public class LogicalDeletePlugin extends BasePlugin {
 
     /**
      * 获取逻辑删除列所在model(modelExampleClassGenerated执行顺序在前面！！！！！和官网上不一样，没办法只有自己去找）
-     * 
+     *
      * @return
      */
     private FullyQualifiedJavaType getColumnInModelType() {

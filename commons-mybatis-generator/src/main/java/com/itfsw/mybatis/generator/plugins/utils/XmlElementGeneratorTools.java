@@ -39,7 +39,7 @@ import org.mybatis.generator.config.GeneratedKey;
  * ---------------------------------------------------------------------------
  * Xml 节点生成工具 参考 org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.AbstractXmlElementGenerator
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2016/12/29 16:47
  *                  ---------------------------------------------------------------------------
@@ -49,7 +49,7 @@ public class XmlElementGeneratorTools {
     /**
      * This method should return an XmlElement for the select key used to
      * automatically generate keys.
-     * 
+     *
      * @param introspectedColumn the column related to the select key statement
      * @param generatedKey       the generated key for the current table
      * @return the selectKey element
@@ -107,7 +107,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 使用JDBC的getGenereatedKeys方法获取主键并赋值到keyProperty设置的领域模型属性中。所以只支持MYSQL和SQLServer
-     * 
+     *
      * @param element
      * @param introspectedTable
      */
@@ -117,7 +117,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 使用JDBC的getGenereatedKeys方法获取主键并赋值到keyProperty设置的领域模型属性中。所以只支持MYSQL和SQLServer
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @param prefix
@@ -139,7 +139,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成keys Ele
-     * 
+     *
      * @param columns
      * @return
      */
@@ -149,7 +149,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成keys Ele
-     * 
+     *
      * @param columns
      * @param bracket
      * @return
@@ -160,7 +160,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成keys Selective Ele
-     * 
+     *
      * @param columns
      * @return
      */
@@ -170,7 +170,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成keys Selective Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @return
@@ -181,7 +181,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成keys Selective Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @param bracket
@@ -193,7 +193,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成values Ele
-     * 
+     *
      * @param columns
      * @return
      */
@@ -203,7 +203,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成values Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @return
@@ -214,7 +214,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成values Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @param bracket
@@ -226,7 +226,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成values Selective Ele
-     * 
+     *
      * @param columns
      * @return
      */
@@ -236,7 +236,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成values Selective Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @return
@@ -247,7 +247,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成values Selective Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @param bracket
@@ -259,7 +259,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成sets Ele
-     * 
+     *
      * @param columns
      * @return
      */
@@ -269,7 +269,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成sets Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @return
@@ -280,7 +280,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成sets Selective Ele
-     * 
+     *
      * @param columns
      * @return
      */
@@ -290,7 +290,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成sets Selective Ele
-     * 
+     *
      * @param columns
      * @param prefix
      * @return
@@ -301,7 +301,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成keys Ele (upsert)
-     * 
+     *
      * @param columns
      * @param prefix
      * @return
@@ -312,7 +312,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成values Ele (upsert)
-     * 
+     *
      * @param columns
      * @param prefix
      * @param bracket
@@ -324,7 +324,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成sets Ele (upsert)
-     * 
+     *
      * @param columns
      * @param prefix
      * @return
@@ -335,7 +335,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 通用遍历columns
-     * 
+     *
      * @param columns
      * @param prefix
      * @param bracket
@@ -348,7 +348,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 通用遍历columns
-     * 
+     *
      * @param columns
      * @param prefix
      * @param bracket
@@ -441,7 +441,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 通用遍历columns
-     * 
+     *
      * @param columns
      * @param prefix
      * @param bracket
@@ -458,7 +458,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * trim 节点
-     * 
+     *
      * @param bracket
      * @return
      */
@@ -476,7 +476,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成选择列到trim 节点
-     * 
+     *
      * @param trimEle
      * @param introspectedColumn
      * @param prefix
@@ -505,7 +505,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成
-     * 
+     *
      * @param element
      * @param introspectedColumn
      * @param prefix
@@ -536,7 +536,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成 xxxByPrimaryKey 的where 语句
-     * 
+     *
      * @param element
      * @param primaryKeyColumns
      * @return
@@ -547,7 +547,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成 xxxByPrimaryKey 的where 语句
-     * 
+     *
      * @param element
      * @param primaryKeyColumns
      * @param prefix
@@ -574,7 +574,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 是否存在自增或者生成的column
-     * 
+     *
      * @param columns
      * @return
      */
@@ -589,7 +589,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成resultMap的result 节点
-     * 
+     *
      * @param name
      * @param introspectedColumn
      * @return
@@ -609,7 +609,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * 生成逻辑删除列的删除值
-     * 
+     *
      * @param logicalDeleteColumn
      * @param value
      * @return
@@ -635,7 +635,7 @@ public class XmlElementGeneratorTools {
 
     /**
      * Gets the parameter clause.
-     * 
+     *
      * @param valueStr
      * @param introspectedColumn the introspected column
      * @return the parameter clause

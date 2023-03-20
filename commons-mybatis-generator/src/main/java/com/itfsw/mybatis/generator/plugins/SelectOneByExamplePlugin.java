@@ -32,7 +32,7 @@ import org.mybatis.generator.api.dom.xml.XmlElement;
  * ---------------------------------------------------------------------------
  * 增加查询一条数据方法
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2016/12/28 14:56
  *                  ---------------------------------------------------------------------------
@@ -54,7 +54,7 @@ public class SelectOneByExamplePlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -79,7 +79,7 @@ public class SelectOneByExamplePlugin extends BasePlugin {
     /**
      * Java Client Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param method
      * @param interfaze
      * @param introspectedTable
@@ -103,7 +103,7 @@ public class SelectOneByExamplePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -152,7 +152,7 @@ public class SelectOneByExamplePlugin extends BasePlugin {
 
     /**
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param element
      * @param introspectedTable
      * @return
@@ -206,7 +206,7 @@ public class SelectOneByExamplePlugin extends BasePlugin {
     /**
      * SQL Map Methods 生成
      * 具体执行顺序 http://www.mybatis.org/generator/reference/pluggingIn.html
-     * 
+     *
      * @param document
      * @param introspectedTable
      * @return

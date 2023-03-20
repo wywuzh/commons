@@ -42,7 +42,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 /**
  * ---------------------------------------------------------------------------
  * ---------------------------------------------------------------------------
- * 
+ *
  * @author: hewei
  * @time:2018/5/21 11:23
  *                 ---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ public class TableRenameConfigurationPlugin extends BasePlugin implements ITable
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @param warnings
      * @return
      */
@@ -94,7 +94,7 @@ public class TableRenameConfigurationPlugin extends BasePlugin implements ITable
 
     /**
      * 表配置
-     * 
+     *
      * @param introspectedTable
      */
     @Override
@@ -213,7 +213,7 @@ public class TableRenameConfigurationPlugin extends BasePlugin implements ITable
 
     /**
      * column rename
-     * 
+     *
      * @param columns
      * @param rule
      * @param tc
