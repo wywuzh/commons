@@ -21,7 +21,7 @@ var AjaxSubmit = {
                 console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
-                // deferred.reject('请求失败');
+                // 请求失败
                 deferred.reject(jqXHR, textStatus, errorThrown);
             }
         });
@@ -43,7 +43,7 @@ var AjaxSubmit = {
                 console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
-                // deferred.reject('请求失败');
+                // 请求失败
                 deferred.reject(jqXHR, textStatus, errorThrown);
             }
         });
@@ -64,7 +64,7 @@ var AjaxSubmit = {
                 console.log(jqXHR);
                 console.log(textStatus);
                 console.log(errorThrown);
-                // deferred.reject('请求失败');
+                // 请求失败
                 deferred.reject(jqXHR, textStatus, errorThrown);
             }
         });
