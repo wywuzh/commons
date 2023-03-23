@@ -128,8 +128,10 @@
         <mybatis-plus.version>3.5.2</mybatis-plus.version>
         <druid.version>1.2.9</druid.version>
 
-        <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
+        <!-- 注：curator、hessian、hessian-lite 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.2.0</curator_version>
+        <hessian_version>4.0.38</hessian_version>
+        <hessian_lite_version>3.2.13</hessian_lite_version>
         <dubbo.version>3.0.8</dubbo.version>
         <shiro.version>1.9.0</shiro.version>
 
@@ -231,10 +233,19 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Apache Dubbo  -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-dependencies-bom</artifactId>
+                <version>${dubbo.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -530,6 +541,16 @@
                         <artifactId>slf4j-log4j12</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.caucho</groupId>
+                <artifactId>hessian</artifactId>
+                <version>${hessian_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>hessian-lite</artifactId>
+                <version>${hessian_lite_version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
