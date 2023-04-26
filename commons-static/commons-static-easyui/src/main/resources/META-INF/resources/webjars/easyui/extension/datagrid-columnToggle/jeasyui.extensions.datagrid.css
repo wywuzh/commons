@@ -1,0 +1,21 @@
+﻿/*jeasyui.extensions.datagrid.js*/
+
+/*添加下一行css代码，修复页面中 input 与 easyui-textbox 组件同行时位置偏移的问题*/
+input { vertical-align: middle; }
+
+.datagrid-cell-hightlight { font-weight: bold; background-color: Yellow; }
+
+.datagrid-rowediting-panel { position: absolute; display: block; border: 1px solid #ddd; padding: 5px 5px; }
+.datagrid-body-rowediting { position: relative; }
+
+.datagrid-row-hidden { display: none; }
+
+.datagrid-header-cell-arrow { float: right; cursor: pointer; position: static; margin: 0; visibility: hidden; border-left: 0 dotted; }
+.datagrid-header-cell-arrow-show { visibility: visible; border-left-width: 1px; }
+
+.datagrid-body .datagrid-row-dnd-top { border-top: 2px dotted red; }
+.datagrid-body .datagrid-row-dnd-bottom { border-bottom: 2px dotted red; }
+
+.datagrid .datagrid-filters-dialog-layout-north { height: 30px; line-height: 30px; padding-left: 20px; }
+.datagrid .datagrid-filters-dialog-layout-center { overflow: auto; padding: 10px; border-top-width: 1px; }
+.datagrid .datagrid-filters-dialog-layout-center ul { margin: 0; padding: 0 0 0 30px; list-style-type: decimal; line-height: 18px; }
