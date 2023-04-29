@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Easyui扩展库 Datagrid - 落阳 整理</title>
+    <link href="http://www.easyui-extlib.com/Content/Site.css" rel="stylesheet" />
+    <script src="http://www.easyui-extlib.com/Scripts/jquery/jquery-1.11.0.min.js"></script>
+    <!--<script src="http://www.easyui-extlib.com/Scripts/jquery-extensions/jquery.jdirk.js"></script>-->
+    <script src="jquery.jdirk.js"></script>
+    <link href="http://www.easyui-extlib.com/Scripts/jquery-easyui/jquery-easyui-1.4.3/themes/default/easyui.css" rel="stylesheet" />
+    <link href="http://www.easyui-extlib.com/Scripts/jquery-easyui/jquery-easyui-1.4.3/themes/icon.css" rel="stylesheet" />
+    <script src="http://www.easyui-extlib.com/Scripts/jquery-easyui/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+    <script src="http://www.easyui-extlib.com/Scripts/jquery-easyui/jquery-easyui-1.4.3/locale/easyui-lang-zh_CN.js"></script>
+
+    <link href="http://www.easyui-extlib.com/Content/icons/icon-standard.css" rel="stylesheet" />
+    <!--<link href="http://www.easyui-extlib.com/Scripts/jquery-easyui-extensions/datagrid/jeasyui.extensions.datagrid.css" rel="stylesheet" />
+    <script src="http://www.easyui-extlib.com/Scripts/jquery-easyui-extensions/menu/jeasyui.extensions.menu.js"></script>
+    <script src="http://www.easyui-extlib.com//Scripts/jquery-easyui-extensions/datagrid/jeasyui.extensions.datagrid.getColumnInfo.js"></script>
+    <script src="http://www.easyui-extlib.com/Scripts/jquery-easyui-extensions/datagrid/jeasyui.extensions.datagrid.columnToggle.js"></script>-->
+    <script src="jeasyui.extensions.menu.js"></script>
+    <script src="jeasyui.extensions.datagrid.getColumnInfo.js"></script>
+    <script src="jeasyui.extensions.datagrid.columnToggle.js"></script>
+    <script>
+        $(function () {
+
+            var getFrozenColumns = function () {
+                var result = [];
+
+                var c1 = [];
+                c1.push({ field: 'ID', title: '主键', width: 100 });
+                c1.push({ field: 'AreaName', title: '地区', width: 150 });
+                c1.push({ field: 'Sex1', title: '男', width: 90, sortable: true });
+                c1.push({ field: 'Sex2', title: '女', width: 90 });
+
+                result.push(c1);
+
+                return result;
+            };
+
+            var getColumns = function () {
+                var result = [];
+
+                var normal00000 = [
+                    { field: 'TS1', title: '测试1', width: 60, hidable: false },
+                    { field: 'TS2', title: '测试2', width: 60, sortable: true },
+                    { field: 'TS3', title: '测试3', width: 60, hidable: true },
+                    { field: 'TS4', title: '测试4', width: 60, hidden: true }
+                ];
+                result.push(normal00000);
+
+                return result;
+            };
+            var options = {
+                idField: "ID",
+                rownumbers: true,
+                remoteSort: false,
+                fit: true,
+                border: false,
+                singleSelect: true,
+                toolbar: "#toolbar1",
+                frozenColumns: getFrozenColumns(),
+                columns: getColumns(),
+                method: "get",
+                url: "datagrid-common-data.json",
+                autoHighlightColumn: true,
+                enableHeaderContextMenu: true,
+                enableHeaderClickMenu: true
+            };
+
+            $("#dg1").datagrid(options);
+        });
+    </script>
+</head>
+<body>
+    <div class="easyui-panel" data-options="fit:true,border:false,title:'列显示和隐藏'">
+        <div id="toolbar1" style="padding:10px;">
+            该 datagrid 控件已经开启显示 表头右键菜单 和 表头点击菜单，菜单中会提供“显示/隐藏/过滤列”的功能。
+        </div>
+        <table id="dg1"></table>
+    </div>
+</body>
+</html>
