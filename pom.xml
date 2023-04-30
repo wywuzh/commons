@@ -128,8 +128,10 @@
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
         <druid.version>1.2.15</druid.version>
 
-        <!-- 注：curator 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
+        <!-- 注：curator、hessian、hessian-lite 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.2.0</curator_version>
+        <hessian_version>4.0.38</hessian_version>
+        <hessian_lite_version>3.2.13</hessian_lite_version>
         <dubbo.version>3.1.4</dubbo.version>
         <shiro.version>1.10.1</shiro.version>
 
