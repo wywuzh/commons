@@ -160,13 +160,14 @@
         <!-- Maven插件 -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
         <flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
-        <formatter.version note="Stay with 2.16.0 for jdk 8 support for time being">2.16.0</formatter.version>
-        <impsort.version>1.6.2</impsort.version>
+        <!-- 格式化源代码插件：Stay with 2.16.0 for jdk 8 support for time being -->
+        <formatter-maven-plugin.version>2.16.0</formatter-maven-plugin.version>
+        <impsort-maven-plugin.version>1.6.2</impsort-maven-plugin.version>
         <build-tools.version>1.2.7</build-tools.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
         <!-- Maven插件配置 -->
-        <formatter.config>eclipse_codeformat_4space.xml</formatter.config>
+        <formatter.configFile>eclipse_codeformat_4space.xml</formatter.configFile>
         <impsort.groups>au,com,de,java,javassist,javax,lombok,mockit,net,ognl,org</impsort.groups>
     </properties>
 
@@ -872,7 +873,7 @@
                 <plugin>
                     <groupId>net.revelc.code.formatter</groupId>
                     <artifactId>formatter-maven-plugin</artifactId>
-                    <version>${formatter.version}</version>
+                    <version>${formatter-maven-plugin.version}</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.github.hazendaz</groupId>
@@ -889,7 +890,7 @@
                 <plugin>
                     <groupId>net.revelc.code</groupId>
                     <artifactId>impsort-maven-plugin</artifactId>
-                    <version>${impsort.version}</version>
+                    <version>${impsort-maven-plugin.version}</version>
                     <configuration>
                         <groups>${impsort.groups}</groups>
                         <staticGroups>java,*</staticGroups>
@@ -960,7 +961,7 @@
                         <groupId>net.revelc.code.formatter</groupId>
                         <artifactId>formatter-maven-plugin</artifactId>
                         <configuration>
-                            <configFile>${formatter.config}</configFile>
+                            <configFile>${formatter.configFile}</configFile>
                             <skipXmlFormatting>true</skipXmlFormatting>
                         </configuration>
                         <executions>
