@@ -234,10 +234,19 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Apache Dubbo  -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-dependencies-bom</artifactId>
+                <version>${dubbo.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -535,6 +544,16 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>com.caucho</groupId>
+                <artifactId>hessian</artifactId>
+                <version>${hessian_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>hessian-lite</artifactId>
+                <version>${hessian_lite_version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
@@ -811,25 +830,37 @@
                         <header>${project.basedir}/license.txt</header>
                         <!-- 排除文件：不需要添加版权信息的文件 -->
                         <excludes>
-                            <exclude>src/main/java/com/itfsw/**</exclude>
-                            <exclude>.editorconfig</exclude>
-                            <exclude>.gitignore</exclude>
-                            <exclude>**/META-INF/**</exclude>
-                            <exclude>settings/**</exclude>
+                            <!-- 单个文件 -->
+                            <exclude>**/license.txt</exclude>
+                            <exclude>**/*.properties</exclude>
+                            <exclude>**/*.yml</exclude>
+                            <exclude>**/*.ymal</exclude>
+                            <exclude>**/*.xml</exclude>
+                            <exclude>**/*.sh</exclude>
+                            <exclude>**/*.bat</exclude>
+                            <exclude>**/.editorconfig</exclude>
+                            <exclude>**/.gitignore</exclude>
                             <exclude>**/*.ctrl</exclude>
                             <exclude>**/*.dat</exclude>
                             <exclude>**/*.lck</exclude>
                             <exclude>**/*.log</exclude>
                             <exclude>**/*maven-wrapper.properties</exclude>
                             <exclude>**/*MavenWrapperDownloader.java</exclude>
-                            <exclude>.factorypath</exclude>
-                            <exclude>.gitattributes</exclude>
-                            <exclude>mvnw</exclude>
-                            <exclude>mvnw.cmd</exclude>
-                            <exclude>ICLA</exclude>
-                            <exclude>LICENSE</exclude>
-                            <exclude>KEYS</exclude>
-                            <exclude>NOTICE</exclude>
+                            <exclude>**/.factorypath</exclude>
+                            <exclude>**/.gitattributes</exclude>
+                            <exclude>**/mvnw</exclude>
+                            <exclude>**/mvnw.cmd</exclude>
+                            <exclude>**/ICLA</exclude>
+                            <exclude>**/LICENSE</exclude>
+                            <exclude>**/KEYS</exclude>
+                            <exclude>**/NOTICE</exclude>
+
+                            <!-- 文件夹目录 -->
+                            <exclude>**/static/**</exclude>
+                            <exclude>**/templates/**</exclude>
+                            <exclude>**/META-INF/**</exclude>
+                            <exclude>**/settings/**</exclude>
+                            <exclude>**/com/itfsw/**</exclude>
                         </excludes>
                         <mapping>
                             <xml.vm>XML_STYLE</xml.vm>
