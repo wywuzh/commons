@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,11 @@ package com.github.wywuzh.commons.mybatis.generator.plugins;
 
 import com.github.wywuzh.commons.core.util.StringHelper;
 import com.github.wywuzh.commons.mybatis.generator.constant.PropertyConstants;
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,7 +86,7 @@ import org.mybatis.generator.config.TableConfiguration;
  * @version v2.1.1
  * @since JDK 1.8
  */
-public abstract class SelectByParamsPlugin extends BasePlugin {
+public abstract class SelectByParamsPlugin extends AbstractPlugin {
 
     /**
      * 表是否开启逻辑删除，默认为true
@@ -139,13 +139,6 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
      */
     public static final String CONDITIONS_NOT_IN_COLUMNS = "conditionsNotInColumns";
 
-    /**
-     * 查询插件
-     *
-     * @since v2.7.0
-     */
-    protected SelectByParamsPlugin selectPlugin;
-
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
@@ -166,13 +159,6 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
         if (StringUtils.isNotBlank(excludeDeletedSql)) {
             this.excludeDeletedSql = excludeDeletedSql;
         }
-
-//        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
-//        if (StringUtils.containsAny(driverClass, new String[]{DRIVER_MySQL, DRIVER_MySQL6, DRIVER_MariaDB})) {
-//            selectPlugin = new MySQLSelectByParamsPlugin();
-//        }else if (StringUtils.containsAny(driverClass, new String[]{DRIVER_ORACLE_OLD, DRIVER_ORACLE})) {
-//            selectPlugin = new OracleSelectByParamsPlugin();
-//        }
     }
 
     /**
@@ -319,20 +305,56 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
         // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
         commentGenerator.addComment(selectPagerEle);
 
+        // xml映射器文件sql：分页
         generateSqlMapForPager(document, introspectedTable, selectPagerEle, includeConditionsEle);
-//        String driverClass = this.getContext().getJdbcConnectionConfiguration().getDriverClass();
-//        if (DRIVER_ORACLE_OLD.equalsIgnoreCase(driverClass) || DRIVER_ORACLE.equalsIgnoreCase(driverClass)) {
-//            // 生成Oracle分页查询SQL
-//            generateOraclePager(document, introspectedTable, selectPagerEle, includeConditionsEle);
-//        } else {
-//            // 生成MySQL分页查询SQL
-//            generateMySQLPager(document, introspectedTable, selectPagerEle, includeConditionsEle);
-//        }
         document.getRootElement().addElement(selectPagerEle);
 
         // 4. 生成where条件
         document.getRootElement().addElement(generateConditionsElement(introspectedTable));
+
+        // [v2.7.0]添加 authData 数据权限
+        document.getRootElement().addElement(generateElementForAuthData(introspectedTable));
+        // [v2.7.0]添加 appendSubConditions 附加条件
+        document.getRootElement().addElement(generateElementForSubConditions(introspectedTable));
+
         return true;
+    }
+
+    /**
+     * 生成Element元素：authData 数据权限
+     *
+     * @param introspectedTable table表信息
+     * @return
+     * @since v2.7.0
+     */
+    private Element generateElementForAuthData(IntrospectedTable introspectedTable) {
+        XmlElement conditionsElement = new XmlElement("sql");
+        conditionsElement.addAttribute(new Attribute("id", "authData"));
+        // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
+        commentGenerator.addComment(conditionsElement);
+
+        // 第一步：先判断map是否为空
+        XmlElement ifElement = new XmlElement("if");
+        ifElement.addAttribute(new Attribute("test", "map.authData != null and map.authData == true"));
+
+        conditionsElement.addElement(ifElement);
+        return conditionsElement;
+    }
+
+    /**
+     * 生成Element元素：appendSubConditions 附加条件
+     *
+     * @param introspectedTable table表信息
+     * @return
+     * @since v2.7.0
+     */
+    private Element generateElementForSubConditions(IntrospectedTable introspectedTable) {
+        XmlElement conditionsElement = new XmlElement("sql");
+        conditionsElement.addAttribute(new Attribute("id", "appendSubConditions"));
+        // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
+        commentGenerator.addComment(conditionsElement);
+
+        return conditionsElement;
     }
 
     /**
@@ -345,49 +367,6 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
      * @since v2.7.0
      */
     protected abstract void generateSqlMapForPager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle);
-
-    @Deprecated
-    private void generateMySQLPager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle) {
-        // select条件
-        Element selectWhereElement = getSelectWhereElement(introspectedTable);
-
-        selectPagerEle.addElement(new TextElement("select "));
-        selectPagerEle.addElement(XmlElementGeneratorTools.getBaseColumnListElement(introspectedTable));
-        selectPagerEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
-        if (selectWhereElement != null) {
-            selectPagerEle.addElement(selectWhereElement);
-        }
-        // 增加where条件SQL
-        selectPagerEle.addElement(includeConditionsEle);
-        // 增加排序功能
-        selectPagerEle.addElement(generateSortElement(introspectedTable));
-        // 添加分页SQL
-        selectPagerEle.addElement(new TextElement("limit #{offset}, #{pageSize}"));
-    }
-
-    @Deprecated
-    private void generateOraclePager(Document document, IntrospectedTable introspectedTable, XmlElement selectPagerEle, XmlElement includeConditionsEle) {
-        // select条件
-        Element selectWhereElement = getSelectWhereElement(introspectedTable);
-
-        selectPagerEle.addElement(new TextElement("select * from ("));
-        selectPagerEle.addElement(new TextElement("select a.*, ROWNUM rn from ("));
-        selectPagerEle.addElement(new TextElement("select "));
-        selectPagerEle.addElement(XmlElementGeneratorTools.getBaseColumnListElement(introspectedTable));
-        selectPagerEle.addElement(new TextElement("from " + introspectedTable.getAliasedFullyQualifiedTableNameAtRuntime()));
-        if (selectWhereElement != null) {
-            selectPagerEle.addElement(selectWhereElement);
-        }
-        // 增加where条件SQL
-        selectPagerEle.addElement(includeConditionsEle);
-        // 增加排序功能
-        selectPagerEle.addElement(generateSortElement(introspectedTable));
-        // 添加分页SQL
-        selectPagerEle.addElement(new TextElement(")a"));
-        selectPagerEle.addElement(new TextElement("where ROWNUM &lt;= #{endset}"));
-        selectPagerEle.addElement(new TextElement(")"));
-        selectPagerEle.addElement(new TextElement("where rn &gt; #{offset}"));
-    }
 
     /**
      * 获取查询条件
@@ -447,32 +426,19 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
     }
 
     /**
-     * 生成Where查询条件
+     * 字段类型：字符
      *
-     * @param introspectedTable table表信息
-     * @return
+     * @since v2.7.0
      */
-    @Deprecated
-    private XmlElement generateWhereConditionsElement(IntrospectedTable introspectedTable) {
-        XmlElement conditionsElement = new XmlElement("sql");
-        conditionsElement.addAttribute(new Attribute("id", WHERE_CONDITION));
-        // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
-        commentGenerator.addComment(conditionsElement);
-
-        // 第一步：先判断map是否为空
-        XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "map != null"));
-        // 创建where
-        XmlElement whereElement = new XmlElement("where");
-
-        // 获取到table中的所有column
-        addElementForAppendConditions(introspectedTable, whereElement);
-
-        ifElement.addElement(whereElement);
-
-        conditionsElement.addElement(ifElement);
-        return conditionsElement;
-    }
+    protected List<JdbcType> JDBC_TYPE_CHARACTER = Arrays.asList(JdbcType.CHAR, JdbcType.VARCHAR, JdbcType.LONGVARCHAR, JdbcType.BINARY, JdbcType.VARBINARY, JdbcType.LONGVARBINARY, JdbcType.BLOB,
+            JdbcType.CLOB, JdbcType.NVARCHAR, JdbcType.NCHAR, JdbcType.NCLOB, JdbcType.LONGNVARCHAR);
+    /**
+     * 字段类型：数值
+     *
+     * @since v2.7.0
+     */
+    protected List<JdbcType> JDBC_TYPE_NUMBER = Arrays.asList(JdbcType.BIT, JdbcType.TINYINT, JdbcType.SMALLINT, JdbcType.INTEGER, JdbcType.BIGINT, JdbcType.FLOAT, JdbcType.REAL, JdbcType.DOUBLE,
+            JdbcType.NUMERIC, JdbcType.DECIMAL);
 
     /**
      * appendConditions查询条件中添加if节点
@@ -483,6 +449,15 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
      */
     protected void addElementForAppendConditions(IntrospectedTable introspectedTable, XmlElement rootElement) {
         TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
+
+        // [v2.7.0]添加 authData 数据权限
+        XmlElement includeEleForAuthData = new XmlElement("include");
+        includeEleForAuthData.addAttribute(new Attribute("refid", "authData"));
+        rootElement.addElement(includeEleForAuthData);
+        // [v2.7.0]添加 appendSubConditions 附加条件
+        XmlElement includeEleForSubConditions = new XmlElement("include");
+        includeEleForSubConditions.addAttribute(new Attribute("refid", "appendSubConditions"));
+        rootElement.addElement(includeEleForSubConditions);
 
         // 开启Like模糊查询
         List<String> conditionsLikeColumns = getConditionsLikeColumns(tableConfiguration);
@@ -501,17 +476,9 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
             // 获取字段类型
             int columnJdbcType = introspectedColumn.getJdbcType();
             JdbcType jdbcType = JdbcType.forCode(columnJdbcType);
-            if (JdbcType.CHAR.equals(jdbcType) || JdbcType.VARCHAR.equals(jdbcType) || JdbcType.LONGVARCHAR.equals(jdbcType) ||
-
-                    JdbcType.BINARY.equals(jdbcType) || JdbcType.VARBINARY.equals(jdbcType) || JdbcType.LONGVARBINARY.equals(jdbcType) ||
-
-                    JdbcType.BLOB.equals(jdbcType) || JdbcType.CLOB.equals(jdbcType) ||
-
-                    JdbcType.NVARCHAR.equals(jdbcType) || JdbcType.NCHAR.equals(jdbcType) || JdbcType.NCLOB.equals(jdbcType) || JdbcType.LONGNVARCHAR.equals(jdbcType)) {
+            if (JDBC_TYPE_CHARACTER.contains(jdbcType)) { // 字符类型
                 mapKeyIfElement.addAttribute(new Attribute("test", "@org.apache.commons.lang3.StringUtils@isNotEmpty(" + javaProperty + ")"));
-            } else if (JdbcType.BIT.equals(jdbcType) || JdbcType.TINYINT.equals(jdbcType) || JdbcType.SMALLINT.equals(jdbcType) || JdbcType.INTEGER.equals(jdbcType) || JdbcType.BIGINT.equals(jdbcType)
-                    || JdbcType.FLOAT.equals(jdbcType) || JdbcType.REAL.equals(jdbcType) || JdbcType.DOUBLE.equals(jdbcType) || JdbcType.NUMERIC.equals(jdbcType)
-                    || JdbcType.DECIMAL.equals(jdbcType)) {
+            } else if (JDBC_TYPE_NUMBER.contains(jdbcType)) { // 数值类型
                 mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null"));
             } else {
                 mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null"));
@@ -545,7 +512,7 @@ public abstract class SelectByParamsPlugin extends BasePlugin {
     }
 
     /**
-     * @param whereElement
+     * @param whereElement 父节点
      * @param columnName   表字段名
      * @param javaProperty Java字段名
      */
