@@ -106,7 +106,7 @@ public class ExcelUtilsTest {
         user.setMobile("14700000000");
         user.setSex("男");
         user.setBirthdate(new Date());
-        user.setBalance(new BigDecimal("100000000000"));
+        user.setBalance(new BigDecimal("100000000000.3698"));
         dataColl.add(user);
 
         Map<String, String[]> columnValidation = new HashMap<>();
