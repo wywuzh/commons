@@ -48,7 +48,7 @@
 
 ### commons-mybatis-generator 插件功能清单
 #### BatchInsertPlugin - 批量新增插件
-* 插件全路径：BatchInsertPlugin。
+* 插件全路径：com.github.wywuzh.commons.mybatis.generator.plugins.BatchInsertPlugin。
 * 版本：2.1.1+
 
 该插件是itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖。
@@ -70,7 +70,7 @@
 `enableMergeInto`使用方式：
 1. 添加`<plugin>`，在`plugin`中配置的`property`属性做为全局属性存在
 ```xml
-    <plugin type="com.github.wywuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin">
+    <plugin type="com.github.wywuzh.commons.mybatis.generator.plugins.BatchInsertPlugin">
         <!-- 是否启用merge into格式进行插入，默认为false -->
         <property name="enableMergeInto" value="true"/>
     </plugin>
@@ -89,7 +89,7 @@
 
 
 #### SelectByParamsPlugin - 自定义select查询插件
-* 插件全路径：SelectByParamsPlugin。
+* 插件全路径：com.github.wywuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin。
 * 版本：2.1.1+
 
 `SelectByParamsPlugin`插件的使用：
