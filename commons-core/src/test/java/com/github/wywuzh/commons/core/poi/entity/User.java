@@ -61,12 +61,12 @@ public class User {
     /**
      * 出生日期
      */
-    @ExcelCell(value = "出生日期", cellType = CellTypeEnum.DateTime, index = 5)
+    @ExcelCell(value = "出生日期", cellType = CellTypeEnum.Date, index = 5)
     private Date birthdate;
     /**
      * 资产
      */
-    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.BigDecimal, format = "￥###,##0.00", index = 6)
+    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.Money, format = "￥###,##0.00", index = 6)
     private BigDecimal balance;
 
 }
