@@ -78,7 +78,7 @@
 
         <revision>2.7.11.SNAPSHOT</revision>
 
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <spring-cloud.version>2021.0.7</spring-cloud.version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
