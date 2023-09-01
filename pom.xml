@@ -72,12 +72,17 @@
         <!-- Maven默认识别 -->
         <skipTest>true</skipTest>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.locale>zh_CN</project.build.locale>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
         <revision>3.0.2.SNAPSHOT</revision>
 
+        <spring_version>6.0.2</spring_version>
+        <spring-framework.version>6.0.2</spring-framework.version>
+        <netty4_version>4.1.85.Final</netty4_version>
+        <netty.version>4.1.85.Final</netty.version>
         <spring-cloud.version>2022.0.1</spring-cloud.version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
@@ -166,7 +171,7 @@
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <!-- Maven插件配置 -->
-        <formatter.config>eclipse_codeformat_4space.xml</formatter.config>
+        <formatter.configFile>eclipse_codeformat_4space.xml</formatter.configFile>
         <impsort.groups>au,com,de,java,javassist,javax,lombok,mockit,net,ognl,org</impsort.groups>
     </properties>
 
@@ -233,10 +238,34 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring-framework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Apache Dubbo  -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-dependencies-bom</artifactId>
+                <version>${dubbo.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -249,9 +278,15 @@
                 <version>${json-lib.version}</version>
                 <classifier>jdk15</classifier>
             </dependency>
-            <dependency>
+            <!--- fastjson：已迁移至“com.alibaba.fastjson2:fastjson2:{fastjson.version}” -->
+            <!--<dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>-->
+            <dependency>
+                <groupId>com.alibaba.fastjson2</groupId>
+                <artifactId>fastjson2</artifactId>
                 <version>${fastjson.version}</version>
             </dependency>
 
@@ -534,6 +569,16 @@
                 </exclusions>
             </dependency>
             <dependency>
+                <groupId>com.caucho</groupId>
+                <artifactId>hessian</artifactId>
+                <version>${hessian_version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>hessian-lite</artifactId>
+                <version>${hessian_lite_version}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo</artifactId>
                 <version>${dubbo.version}</version>
@@ -810,25 +855,37 @@
                         <header>${project.basedir}/license.txt</header>
                         <!-- 排除文件：不需要添加版权信息的文件 -->
                         <excludes>
-                            <exclude>**/itfsw/**</exclude>
-                            <exclude>.editorconfig</exclude>
-                            <exclude>.gitignore</exclude>
-                            <exclude>**/META-INF/**</exclude>
-                            <exclude>settings/**</exclude>
+                            <!-- 单个文件 -->
+                            <exclude>**/license.txt</exclude>
+                            <exclude>**/*.properties</exclude>
+                            <exclude>**/*.yml</exclude>
+                            <exclude>**/*.ymal</exclude>
+                            <exclude>**/*.xml</exclude>
+                            <exclude>**/*.sh</exclude>
+                            <exclude>**/*.bat</exclude>
+                            <exclude>**/.editorconfig</exclude>
+                            <exclude>**/.gitignore</exclude>
                             <exclude>**/*.ctrl</exclude>
                             <exclude>**/*.dat</exclude>
                             <exclude>**/*.lck</exclude>
                             <exclude>**/*.log</exclude>
                             <exclude>**/*maven-wrapper.properties</exclude>
                             <exclude>**/*MavenWrapperDownloader.java</exclude>
-                            <exclude>.factorypath</exclude>
-                            <exclude>.gitattributes</exclude>
-                            <exclude>mvnw</exclude>
-                            <exclude>mvnw.cmd</exclude>
-                            <exclude>ICLA</exclude>
-                            <exclude>LICENSE</exclude>
-                            <exclude>KEYS</exclude>
-                            <exclude>NOTICE</exclude>
+                            <exclude>**/.factorypath</exclude>
+                            <exclude>**/.gitattributes</exclude>
+                            <exclude>**/mvnw</exclude>
+                            <exclude>**/mvnw.cmd</exclude>
+                            <exclude>**/ICLA</exclude>
+                            <exclude>**/LICENSE</exclude>
+                            <exclude>**/KEYS</exclude>
+                            <exclude>**/NOTICE</exclude>
+
+                            <!-- 文件夹目录 -->
+                            <exclude>**/static/**</exclude>
+                            <exclude>**/templates/**</exclude>
+                            <exclude>**/META-INF/**</exclude>
+                            <exclude>**/settings/**</exclude>
+                            <exclude>**/com/itfsw/**</exclude>
                         </excludes>
                         <mapping>
                             <xml.vm>XML_STYLE</xml.vm>
@@ -842,7 +899,7 @@
                         </dependency>
                     </dependencies>
                 </plugin>
-                <!-- Maven多模块版本管理插件 -->
+                <!-- Maven多模块版本管理插件：统一版本号管理 -->
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>flatten-maven-plugin</artifactId>
@@ -960,7 +1017,7 @@
                         <groupId>net.revelc.code.formatter</groupId>
                         <artifactId>formatter-maven-plugin</artifactId>
                         <configuration>
-                            <configFile>${formatter.config}</configFile>
+                            <configFile>${formatter.configFile}</configFile>
                             <skipXmlFormatting>true</skipXmlFormatting>
                         </configuration>
                         <executions>
