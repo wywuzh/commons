@@ -132,7 +132,7 @@
         <curator_version>4.2.0</curator_version>
         <hessian_version>4.0.38</hessian_version>
         <hessian_lite_version>3.2.13</hessian_lite_version>
-        <dubbo.version>3.2.5</dubbo.version>
+        <dubbo.version>3.2.6</dubbo.version>
         <shiro.version>1.12.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>2.0.0</alibaba-dingtalk-service-sdk.version>
