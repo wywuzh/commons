@@ -15,11 +15,11 @@
  */
 package com.github.wywuzh.commons.core.poi.entity;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
 import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 import lombok.Data;
 

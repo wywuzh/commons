@@ -15,14 +15,6 @@
  */
 package com.github.wywuzh.commons.core.poi.style;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.usermodel.IndexedColors;
-
 import com.alibaba.excel.metadata.Head;
 import com.alibaba.excel.metadata.data.DataFormatData;
 import com.alibaba.excel.write.handler.context.CellWriteHandlerContext;
@@ -31,6 +23,14 @@ import com.alibaba.excel.write.style.AbstractVerticalCellStyleStrategy;
 import com.github.wywuzh.commons.core.poi.EasyExcelUtils;
 import com.github.wywuzh.commons.core.poi.ExcelUtils;
 import com.github.wywuzh.commons.core.poi.modle.ExcelCellField;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.usermodel.IndexedColors;
 
 /**
  * 类VerticalCellStyleStrategy的实现描述：自定义列样式
