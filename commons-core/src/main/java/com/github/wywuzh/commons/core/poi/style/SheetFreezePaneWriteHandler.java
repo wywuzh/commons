@@ -15,20 +15,20 @@
  */
 package com.github.wywuzh.commons.core.poi.style;
 
-import com.alibaba.excel.write.handler.AbstractSheetWriteHandler;
+import org.apache.poi.ss.usermodel.Sheet;
+
+import com.alibaba.excel.write.handler.SheetWriteHandler;
 import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
 import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
 
-import org.apache.poi.ss.usermodel.Sheet;
-
 /**
- * 类CustomFreezeRowColHandler的实现描述：冻结行列
+ * 类SheetFreezePaneWriteHandler的实现描述：冻结行列
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2022-07-11 12:38:38
  * @version v2.6.0
  * @since JDK 1.8
  */
-public class CustomFreezeRowColHandler extends AbstractSheetWriteHandler {
+public class SheetFreezePaneWriteHandler implements SheetWriteHandler {
 
     /**
      * 要冻结的列，从0开始
@@ -47,15 +47,15 @@ public class CustomFreezeRowColHandler extends AbstractSheetWriteHandler {
      */
     private Integer topRow;
 
-    public CustomFreezeRowColHandler() {
+    public SheetFreezePaneWriteHandler() {
         this(0, 1, 0, 1);
     }
 
-    public CustomFreezeRowColHandler(int colSplit, int rowSplit) {
+    public SheetFreezePaneWriteHandler(int colSplit, int rowSplit) {
         this(colSplit, rowSplit, colSplit, rowSplit);
     }
 
-    public CustomFreezeRowColHandler(int colSplit, int rowSplit, int leftmostColumn, int topRow) {
+    public SheetFreezePaneWriteHandler(int colSplit, int rowSplit, int leftmostColumn, int topRow) {
         this.colSplit = colSplit;
         this.rowSplit = rowSplit;
         this.leftmostColumn = leftmostColumn;

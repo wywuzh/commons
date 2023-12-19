@@ -45,7 +45,7 @@ public class SortUtils {
         if (fieldNames == null || fieldNames.length == 0) {
             return data;
         }
-        ArrayList<Object> sortFields = new ArrayList<Object>();
+        List<Object> sortFields = new LinkedList<>();
         for (String fieldName : fieldNames) {
             Comparator comparator = ComparableComparator.getInstance();
             // 允许null
@@ -86,7 +86,7 @@ public class SortUtils {
         if (fieldNameMap == null || fieldNameMap.size() == 0) {
             return data;
         }
-        ArrayList<Object> sortFields = new ArrayList<Object>();
+        List<Object> sortFields = new LinkedList<>();
         for (Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
             // 字段名
             String fieldName = entry.getKey();

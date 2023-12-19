@@ -15,11 +15,11 @@
  */
 package com.github.wywuzh.commons.core.poi.entity;
 
-import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
-import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
 
 import lombok.Data;
 
@@ -51,7 +51,7 @@ public class User {
     /**
      * 手机号
      */
-    @ExcelCell(value = "手机号", index = 3)
+    @ExcelCell(value = "手机号", format = "000 0000 0000", index = 3)
     private String mobile;
     /**
      * 性别
@@ -61,12 +61,12 @@ public class User {
     /**
      * 出生日期
      */
-    @ExcelCell(value = "出生日期", cellType = CellTypeEnum.Date, index = 5)
+    @ExcelCell(value = "出生日期", cellType = CellTypeEnum.Date, format = "yyyy-MM-dd", index = 5)
     private Date birthdate;
     /**
      * 资产
      */
-    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.Money, format = "￥###,##0.00", index = 6)
+    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.Money, format = "$###,##0.00", index = 6)
     private BigDecimal balance;
 
 }

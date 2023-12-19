@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.wywuzh.commons.core.poi.style;
+package com.github.wywuzh.commons.core.poi.style.column;
 
 import com.alibaba.excel.enums.CellDataTypeEnum;
 import com.alibaba.excel.metadata.Head;
@@ -38,8 +38,8 @@ import org.slf4j.LoggerFactory;
  * @version v2.3.5
  * @since JDK 1.8
  */
-public class CustomCellWriteHandler extends AbstractColumnWidthStyleStrategy {
-    private final Logger LOGGER = LoggerFactory.getLogger(CustomCellWriteHandler.class);
+public class ColumnWidthAdaptiveStyleStrategy extends AbstractColumnWidthStyleStrategy {
+    private final Logger LOGGER = LoggerFactory.getLogger(ColumnWidthAdaptiveStyleStrategy.class);
 
     /**
      * 列的长度
@@ -50,10 +50,10 @@ public class CustomCellWriteHandler extends AbstractColumnWidthStyleStrategy {
      */
     private Map<Integer, Map<Integer, Integer>> CACHE = new HashMap<>();
 
-    public CustomCellWriteHandler() {
+    public ColumnWidthAdaptiveStyleStrategy() {
     }
 
-    public CustomCellWriteHandler(Integer[] columnLengths) {
+    public ColumnWidthAdaptiveStyleStrategy(Integer[] columnLengths) {
         this.columnLengths = columnLengths;
     }
 

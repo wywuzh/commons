@@ -54,6 +54,13 @@ public class ExcelExportRequest implements Serializable {
     private Map<String, String[]> columnValidation;
 
     /**
+     * 冻结窗格
+     *
+     * @since v2.7.8
+     */
+    private FreezePane freezePane;
+
+    /**
      * 请求数据
      */
     private Collection<?> dataColl;
@@ -115,6 +122,14 @@ public class ExcelExportRequest implements Serializable {
         this.columnValidation = columnValidation;
     }
 
+    public FreezePane getFreezePane() {
+        return freezePane;
+    }
+
+    public void setFreezePane(FreezePane freezePane) {
+        this.freezePane = freezePane;
+    }
+
     public Collection<?> getDataColl() {
         return dataColl;
     }
@@ -130,4 +145,5 @@ public class ExcelExportRequest implements Serializable {
     public void setTips(String tips) {
         this.tips = tips;
     }
+
 }

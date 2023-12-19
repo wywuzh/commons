@@ -17,6 +17,8 @@ package com.github.wywuzh.commons.core.poi.modle;
 
 import java.io.Serializable;
 
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+
 /**
  * 类ExcelCellField的实现描述：Excel 列字段
  *
@@ -40,6 +42,12 @@ public class ExcelCellField implements Serializable {
      */
     private Integer fieldLength;
 
+    /**
+     * 单元格列类型
+     *
+     * @since v2.7.8
+     */
+    private CellTypeEnum cellType;
     /**
      * 单元格列数据格式
      */
@@ -83,6 +91,14 @@ public class ExcelCellField implements Serializable {
 
     public void setFieldLength(Integer fieldLength) {
         this.fieldLength = fieldLength;
+    }
+
+    public CellTypeEnum getCellType() {
+        return cellType;
+    }
+
+    public void setCellType(CellTypeEnum cellType) {
+        this.cellType = cellType;
     }
 
     public String getFormat() {
