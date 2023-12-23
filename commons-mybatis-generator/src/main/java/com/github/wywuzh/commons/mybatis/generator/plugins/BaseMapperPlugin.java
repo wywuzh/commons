@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
-
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 /**
  * 类BaseMapperPlugin的实现描述：BaseMapper基类插件。参考网址：https://blog.csdn.net/u011781521/article/details/78697775
- * 
+ *
  * <pre class="code">
  * 使用方式：
  * 1. 添加&lt;plugin&gt;
@@ -51,7 +49,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * @version v2.1.1
  * @since JDK 1.8
  */
-public class BaseMapperPlugin extends BasePlugin {
+public class BaseMapperPlugin extends AbstractPlugin {
     private static final String DEFAULT_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseMapper";
     private static final String DEFAULT_DAO_SUPER_CLASS_NAME = "BaseMapper";
     private static final String DEFAULT_EXPAND_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseExpandMapper";

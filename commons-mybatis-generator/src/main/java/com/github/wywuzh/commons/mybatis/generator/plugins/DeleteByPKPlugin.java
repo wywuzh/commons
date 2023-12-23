@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
@@ -37,7 +36,7 @@ import org.mybatis.generator.config.TableConfiguration;
 
 /**
  * 类DeleteByPKPlugin的实现描述：根据主键删除数据
- * 
+ *
  * <pre class="code">
  * 使用方式：
  * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在
@@ -70,7 +69,7 @@ import org.mybatis.generator.config.TableConfiguration;
  * @version v2.3.6
  * @since JDK 1.8
  */
-public class DeleteByPKPlugin extends BasePlugin {
+public class DeleteByPKPlugin extends AbstractPlugin {
 
     /**
      * 方法名

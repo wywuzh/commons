@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
@@ -35,7 +34,7 @@ import org.mybatis.generator.internal.util.StringUtility;
 
 /**
  * 类BatchInsertPlugin的实现描述：itfsw批量新增SQL插件精简版，去掉batchInsertSelective接口。去掉ModelColumnPlugin插件依赖
- * 
+ *
  * <pre class="code">
  * <strong>enableMergeInto使用方式</strong>：
  * 1. 添加&lt;plugin&gt;，在plugin中配置的property属性做为全局属性存在
@@ -56,7 +55,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * @version v2.1.1
  * @since JDK 1.8
  */
-public class BatchInsertPlugin extends BasePlugin {
+public class BatchInsertPlugin extends AbstractPlugin {
     public static final String METHOD_BATCH_INSERT = "batchInsert";  // 方法名
     public static final String PRO_ALLOW_MULTI_QUERIES = "allowMultiQueries";   // property allowMultiQueries
     public static final String ENABLE_MERGE_INTO = "enableMergeInto"; // 是否启用merge into格式进行插入

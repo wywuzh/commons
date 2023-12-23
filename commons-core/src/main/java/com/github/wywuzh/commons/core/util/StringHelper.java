@@ -28,6 +28,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.*;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -262,7 +263,7 @@ public class StringHelper {
             }
         }
 
-        return new sun.misc.BASE64Encoder().encode(out.toByteArray());
+        return Base64.encodeBase64String(out.toByteArray());
     }
 
     /**
@@ -284,7 +285,7 @@ public class StringHelper {
         byte[] compressed = null;
         String decompressed = null;
         try {
-            compressed = new sun.misc.BASE64Decoder().decodeBuffer(compressedStr);
+            compressed = Base64.decodeBase64(compressedStr);
             in = new ByteArrayInputStream(compressed);
             ginzip = new GZIPInputStream(in);
 
@@ -344,7 +345,7 @@ public class StringHelper {
             zout.write(str.getBytes());
             zout.closeEntry();
             compressed = out.toByteArray();
-            compressedStr = new sun.misc.BASE64Encoder().encodeBuffer(compressed);
+            compressedStr = Base64.encodeBase64String(compressed);
         } catch (IOException e) {
             compressed = null;
             LOGGER.error(e.getMessage(), e);
@@ -383,7 +384,7 @@ public class StringHelper {
         ZipInputStream zin = null;
         String decompressed = null;
         try {
-            byte[] compressed = new sun.misc.BASE64Decoder().decodeBuffer(compressedStr);
+            byte[] compressed = Base64.decodeBase64(compressedStr);
             out = new ByteArrayOutputStream();
             in = new ByteArrayInputStream(compressed);
             zin = new ZipInputStream(in);

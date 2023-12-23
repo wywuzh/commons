@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,9 @@ public enum CellTypeEnum {
     Undefined, // 未知
     String, // 字符
     Integer, // 整型数值
-    BigDecimal, // 2位小数
+    BigDecimal, // 数值，保留2位小数
     Money, // 金额，保留2位小数
+    Rate, // 率，保留4位小数
     Accounting, // 会计专用
     Percent, // 百分比
     Date, // 日期：yyyy-MM-dd格式
