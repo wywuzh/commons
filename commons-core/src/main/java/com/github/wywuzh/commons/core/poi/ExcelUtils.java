@@ -15,6 +15,21 @@
  */
 package com.github.wywuzh.commons.core.poi;
 
+import com.github.wywuzh.commons.core.common.ContentType;
+import com.github.wywuzh.commons.core.math.CalculationUtils;
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+import com.github.wywuzh.commons.core.poi.modle.ExcelCellField;
+import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
+import com.github.wywuzh.commons.core.poi.modle.FreezePane;
+import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
+import com.github.wywuzh.commons.core.reflect.ReflectUtils;
+import com.github.wywuzh.commons.core.util.DateUtils;
+import com.github.wywuzh.commons.core.util.SortUtils;
+import com.github.wywuzh.commons.core.util.StringHelper;
+import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -28,7 +43,6 @@ import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.github.wywuzh.commons.core.util.StringHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -41,19 +55,6 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-
-import com.github.wywuzh.commons.core.common.ContentType;
-import com.github.wywuzh.commons.core.math.CalculationUtils;
-import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
-import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
-import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
-import com.github.wywuzh.commons.core.poi.modle.ExcelCellField;
-import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
-import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
-import com.github.wywuzh.commons.core.reflect.ReflectUtils;
-import com.github.wywuzh.commons.core.util.DateUtils;
-import com.github.wywuzh.commons.core.util.SortUtils;
-import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
 
 /**
  * 类ExcelUtils的实现描述：Excel 工具
@@ -415,7 +416,12 @@ public class ExcelUtils {
         }
 
         // 冻结窗口-首行
-        sheet.createFreezePane(0, firstRowNumber);
+        // [v2.7.8]优先使用传入的冻结请求
+        FreezePane freezePane = excelExportRequest.getFreezePane();
+        if (freezePane == null) {
+            freezePane = new FreezePane(0, firstRowNumber);
+        }
+        sheet.createFreezePane(freezePane.getColSplit(), freezePane.getRowSplit(), freezePane.getLeftmostColumn(), freezePane.getTopRow());
 
         // 输入值
         if (excelExportRequest.getDataColl() != null) {
@@ -474,7 +480,7 @@ public class ExcelUtils {
         }
     }
 
-    private static short getCellDateFormat(Workbook workbook, Object data, String columnName) {
+    public static short getCellDateFormat(Workbook workbook, Object data, String columnName) {
         // 取到columnName对应的实际字段/方法
         Object realField = getRealField(data, columnName);
         Short dataFormat = -1;
@@ -484,7 +490,7 @@ public class ExcelUtils {
         return dataFormat;
     }
 
-    private static short getCellDateFormat(Workbook workbook, Object realField) {
+    public static short getCellDateFormat(Workbook workbook, Object realField) {
         ExcelCell excelCell = null;
         if (realField instanceof Field) {
             excelCell = ((Field) realField).getAnnotation(ExcelCell.class);
@@ -507,40 +513,72 @@ public class ExcelUtils {
         return dataFormat;
     }
 
-    private static short getCellDateFormat(Workbook workbook, CellTypeEnum cellTypeEnum) {
-        if (CellTypeEnum.String.equals(cellTypeEnum)) { // 字符串文本
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_String);
-        } else if (CellTypeEnum.Percent.equals(cellTypeEnum)) { // 百分比
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Percent);
-        } else if (CellTypeEnum.Integer.equals(cellTypeEnum)) { // 整型数值
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Integer);
-        } else if (CellTypeEnum.BigDecimal.equals(cellTypeEnum)) { // 数值，保留2位小数
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_BigDecimal);
-        } else if (CellTypeEnum.Money.equals(cellTypeEnum)) { // 金额，保留2位小数
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Money);
-        } else if (CellTypeEnum.Rate.equals(cellTypeEnum)) { // 率，保留4位小数
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Rate);
-        } else if (CellTypeEnum.Accounting.equals(cellTypeEnum)) { // 会计专用
-            DataFormat dataFormat = workbook.createDataFormat();
-            // 金额格式：会计专用格式
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Accounting);
-        } else if (CellTypeEnum.Date.equals(cellTypeEnum)) { // 日期
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Date);
-        } else if (CellTypeEnum.Time.equals(cellTypeEnum)) { // 时间
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Time);
-        } else if (CellTypeEnum.DateTime.equals(cellTypeEnum)) { // 日期时间
-            DataFormat dataFormat = workbook.createDataFormat();
-            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_DateTime);
+    public static short getCellDateFormat(Workbook workbook, CellTypeEnum cellTypeEnum) {
+        String format = getFormat(cellTypeEnum);
+        if (StringUtils.isBlank(format)) {
+            return -1;
         }
-        return -1;
+        DataFormat dataFormat = workbook.createDataFormat();
+        return dataFormat.getFormat(format);
+//        if (CellTypeEnum.String.equals(cellTypeEnum)) { // 字符串文本
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_String);
+//        } else if (CellTypeEnum.Percent.equals(cellTypeEnum)) { // 百分比
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Percent);
+//        } else if (CellTypeEnum.Integer.equals(cellTypeEnum)) { // 整型数值
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Integer);
+//        } else if (CellTypeEnum.BigDecimal.equals(cellTypeEnum)) { // 数值，保留2位小数
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_BigDecimal);
+//        } else if (CellTypeEnum.Money.equals(cellTypeEnum)) { // 金额，保留2位小数
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Money);
+//        } else if (CellTypeEnum.Rate.equals(cellTypeEnum)) { // 率，保留4位小数
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Rate);
+//        } else if (CellTypeEnum.Accounting.equals(cellTypeEnum)) { // 会计专用
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            // 金额格式：会计专用格式
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Accounting);
+//        } else if (CellTypeEnum.Date.equals(cellTypeEnum)) { // 日期
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Date);
+//        } else if (CellTypeEnum.Time.equals(cellTypeEnum)) { // 时间
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Time);
+//        } else if (CellTypeEnum.DateTime.equals(cellTypeEnum)) { // 日期时间
+//            DataFormat dataFormat = workbook.createDataFormat();
+//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_DateTime);
+//        }
+//        return -1;
+    }
+
+    public static String getFormat(CellTypeEnum cellTypeEnum) {
+        switch (cellTypeEnum) {
+        case String: // 字符串文本
+            return CellStyleConstants.STYLE_FORMAT_String;
+        case Percent: // 百分比
+            return CellStyleConstants.STYLE_FORMAT_Percent;
+        case Integer: // 整型数值
+            return CellStyleConstants.STYLE_FORMAT_Integer;
+        case BigDecimal: // 数值，保留2位小数
+            return CellStyleConstants.STYLE_FORMAT_BigDecimal;
+        case Money: // 金额，保留2位小数
+            return CellStyleConstants.STYLE_FORMAT_Money;
+        case Rate: // 率，保留4位小数
+            return CellStyleConstants.STYLE_FORMAT_Rate;
+        case Accounting: // 会计专用，保留2位小数
+            return CellStyleConstants.STYLE_FORMAT_Accounting;
+        case Date: // 日期：yyyy-MM-dd格式
+            return CellStyleConstants.STYLE_FORMAT_Date;
+        case Time: // 时间：HH:mm:ss格式
+            return CellStyleConstants.STYLE_FORMAT_Time;
+        case DateTime: // 日期时间：yyyy-MM-dd HH:mm:ss格式
+            return CellStyleConstants.STYLE_FORMAT_DateTime;
+        }
+        return null;
     }
 
     private static Object getRealField(Object data, String columnName) {
@@ -779,7 +817,7 @@ public class ExcelUtils {
      * @param lastCol              结束列，不能小于开始列
      * @return
      */
-    private static Sheet setValidation(Workbook workbook, Sheet sheet, String columnTitle, String[] columnValidationData, int firstRow, int lastRow, int firstCol, int lastCol) {
+    public static Sheet setValidation(Workbook workbook, Sheet sheet, String columnTitle, String[] columnValidationData, int firstRow, int lastRow, int firstCol, int lastCol) {
         if (firstRow < 1) {
             throw new IllegalArgumentException("firstRow must not less 1");
         }
@@ -989,7 +1027,7 @@ public class ExcelUtils {
      * @return
      * @author 伍章红 2015年4月28日 ( 下午3:07:53 )
      */
-    private static CellStyle createCellStyle(Workbook workbook) {
+    public static CellStyle createCellStyle(Workbook workbook) {
         CellStyle cellStyle = workbook.createCellStyle();
         // 内容居中对齐 、垂直居中
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -1106,6 +1144,34 @@ public class ExcelUtils {
     }
 
     /**
+     * 读取类字段上面的ExcelCell注解，并转换为ExcelCellField对象
+     *
+     * @param clazz 目标类
+     * @return ExcelCellField对象
+     * @since v2.7.8
+     */
+    public static <T> List<ExcelCellField> resolvedExcelCellField(Class<T> clazz) {
+        List<ExcelCellField> excelCellFieldList = new ArrayList<>();
+        List<Field> fieldList = FieldUtils.getFieldsListWithAnnotation(clazz, ExcelCell.class);
+        if (CollectionUtils.isEmpty(fieldList)) {
+            return excelCellFieldList;
+        }
+        for (Field field : fieldList) {
+            ExcelCell excelCell = field.getAnnotation(ExcelCell.class);
+
+            ExcelCellField excelCellField = new ExcelCellField();
+            excelCellField.setFieldName(field.getName());
+            excelCellField.setFieldTitle(excelCell.value());
+            excelCellField.setCellType(excelCell.cellType());
+            excelCellField.setIndex(excelCell.index());
+            excelCellField.setSortNo(excelCell.sort());
+            excelCellField.setFormat(excelCell.format());
+            excelCellFieldList.add(excelCellField);
+        }
+        return excelCellFieldList;
+    }
+
+    /**
      * 解析需要读取的字段，如果 columns 为空，就以 clazz 类中 @ExcelCell 注解标记的字段为准
      *
      * @param clazz   目标类
@@ -1117,21 +1183,9 @@ public class ExcelUtils {
             return columns;
         }
 
-        List<Field> fieldList = FieldUtils.getFieldsListWithAnnotation(clazz, ExcelCell.class);
-        if (CollectionUtils.isEmpty(fieldList)) {
+        List<ExcelCellField> excelCellFieldList = resolvedExcelCellField(clazz);
+        if (CollectionUtils.isEmpty(excelCellFieldList)) {
             return columns;
-        }
-        List<ExcelCellField> excelCellFieldList = new ArrayList<>(fieldList.size());
-        for (Field field : fieldList) {
-            ExcelCell excelCell = field.getAnnotation(ExcelCell.class);
-
-            ExcelCellField excelCellField = new ExcelCellField();
-            excelCellField.setFieldName(field.getName());
-            excelCellField.setFieldTitle(excelCell.value());
-            excelCellField.setIndex(excelCell.index());
-            excelCellField.setSortNo(excelCell.sort());
-            excelCellField.setFormat(excelCell.format());
-            excelCellFieldList.add(excelCellField);
         }
         // 排序：索引、排序、字段标题
         SortUtils.sort(excelCellFieldList, new String[] {
