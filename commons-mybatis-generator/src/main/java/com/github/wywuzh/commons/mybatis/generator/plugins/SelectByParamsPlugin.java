@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,10 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.github.wywuzh.commons.core.util.StringHelper;
-import com.github.wywuzh.commons.mybatis.generator.constant.PropertyConstants;
-import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
-import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
-import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
-
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.JdbcType;
@@ -34,6 +29,12 @@ import org.mybatis.generator.api.dom.xml.*;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.TableConfiguration;
+
+import com.github.wywuzh.commons.core.util.StringHelper;
+import com.github.wywuzh.commons.mybatis.generator.constant.MbgPropertyConstants;
+import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
+import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
 
 /**
  * 类SelectByParamsPlugin的实现描述：自定义select查询插件
@@ -88,24 +89,24 @@ import org.mybatis.generator.config.TableConfiguration;
  */
 public abstract class SelectByParamsPlugin extends AbstractPlugin {
 
-    /**
-     * 表是否开启逻辑删除，默认为true
-     *
-     * @since 2.3.6
-     */
-    private boolean enableLogicDelete = true;
-    /**
-     * 逻辑删除字段默认值
-     *
-     * @since 2.3.6
-     */
-    private String logicDeleteField = "is_delete";
-    /**
-     * 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
-     *
-     * @since 2.3.6
-     */
-    private String excludeDeletedSql = "is_delete = 0";
+//    /**
+//     * 表是否开启逻辑删除，默认为true
+//     *
+//     * @since 2.3.6
+//     */
+//    private boolean enableLogicDelete = true;
+//    /**
+//     * 逻辑删除字段默认值
+//     *
+//     * @since 2.3.6
+//     */
+//    private String logicDeleteField = "is_delete";
+//    /**
+//     * 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
+//     *
+//     * @since 2.3.6
+//     */
+//    private String excludeDeletedSql = "is_delete = 0";
 
     /**
      * 数据总数查询
@@ -143,55 +144,59 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
 
-        // v2.3.6
-        // 表是否开启逻辑删除，默认为true
-        String enableLogicDelete = super.getProperties().getProperty(PropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
-        if (StringUtils.isNotBlank(enableLogicDelete)) {
-            this.enableLogicDelete = Boolean.valueOf(enableLogicDelete);
-        }
-        // 逻辑删除字段
-        String logicDeleteField = super.getProperties().getProperty(PropertyConstants.PROPERTY_LOGIC_DELETE_FIELD);
-        if (StringUtils.isNotBlank(enableLogicDelete)) {
-            this.logicDeleteField = logicDeleteField;
-        }
-        // 排除数据sql，即剔除已删除数据的sql
-        String excludeDeletedSql = super.getProperties().getProperty(PropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
-        if (StringUtils.isNotBlank(excludeDeletedSql)) {
-            this.excludeDeletedSql = excludeDeletedSql;
-        }
+        /*
+         * // v2.3.6
+         * // 表是否开启逻辑删除，默认为true
+         * String enableLogicDelete = super.getProperties().getProperty(MbgPropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
+         * if (StringUtils.isNotBlank(enableLogicDelete)) {
+         * this.enableLogicDelete = Boolean.valueOf(enableLogicDelete);
+         * }
+         * // 逻辑删除字段
+         * String logicDeleteField = super.getProperties().getProperty(MbgPropertyConstants.PROPERTY_LOGIC_DELETE_FIELD);
+         * if (StringUtils.isNotBlank(enableLogicDelete)) {
+         * this.logicDeleteField = logicDeleteField;
+         * }
+         * // 排除数据sql，即剔除已删除数据的sql
+         * String excludeDeletedSql = super.getProperties().getProperty(MbgPropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
+         * if (StringUtils.isNotBlank(excludeDeletedSql)) {
+         * this.excludeDeletedSql = excludeDeletedSql;
+         * }
+         */
     }
 
-    /**
-     * 表是否开启逻辑删除，默认为true
-     *
-     * @param tableConfiguration table配置
-     * @return
-     * @since 2.3.6
-     */
-    protected boolean enableLogicDelete(TableConfiguration tableConfiguration) {
-        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
-        String enableLogicDelete = tableConfiguration.getProperty(PropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
-        if (StringUtils.isNotBlank(enableLogicDelete)) {
-            return Boolean.valueOf(enableLogicDelete);
-        }
-        return this.enableLogicDelete;
-    }
-
-    /**
-     * 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
-     *
-     * @param tableConfiguration table配置
-     * @return
-     * @since 2.3.6
-     */
-    protected String excludeDeletedSql(TableConfiguration tableConfiguration) {
-        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
-        String excludeDeletedSql = tableConfiguration.getProperty(PropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
-        if (StringUtils.isNotBlank(excludeDeletedSql)) {
-            return excludeDeletedSql;
-        }
-        return this.excludeDeletedSql;
-    }
+//    /**
+//     * 表是否开启逻辑删除，默认为true
+//     *
+//     * @param tableConfiguration table配置
+//     * @return
+//     * @since 2.3.6
+//     */
+//    @Deprecated
+//    protected boolean enableLogicDelete(TableConfiguration tableConfiguration) {
+//        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
+//        String enableLogicDelete = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
+//        if (StringUtils.isNotBlank(enableLogicDelete)) {
+//            return Boolean.valueOf(enableLogicDelete);
+//        }
+//        return this.enableLogicDelete;
+//    }
+//
+//    /**
+//     * 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
+//     *
+//     * @param tableConfiguration table配置
+//     * @return
+//     * @since 2.3.6
+//     */
+//    @Deprecated
+//    protected String excludeDeletedSql(TableConfiguration tableConfiguration) {
+//        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
+//        String excludeDeletedSql = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
+//        if (StringUtils.isNotBlank(excludeDeletedSql)) {
+//            return excludeDeletedSql;
+//        }
+//        return this.excludeDeletedSql;
+//    }
 
     /**
      * Java Client Methods 生成
@@ -376,10 +381,15 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      * @since 2.3.6
      */
     protected Element getSelectWhereElement(IntrospectedTable introspectedTable) {
+        // table配置：<table>标签配置信息
+        TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
+        // <plugin>标签属性信息
+        Properties properties = super.getProperties();
+
         // 表是否开启逻辑删除，默认为true
-        boolean enableLogicDelete = enableLogicDelete(introspectedTable.getTableConfiguration());
+        boolean enableLogicDelete = super.getProperty(tableConfiguration, properties, MbgPropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE, MbgPropertyConstants.enableLogicDelete);
         // 排除数据sql，即剔除已删除数据的sql
-        String excludeDeletedSql = excludeDeletedSql(introspectedTable.getTableConfiguration());
+        String excludeDeletedSql = super.getProperty(tableConfiguration, properties, MbgPropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL, MbgPropertyConstants.excludeDeletedSql);
         if (!enableLogicDelete || StringUtils.isBlank(excludeDeletedSql)) {
             return null; // 没有开启逻辑删除，或者排除数据sql为空
         }
@@ -458,6 +468,8 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
         XmlElement includeEleForSubConditions = new XmlElement("include");
         includeEleForSubConditions.addAttribute(new Attribute("refid", "appendSubConditions"));
         rootElement.addElement(includeEleForSubConditions);
+        // 创建一个空行
+        rootElement.addElement(new TextElement(""));
 
         // 开启Like模糊查询
         List<String> conditionsLikeColumns = getConditionsLikeColumns(tableConfiguration);

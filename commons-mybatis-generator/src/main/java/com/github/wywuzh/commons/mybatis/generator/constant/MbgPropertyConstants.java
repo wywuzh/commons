@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,24 +22,46 @@ package com.github.wywuzh.commons.mybatis.generator.constant;
  * @version v2.7.0
  * @since JDK 1.8
  */
-public class PropertyConstants {
+public class MbgPropertyConstants {
 
+    // =======================>>> <property>属性名
     /**
-     * 表是否开启逻辑删除
+     * 属性名：表是否开启逻辑删除
      *
      * @since 2.3.6
      */
     public static final String PROPERTY_ENABLE_LOGIC_DELETE = "enableLogicDelete";
     /**
-     * 逻辑删除字段。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件。
+     * 属性名：逻辑删除字段。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件。
      *
      * @since 2.3.6
      */
     public static final String PROPERTY_LOGIC_DELETE_FIELD = "logicDeleteField";
     /**
-     * 排除数据sql，即剔除已删除数据的sql
+     * 属性名：排除数据sql，即剔除已删除数据的sql
      *
      * @since 2.3.6
      */
     public static final String PROPERTY_EXCLUDE_DELETED_SQL = "excludeDeletedSql";
+
+    // =======================>>> <property>属性默认值
+    /**
+     * 默认属性值：表是否开启逻辑删除，默认为true
+     *
+     * @since 2.3.6
+     */
+    public static boolean enableLogicDelete = true;
+    /**
+     * 默认属性值：逻辑删除字段默认值
+     *
+     * @since 2.3.6
+     */
+    public static String logicDeleteField = "is_delete";
+    /**
+     * 默认属性值：排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
+     *
+     * @since 2.3.6
+     */
+    public static String excludeDeletedSql = "is_delete = 0";
+
 }

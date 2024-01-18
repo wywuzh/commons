@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.apache.commons.lang3.StringUtils;
  * @version v2.4.5
  * @since JDK 1.8
  */
-public class PropertiesUtils {
+public class MbgPropertiesUtils {
 
     /**
      * 获取属性值
