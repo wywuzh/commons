@@ -15,6 +15,13 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
+import com.github.wywuzh.commons.core.util.StringHelper;
+import com.github.wywuzh.commons.mybatis.generator.constant.MbgPropertyConstants;
+import com.github.wywuzh.commons.mybatis.generator.model.BlankElement;
+import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
+import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
+
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,12 +36,6 @@ import org.mybatis.generator.api.dom.xml.*;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.TableConfiguration;
-
-import com.github.wywuzh.commons.core.util.StringHelper;
-import com.github.wywuzh.commons.mybatis.generator.constant.MbgPropertyConstants;
-import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
-import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
-import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
 
 /**
  * 类SelectByParamsPlugin的实现描述：自定义select查询插件
@@ -469,7 +470,7 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
         includeEleForSubConditions.addAttribute(new Attribute("refid", "appendSubConditions"));
         rootElement.addElement(includeEleForSubConditions);
         // 创建一个空行
-        rootElement.addElement(new TextElement(""));
+        rootElement.addElement(new BlankElement());
 
         // 开启Like模糊查询
         List<String> conditionsLikeColumns = getConditionsLikeColumns(tableConfiguration);
