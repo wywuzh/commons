@@ -44,6 +44,27 @@ public class MbgPropertyConstants {
      */
     public static final String PROPERTY_EXCLUDE_DELETED_SQL = "excludeDeletedSql";
 
+    /**
+     * table配置属性：Like模糊查询
+     */
+    public static final String PROPERTY_CONDITIONS_LIKE_COLUMNS = "conditionsLikeColumns";
+    /**
+     * table配置属性：Foreach in查询
+     */
+    public static final String PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS = "conditionsForeachInColumns";
+    /**
+     * table配置属性：Not in查询
+     *
+     * @since v2.4.5
+     */
+    public static final String PROPERTY_CONDITIONS_NOT_IN_COLUMNS = "conditionsNotInColumns";
+    /**
+     * appendConditions条件引入项
+     *
+     * @since v2.7.8
+     */
+    public static final String PROPERTY_CONDITIONS_INCLUDES = "conditionsIncludes";
+
     // =======================>>> <property>属性默认值
     /**
      * 默认属性值：表是否开启逻辑删除，默认为true
