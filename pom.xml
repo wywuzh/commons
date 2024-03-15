@@ -84,9 +84,9 @@
         <!-- 注：spring、spring-security、netty版本号以spring-boot中内置版本为准 -->
         <spring-framework.version>5.3.25</spring-framework.version>
         <spring_version>5.3.25</spring_version>
-        <spring-security.version>5.7.6</spring-security.version>
-        <netty.version>4.1.87.Final</netty.version>
-        <netty4_version>4.1.87.Final</netty4_version>
+        <spring-security.version>5.7.7</spring-security.version>
+        <netty.version>4.1.89.Final</netty.version>
+        <netty4_version>4.1.89.Final</netty4_version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
