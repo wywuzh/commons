@@ -72,13 +72,21 @@
         <!-- Maven默认识别 -->
         <skipTest>true</skipTest>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.locale>zh_CN</project.build.locale>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
 
         <revision>2.7.8.SNAPSHOT</revision>
-
+        <spring-boot.version>2.7.8</spring-boot.version>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
+
+        <!-- 注：spring、spring-security、netty版本号以spring-boot中内置版本为准 -->
+        <spring-framework.version>5.3.25</spring-framework.version>
+        <spring_version>5.3.25</spring_version>
+        <spring-security.version>5.7.6</spring-security.version>
+        <netty.version>4.1.87.Final</netty.version>
+        <netty4_version>4.1.87.Final</netty4_version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
@@ -234,6 +242,30 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring-framework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Security -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>${spring-security.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -243,6 +275,13 @@
                 <scope>import</scope>
             </dependency>
             <!-- Apache Dubbo  -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-dependencies-bom</artifactId>
