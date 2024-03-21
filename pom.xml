@@ -87,8 +87,8 @@
         <spring-framework.version>5.3.30</spring-framework.version>
         <spring_version>5.3.30</spring_version>
         <spring-security.version>5.7.11</spring-security.version>
-        <netty.version>4.1.97.Final</netty.version>
-        <netty4_version>4.1.97.Final</netty4_version>
+        <netty.version>4.1.100.Final</netty.version>
+        <netty4_version>4.1.100.Final</netty4_version>
         <log4j2.version>2.17.2</log4j2.version>
         <log4j2_version>2.17.2</log4j2_version>
         <logback.version>1.2.12</logback.version>
@@ -101,8 +101,8 @@
         <gson_version>2.9.1</gson_version>
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <javax_annotation-api_version>1.3.2</javax_annotation-api_version>
-        <tomcat.version>9.0.80</tomcat.version>
-        <tomcat_embed_version>9.0.80</tomcat_embed_version>
+        <tomcat.version>9.0.82</tomcat.version>
+        <tomcat_embed_version>9.0.82</tomcat_embed_version>
         <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
         <hibernate_validator_new_version>6.2.5.Final</hibernate_validator_new_version>
         <snakeyaml.version>1.30</snakeyaml.version>
