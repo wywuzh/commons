@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +16,19 @@
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
 import com.github.wywuzh.commons.core.util.StringHelper;
-import com.github.wywuzh.commons.mybatis.generator.constant.PropertyConstants;
+import com.github.wywuzh.commons.mybatis.generator.constant.MbgPropertyConstants;
+import com.github.wywuzh.commons.mybatis.generator.model.BlankElement;
+import com.github.wywuzh.commons.mybatis.generator.utils.MbgPluginUtils;
+import com.github.wywuzh.commons.mybatis.generator.utils.MbgPropertiesUtils;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.type.JdbcType;
 import org.mybatis.generator.api.IntrospectedColumn;
@@ -89,25 +93,6 @@ import org.mybatis.generator.config.TableConfiguration;
 public abstract class SelectByParamsPlugin extends AbstractPlugin {
 
     /**
-     * 表是否开启逻辑删除，默认为true
-     *
-     * @since 2.3.6
-     */
-    private boolean enableLogicDelete = true;
-    /**
-     * 逻辑删除字段默认值
-     *
-     * @since 2.3.6
-     */
-    private String logicDeleteField = "is_delete";
-    /**
-     * 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
-     *
-     * @since 2.3.6
-     */
-    private String excludeDeletedSql = "is_delete = 0";
-
-    /**
      * 数据总数查询
      */
     public static final String METHOD_SELECT_TOTAL = "selectTotalByParams";
@@ -124,73 +109,9 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      */
     public static final String WHERE_CONDITION = "appendConditions";
 
-    /**
-     * Like模糊查询
-     */
-    public static final String CONDITIONS_LIKE_COLUMNS = "conditionsLikeColumns";
-    /**
-     * Foreach in查询
-     */
-    public static final String CONDITIONS_FOREACH_IN_COLUMNS = "conditionsForeachInColumns";
-    /**
-     * Not in查询
-     *
-     * @since v2.4.5
-     */
-    public static final String CONDITIONS_NOT_IN_COLUMNS = "conditionsNotInColumns";
-
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
-
-        // v2.3.6
-        // 表是否开启逻辑删除，默认为true
-        String enableLogicDelete = super.getProperties().getProperty(PropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
-        if (StringUtils.isNotBlank(enableLogicDelete)) {
-            this.enableLogicDelete = Boolean.valueOf(enableLogicDelete);
-        }
-        // 逻辑删除字段
-        String logicDeleteField = super.getProperties().getProperty(PropertyConstants.PROPERTY_LOGIC_DELETE_FIELD);
-        if (StringUtils.isNotBlank(enableLogicDelete)) {
-            this.logicDeleteField = logicDeleteField;
-        }
-        // 排除数据sql，即剔除已删除数据的sql
-        String excludeDeletedSql = super.getProperties().getProperty(PropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
-        if (StringUtils.isNotBlank(excludeDeletedSql)) {
-            this.excludeDeletedSql = excludeDeletedSql;
-        }
-    }
-
-    /**
-     * 表是否开启逻辑删除，默认为true
-     *
-     * @param tableConfiguration table配置
-     * @return
-     * @since 2.3.6
-     */
-    protected boolean enableLogicDelete(TableConfiguration tableConfiguration) {
-        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
-        String enableLogicDelete = tableConfiguration.getProperty(PropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE);
-        if (StringUtils.isNotBlank(enableLogicDelete)) {
-            return Boolean.valueOf(enableLogicDelete);
-        }
-        return this.enableLogicDelete;
-    }
-
-    /**
-     * 排除删除数据sql。在生成selectTotalByParams、selectListByParams、selectPagerByParams查询语句时，会在where条件后面添加该条件
-     *
-     * @param tableConfiguration table配置
-     * @return
-     * @since 2.3.6
-     */
-    protected String excludeDeletedSql(TableConfiguration tableConfiguration) {
-        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
-        String excludeDeletedSql = tableConfiguration.getProperty(PropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL);
-        if (StringUtils.isNotBlank(excludeDeletedSql)) {
-            return excludeDeletedSql;
-        }
-        return this.excludeDeletedSql;
     }
 
     /**
@@ -312,49 +233,18 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
         // 4. 生成where条件
         document.getRootElement().addElement(generateConditionsElement(introspectedTable));
 
-        // [v2.7.0]添加 authData 数据权限
-        document.getRootElement().addElement(generateElementForAuthData(introspectedTable));
-        // [v2.7.0]添加 appendSubConditions 附加条件
-        document.getRootElement().addElement(generateElementForSubConditions(introspectedTable));
+        // [v2.7.8]通过<include>标签引入的子项
+        String PROPERTY_CONDITIONS_INCLUDES = super.getProperty(introspectedTable, MbgPropertyConstants.PROPERTY_CONDITIONS_INCLUDES, null);
+        List<String> conditionsIncludes = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_INCLUDES);
+        for (String include : conditionsIncludes) {
+            XmlElement conditionsElement = new XmlElement("sql");
+            conditionsElement.addAttribute(new Attribute("id", include));
+            // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
+            commentGenerator.addComment(conditionsElement);
+            document.getRootElement().addElement(conditionsElement);
+        }
 
         return true;
-    }
-
-    /**
-     * 生成Element元素：authData 数据权限
-     *
-     * @param introspectedTable table表信息
-     * @return
-     * @since v2.7.0
-     */
-    private Element generateElementForAuthData(IntrospectedTable introspectedTable) {
-        XmlElement conditionsElement = new XmlElement("sql");
-        conditionsElement.addAttribute(new Attribute("id", "authData"));
-        // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
-        commentGenerator.addComment(conditionsElement);
-
-        // 第一步：先判断map是否为空
-        XmlElement ifElement = new XmlElement("if");
-        ifElement.addAttribute(new Attribute("test", "map.authData != null and map.authData == true"));
-
-        conditionsElement.addElement(ifElement);
-        return conditionsElement;
-    }
-
-    /**
-     * 生成Element元素：appendSubConditions 附加条件
-     *
-     * @param introspectedTable table表信息
-     * @return
-     * @since v2.7.0
-     */
-    private Element generateElementForSubConditions(IntrospectedTable introspectedTable) {
-        XmlElement conditionsElement = new XmlElement("sql");
-        conditionsElement.addAttribute(new Attribute("id", "appendSubConditions"));
-        // 添加注释(!!!必须添加注释，overwrite覆盖生成时，@see XmlFileMergerJaxp.isGeneratedNode会去判断注释中是否存在OLD_ELEMENT_TAGS中的一点，例子：@mbg.generated)
-        commentGenerator.addComment(conditionsElement);
-
-        return conditionsElement;
     }
 
     /**
@@ -376,10 +266,15 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      * @since 2.3.6
      */
     protected Element getSelectWhereElement(IntrospectedTable introspectedTable) {
+        // table配置：<table>标签配置信息
+        TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
+        // <plugin>标签属性信息
+        Properties properties = super.getProperties();
+
         // 表是否开启逻辑删除，默认为true
-        boolean enableLogicDelete = enableLogicDelete(introspectedTable.getTableConfiguration());
+        boolean enableLogicDelete = super.getProperty(tableConfiguration, properties, MbgPropertyConstants.PROPERTY_ENABLE_LOGIC_DELETE, MbgPropertyConstants.enableLogicDelete);
         // 排除数据sql，即剔除已删除数据的sql
-        String excludeDeletedSql = excludeDeletedSql(introspectedTable.getTableConfiguration());
+        String excludeDeletedSql = super.getProperty(tableConfiguration, properties, MbgPropertyConstants.PROPERTY_EXCLUDE_DELETED_SQL, MbgPropertyConstants.excludeDeletedSql);
         if (!enableLogicDelete || StringUtils.isBlank(excludeDeletedSql)) {
             return null; // 没有开启逻辑删除，或者排除数据sql为空
         }
@@ -450,21 +345,28 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
     protected void addElementForAppendConditions(IntrospectedTable introspectedTable, XmlElement rootElement) {
         TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
 
-        // [v2.7.0]添加 authData 数据权限
-        XmlElement includeEleForAuthData = new XmlElement("include");
-        includeEleForAuthData.addAttribute(new Attribute("refid", "authData"));
-        rootElement.addElement(includeEleForAuthData);
-        // [v2.7.0]添加 appendSubConditions 附加条件
-        XmlElement includeEleForSubConditions = new XmlElement("include");
-        includeEleForSubConditions.addAttribute(new Attribute("refid", "appendSubConditions"));
-        rootElement.addElement(includeEleForSubConditions);
+        // [v2.7.8]通过<include>标签引入的子项
+        String PROPERTY_CONDITIONS_INCLUDES = super.getProperty(introspectedTable, MbgPropertyConstants.PROPERTY_CONDITIONS_INCLUDES, null);
+        List<String> conditionsIncludes = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_INCLUDES);
+        if (CollectionUtils.isNotEmpty(conditionsIncludes)) {
+            for (String include : conditionsIncludes) {
+                XmlElement includeEle = new XmlElement("include");
+                includeEle.addAttribute(new Attribute("refid", include));
+                rootElement.addElement(includeEle);
+            }
+            // 创建一个空行
+            rootElement.addElement(new BlankElement());
+        }
 
         // 开启Like模糊查询
-        List<String> conditionsLikeColumns = getConditionsLikeColumns(tableConfiguration);
+//        List<String> conditionsLikeColumns = getConditionsLikeColumns(tableConfiguration);
+        List<String> conditionsLikeColumns = MbgPropertiesUtils.split(tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_LIKE_COLUMNS));
         // 开启Foreach in查询
-        List<String> conditionsForeachInColumns = getConditionsForeachInColumns(tableConfiguration);
+//        List<String> conditionsForeachInColumns = getConditionsForeachInColumns(tableConfiguration);
+        List<String> conditionsForeachInColumns = MbgPropertiesUtils.split(tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS));
         // not in查询字段
-        List<String> conditionsNotInColumns = getConditionsNotInColumns(tableConfiguration);
+//        List<String> conditionsNotInColumns = getConditionsNotInColumns(tableConfiguration);
+        List<String> conditionsNotInColumns = MbgPropertiesUtils.split(tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_NOT_IN_COLUMNS));
 
         List<IntrospectedColumn> introspectedColumnList = ListUtilities.removeIdentityAndGeneratedAlwaysColumns(introspectedTable.getAllColumns());
         for (int i = 0; i < introspectedColumnList.size(); i++) {
@@ -499,14 +401,14 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
 
             // 添加 foreach in 查询支持
             if (conditionsForeachInColumns != null && conditionsForeachInColumns.size() > 0 && conditionsForeachInColumns.contains(columnName)) {
-                addElementForIn(rootElement, introspectedColumn, columnName, javaProperty + "s");
+                MbgPluginUtils.addElementForIn(rootElement, introspectedColumn, columnName, javaProperty + "s");
             }
 
             // 添加 not in 查询支持
             if (conditionsNotInColumns != null && conditionsNotInColumns.size() > 0 && conditionsNotInColumns.contains(columnName)) {
                 // 封装 not in 字段，eg：notInIds
                 String fieldName = StringUtils.join("map.", "notIn", StringHelper.firstCharToUpperCase(introspectedColumn.getJavaProperty()), "s");
-                addElementForNotIn(rootElement, introspectedColumn, columnName, fieldName);
+                MbgPluginUtils.addElementForNotIn(rootElement, introspectedColumn, columnName, fieldName);
             }
         }
     }
@@ -560,77 +462,14 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
     protected abstract String resolveDbLikeSql(String javaProperty);
 
     /**
-     * @param whereElement
-     * @param columnName   表字段名
-     * @param javaProperty Java字段名
-     */
-    protected void addElementForIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
-        // 第二步：添加map中key的空判断
-        XmlElement mapKeyIfElement = new XmlElement("if");
-        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + ".size &gt; 0"));
-        mapKeyIfElement.addElement(new TextElement("and " + columnName + " in"));
-
-        // 添加foreach节点
-        XmlElement foreachElement = new XmlElement("foreach");
-        foreachElement.addAttribute(new Attribute("collection", javaProperty));
-        foreachElement.addAttribute(new Attribute("item", "item"));
-        foreachElement.addAttribute(new Attribute("open", "("));
-        foreachElement.addAttribute(new Attribute("close", ")"));
-        foreachElement.addAttribute(new Attribute("separator", ","));
-        foreachElement.addElement(new TextElement("#{item}"));
-
-        mapKeyIfElement.addElement(foreachElement);
-
-        whereElement.addElement(mapKeyIfElement);
-    }
-
-    /**
-     * @param whereElement
-     * @param columnName   表字段名
-     * @param javaProperty Java字段名
-     */
-    protected void addElementForNotIn(XmlElement whereElement, IntrospectedColumn introspectedColumn, String columnName, String javaProperty) {
-        // 第二步：添加map中key的空判断
-        XmlElement mapKeyIfElement = new XmlElement("if");
-        mapKeyIfElement.addAttribute(new Attribute("test", javaProperty + " != null and " + javaProperty + ".size &gt; 0"));
-        mapKeyIfElement.addElement(new TextElement("and " + columnName + " not in"));
-
-        // 添加foreach节点
-        XmlElement foreachElement = new XmlElement("foreach");
-        foreachElement.addAttribute(new Attribute("collection", javaProperty));
-        foreachElement.addAttribute(new Attribute("item", "item"));
-        foreachElement.addAttribute(new Attribute("open", "("));
-        foreachElement.addAttribute(new Attribute("close", ")"));
-        foreachElement.addAttribute(new Attribute("separator", ","));
-        foreachElement.addElement(new TextElement("#{item}"));
-
-        mapKeyIfElement.addElement(foreachElement);
-
-        whereElement.addElement(mapKeyIfElement);
-    }
-
-    /**
      * 开启Like模糊查询
      *
      * @param tableConfiguration
      * @return
      */
     protected List<String> getConditionsLikeColumns(TableConfiguration tableConfiguration) {
-        List<String> resultList = new LinkedList<>();
-
-        String conditionsLikeColumns = tableConfiguration.getProperty(CONDITIONS_LIKE_COLUMNS);
-        if (StringUtils.isNotBlank(conditionsLikeColumns)) {
-            // conditionsLikeColumns 兼容全角和半角的逗号分隔符
-            conditionsLikeColumns = StringUtils.replace(conditionsLikeColumns, "，", ",");
-            String[] dataArr = StringUtils.split(conditionsLikeColumns, ",");
-            for (String str : dataArr) {
-                str = str.trim();
-                if (str == null || "".equals(str)) {
-                    continue;
-                }
-                resultList.add(str);
-            }
-        }
+        String PROPERTY_CONDITIONS_LIKE_COLUMNS = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_LIKE_COLUMNS);
+        List<String> resultList = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_LIKE_COLUMNS);
         return resultList;
     }
 
@@ -641,21 +480,8 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      * @return
      */
     protected List<String> getConditionsForeachInColumns(TableConfiguration tableConfiguration) {
-        List<String> resultList = new LinkedList<>();
-
-        String conditionsForeachInColumns = tableConfiguration.getProperty(CONDITIONS_FOREACH_IN_COLUMNS);
-        if (StringUtils.isNotBlank(conditionsForeachInColumns)) {
-            // conditionsForeachInColumns 兼容全角和半角的逗号分隔符
-            conditionsForeachInColumns = StringUtils.replace(conditionsForeachInColumns, "，", ",");
-            String[] dataArr = StringUtils.split(conditionsForeachInColumns, ",");
-            for (String str : dataArr) {
-                str = str.trim();
-                if (str == null || "".equals(str)) {
-                    continue;
-                }
-                resultList.add(str);
-            }
-        }
+        String PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS);
+        List<String> resultList = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS);
         return resultList;
     }
 
@@ -667,21 +493,8 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      * @since v2.4.5
      */
     protected List<String> getConditionsNotInColumns(TableConfiguration tableConfiguration) {
-        List<String> resultList = new LinkedList<>();
-
-        String conditionsNotInColumns = tableConfiguration.getProperty(CONDITIONS_NOT_IN_COLUMNS);
-        if (StringUtils.isNotBlank(conditionsNotInColumns)) {
-            // conditionsNotInColumns 兼容全角和半角的逗号分隔符
-            conditionsNotInColumns = StringUtils.replace(conditionsNotInColumns, "，", ",");
-            String[] dataArr = StringUtils.split(conditionsNotInColumns, ",");
-            for (String str : dataArr) {
-                str = str.trim();
-                if (str == null || "".equals(str)) {
-                    continue;
-                }
-                resultList.add(str);
-            }
-        }
+        String PROPERTY_CONDITIONS_NOT_IN_COLUMNS = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_NOT_IN_COLUMNS);
+        List<String> resultList = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_NOT_IN_COLUMNS);
         return resultList;
     }
 
