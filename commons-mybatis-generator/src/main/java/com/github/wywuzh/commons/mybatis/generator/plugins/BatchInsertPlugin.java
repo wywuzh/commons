@@ -15,7 +15,6 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
@@ -56,7 +55,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * @version v2.1.1
  * @since JDK 1.8
  */
-public class BatchInsertPlugin extends BasePlugin {
+public class BatchInsertPlugin extends AbstractPlugin {
     public static final String METHOD_BATCH_INSERT = "batchInsert";  // 方法名
     public static final String PRO_ALLOW_MULTI_QUERIES = "allowMultiQueries";   // property allowMultiQueries
     public static final String ENABLE_MERGE_INTO = "enableMergeInto"; // 是否启用merge into格式进行插入
