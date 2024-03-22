@@ -84,11 +84,11 @@
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
         1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
         -->
-        <spring-framework.version>6.0.4</spring-framework.version>
-        <spring_version>6.0.4</spring_version>
-        <spring-security.version>6.0.1</spring-security.version>
-        <netty.version>4.1.87.Final</netty.version>
-        <netty4_version>4.1.87.Final</netty4_version>
+        <spring-framework.version>6.0.5</spring-framework.version>
+        <spring_version>6.0.5</spring_version>
+        <spring-security.version>6.0.2</spring-security.version>
+        <netty.version>4.1.89.Final</netty.version>
+        <netty4_version>4.1.89.Final</netty4_version>
         <log4j2.version>2.19.0</log4j2.version>
         <log4j2_version>2.19.0</log4j2_version>
         <logback.version>1.4.5</logback.version>
