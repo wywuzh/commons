@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,21 +14,6 @@
  * limitations under the License.
  */
 package com.github.wywuzh.commons.core.poi;
-
-import com.github.wywuzh.commons.core.common.ContentType;
-import com.github.wywuzh.commons.core.math.CalculationUtils;
-import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
-import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
-import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
-import com.github.wywuzh.commons.core.poi.modle.ExcelCellField;
-import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
-import com.github.wywuzh.commons.core.poi.modle.FreezePane;
-import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
-import com.github.wywuzh.commons.core.reflect.ReflectUtils;
-import com.github.wywuzh.commons.core.util.DateUtils;
-import com.github.wywuzh.commons.core.util.SortUtils;
-import com.github.wywuzh.commons.core.util.StringHelper;
-import com.github.wywuzh.commons.core.util.SystemPropertyUtils;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -55,6 +40,20 @@ import org.apache.poi.xssf.usermodel.XSSFDataValidation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+
+import com.github.wywuzh.commons.core.common.ContentType;
+import com.github.wywuzh.commons.core.math.CalculationUtils;
+import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
+import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
+import com.github.wywuzh.commons.core.poi.modle.ExcelCellField;
+import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
+import com.github.wywuzh.commons.core.poi.modle.FreezePane;
+import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
+import com.github.wywuzh.commons.core.reflect.ReflectUtils;
+import com.github.wywuzh.commons.core.util.DateUtils;
+import com.github.wywuzh.commons.core.util.SortUtils;
+import com.github.wywuzh.commons.core.util.StringHelper;
 
 /**
  * 类ExcelUtils的实现描述：Excel 工具
@@ -332,17 +331,17 @@ public class ExcelUtils {
         Assert.notEmpty(excelExportRequest.getColumnTitles(), "columnTitles must not be empty");
 
         // 生成头部列(单元格)样式
-        CellStyle headerStyle = createHeaderStyle(workbook);
+        CellStyle headerStyle = CellStyleTools.createHeaderStyle(workbook);
         CellStyle requiredHeaderStyle = null;
         // 生成内容列(单元格)样式
-        CellStyle contentStyle = createContentStyle(workbook);
+        CellStyle contentStyle = CellStyleTools.createContentStyle(workbook);
 
         String[] columns = excelExportRequest.getColumns();
         String[] columnTitles = excelExportRequest.getColumnTitles();
         Integer[] columnLengths = excelExportRequest.getColumnLengths();
         List<String> requiredColumnTitles = excelExportRequest.getRequiredColumnTitles();
         if (CollectionUtils.isNotEmpty(requiredColumnTitles)) {
-            requiredHeaderStyle = createHeaderStyleForRequired(workbook);
+            requiredHeaderStyle = CellStyleTools.createHeaderStyleForRequired(workbook);
         }
         // 行高
         final float height = -1;
@@ -355,7 +354,7 @@ public class ExcelUtils {
             // 第一行添加提示信息
             Cell cell = tipsRow.createCell(0);
             cell.setCellValue(excelExportRequest.getTips());
-            cell.setCellStyle(createHeaderStyleForTips(workbook));
+            cell.setCellStyle(CellStyleTools.createHeaderStyleForTips(workbook));
             // 合并单元格，合并的列与导出列保持一致
             sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, columns.length - 1));
             // 设置第一行高度
@@ -376,7 +375,7 @@ public class ExcelUtils {
 
         // 创建表头行
         for (int j = 0; j < columnTitles.length; j++) {
-            int titleIndex = j;
+            int columnTitleIndex = j;
             // 生成第j列 - 单元格
             Cell cell = headerRow.createCell(j);
             String columnComment = columnTitles[j];
@@ -406,12 +405,12 @@ public class ExcelUtils {
                     continue;
                 }
                 // 设置为下拉框
-                setValidation(workbook, sheet, columnComment, columnValidationData, 1, MAX_ROW, titleIndex, titleIndex);
+                setValidation(workbook, sheet, columnComment, columnValidationData, 1, MAX_ROW, columnTitleIndex, columnTitleIndex);
 
                 // 默认该列为为文本格式
-                CellStyle cellStyleForText = createCellStyle(workbook);
+                CellStyle cellStyleForText = Optional.ofNullable(sheet.getColumnStyle(columnTitleIndex)).orElse(CellStyleTools.createCellStyle(workbook));
                 cellStyleForText.setDataFormat(getCellDateFormat(workbook, CellTypeEnum.String));
-                sheet.setDefaultColumnStyle(titleIndex, cellStyleForText);
+                sheet.setDefaultColumnStyle(columnTitleIndex, cellStyleForText);
             }
         }
 
@@ -423,7 +422,7 @@ public class ExcelUtils {
         }
         sheet.createFreezePane(freezePane.getColSplit(), freezePane.getRowSplit(), freezePane.getLeftmostColumn(), freezePane.getTopRow());
 
-        // 输入值
+        // 数据行
         if (excelExportRequest.getDataColl() != null) {
             Iterator<?> iterator = excelExportRequest.getDataColl().iterator();
             int index = firstRowNumber;
@@ -433,7 +432,7 @@ public class ExcelUtils {
                     continue;
                 }
 
-                // 创建行，从第二行开始
+                // 数据行，从第二行开始
                 Row sheetRow = sheet.createRow(index);
                 sheetRow.setHeightInPoints(height);
 
@@ -441,12 +440,13 @@ public class ExcelUtils {
                     // 生成第k列 - 单元格
                     Cell cell = sheetRow.createCell(k);
                     String columnName = columns[k];
+                    CellStyle columnStyle = Optional.ofNullable(sheet.getColumnStyle(k)).orElse(contentStyle);
 
                     Object realValue = getRealValue(data, columnName);
                     // 设置cell列字段值
                     setCellValue(workbook, cell, data, columnName, realValue);
                     // 设置cell列style样式
-                    setCellStyle(workbook, cell, contentStyle, data, columnName);
+                    setCellStyle(workbook, cell, columnStyle, data, columnName);
 
                     // 列宽有设置时以设置为准，否则通过字段值长度计算列宽
                     if (columnLengths != null && columnLengths.length > 0) {
@@ -462,6 +462,7 @@ public class ExcelUtils {
             }
         }
 
+        // 设置单元格宽度
         for (int j = 0; j < maxLength.length; j++) {
             sheet.setColumnWidth(j, maxLength[j]); // 每个字符大约10像素
         }
@@ -472,7 +473,8 @@ public class ExcelUtils {
     private static void setCellStyle(Workbook workbook, Cell cell, CellStyle defaultCellStyle, Object data, String columnName) {
         short cellDateFormat = getCellDateFormat(workbook, data, columnName);
         if (cellDateFormat != -1) {
-            CellStyle cellStyle = createContentStyle(workbook);
+            CellStyle cellStyle = CellStyleTools.createContentStyle(workbook);
+            cellStyle.cloneStyleFrom(defaultCellStyle);
             cellStyle.setDataFormat(cellDateFormat);
             cell.setCellStyle(cellStyle);
         } else {
@@ -651,7 +653,33 @@ public class ExcelUtils {
             cell.setCellValue("");
             return;
         }
-        cell.setCellValue(String.valueOf(realValue));
+        if (realValue instanceof BigDecimal) {
+            cell.setCellValue(((BigDecimal) realValue).doubleValue());
+        } else {
+            cell.setCellValue(String.valueOf(realValue));
+        }
+    }
+
+    /**
+     * 设置单元格值
+     *
+     * @param workbook   工作簿对象
+     * @param cell       单元格
+     * @param data       数据行
+     * @param columnName 字段名
+     * @since v2.7.0
+     */
+    private static void setCellValue(Workbook workbook, Cell cell, Object data, String columnName) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {
+        Object realValue = getRealValue(data, columnName);
+        if (realValue == null) {
+            cell.setCellValue("");
+            return;
+        }
+        if (realValue instanceof BigDecimal) {
+            cell.setCellValue(((BigDecimal) realValue).doubleValue());
+        } else {
+            cell.setCellValue(String.valueOf(realValue));
+        }
     }
 
     /**
@@ -679,9 +707,10 @@ public class ExcelUtils {
             // 将属性值存入单元格
             return dateValue;
         } else if (realValue instanceof BigDecimal || realValue instanceof Float || realValue instanceof Double) {
-            return getRealValueForNumber(data, columnName, realValue);
+//            return getRealValueForNumber(data, columnName, realValue);
+            return new BigDecimal(realValue.toString());
         } else if (realValue instanceof Byte || realValue instanceof Short || realValue instanceof Integer || realValue instanceof Long) {
-            return new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP).longValue();
+            return new BigDecimal(realValue.toString()).setScale(0, BigDecimal.ROUND_HALF_UP);
         }
         return realValue.toString();
     }
@@ -879,164 +908,6 @@ public class ExcelUtils {
         // 设置hiddenSheet隐藏
         workbook.setSheetHidden(workbook.getSheetIndex(hideSheet), true);
         return sheet;
-    }
-
-    /**
-     * 设置表头列(单元格)样式
-     *
-     * @param workbook 工作簿对象
-     * @return
-     * @author 伍章红 2015年4月28日 ( 下午3:07:26 )
-     */
-    private static CellStyle createHeaderStyle(Workbook workbook) {
-        CellStyle cellStyle = createCellStyle(workbook);
-        // [v2.7.0]增加底色
-        // 填充方案：全部前景色
-        Short fillPatternCode = CellStyleTools.getHeaderStyleForFillPatternCode();
-        if (fillPatternCode != null) {
-            cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode));
-        }
-        // 设置前景色
-        Short fillForegroundColor = CellStyleTools.getHeaderStyleForFillForegroundColor();
-        if (fillForegroundColor != null) {
-            cellStyle.setFillForegroundColor(fillForegroundColor);
-        }
-        // 设置背景色
-        Short fillBackgroundColor = CellStyleTools.getHeaderStyleForFillBackgroundColor();
-        if (fillBackgroundColor != null) {
-            cellStyle.setFillBackgroundColor(fillBackgroundColor);
-        }
-        // 注：前景色/背景色不为空时，填充方案不可为空
-        if (fillPatternCode == null && (fillForegroundColor != null || fillBackgroundColor != null)) {
-            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        }
-
-        // 设置字体
-        Font font = workbook.createFont();
-        Short fontColor = CellStyleTools.getHeaderStyleForFontColor();
-        if (fontColor != null) {
-            font.setColor(fontColor); // Font.COLOR_RED
-        }
-        // 文本加粗
-        font.setBold(true);
-        font.setFontName(SystemPropertyUtils.getFontName());
-        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
-        cellStyle.setFont(font);
-        return cellStyle;
-    }
-
-    /**
-     * 设置表头列(单元格)样式：表头提示信息
-     *
-     * @param workbook 工作簿对象
-     * @return
-     */
-    public static CellStyle createHeaderStyleForTips(Workbook workbook) {
-        CellStyle cellStyle = workbook.createCellStyle();
-        // 内容左对齐 、垂直居中
-        cellStyle.setAlignment(HorizontalAlignment.LEFT);
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-        // [v2.7.0]增加底色
-        // 填充方案：全部前景色
-        Short fillPatternCode = Optional.ofNullable(CellStyleTools.getHeaderStyleTipsForFillPatternCode()).orElse(FillPatternType.SOLID_FOREGROUND.getCode());
-        cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode)); // FillPatternType.SOLID_FOREGROUND
-        // 设置前景色：默认黄色
-        Short fillForegroundColor = Optional.ofNullable(CellStyleTools.getHeaderStyleTipsForFillForegroundColor()).orElse(IndexedColors.YELLOW.getIndex());
-        cellStyle.setFillForegroundColor(fillForegroundColor); // IndexedColors.YELLOW.getIndex()
-        // 设置背景色：默认黄色
-        Short fillBackgroundColor = Optional.ofNullable(CellStyleTools.getHeaderStyleTipsForFillBackgroundColor()).orElse(IndexedColors.YELLOW.getIndex());
-        cellStyle.setFillBackgroundColor(fillBackgroundColor); // IndexedColors.YELLOW.getIndex()
-
-        // 设置字体
-        Font font = workbook.createFont();
-        Short fontColor = CellStyleTools.getHeaderStyleTipsForFontColor();
-        if (fontColor != null) {
-            font.setColor(fontColor); // Font.COLOR_RED
-        }
-        font.setBold(true);
-        font.setFontName(SystemPropertyUtils.getFontName());
-        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
-        cellStyle.setFont(font);
-        return cellStyle;
-    }
-
-    /**
-     * 设置表头列(单元格)样式：表头必填字段 - 红色提示
-     *
-     * @param workbook 工作簿对象
-     * @return
-     * @author 伍章红 2015年4月28日 ( 下午3:07:26 )
-     */
-    private static CellStyle createHeaderStyleForRequired(Workbook workbook) {
-        CellStyle cellStyle = createCellStyle(workbook);
-        // [v2.7.0]增加底色
-        // 填充方案：全部前景色
-        Short fillPatternCode = CellStyleTools.getHeaderStyleRequiredForFillPatternCode();
-        if (fillPatternCode != null) {
-            cellStyle.setFillPattern(FillPatternType.forInt(fillPatternCode)); // FillPatternType.SOLID_FOREGROUND.getCode()
-        }
-        // 设置前景色
-        Short fillForegroundColor = CellStyleTools.getHeaderStyleRequiredForFillForegroundColor();
-        if (fillForegroundColor != null) {
-            cellStyle.setFillForegroundColor(fillForegroundColor); // IndexedColors.YELLOW.getIndex()
-        }
-        // 设置背景色
-        Short fillBackgroundColor = CellStyleTools.getHeaderStyleRequiredForFillBackgroundColor();
-        if (fillBackgroundColor != null) {
-            cellStyle.setFillBackgroundColor(fillBackgroundColor); // IndexedColors.YELLOW.getIndex()
-        }
-        // 注：前景色/背景色不为空时，填充方案不可为空
-        if (fillPatternCode == null && (fillForegroundColor != null || fillBackgroundColor != null)) {
-            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        }
-
-        // 设置字体
-        Font font = workbook.createFont();
-        font.setColor(CellStyleTools.getHeaderStyleRequiredForFontColor()); // Font.COLOR_RED
-        // 文本加粗
-        font.setBold(true);
-        font.setFontName(SystemPropertyUtils.getFontName());
-        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
-        cellStyle.setFont(font);
-        return cellStyle;
-    }
-
-    /**
-     * 设置内容列(单元格)样式
-     *
-     * @param workbook 工作簿对象
-     * @return
-     * @author 伍章红 2015年4月28日 ( 下午3:07:26 )
-     */
-    private static CellStyle createContentStyle(Workbook workbook) {
-        CellStyle cellStyle = createCellStyle(workbook);
-
-        // 设置字体
-        Font font = workbook.createFont();
-        font.setColor(Font.COLOR_NORMAL);
-        font.setFontName(SystemPropertyUtils.getFontName());
-        font.setFontHeightInPoints(SystemPropertyUtils.getFontHeight());
-        cellStyle.setFont(font);
-        return cellStyle;
-    }
-
-    /**
-     * 设置数据列(单元格)样式
-     *
-     * @param workbook 工作簿对象
-     * @return
-     * @author 伍章红 2015年4月28日 ( 下午3:07:53 )
-     */
-    public static CellStyle createCellStyle(Workbook workbook) {
-        CellStyle cellStyle = workbook.createCellStyle();
-        // 内容居中对齐 、垂直居中
-        cellStyle.setAlignment(HorizontalAlignment.CENTER);
-        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
-//        cellStyle.setBorderTop(BorderStyle.THIN);
-//        cellStyle.setBorderLeft(BorderStyle.THIN);
-//        cellStyle.setBorderRight(BorderStyle.THIN);
-//        cellStyle.setBorderBottom(BorderStyle.THIN);
-        return cellStyle;
     }
 
     /**

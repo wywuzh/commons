@@ -15,17 +15,17 @@
  */
 package com.github.wywuzh.commons.core.poi.style;
 
-import com.alibaba.excel.write.handler.SheetWriteHandler;
-import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
-import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
-import com.github.wywuzh.commons.core.poi.ExcelUtils;
-import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
-
 import java.util.Map;
 
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+
+import com.alibaba.excel.write.handler.SheetWriteHandler;
+import com.alibaba.excel.write.metadata.holder.WriteSheetHolder;
+import com.alibaba.excel.write.metadata.holder.WriteWorkbookHolder;
+import com.github.wywuzh.commons.core.poi.ExcelUtils;
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
 
 /**
  * 类SheetValidationWriteHandler的实现描述：字段有效性验证(下拉列表)
@@ -86,7 +86,7 @@ public class SheetValidationWriteHandler implements SheetWriteHandler {
                 ExcelUtils.setValidation(workbook, sheet, columnComment, columnValidationData, 1, ExcelUtils.MAX_ROW, titleIndex, titleIndex);
 
                 // 默认该列为为文本格式
-                CellStyle cellStyleForText = ExcelUtils.createCellStyle(workbook);
+                CellStyle cellStyleForText = CellStyleTools.createCellStyle(workbook);
                 cellStyleForText.setDataFormat(ExcelUtils.getCellDateFormat(workbook, CellTypeEnum.String));
                 sheet.setDefaultColumnStyle(titleIndex, cellStyleForText);
             }
