@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,6 @@
  */
 package com.github.wywuzh.commons.core.poi;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.util.*;
-
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.junit.Test;
-
 import com.github.wywuzh.commons.core.json.jackson.JsonMapper;
 import com.github.wywuzh.commons.core.poi.annotation.ExcelCell;
 import com.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
@@ -32,7 +22,17 @@ import com.github.wywuzh.commons.core.poi.entity.User;
 import com.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
 import com.github.wywuzh.commons.core.poi.style.CellStyleTools;
 
+import java.io.*;
+import java.lang.reflect.Field;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.util.*;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.junit.Test;
 
 /**
  * 类ExcelUtilsTest的实现描述：Excel 工具
@@ -221,13 +221,15 @@ public class ExcelUtilsTest {
             disableCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
             disableCellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
             disableCellStyle.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-            /*// 自定义颜色：Color(217, 217, 217)，HEX=D9D9D9
-            XSSFColor xssfColor = new XSSFColor();
-            xssfColor.setRGB(new byte[] {
-                    (byte) 192, (byte) 192, (byte) 192
-            });
-            disableCellStyle.setFillForegroundColor(xssfColor.getIndex());
-            disableCellStyle.setFillBackgroundColor(xssfColor.getIndex());*/
+            /*
+             * // 自定义颜色：Color(217, 217, 217)，HEX=D9D9D9
+             * XSSFColor xssfColor = new XSSFColor();
+             * xssfColor.setRGB(new byte[] {
+             * (byte) 192, (byte) 192, (byte) 192
+             * });
+             * disableCellStyle.setFillForegroundColor(xssfColor.getIndex());
+             * disableCellStyle.setFillBackgroundColor(xssfColor.getIndex());
+             */
             // 内容列(单元格)样式(可编辑)
             CellStyle enableCellStyle = CellStyleTools.createContentStyle(workbook);
             List<String> enableColumns = Arrays.asList("昵称");
@@ -249,8 +251,10 @@ public class ExcelUtilsTest {
                 cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
                 cellStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
                 cellStyle.setFillBackgroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
-                /*cellStyle.setFillForegroundColor(xssfColor.getIndex());
-                cellStyle.setFillBackgroundColor(xssfColor.getIndex());*/
+                /*
+                 * cellStyle.setFillForegroundColor(xssfColor.getIndex());
+                 * cellStyle.setFillBackgroundColor(xssfColor.getIndex());
+                 */
                 cell.setCellStyle(cellStyle);
             }
 
