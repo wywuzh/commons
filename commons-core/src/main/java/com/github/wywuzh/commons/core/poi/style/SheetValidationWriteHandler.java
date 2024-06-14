@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class SheetValidationWriteHandler implements SheetWriteHandler {
                 ExcelUtils.setValidation(workbook, sheet, columnComment, columnValidationData, 1, ExcelUtils.MAX_ROW, titleIndex, titleIndex);
 
                 // 默认该列为为文本格式
-                CellStyle cellStyleForText = ExcelUtils.createCellStyle(workbook);
+                CellStyle cellStyleForText = CellStyleTools.createCellStyle(workbook);
                 cellStyleForText.setDataFormat(ExcelUtils.getCellDateFormat(workbook, CellTypeEnum.String));
                 sheet.setDefaultColumnStyle(titleIndex, cellStyleForText);
             }
