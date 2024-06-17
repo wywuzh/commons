@@ -59,7 +59,12 @@
             <version>${mybatis-plus.version}</version>
         </dependency>
 
-        <!-- MySQL 连接驱动依赖 -->
+        <!-- MySQL 连接驱动依赖：从8.0.31开始迁移至“com.mysql:mysql-connector-j:{version}” -->
+        <!--<dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>-->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
