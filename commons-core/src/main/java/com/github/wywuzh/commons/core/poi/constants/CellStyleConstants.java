@@ -79,8 +79,9 @@ public class CellStyleConstants {
     public static final String STYLE_FORMAT_String = "TEXT"; // 字符
     public static final String STYLE_FORMAT_Percent = "0.00%"; // 百分比
     public static final String STYLE_FORMAT_Integer = "0"; // 整型数值
-    public static final String STYLE_FORMAT_BigDecimal = "0.00"; // 2位小数
+    public static final String STYLE_FORMAT_BigDecimal = "0.00"; // 数值，保留2位小数
     public static final String STYLE_FORMAT_Money = "###,##0.00"; // 金额，保留2位小数
+    public static final String STYLE_FORMAT_Rate = "0.0000"; // 率，保留4位小数
     public static final String STYLE_FORMAT_Accounting = "_ * #,##0.00_ ;_ * -#,##0.00_ ;_ * \"-\"??_ ;_ @_ "; // 会计专用，保留2位小数
     public static final String STYLE_FORMAT_Date = "yyyy-MM-dd"; // 日期：yyyy-MM-dd格式
     public static final String STYLE_FORMAT_Time = "hh:mm:ss"; // 时间：HH:mm:ss格式

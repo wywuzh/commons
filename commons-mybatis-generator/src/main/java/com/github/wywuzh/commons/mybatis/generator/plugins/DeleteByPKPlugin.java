@@ -15,7 +15,6 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
@@ -70,7 +69,7 @@ import org.mybatis.generator.config.TableConfiguration;
  * @version v2.3.6
  * @since JDK 1.8
  */
-public class DeleteByPKPlugin extends BasePlugin {
+public class DeleteByPKPlugin extends AbstractPlugin {
 
     /**
      * 方法名
