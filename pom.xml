@@ -86,7 +86,7 @@
         -->
         <spring-framework.version>6.0.6</spring-framework.version>
         <spring_version>6.0.6</spring_version>
-        <spring-security.version>6.0.2</spring-security.version>
+        <spring-security.version>6.0.3</spring-security.version>
         <netty.version>4.1.89.Final</netty.version>
         <netty4_version>4.1.89.Final</netty4_version>
         <log4j2.version>2.19.0</log4j2.version>
