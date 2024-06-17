@@ -1,0 +1,24 @@
+/*升序*/
+.icon-standard-hmenu-asc {
+    background: url(http://www.easyui-extlib.com/Content/icons/icon-standard/16x16/hmenu-asc.gif) no-repeat center center;
+}
+/*降序*/
+.icon-standard-hmenu-desc {
+    background: url(http://www.easyui-extlib.com/Content/icons/icon-standard/16x16/hmenu-desc.gif) no-repeat center center;
+}
+/*显示/隐藏列*/
+.icon-standard-application-view-columns {
+    background: url(http://www.easyui-extlib.com/Content/icons/icon-standard/16x16/application-view-columns.png) no-repeat center center;
+}
+/*过滤/显示*/
+.icon-standard-application-view-list {
+    background: url(http://www.easyui-extlib.com/Content/icons/icon-standard/16x16/application-view-list.png) no-repeat center center;
+}
+/*显示/隐藏列-还原默认*/
+.icon-standard-application-view-tile {
+    background: url(http://www.easyui-extlib.com/Content/icons/icon-standard/16x16/application-view-tile.png) no-repeat center center;
+}
+/*过滤/显示-处理更多*/
+.icon-standard-application-view-detail {
+    background: url(http://www.easyui-extlib.com/Content/icons/icon-standard/16x16/application-view-detail.png) no-repeat center center;
+}

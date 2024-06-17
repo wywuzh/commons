@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package com.github.wywuzh.commons.core.poi.modle;
+
+import com.github.wywuzh.commons.core.poi.enums.CellTypeEnum;
 
 import java.io.Serializable;
 
@@ -40,6 +42,12 @@ public class ExcelCellField implements Serializable {
      */
     private Integer fieldLength;
 
+    /**
+     * 单元格列类型
+     *
+     * @since v2.7.8
+     */
+    private CellTypeEnum cellType;
     /**
      * 单元格列数据格式
      */
@@ -83,6 +91,14 @@ public class ExcelCellField implements Serializable {
 
     public void setFieldLength(Integer fieldLength) {
         this.fieldLength = fieldLength;
+    }
+
+    public CellTypeEnum getCellType() {
+        return cellType;
+    }
+
+    public void setCellType(CellTypeEnum cellType) {
+        this.cellType = cellType;
     }
 
     public String getFormat() {
