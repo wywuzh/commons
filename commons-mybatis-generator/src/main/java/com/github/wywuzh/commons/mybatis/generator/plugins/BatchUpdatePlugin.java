@@ -15,7 +15,6 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
 import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
 import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
 
@@ -60,7 +59,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * @see org.mybatis.generator.codegen.mybatis3.xmlmapper.elements.UpdateByPrimaryKeySelectiveElementGenerator
  * @since JDK 1.8
  */
-public class BatchUpdatePlugin extends BasePlugin {
+public class BatchUpdatePlugin extends AbstractPlugin {
     public static final String METHOD_BATCH_UPDATE = "batchUpdate";  // 方法名
     public static final String PRO_ALLOW_MULTI_QUERIES = "allowMultiQueries";   // property allowMultiQueries
     public static final String ENABLE_MERGE_INTO = "enableMergeInto"; // 是否启用merge into格式进行更新

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,13 @@ public class ExcelExportRequest implements Serializable {
      * 字段有效性验证：key=column字段，value=column字段下拉框列表数据（验证数据）
      */
     private Map<String, String[]> columnValidation;
+
+    /**
+     * 冻结窗格
+     *
+     * @since v2.7.8
+     */
+    private FreezePane freezePane;
 
     /**
      * 请求数据
@@ -115,6 +122,14 @@ public class ExcelExportRequest implements Serializable {
         this.columnValidation = columnValidation;
     }
 
+    public FreezePane getFreezePane() {
+        return freezePane;
+    }
+
+    public void setFreezePane(FreezePane freezePane) {
+        this.freezePane = freezePane;
+    }
+
     public Collection<?> getDataColl() {
         return dataColl;
     }
@@ -130,4 +145,5 @@ public class ExcelExportRequest implements Serializable {
     public void setTips(String tips) {
         this.tips = tips;
     }
+
 }
