@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ public class User {
     /**
      * 手机号
      */
-    @ExcelCell(value = "手机号", format = "000 0000 0000", index = 3)
+    @ExcelCell(value = "手机号", /* format = "### #### ####", */ index = 3)
     private String mobile;
     /**
      * 性别
@@ -66,7 +66,7 @@ public class User {
     /**
      * 资产
      */
-    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.Money, format = "$###,##0.00", index = 6)
+    @ExcelCell(value = "资产余额", cellType = CellTypeEnum.Money, /* format = "$###,##0.00", */ index = 6)
     private BigDecimal balance;
 
 }

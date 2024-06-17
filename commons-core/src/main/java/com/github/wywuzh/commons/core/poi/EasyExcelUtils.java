@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.github.wywuzh.commons.core.poi;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
+import com.alibaba.excel.write.handler.WorkbookWriteHandler;
+import com.alibaba.excel.write.handler.context.WorkbookWriteHandlerContext;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
@@ -40,6 +42,7 @@ import java.util.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -196,7 +199,22 @@ public class EasyExcelUtils {
                 // 自适应列宽
                 .registerWriteHandler(new ColumnWidthAdaptiveStyleStrategy(columnLengths))
                 // 自定义列样式
-                .registerWriteHandler(new VerticalCellStyleStrategy(columns, columnTitles, columnLengths, requiredColumnTitles, fieldTitleExcelCellMap));
+                .registerWriteHandler(new VerticalCellStyleStrategy(columns, columnTitles, columnLengths, requiredColumnTitles, fieldTitleExcelCellMap))
+                // 压缩临时文件
+                .registerWriteHandler(new WorkbookWriteHandler() {
+                    @Override
+                    public void afterWorkbookCreate(WorkbookWriteHandlerContext context) {
+                        // 获取到Workbook对象
+                        Workbook workbook = context.getWriteWorkbookHolder().getWorkbook();
+                        // 只有SXSSFWorkbook模式才会生成临时文件
+                        if (workbook instanceof SXSSFWorkbook) {
+                            SXSSFWorkbook sxssfWorkbook = (SXSSFWorkbook) workbook;
+                            // 设置临时文件压缩，当然这个会浪费cpu性能 但是临时文件会变小
+                            // 生成的临时文件格式会变为：poi-sxssf-sheet-xml{0000000}.gz
+                            sxssfWorkbook.setCompressTempFiles(true);
+                        }
+                    }
+                });
         WriteSheet writeSheet = excelWriterSheetBuilder.build();
 
         // 设置表头
@@ -302,6 +320,17 @@ public class EasyExcelUtils {
     }
 
     /**
+     * 关闭IO、清理临时文件
+     *
+     * @param excelWriter ExcelWriter对象
+     */
+    public static void finish(ExcelWriter excelWriter) {
+        // 关闭IO
+        // WriteContextImpl#finish(boolean) 方法会默认调用 ((SXSSFWorkbook)workbook).dispose(); 方法对POI的临时文件进行清理
+        excelWriter.finish();
+    }
+
+    /**
      * 将数据写出到目标文件
      *
      * @param destFile     目标文件
@@ -353,7 +382,7 @@ public class EasyExcelUtils {
         EasyExcelUtils.writeData(excelWriter, writeSheet, list, columns);
 
         // 4. 关闭IO
-        excelWriter.finish();
+        EasyExcelUtils.finish(excelWriter);
     }
 
 }
