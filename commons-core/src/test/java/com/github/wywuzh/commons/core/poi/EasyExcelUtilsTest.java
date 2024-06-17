@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -103,7 +103,10 @@ public class EasyExcelUtilsTest {
             // 3. 写入数据
             EasyExcelUtils.writeData(excelWriter, writeSheet, dataColl, columns);
             // 4. 关闭IO
-            excelWriter.finish();
+            // 注：ExcelBuilderImpl类的静态代码块中调用 FileUtils.createPoiFilesDirectory() 方法创建了临时文件目录，采用的是POI提供的DefaultTempFileCreationStrategy临时文件策略，临时文件会在JVM退出时才删除，因此我们需要通过调用 ((SXSSFWorkbook)
+            // workbook).dispose() 方法来清理临时文件
+            // WriteContextImpl#finish(boolean) 方法会默认调用 ((SXSSFWorkbook)workbook).dispose(); 方法对POI的临时文件进行清理
+            EasyExcelUtils.finish(excelWriter);
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
