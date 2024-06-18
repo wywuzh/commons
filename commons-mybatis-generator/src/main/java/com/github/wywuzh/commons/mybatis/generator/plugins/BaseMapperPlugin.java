@@ -15,8 +15,6 @@
  */
 package com.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.utils.BasePlugin;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,7 @@ import org.mybatis.generator.internal.util.StringUtility;
  * @version v2.1.1
  * @since JDK 1.8
  */
-public class BaseMapperPlugin extends BasePlugin {
+public class BaseMapperPlugin extends AbstractPlugin {
     private static final String DEFAULT_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseMapper";
     private static final String DEFAULT_DAO_SUPER_CLASS_NAME = "BaseMapper";
     private static final String DEFAULT_EXPAND_DAO_SUPER_CLASS = "com.github.wywuzh.commons.mybatis.generator.mapper.BaseExpandMapper";
