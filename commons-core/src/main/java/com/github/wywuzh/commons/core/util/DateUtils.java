@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,7 +108,7 @@ public class DateUtils {
      * @return
      */
     public static SimpleDateFormat getInstance(String pattern) {
-        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must be null");
+        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must not be null");
 
         SimpleDateFormat dateFormat = threadLocal.get();
         dateFormat.applyPattern(pattern);
@@ -122,7 +122,7 @@ public class DateUtils {
      * @return 返回“yyyy-MM-dd HH:mm:ss”格式字符串
      */
     public static String format(Date date) {
-        Assert.notNull(date, "[Assertion failed] - the date argument must be null");
+        Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
 
         return getInstance(PATTERN_DATE_TIME).format(date);
     }
@@ -139,8 +139,8 @@ public class DateUtils {
      * @return 返回“yyyy-MM-dd HH:mm:ss”格式字符串，如果传入时间为空，返回null
      */
     public static String format(Date date, String pattern) {
-        Assert.notNull(date, "[Assertion failed] - the date argument must be null");
-        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must be null");
+        Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
+        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must not be null");
 
         return getInstance(pattern).format(date);
     }
@@ -176,8 +176,8 @@ public class DateUtils {
      * @since v2.7.0
      */
     public static Date parse(String parseDate, String pattern, boolean quietly) {
-        Assert.notBlank(parseDate, "[Assertion failed] - the parseDate argument must be null");
-        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must be null");
+        Assert.notBlank(parseDate, "[Assertion failed] - the parseDate argument must not be null");
+        Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must not be null");
 
         Date date = null;
         try {
@@ -213,7 +213,7 @@ public class DateUtils {
      * @see Calendar#SECOND
      */
     public static Date addNumWithType(Date date, int fieldType, int num) {
-        Assert.notNull(date, "[Assertion failed] - the date argument must be null");
+        Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -228,7 +228,7 @@ public class DateUtils {
      * @return
      */
     public static Date getFirstDaily(Date daily) {
-        Assert.notNull(daily, "[Assertion failed] - the daily argument must be null");
+        Assert.notNull(daily, "[Assertion failed] - the daily argument must not be null");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(daily);
@@ -246,7 +246,7 @@ public class DateUtils {
      * @return
      */
     public static Date getFirstDaily(String daily) {
-        Assert.notBlank(daily, "[Assertion failed] - the daily argument must be null");
+        Assert.notBlank(daily, "[Assertion failed] - the daily argument must not be null");
 
         Date parse = parse(daily, PATTERN_DATE);
         if (parse == null) {
@@ -263,7 +263,7 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回0
      */
     public static long getFirstDailyTime(String daily) {
-        Assert.notBlank(daily, "[Assertion failed] - the daily argument must be null");
+        Assert.notBlank(daily, "[Assertion failed] - the daily argument must not be null");
 
         Date parse = parse(daily, PATTERN_DATE);
         if (parse == null) {
@@ -280,7 +280,7 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回0
      */
     public static long getFirstDailyTime(Date daily) {
-        Assert.notNull(daily, "[Assertion failed] - the daily argument must be null");
+        Assert.notNull(daily, "[Assertion failed] - the daily argument must not be null");
 
         Date firstDaily = getFirstDaily(daily);
         return (null == firstDaily) ? 0 : firstDaily.getTime();
@@ -293,7 +293,7 @@ public class DateUtils {
      * @return
      */
     public static Date getLastDaily(Date daily) {
-        Assert.notNull(daily, "[Assertion failed] - the daily argument must be null");
+        Assert.notNull(daily, "[Assertion failed] - the daily argument must not be null");
 
         Date firstDaily = getFirstDaily(daily);
         if (null == firstDaily) {
@@ -347,7 +347,7 @@ public class DateUtils {
      * @return
      */
     public static long getLastDailyTime(Date daily) {
-        Assert.notNull(daily, "[Assertion failed] - the daily argument must be null");
+        Assert.notNull(daily, "[Assertion failed] - the daily argument must not be null");
 
         Date lastDaily = getLastDaily(daily);
         return lastDaily == null ? 0 : lastDaily.getTime();
@@ -360,7 +360,7 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回空
      */
     public static Date getFirstMonthly(Date monthly) {
-        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must be null");
+        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must not be null");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(monthly);
@@ -412,7 +412,7 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回0
      */
     public static long getFirstMonthlyTime(Date monthly) {
-        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must be null");
+        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must not be null");
 
         Date firstMonthly = getFirstMonthly(monthly);
         return firstMonthly == null ? 0 : firstMonthly.getTime();
@@ -425,7 +425,7 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回null
      */
     public static Date getLastMonthly(Date monthly) {
-        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must be null");
+        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must not be null");
 
         Date firstMonthly = getFirstMonthly(monthly);
         if (null == firstMonthly) {
@@ -478,7 +478,7 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回0
      */
     public static long getLastMonthlyTime(Date monthly) {
-        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must be null");
+        Assert.notNull(monthly, "[Assertion failed] - the monthly argument must not be null");
 
         Date lastMonthly = getLastMonthly(monthly);
         return lastMonthly == null ? 0 : lastMonthly.getTime();
@@ -491,7 +491,7 @@ public class DateUtils {
      * @return 传入时间所在季度的第一天
      */
     public static Date getFirstQuarter(Date quarterly) {
-        Assert.notNull(quarterly, "[Assertion failed] - the date argument must be null");
+        Assert.notNull(quarterly, "[Assertion failed] - the date argument must not be null");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(quarterly);
@@ -522,7 +522,7 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回0
      */
     public static long getFirstQuarterTime(Date quarterly) {
-        Assert.notNull(quarterly, "[Assertion failed] - the date argument must be null");
+        Assert.notNull(quarterly, "[Assertion failed] - the date argument must not be null");
 
         Date firstQuarter = getFirstQuarter(quarterly);
 
@@ -536,7 +536,7 @@ public class DateUtils {
      * @return 传入时间所在季度的最后一天
      */
     public static Date getLastQuarter(Date quarterly) {
-        Assert.notNull(quarterly, "[Assertion failed] - the date argument must be null");
+        Assert.notNull(quarterly, "[Assertion failed] - the date argument must not be null");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(quarterly);
@@ -569,11 +569,58 @@ public class DateUtils {
      * @return 如果传入参数值为空，返回0
      */
     public static long getLastQuarterTime(Date quarterly) {
-        Assert.notNull(quarterly, "[Assertion failed] - the date argument must be null");
+        Assert.notNull(quarterly, "[Assertion failed] - the date argument must not be null");
 
         Date lastQuarter = getLastQuarter(quarterly);
 
         return null == lastQuarter ? 0 : lastQuarter.getTime();
+    }
+
+    /**
+     * 获取传入时间的所在年月
+     *
+     * @param date 时间
+     * @return 传入时间的所在年月
+     * @since v2.7.8
+     */
+    public static Date getCurrentYearMonth(Date date) {
+        Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.set(FIELD_DAY_OF_MONTH, 0);
+        calendar.set(FIELD_HOUR_OF_DAY, 0);
+        calendar.set(FIELD_MINUTE, 0);
+        calendar.set(FIELD_SECOND, 0);
+        calendar.set(FIELD_MILLISECOND, 0);
+
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取传入时间的上一年月
+     *
+     * @param date 时间
+     * @return 传入时间的\上一年月
+     * @since v2.7.8
+     */
+    public static Date getPreYearMonth(Date date) {
+        Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
+
+        return addNumWithType(getCurrentYearMonth(date), FIELD_MONTH, -1);
+    }
+
+    /**
+     * 获取传入时间的下一年月
+     *
+     * @param date 时间
+     * @return 传入时间的下一年月
+     * @since v2.7.8
+     */
+    public static Date getNextYearMonth(Date date) {
+        Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
+
+        return addNumWithType(getCurrentYearMonth(date), FIELD_MONTH, 1);
     }
 
     /**
@@ -635,8 +682,8 @@ public class DateUtils {
      * @since v2.5.2
      */
     public static Integer getDayInterval(Date startDate, Date endDate) {
-        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must be null");
-        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must be null");
+        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must not be null");
+        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must not be null");
 
         return getDayInterval(startDate, endDate, true);
     }
@@ -651,8 +698,8 @@ public class DateUtils {
      * @since v2.5.2
      */
     public static Integer getDayInterval(Date startDate, Date endDate, boolean includeCurrentDay) {
-        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must be null");
-        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must be null");
+        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must not be null");
+        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must not be null");
 
         int dayInterval = CalculationUtils.div(new BigDecimal(endDate.getTime() - startDate.getTime()), new BigDecimal(1000 * 3600 * 24)).abs().intValue();
         if (includeCurrentDay) {
@@ -670,8 +717,8 @@ public class DateUtils {
      * @since v2.5.2
      */
     public static Integer getMonthInterval(Date startDate, Date endDate) {
-        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must be null");
-        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must be null");
+        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must not be null");
+        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must not be null");
 
         return getMonthInterval(startDate, endDate, true);
     }
@@ -686,8 +733,8 @@ public class DateUtils {
      * @since v2.5.2
      */
     public static Integer getMonthInterval(Date startDate, Date endDate, boolean includeCurrentMonth) {
-        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must be null");
-        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must be null");
+        Assert.notNull(startDate, "[Assertion failed] - the startDate argument must not be null");
+        Assert.notNull(endDate, "[Assertion failed] - the endDate argument must not be null");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(startDate);
@@ -715,8 +762,8 @@ public class DateUtils {
      * @since v2.5.2
      */
     public static Integer getMonthInterval(String startYearMonth, String endYearMonth, boolean includeCurrentDay) {
-        Assert.notBlank(startYearMonth, "[Assertion failed] - the startYearMonth argument must be null");
-        Assert.notBlank(endYearMonth, "[Assertion failed] - the endYearMonth argument must be null");
+        Assert.notBlank(startYearMonth, "[Assertion failed] - the startYearMonth argument must not be null");
+        Assert.notBlank(endYearMonth, "[Assertion failed] - the endYearMonth argument must not be null");
 
         Date startDate = DateUtils.parse(startYearMonth, DateUtils.PATTERN_YYYY_MM);
         Assert.notNull(startDate, "数据格式有误，必须是yyyy-MM格式");
@@ -734,7 +781,7 @@ public class DateUtils {
      * @since v2.7.0
      */
     public static List<String> getMonthFullDay(String yearMonth) {
-        Assert.notBlank(yearMonth, "[Assertion failed] - the yearMonth argument must be null");
+        Assert.notBlank(yearMonth, "[Assertion failed] - the yearMonth argument must not be null");
 
         Date yearMonthDate = DateUtils.parse(yearMonth, DateUtils.PATTERN_YYYY_MM);
         Assert.notNull(yearMonthDate, "数据格式有误，必须是yyyy-MM格式");
@@ -749,7 +796,7 @@ public class DateUtils {
      * @since v2.7.0
      */
     public static List<String> getMonthFullDay(Date yearMonth) {
-        Assert.notNull(yearMonth, "[Assertion failed] - the yearMonth argument must be null");
+        Assert.notNull(yearMonth, "[Assertion failed] - the yearMonth argument must not be null");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(yearMonth);
