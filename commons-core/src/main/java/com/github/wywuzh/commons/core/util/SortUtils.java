@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2023 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ public class SortUtils {
         if (fieldNames == null || fieldNames.length == 0) {
             return data;
         }
-        ArrayList<Object> sortFields = new ArrayList<Object>();
+        List<Object> sortFields = new LinkedList<>();
         for (String fieldName : fieldNames) {
             Comparator comparator = ComparableComparator.getInstance();
             // 允许null
@@ -86,7 +86,7 @@ public class SortUtils {
         if (fieldNameMap == null || fieldNameMap.size() == 0) {
             return data;
         }
-        ArrayList<Object> sortFields = new ArrayList<Object>();
+        List<Object> sortFields = new LinkedList<>();
         for (Map.Entry<String, String> entry : fieldNameMap.entrySet()) {
             // 字段名
             String fieldName = entry.getKey();
