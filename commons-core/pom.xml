@@ -128,7 +128,7 @@
             <artifactId>guava</artifactId>
         </dependency>
 
-        <!-- Apache HttpClient -->
+        <!-- Apache HttpClient：Spring Boot 3.1移除了HttpClient 4的依赖管理，鼓励用户迁移到HttpClient 5 -->
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>

@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.0.7</version>
+        <version>3.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -60,8 +60,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
-        <revision>3.0.7.SNAPSHOT</revision>
-        <spring-boot.version>3.0.7</spring-boot.version>
+        <revision>3.1.0-SNAPSHOT</revision>
+        <spring-boot.version>3.1.0</spring-boot.version>
         <spring-cloud.version>2022.0.3</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
@@ -69,19 +69,19 @@
         -->
         <spring-framework.version>6.0.9</spring-framework.version>
         <spring_version>6.0.9</spring_version>
-        <spring-security.version>6.0.3</spring-security.version>
+        <spring-security.version>6.1.0</spring-security.version>
         <netty.version>4.1.92.Final</netty.version>
         <netty4_version>4.1.92.Final</netty4_version>
-        <log4j2.version>2.19.0</log4j2.version>
-        <log4j2_version>2.19.0</log4j2_version>
+        <log4j2.version>2.20.0</log4j2.version>
+        <log4j2_version>2.20.0</log4j2_version>
         <logback.version>1.4.7</logback.version>
         <logback_version>1.4.7</logback_version>
         <slf4j.version>2.0.7</slf4j.version>
         <slf4j_version>2.0.7</slf4j_version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <commons_lang3_version>3.12.0</commons_lang3_version>
-        <gson.version>2.9.1</gson.version>
-        <gson_version>2.9.1</gson_version>
+        <gson.version>2.10.1</gson.version>
+        <gson_version>2.10.1</gson_version>
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <javax_annotation-api_version>1.3.2</javax_annotation-api_version>
         <tomcat.version>10.1.8</tomcat.version>
@@ -177,8 +177,8 @@
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
         <flatten-maven-plugin.version>1.3.0</flatten-maven-plugin.version>
         <formatter-maven-plugin.version>2.21.0</formatter-maven-plugin.version>
-        <impsort-maven-plugin.version>1.6.2</impsort-maven-plugin.version>
-        <build-tools.version>1.2.7</build-tools.version>
+        <impsort-maven-plugin.version>1.8.0</impsort-maven-plugin.version>
+        <build-tools.version>1.3.0</build-tools.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
         <!-- Maven插件配置 -->
@@ -387,6 +387,44 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+
+            <!-- Apache HttpClient：Spring Boot 3.1移除了HttpClient 4的依赖管理，鼓励用户迁移到HttpClient 5。此处手动增加HttpClient 4 -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>fluent-hc</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>commons-logging</groupId>
+                        <artifactId>commons-logging</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-cache</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-osgi</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-win</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpmime</artifactId>
+                <version>${httpclient.version}</version>
             </dependency>
 
             <dependency>
