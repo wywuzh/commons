@@ -19,12 +19,12 @@
         <dependency>
             <groupId>com.github.wywuzh</groupId>
             <artifactId>commons-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>com.github.wywuzh</groupId>
             <artifactId>commons-pager</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
 
         <!-- Spring Boot Mybatis 依赖 -->

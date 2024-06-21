@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.github.wywuzh</groupId>
             <artifactId>commons-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
 
         <!-- Alibaba Dingtalk -->
