@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.wywuzh</groupId>
+    <groupId>io.github.wywuzh</groupId>
     <artifactId>commons-parent</artifactId>
     <version>${revision}</version>
     <name>commons</name>
@@ -182,6 +182,7 @@
         <build-tools.version>1.2.7</build-tools.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.5.0</central-publishing-maven-plugin.version>
         <!-- Maven插件配置 -->
         <formatter.configFile>eclipse_codeformat_4space.xml</formatter.configFile>
         <impsort.groups>au,com,de,java,javassist,javax,lombok,mockit,net,ognl,org</impsort.groups>
@@ -965,7 +966,7 @@
                             <version>${build-tools.version}</version>
                         </dependency>
                         <dependency>
-                            <groupId>com.github.wywuzh</groupId>
+                            <groupId>io.github.wywuzh</groupId>
                             <artifactId>commons-build-tools</artifactId>
                             <version>${revision}</version>
                         </dependency>
@@ -1009,6 +1010,19 @@
                         也可以删除：mvn nexus-staging:drop
                         -->
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <!-- sonatype中央仓库新发布流程插件 -->
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>${central-publishing-maven-plugin.version}</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                        <waitUntil>published</waitUntil>
+                        <deploymentName>${project.groupId}:${project.artifactId}:${project.version}</deploymentName>
                     </configuration>
                 </plugin>
             </plugins>
@@ -1118,6 +1132,34 @@
                 </snapshotRepository>
                 <repository>
                     <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>central-deploy</id>
+            <build>
+                <plugins>
+                    <!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <!-- sonatype中央仓库新发布流程插件 -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>central</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>central</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>
