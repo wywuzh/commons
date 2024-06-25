@@ -1,25 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Copyright 2015-2023 the original author or authors.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-         http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.wywuzh</groupId>
+    <groupId>io.github.wywuzh</groupId>
     <artifactId>commons-parent</artifactId>
     <version>${revision}</version>
     <name>commons</name>
@@ -64,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.8</version>
+        <version>2.7.18</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -72,68 +55,101 @@
         <!-- Maven默认识别 -->
         <skipTest>true</skipTest>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.locale>zh_CN</project.build.locale>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
 
-        <revision>2.7.8.SNAPSHOT</revision>
+        <revision>2.7.18.RELEASE</revision>
+        <spring-boot.version>2.7.18</spring-boot.version>
+        <spring-cloud.version>2021.0.8</spring-cloud.version>
 
-        <spring-cloud.version>2021.0.5</spring-cloud.version>
+        <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
+        1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
+        -->
+        <spring-framework.version>5.3.31</spring-framework.version>
+        <spring_version>5.3.31</spring_version>
+        <spring-security.version>5.7.11</spring-security.version>
+        <netty.version>4.1.101.Final</netty.version>
+        <netty4_version>4.1.101.Final</netty4_version>
+        <log4j2.version>2.17.2</log4j2.version>
+        <log4j2_version>2.17.2</log4j2_version>
+        <logback.version>1.2.12</logback.version>
+        <logback_version>1.2.12</logback_version>
+        <slf4j.version>1.7.36</slf4j.version>
+        <slf4j_version>1.7.36</slf4j_version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
+        <commons_lang3_version>3.12.0</commons_lang3_version>
+        <gson.version>2.9.1</gson.version>
+        <gson_version>2.9.1</gson_version>
+        <javax-annotation.version>1.3.2</javax-annotation.version>
+        <javax_annotation-api_version>1.3.2</javax_annotation-api_version>
+        <tomcat.version>9.0.83</tomcat.version>
+        <tomcat_embed_version>9.0.83</tomcat_embed_version>
+        <hibernate-validator.version>6.2.5.Final</hibernate-validator.version>
+        <hibernate_validator_new_version>6.2.5.Final</hibernate_validator_new_version>
+        <snakeyaml.version>1.30</snakeyaml.version>
+        <snakeyaml_version>1.30</snakeyaml_version>
+        <httpclient.version>4.5.14</httpclient.version>
+        <httpclient_version>4.5.14</httpclient_version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
         <log4j2.version>2.17.2</log4j2.version>
-        <logback.version>1.2.11</logback.version>
+        <logback.version>1.2.12</logback.version>
         <slf4j.version>1.7.36</slf4j.version>
-        <jackson-bom.version>2.13.4</jackson-bom.version>
+        <jackson-bom.version>2.13.5</jackson-bom.version>
         <commons-codec.version>1.15</commons-codec.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
-        <spring-kafka.version>2.8.10</spring-kafka.version>
+        <spring-kafka.version>2.8.11</spring-kafka.version>
         -->
 
         <json-lib.version>2.4</json-lib.version>
-        <fastjson.version>2.0.23</fastjson.version>
+        <fastjson.version>2.0.42</fastjson.version>
+        <fastjson2_version>2.0.42</fastjson2_version>
         <dom4j.version>2.1.3</dom4j.version>
 
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-compress.version>1.22</commons-compress.version>
+        <commons-compress.version>1.25.0</commons-compress.version>
+        <commons_compress_version>1.25.0</commons_compress_version>
         <commons-configuration.version>1.10</commons-configuration.version>
-        <commons-configuration2.version>2.8.0</commons-configuration2.version>
+        <commons-configuration2.version>2.9.0</commons-configuration2.version>
         <commons-io.version>2.11.0</commons-io.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <commons-validator.version>1.7</commons-validator.version>
         <commons-net.version>3.8.0</commons-net.version>
         <jsch.version>0.1.55</jsch.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.1.3-jre</guava.version>
 
         <commons-fileupload.version>1.4</commons-fileupload.version>
-        <apache-poi.version>5.2.3</apache-poi.version>
+        <apache-poi.version>5.2.5</apache-poi.version>
         <easyexcel.version>3.1.5</easyexcel.version>
         <google-zxing.version>3.5.1</google-zxing.version>
         <ma.glasnost.orika.version>1.5.4</ma.glasnost.orika.version>
-        <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
-        <hutool.version>5.8.11</hutool.version>
+        <hutool.version>5.8.23</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
         <apollo-client.version>1.9.2</apollo-client.version>
+        <apollo_client_version>1.9.2</apollo_client_version>
 
         <commons-dbutils.version>1.7</commons-dbutils.version>
-        <mybatis-spring-boot.version>2.2.2</mybatis-spring-boot.version>
+        <mybatis-spring-boot.version>2.3.1</mybatis-spring-boot.version>
         <mybatis-generator-core.version>1.3.7</mybatis-generator-core.version>
         <mybatis-generator-plugin.version>1.3.8</mybatis-generator-plugin.version>
-        <pagehelper-spring-boot.version>1.4.6</pagehelper-spring-boot.version>
+        <pagehelper-spring-boot.version>1.4.7</pagehelper-spring-boot.version>
         <mybatis-plus.version>3.5.3.1</mybatis-plus.version>
-        <druid.version>1.2.15</druid.version>
+        <druid.version>1.2.20</druid.version>
 
         <!-- 注：curator、hessian、hessian-lite 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
         <curator_version>4.2.0</curator_version>
         <hessian_version>4.0.38</hessian_version>
         <hessian_lite_version>3.2.13</hessian_lite_version>
-        <dubbo.version>3.1.5</dubbo.version>
-        <shiro.version>1.11.0</shiro.version>
+        <dubbo.version>3.2.9</dubbo.version>
+        <shiro.version>1.12.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>2.0.0</alibaba-dingtalk-service-sdk.version>
 
@@ -159,13 +175,14 @@
 
         <!-- Maven插件 -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
-        <flatten-maven-plugin.version>1.2.7</flatten-maven-plugin.version>
+        <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
         <!-- 格式化源代码插件：Stay with 2.16.0 for jdk 8 support for time being -->
         <formatter-maven-plugin.version>2.16.0</formatter-maven-plugin.version>
         <impsort-maven-plugin.version>1.6.2</impsort-maven-plugin.version>
         <build-tools.version>1.2.7</build-tools.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.5.0</central-publishing-maven-plugin.version>
         <!-- Maven插件配置 -->
         <formatter.configFile>eclipse_codeformat_4space.xml</formatter.configFile>
         <impsort.groups>au,com,de,java,javassist,javax,lombok,mockit,net,ognl,org</impsort.groups>
@@ -234,6 +251,30 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-framework-bom</artifactId>
+                <version>${spring-framework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Security -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>${spring-security.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Spring Boot -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <!-- Spring Cloud -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
@@ -243,6 +284,13 @@
                 <scope>import</scope>
             </dependency>
             <!-- Apache Dubbo  -->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
             <dependency>
                 <groupId>org.apache.dubbo</groupId>
                 <artifactId>dubbo-dependencies-bom</artifactId>
@@ -918,7 +966,7 @@
                             <version>${build-tools.version}</version>
                         </dependency>
                         <dependency>
-                            <groupId>com.github.wywuzh</groupId>
+                            <groupId>io.github.wywuzh</groupId>
                             <artifactId>commons-build-tools</artifactId>
                             <version>${revision}</version>
                         </dependency>
@@ -962,6 +1010,19 @@
                         也可以删除：mvn nexus-staging:drop
                         -->
                         <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    </configuration>
+                </plugin>
+                <!-- sonatype中央仓库新发布流程插件 -->
+                <plugin>
+                    <groupId>org.sonatype.central</groupId>
+                    <artifactId>central-publishing-maven-plugin</artifactId>
+                    <version>${central-publishing-maven-plugin.version}</version>
+                    <extensions>true</extensions>
+                    <configuration>
+                        <publishingServerId>central</publishingServerId>
+                        <autoPublish>true</autoPublish>
+                        <waitUntil>published</waitUntil>
+                        <deploymentName>io.github.wywuzh:commons-parent:${project.version}</deploymentName>
                     </configuration>
                 </plugin>
             </plugins>
@@ -1071,6 +1132,34 @@
                 </snapshotRepository>
                 <repository>
                     <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+
+        <profile>
+            <id>central-deploy</id>
+            <build>
+                <plugins>
+                    <!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                    <!-- sonatype中央仓库新发布流程插件 -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>central</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>central</id>
                     <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
                 </repository>
             </distributionManagement>

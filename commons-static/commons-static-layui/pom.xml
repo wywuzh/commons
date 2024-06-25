@@ -1,21 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-
-    Copyright 2015-2023 the original author or authors.
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-         http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -23,10 +6,12 @@
     <artifactId>commons-static-layui</artifactId>
     <name>commons :: static :: Layui</name>
     <packaging>jar</packaging>
-    <description>layui ok-admin v2.0 后台模板，一款基于Layui框架的轻量级扁平化且完全免费开源的网站后台管理系统模板。https://gitee.com/bobi1234/ok-admin</description>
+    <description>layui ok-admin v2.0
+        后台模板，一款基于Layui框架的轻量级扁平化且完全免费开源的网站后台管理系统模板。https://gitee.com/bobi1234/ok-admin
+    </description>
 
     <parent>
-        <groupId>com.github.wywuzh</groupId>
+        <groupId>io.github.wywuzh</groupId>
         <artifactId>commons-static</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -34,9 +19,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.wywuzh</groupId>
+            <groupId>io.github.wywuzh</groupId>
             <artifactId>commons-core</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
