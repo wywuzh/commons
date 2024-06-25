@@ -9,7 +9,7 @@
     <description>mybatis-generator代码自动生成插件</description>
 
     <parent>
-        <groupId>com.github.wywuzh</groupId>
+        <groupId>io.github.wywuzh</groupId>
         <artifactId>commons-parent</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -17,12 +17,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.wywuzh</groupId>
+            <groupId>io.github.wywuzh</groupId>
             <artifactId>commons-core</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.wywuzh</groupId>
+            <groupId>io.github.wywuzh</groupId>
             <artifactId>commons-pager</artifactId>
             <version>${revision}</version>
         </dependency>
