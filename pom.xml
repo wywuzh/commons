@@ -60,7 +60,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
 
-        <revision>2.7.18.SNAPSHOT</revision>
+        <revision>2.7.18.RELEASE</revision>
         <spring-boot.version>2.7.18</spring-boot.version>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
 
