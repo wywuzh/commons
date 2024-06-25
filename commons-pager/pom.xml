@@ -9,7 +9,7 @@
     <url>http://git.oschina.net/wywuzh/commons</url>
 
     <parent>
-        <groupId>com.github.wywuzh</groupId>
+        <groupId>io.github.wywuzh</groupId>
         <artifactId>commons-parent</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>

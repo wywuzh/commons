@@ -11,7 +11,7 @@
     <url>http://git.oschina.net/wywuzh/commons</url>
 
     <parent>
-        <groupId>com.github.wywuzh</groupId>
+        <groupId>io.github.wywuzh</groupId>
         <artifactId>commons-parent</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -19,12 +19,12 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.wywuzh</groupId>
+            <groupId>io.github.wywuzh</groupId>
             <artifactId>commons-core</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.wywuzh</groupId>
+            <groupId>io.github.wywuzh</groupId>
             <artifactId>commons-pager</artifactId>
             <version>${revision}</version>
         </dependency>
