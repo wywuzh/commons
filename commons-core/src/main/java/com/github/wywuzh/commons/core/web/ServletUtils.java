@@ -15,19 +15,20 @@
  */
 package com.github.wywuzh.commons.core.web;
 
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.Validate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * 类ServletUtils的实现描述：TODO 类实现描述
@@ -37,6 +38,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @since JDK 1.8
  */
 public class ServletUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
 
     /**
      * 获取当前请求对象
@@ -47,14 +49,14 @@ public class ServletUtils {
     public static HttpServletRequest getRequest() {
         HttpServletRequest request = null;
         try {
-            request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            if (request == null) {
-                return null;
+            if (RequestContextHolder.currentRequestAttributes() != null) {
+                request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             }
-            return request;
         } catch (Exception e) {
+            logger.error("通过RequestContextHolder.currentRequestAttributes()获取request失败：", e);
             return null;
         }
+        return request;
     }
 
     /**
@@ -66,11 +68,11 @@ public class ServletUtils {
     public static HttpServletResponse getResponse() {
         HttpServletResponse response = null;
         try {
-            response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-            if (response == null) {
-                return null;
+            if (RequestContextHolder.currentRequestAttributes() != null) {
+                response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
             }
         } catch (Exception e) {
+            logger.error("通过RequestContextHolder.currentRequestAttributes()获取response失败：", e);
             return null;
         }
         return response;
@@ -166,7 +168,7 @@ public class ServletUtils {
                 String unprefixed = paramName.substring(pre.length());
                 String[] values = request.getParameterValues(paramName);
                 if (values == null || values.length == 0) {
-                    values = new String[] {};
+                    values = new String[]{};
                     // Do nothing, no values found at all.
                 } else if (values.length > 1) {
                     params.put(unprefixed, values);
