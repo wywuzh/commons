@@ -26,7 +26,7 @@
     <description>AdminLTE模板</description>
 
     <parent>
-        <groupId>com.github.wywuzh</groupId>
+        <groupId>io.github.wywuzh</groupId>
         <artifactId>commons-static</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
