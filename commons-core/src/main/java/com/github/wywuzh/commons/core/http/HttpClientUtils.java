@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2022 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import com.github.wywuzh.commons.core.json.gson.GsonUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -31,6 +32,8 @@ import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.http.*;
@@ -49,6 +52,7 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -272,7 +276,7 @@ public class HttpClientUtils {
     }
 
     /**
-     * POST请求数据
+     * POST请求数据(form表单)
      *
      * @param uri    请求URI地址
      * @param params 请求参数
@@ -286,7 +290,7 @@ public class HttpClientUtils {
     }
 
     /**
-     * POST请求数据
+     * POST请求数据(form表单)
      *
      * @param uri    请求URI地址
      * @param param  请求参数
@@ -301,7 +305,7 @@ public class HttpClientUtils {
     }
 
     /**
-     * POST请求数据
+     * POST请求数据(form表单)
      *
      * @param uri     请求URI地址
      * @param param   请求参数
@@ -317,7 +321,7 @@ public class HttpClientUtils {
     }
 
     /**
-     * POST请求数据
+     * POST请求数据(form表单)
      *
      * @param uri     请求URI地址
      * @param param   请求参数
@@ -352,29 +356,30 @@ public class HttpClientUtils {
             }
             httpPost.setHeaders(headers);
         }
+        httpPost.addHeader("Content-type", "application/x-www-form-urlencoded; charset=utf-8");
         return httpClientSender.doRequest(httpPost);
     }
 
     /**
-     * POST请求数据
+     * POST请求数据(json)
      *
-     * @param uri     请求URI地址
-     * @param param   请求参数
-     * @param header  header参数
-     * @param charset 字符集
+     * @param uri      请求URI地址
+     * @param postData 请求参数
+     * @param header   header参数
+     * @param charset  字符集
      * @return
      * @since v2.3.8
      */
-    public static ResponseMessage doPost(String uri, Object param, Map<String, String> header, Charset charset) {
+    public static ResponseMessage doPostJson(String uri, Object postData, Map<String, String> header, Charset charset) {
         Assert.notNull(uri, "uri must not be null");
         Assert.notNull(charset, "charset must not be null");
 
         HttpPost httpPost = new HttpPost(uri);
 
         // 请求参数
-        if (null != param) {
-            String json = GsonUtil.format(param);
-            httpPost.setEntity(new StringEntity(json, charset));
+        if (null != postData) {
+            String postDataJson = GsonUtil.format(postData);
+            httpPost.setEntity(new StringEntity(postDataJson, charset));
         }
 
         // header参数
@@ -387,6 +392,105 @@ public class HttpClientUtils {
             }
             httpPost.setHeaders(headers);
         }
+        return httpClientSender.doRequest(httpPost);
+    }
+
+    /**
+     * POST请求数据(json)
+     *
+     * @param uri          请求URI地址
+     * @param postDataJson 请求参数
+     * @param header       header参数
+     * @param charset      字符集
+     * @return
+     * @since v2.3.8
+     */
+    public static ResponseMessage doPostJson(String uri, String postDataJson, Map<String, String> header, Charset charset) {
+        Assert.notNull(uri, "uri must not be null");
+        Assert.notNull(charset, "charset must not be null");
+
+        HttpPost httpPost = new HttpPost(uri);
+
+        // 请求参数
+        if (null != postDataJson) {
+            httpPost.setEntity(new StringEntity(postDataJson, charset));
+        }
+
+        // header参数
+        if (null != header && header.size() > 0) {
+            Header[] headers = new Header[header.size()];
+            int index = 0;
+            for (String key : header.keySet()) {
+                headers[index] = new BasicHeader(key, header.get(key));
+                index++;
+            }
+            httpPost.setHeaders(headers);
+        }
+        return httpClientSender.doRequest(httpPost);
+    }
+
+    /**
+     * POST请求数据(form上传文件)
+     *
+     * @param uri      请求URI地址
+     * @param formData 请求参数
+     * @param file     form Post 文件
+     * @return
+     * @since v3.0.2
+     */
+    public static ResponseMessage doPostFileForm(String uri, Map<String, String> formData, File file) {
+        try (InputStream inputStream = FileUtils.openInputStream(file)) {
+            String fileName = file.getName();
+            return doPostFileForm(uri, formData, inputStream, fileName, "file");
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * POST请求数据(form上传文件)
+     *
+     * @param uri            请求URI地址
+     * @param formData       请求参数
+     * @param inputStream    form Post 文件流
+     * @param fileSourceName form Post 文件名，需带文件后缀
+     * @return
+     * @since v3.0.2
+     */
+    public static ResponseMessage doPostFileForm(String uri, Map<String, String> formData, InputStream inputStream, String fileSourceName) {
+        return doPostFileForm(uri, formData, inputStream, fileSourceName, "file");
+    }
+
+    /**
+     * POST请求数据(form上传文件)
+     *
+     * @param uri            请求URI地址
+     * @param formData       请求参数
+     * @param inputStream    form Post 文件流
+     * @param fileSourceName form Post 文件名，需带文件后缀
+     * @param fileParamName  form Post 文件参数名，通常为file
+     * @return
+     * @since v3.0.2
+     */
+    public static ResponseMessage doPostFileForm(String uri, Map<String, String> formData, InputStream inputStream, String fileSourceName, String fileParamName) {
+        Assert.notNull(uri, "uri must not be null");
+
+        HttpPost httpPost = new HttpPost(uri);
+
+        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+        // 设置浏览器兼容模式
+        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+        // 设置请求的编码格式
+        builder.setCharset(Consts.UTF_8);
+        builder.setContentType(org.apache.http.entity.ContentType.MULTIPART_FORM_DATA);
+        builder.addBinaryBody(fileParamName, inputStream, org.apache.http.entity.ContentType.MULTIPART_FORM_DATA, fileSourceName);
+        if (MapUtils.isNotEmpty(formData)) {
+            for (Map.Entry<String, String> entry : formData.entrySet()) {
+                builder.addPart(entry.getKey(), new StringBody(entry.getValue(), org.apache.http.entity.ContentType.MULTIPART_FORM_DATA));
+            }
+        }
+        httpPost.setEntity(builder.build());
         return httpClientSender.doRequest(httpPost);
     }
 
@@ -701,8 +805,15 @@ public class HttpClientUtils {
 
         // 设置全局的标准cookie策略
         RequestConfig config = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT).setExpectContinueEnabled(true)
-                .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
-                .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
+                .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
+                // 设置连接超时为30秒，单位为毫秒
+                // tips: 连接超时是指HttpClient在建立与远程服务器的连接时等待的时间。如果在这个时间内无法建立连接，HttpClient将抛出异常。连接超时通常用于控制网络延迟较高或服务器响应较慢的情况
+                .setConnectTimeout(30 * 1000)
+                // 设置读取超时为30秒，单位为毫秒
+                // tips: 读取超时是指HttpClient在读取服务器响应时等待的时间。如果在这个时间内无法读取到完整的响应，HttpClient将抛出异常。读取超时通常用于控制服务器处理请求的时间过长或网络传输速度较慢的情况
+                .setSocketTimeout(30 * 1000)
+                // 设置从连接池中获取连接的超时为10秒，单位为毫秒
+                .setConnectionRequestTimeout(10 * 1000).build();
         // 创建可用Scheme
         Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
                 .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
@@ -758,8 +869,15 @@ public class HttpClientUtils {
         public HttpClientSender() {
             // 设置全局的标准cookie策略
             requestConfig = RequestConfig.custom().setCookieSpec(CookieSpecs.STANDARD_STRICT).setExpectContinueEnabled(true)
-                    .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
-                    .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
+                    .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC))
+                    // 设置连接超时为30秒，单位为毫秒
+                    // tips: 连接超时是指HttpClient在建立与远程服务器的连接时等待的时间。如果在这个时间内无法建立连接，HttpClient将抛出异常。连接超时通常用于控制网络延迟较高或服务器响应较慢的情况
+                    .setConnectTimeout(30 * 1000)
+                    // 设置读取超时为30秒，单位为毫秒
+                    // tips: 读取超时是指HttpClient在读取服务器响应时等待的时间。如果在这个时间内无法读取到完整的响应，HttpClient将抛出异常。读取超时通常用于控制服务器处理请求的时间过长或网络传输速度较慢的情况
+                    .setSocketTimeout(30 * 1000)
+                    // 设置从连接池中获取连接的超时为10秒，单位为毫秒
+                    .setConnectionRequestTimeout(10 * 1000).build();
             // 创建可用Scheme
             Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
                     .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
