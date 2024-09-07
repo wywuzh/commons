@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2023 the original author or authors.
+ * Copyright 2015-2024 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -37,6 +39,7 @@ import jakarta.servlet.http.HttpServletResponse;
  * @since JDK 1.8
  */
 public class ServletUtils {
+    private static final Logger logger = LoggerFactory.getLogger(ServletUtils.class);
 
     /**
      * 获取当前请求对象
@@ -47,14 +50,14 @@ public class ServletUtils {
     public static HttpServletRequest getRequest() {
         HttpServletRequest request = null;
         try {
-            request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
-            if (request == null) {
-                return null;
+            if (RequestContextHolder.currentRequestAttributes() != null) {
+                request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
             }
-            return request;
         } catch (Exception e) {
+            logger.error("通过RequestContextHolder.currentRequestAttributes()获取request失败：", e);
             return null;
         }
+        return request;
     }
 
     /**
@@ -66,11 +69,11 @@ public class ServletUtils {
     public static HttpServletResponse getResponse() {
         HttpServletResponse response = null;
         try {
-            response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
-            if (response == null) {
-                return null;
+            if (RequestContextHolder.currentRequestAttributes() != null) {
+                response = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getResponse();
             }
         } catch (Exception e) {
+            logger.error("通过RequestContextHolder.currentRequestAttributes()获取response失败：", e);
             return null;
         }
         return response;
