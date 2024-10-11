@@ -11,7 +11,7 @@
     </description>
 
     <parent>
-        <groupId>com.github.wywuzh</groupId>
+        <groupId>io.github.wywuzh</groupId>
         <artifactId>commons-static</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
@@ -19,7 +19,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.wywuzh</groupId>
+            <groupId>io.github.wywuzh</groupId>
             <artifactId>commons-core</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
