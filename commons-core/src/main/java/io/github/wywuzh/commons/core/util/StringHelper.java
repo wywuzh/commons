@@ -31,8 +31,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.wywuzh.commons.core.json.gson.GsonUtil;
-
 /**
  * 类StringHelper.java的实现描述：字符串
  *
@@ -52,7 +50,7 @@ public class StringHelper {
      * StringHelper.getZeroString(5) = "00000"
      * </pre>
      *
-     * @param length
+     * @param length 指定length长度
      * @return
      */
     public static String getZeroString(final int length) {
@@ -585,25 +583,36 @@ public class StringHelper {
         return length;
     }
 
-    public static void main(String[] args) {
-        System.out.println(fillZero(3, 2L));
-
-        System.out.println(spellToStr(3, "t"));
-
-        System.out.println(spellToStr(3, "?", ","));
-
-        System.out.println(GsonUtil.format(spellToArray(2, "t")));
-
-        System.out.println(GsonUtil.format(spellToList(2, "?")));
-
-        // 将数据库字段按照驼峰命名规则转换为实体类字段
-        String columnName = "USER_ID";
-        String field = convertToField(columnName);
-        System.out.println("convertToField方法：" + columnName + " ===> " + field);
-
-        // 将驼峰命名规则的实体类字段转换为数据库字段
-        String column = convertToColumn(field);
-        System.out.println("convertToField方法：" + field + " ===> " + column);
+    /**
+     * 计算文本长度
+     *
+     * <pre>
+     *  [\u4e00-\u9fa5]说明：
+     *  1.这两个Unicode值正好是Unicode表中的汉字的头和尾
+     *  2."[]"代表里边的值出现一个就可以
+     * </pre>
+     *
+     * @param value
+     * @return
+     * @author 伍章红 2015年4月28日 ( 下午3:10:32 )
+     * @deprecated 已废弃，请使用 {@link StringHelper#length(String)} 方法
+     */
+    @Deprecated
+    public static int stringRealLength(String value) {
+        if (value == null) {
+            return 0;
+        }
+        int valueLength = 0;
+        String chinese = "[\u4e00-\u9fa5]";
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (String.valueOf(c).matches(chinese)) {
+                valueLength += 2;
+            } else {
+                valueLength += 1;
+            }
+        }
+        return valueLength;
     }
 
 }

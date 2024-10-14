@@ -15,29 +15,6 @@
  */
 package io.github.wywuzh.commons.core.poi;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.MessageFormat;
-import java.text.NumberFormat;
-import java.util.*;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-
 import io.github.wywuzh.commons.core.common.ContentType;
 import io.github.wywuzh.commons.core.math.CalculationUtils;
 import io.github.wywuzh.commons.core.poi.annotation.ExcelCell;
@@ -53,6 +30,28 @@ import io.github.wywuzh.commons.core.util.SortUtils;
 import io.github.wywuzh.commons.core.util.StringHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.util.*;
 
 /**
  * 类ExcelUtils的实现描述：Excel 工具
@@ -865,12 +864,12 @@ public class ExcelUtils {
         }
         // 参考地址：https://www.cnblogs.com/zouhao/p/11346243.html
         // 创建sheet，写入枚举项
-        /*
-         * int sheets = workbook.getNumberOfSheets();
-         * String prefixName = StringUtils.join(columnTitle, StaConstants.SEPARATE_UNDERLINE, sheets);
-         * Sheet hideSheet = workbook.createSheet(prefixName + "_hiddenSheet");
-         */
-        String prefixName = columnTitle;
+        // 隐藏sheet特殊字符处理
+        String prefixName = StringUtils.replaceEach(columnTitle, new String[] {
+                "-", "/", "\\", "?", "*", "[", "]", ":"
+        }, new String[] {
+                "", "", "", "", "", "", "", ""
+        });
         // 已经创建了隐藏sheet，直接使用原来的就行
         Sheet hideSheet = workbook.getSheet(prefixName + "_hiddenSheet");
         if (hideSheet != null) {
@@ -907,38 +906,6 @@ public class ExcelUtils {
         // 设置hiddenSheet隐藏
         workbook.setSheetHidden(workbook.getSheetIndex(hideSheet), true);
         return sheet;
-    }
-
-    /**
-     * 计算文本长度
-     *
-     * <pre>
-     *  [\u4e00-\u9fa5]说明：
-     *  1.这两个Unicode值正好是Unicode表中的汉字的头和尾
-     *  2."[]"代表里边的值出现一个就可以
-     * </pre>
-     *
-     * @param value
-     * @return
-     * @author 伍章红 2015年4月28日 ( 下午3:10:32 )
-     * @deprecated 已废弃，请使用 {@link StringHelper#length(String)} 方法
-     */
-    @Deprecated
-    private static int stringRealLength(String value) {
-        if (value == null) {
-            return 0;
-        }
-        int valueLength = 0;
-        String chinese = "[\u4e00-\u9fa5]";
-        for (int i = 0; i < value.length(); i++) {
-            char c = value.charAt(i);
-            if (String.valueOf(c).matches(chinese)) {
-                valueLength += 2;
-            } else {
-                valueLength += 1;
-            }
-        }
-        return valueLength;
     }
 
     /**

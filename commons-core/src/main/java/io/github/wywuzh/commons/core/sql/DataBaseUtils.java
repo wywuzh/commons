@@ -39,7 +39,16 @@ public class DataBaseUtils {
         if (dataSource == null) {
             return null;
         }
-        return new DataBase(dataSource.getConnection());
+        Connection connection = null;
+        try {
+            connection = dataSource.getConnection();
+            return new DataBase(connection);
+        } catch (SQLException e) {
+            log.error(e.getMessage(), e);
+            throw e;
+        } finally {
+            close(connection);
+        }
     }
 
     /**
