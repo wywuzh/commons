@@ -1,4 +1,8 @@
 ## 更新日志
+### SpringBoot/v3.2.0
+1. 工具包根目录统一调整为`io.github.wywuzh`，与groupId保持一致。若仍然打算使用`com.github.wywuzh`目录，请使用`v3.2.0`以下的包
+
+
 ### SpringBoot/v2.7.5
 1. MySQL驱动由`mysql:mysql-connector-java`迁移至`com.mysql:mysql-connector-j`。注：`spring-boot-dependencies`官方从`2.7.5`版本开始引入`com.mysql:mysql-connector-j`依赖包，`2.7.8`版本彻底移除掉了`mysql:mysql-connector-java`依赖包，为便于使用`com.mysql:mysql-connector-j`依赖包，`commons-mybatis`模块从`2.7.5`版本开始切换
 
