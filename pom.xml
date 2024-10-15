@@ -71,7 +71,7 @@
         <spring_version>6.0.14</spring_version>
         <spring-security.version>6.1.5</spring-security.version>
         <netty.version>4.1.101.Final</netty.version>
-        <netty4_version>4.1.100.Final</netty4_version>
+        <netty4_version>4.1.101.Final</netty4_version>
         <log4j2.version>2.20.0</log4j2.version>
         <log4j2_version>2.20.0</log4j2_version>
         <logback.version>1.4.11</logback.version>
@@ -133,8 +133,8 @@
         <jep.version>2.24</jep.version>
         <hutool.version>5.8.23</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
-        <apollo-client.version>1.9.2</apollo-client.version>
-        <apollo_client_version>1.9.2</apollo_client_version>
+        <apollo-client.version>2.1.0</apollo-client.version>
+        <apollo_client_version>2.1.0</apollo_client_version>
 
         <commons-dbutils.version>1.7</commons-dbutils.version>
         <mybatis-spring-boot.version>3.0.3</mybatis-spring-boot.version>
