@@ -35,14 +35,14 @@
             <property name="allowMultiQueries" value="false"/>
         </plugin>
         <!-- 自定义查询插件 -->
-        <plugin type="com.github.wywuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin">
+        <plugin type="io.github.wywuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin">
             <!-- 物理删除字段 -->
             <property name="physicalDeleteField" value="is_delete"/>
             <!-- 排除数据sql，即剔除已删除数据的sql -->
             <property name="excludeDeletedSql" value="is_delete = 0"/>
         </plugin>
         <!-- 根据主键删除数据。注：在plugin中配置的property属性做为全局属性存在，若需要对某张表单独定制，可在该table下配置进行覆盖 -->
-        <plugin type="com.github.wywuzh.commons.mybatis.generator.plugins.DeleteByPKPlugin">
+        <plugin type="io.github.wywuzh.commons.mybatis.generator.plugins.DeleteByPKPlugin">
             <!-- 方法名，默认：deleteByIds。 -->
             <property name="methodName" value="deleteByIds"/>
             <!-- 表是否开启逻辑删除，默认为true。如果传入值为false，表示该表使用的是物理删除，生成的sql为delete删除语句，logicDeleteField、logicDeletedFlag两个参数值将没有意义。 -->
@@ -72,7 +72,7 @@
             <property name="useInformationSchema" value="true"/>
         </jdbcConnection>
 
-        <javaTypeResolver type="com.github.wywuzh.commons.mybatis.generator.types.JavaTypeResolverSupport">
+        <javaTypeResolver type="io.github.wywuzh.commons.mybatis.generator.types.JavaTypeResolverSupport">
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
