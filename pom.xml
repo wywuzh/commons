@@ -8,7 +8,7 @@
     <name>commons</name>
     <packaging>pom</packaging>
     <description>项目公共组件类库</description>
-    <url>http://git.oschina.net/wywuzh/commons</url>
+    <url>https://github.com/wywuzh/commons</url>
     <inceptionYear>2015</inceptionYear>
 
     <modules>
@@ -27,7 +27,7 @@
         <developer>
             <name>wywuzh</name>
             <email>wywuzh@163.com</email>
-            <url>http://git.oschina.net/wywuzh</url>
+            <url>https://github.com/wywuzh</url>
         </developer>
     </developers>
 

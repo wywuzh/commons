@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <description>Spring JDBC工具类库，旨在对Spring JDBC进行简单封装，降低Spring JDBC使用的复杂度，提高重复性代码的可重用度，尽可能地减少编码工作量。
     </description>
-    <url>http://git.oschina.net/wywuzh/commons</url>
+    <url>https://github.com/wywuzh/commons</url>
 
     <parent>
         <groupId>io.github.wywuzh</groupId>
