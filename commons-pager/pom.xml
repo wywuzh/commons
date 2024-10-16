@@ -6,7 +6,7 @@
     <name>commons :: Pagination</name>
     <packaging>jar</packaging>
     <description>分页组件</description>
-    <url>http://git.oschina.net/wywuzh/commons</url>
+    <url>https://github.com/wywuzh/commons</url>
 
     <parent>
         <groupId>io.github.wywuzh</groupId>

@@ -5,7 +5,7 @@
     <artifactId>commons-core</artifactId>
     <name>commons :: Core</name>
     <packaging>jar</packaging>
-    <url>http://git.oschina.net/wywuzh/commons</url>
+    <url>https://github.com/wywuzh/commons</url>
 
     <parent>
         <groupId>io.github.wywuzh</groupId>
