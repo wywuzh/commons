@@ -8,7 +8,7 @@
     <name>commons</name>
     <packaging>pom</packaging>
     <description>项目公共组件类库</description>
-    <url>http://git.oschina.net/wywuzh/commons</url>
+    <url>https://github.com/wywuzh/commons</url>
     <inceptionYear>2015</inceptionYear>
 
     <modules>
@@ -27,7 +27,7 @@
         <developer>
             <name>wywuzh</name>
             <email>wywuzh@163.com</email>
-            <url>http://git.oschina.net/wywuzh</url>
+            <url>https://github.com/wywuzh</url>
         </developer>
     </developers>
 
@@ -67,11 +67,11 @@
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
         1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
         -->
-        <spring-framework.version>6.0.14</spring-framework.version>
-        <spring_version>6.0.14</spring_version>
+        <spring-framework.version>6.1.1</spring-framework.version>
+        <spring_version>6.1.1</spring_version>
         <spring-security.version>6.1.5</spring-security.version>
         <netty.version>4.1.101.Final</netty.version>
-        <netty4_version>4.1.100.Final</netty4_version>
+        <netty4_version>4.1.101.Final</netty4_version>
         <log4j2.version>2.20.0</log4j2.version>
         <log4j2_version>2.20.0</log4j2_version>
         <logback.version>1.4.11</logback.version>
@@ -95,13 +95,13 @@
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
-        <log4j2.version>2.20.0</log4j2.version>
+        <log4j2.version>2.21.1</log4j2.version>
         <logback.version>1.4.11</logback.version>
-        <slf4j.version>2.0.7</slf4j.version>
+        <slf4j.version>2.0.9</slf4j.version>
         <jackson-bom.version>2.15.3</jackson-bom.version>
-        <commons-codec.version>1.15</commons-codec.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <spring-kafka.version>3.0.10</spring-kafka.version>
+        <commons-codec.version>1.16.0</commons-codec.version>
+        <commons-lang3.version>3.13.0</commons-lang3.version>
+        <spring-kafka.version>3.1.0</spring-kafka.version>
         -->
 
         <json-lib.version>2.4</json-lib.version>
@@ -133,8 +133,8 @@
         <jep.version>2.24</jep.version>
         <hutool.version>5.8.23</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
-        <apollo-client.version>1.9.2</apollo-client.version>
-        <apollo_client_version>1.9.2</apollo_client_version>
+        <apollo-client.version>2.1.0</apollo-client.version>
+        <apollo_client_version>2.1.0</apollo_client_version>
 
         <commons-dbutils.version>1.7</commons-dbutils.version>
         <mybatis-spring-boot.version>3.0.3</mybatis-spring-boot.version>
