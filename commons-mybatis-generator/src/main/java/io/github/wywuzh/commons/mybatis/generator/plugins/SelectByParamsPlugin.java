@@ -15,10 +15,6 @@
  */
 package io.github.wywuzh.commons.mybatis.generator.plugins;
 
-import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
-import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
-import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -33,6 +29,10 @@ import org.mybatis.generator.api.dom.xml.*;
 import org.mybatis.generator.codegen.mybatis3.ListUtilities;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.TableConfiguration;
+
+import com.itfsw.mybatis.generator.plugins.utils.FormatTools;
+import com.itfsw.mybatis.generator.plugins.utils.JavaElementGeneratorTools;
+import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
 
 import io.github.wywuzh.commons.core.util.StringHelper;
 import io.github.wywuzh.commons.mybatis.generator.constant.MbgPropertyConstants;
@@ -468,6 +468,7 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      * @param tableConfiguration
      * @return
      */
+    @Deprecated
     protected List<String> getConditionsLikeColumns(TableConfiguration tableConfiguration) {
         String PROPERTY_CONDITIONS_LIKE_COLUMNS = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_LIKE_COLUMNS);
         List<String> resultList = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_LIKE_COLUMNS);
@@ -480,6 +481,7 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      * @param tableConfiguration
      * @return
      */
+    @Deprecated
     protected List<String> getConditionsForeachInColumns(TableConfiguration tableConfiguration) {
         String PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS);
         List<String> resultList = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_FOREACH_IN_COLUMNS);
@@ -493,6 +495,7 @@ public abstract class SelectByParamsPlugin extends AbstractPlugin {
      * @return
      * @since v2.4.5
      */
+    @Deprecated
     protected List<String> getConditionsNotInColumns(TableConfiguration tableConfiguration) {
         String PROPERTY_CONDITIONS_NOT_IN_COLUMNS = tableConfiguration.getProperty(MbgPropertyConstants.PROPERTY_CONDITIONS_NOT_IN_COLUMNS);
         List<String> resultList = MbgPropertiesUtils.split(PROPERTY_CONDITIONS_NOT_IN_COLUMNS);
