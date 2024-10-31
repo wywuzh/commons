@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.8</version>
+        <version>3.1.9</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -60,8 +60,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
-        <revision>3.1.8.RELEASE</revision>
-        <spring-boot.version>3.1.8</spring-boot.version>
+        <revision>3.1.9.RELEASE</revision>
+        <spring-boot.version>3.1.9</spring-boot.version>
         <spring-cloud.version>2022.0.5</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
@@ -1070,7 +1070,7 @@
         <!-- 阿里云Maven私服 -->
         <repository>
             <id>maven-ali</id>
-            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+            <url>https://maven.aliyun.com/repository/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
