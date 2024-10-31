@@ -35,10 +35,10 @@
             <property name="allowMultiQueries" value="false"/>
         </plugin>
         <!-- 自定义查询插件 -->
-        <plugin type="io.github.wywuzh.commons.mybatis.generator.plugins.SelectByParamsPlugin">
-            <!-- 物理删除字段 -->
-            <property name="physicalDeleteField" value="is_delete"/>
-            <!-- 排除数据sql，即剔除已删除数据的sql -->
+        <plugin type="io.github.wywuzh.commons.mybatis.generator.plugins.MySQLSelectByParamsPlugin">
+            <!-- 表是否开启逻辑删除，默认为true。如果值为false，表示该表使用的是物理删除，excludeDeletedSql指定的参数值将没有意义。 -->
+            <property name="enableLogicDelete" value="true"/>
+            <!-- 逻辑删除排除数据sql，即剔除已删除数据的sql -->
             <property name="excludeDeletedSql" value="is_delete = 0"/>
         </plugin>
         <!-- 根据主键删除数据。注：在plugin中配置的property属性做为全局属性存在，若需要对某张表单独定制，可在该table下配置进行覆盖 -->
@@ -101,9 +101,11 @@
             <property name="enablePhysicalDelete" value="true"/>
             <!-- 排除数据sql，即剔除已删除数据的sql。注意：需要和enablePhysicalDelete配合使用，只有enablePhysicalDelete为false，该值配置无效 -->
             <property name="excludeDeletedSql" value="and is_delete = 0"/>
-            <!-- Where条件语句：like。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
+            <!-- Where条件语句：Like模糊查询。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
             <property name="conditionsLikeColumns" value=""/>
-            <!-- Where条件语句：in。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
+            <!-- Where条件语句：Foreach in查询。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
+            <property name="conditionsForeachInColumns" value=""/>
+            <!-- Where条件语句：not in查询字段。多个字段用逗号分隔，支持中英文格式（全角和半角）：,， -->
             <property name="conditionsForeachInColumns" value=""/>
             <!-- 大文本格式 -->
             <columnOverride column="REQUEST_PARAMS" javaType="java.lang.String" jdbcType="VARCHAR"/>
