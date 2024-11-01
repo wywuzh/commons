@@ -105,15 +105,15 @@
         -->
 
         <json-lib.version>2.4</json-lib.version>
-        <fastjson.version>2.0.46</fastjson.version>
-        <fastjson2_version>2.0.46</fastjson2_version>
+        <fastjson.version>2.0.47</fastjson.version>
+        <fastjson2_version>2.0.47</fastjson2_version>
         <dom4j.version>2.1.3</dom4j.version>
 
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections.version>3.2.2</commons-collections.version>
         <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-compress.version>1.25.0</commons-compress.version>
-        <commons_compress_version>1.25.0</commons_compress_version>
+        <commons-compress.version>1.26.0</commons-compress.version>
+        <commons_compress_version>1.26.0</commons_compress_version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-configuration2.version>2.9.0</commons-configuration2.version>
         <commons-io.version>2.11.0</commons-io.version>
@@ -131,7 +131,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
-        <hutool.version>5.8.25</hutool.version>
+        <hutool.version>5.8.26</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
         <apollo-client.version>2.1.0</apollo-client.version>
         <apollo_client_version>2.1.0</apollo_client_version>
@@ -148,7 +148,7 @@
         <curator_version>4.2.0</curator_version>
         <hessian_version>4.0.38</hessian_version>
         <hessian_lite_version>3.2.13</hessian_lite_version>
-        <dubbo.version>3.2.10</dubbo.version>
+        <dubbo.version>3.2.11</dubbo.version>
         <shiro.version>1.13.0</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>2.0.0</alibaba-dingtalk-service-sdk.version>
