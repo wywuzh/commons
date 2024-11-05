@@ -1,6 +1,7 @@
 ## 更新日志
 ### SpringBoot/v3.2.0
 1. 工具包根目录统一调整为`io.github.wywuzh`，与groupId保持一致。若仍然打算使用`com.github.wywuzh`目录，请使用`v3.2.0`以下的包
+2. Json工具`com.alibaba:fastjson`迁移至`com.alibaba.fastjson2:fastjson2`，`3.2.0`版本开始移除`com.alibaba:fastjson`依赖包
 
 
 ### SpringBoot/v2.7.5
