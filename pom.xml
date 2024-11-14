@@ -129,8 +129,8 @@
         <jep.version>2.24</jep.version>
         <hutool.version>5.8.27</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
-        <apollo-client.version>2.1.0</apollo-client.version>
-        <apollo_client_version>2.1.0</apollo_client_version>
+        <apollo-client.version>2.2.0</apollo-client.version>
+        <apollo_client_version>2.2.0</apollo_client_version>
 
         <commons-dbutils.version>1.7</commons-dbutils.version>
         <mybatis-spring-boot.version>3.0.3</mybatis-spring-boot.version>
