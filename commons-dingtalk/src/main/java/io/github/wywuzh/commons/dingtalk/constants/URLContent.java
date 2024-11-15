@@ -34,7 +34,7 @@ public class URLContent {
      */
     public static final String URL_GET_TOKKEN = BASE_API_URL + "/gettoken";
     /**
-     * 获取凭证：获取第三方企业应用的access_token
+     * 获取凭证：获取定制应用的access_token
      */
     public static final String URL_SERVICE_GET_CORP_TOKEN = BASE_API_URL + "/service/get_corp_token";
     /**

@@ -36,7 +36,7 @@ import io.github.wywuzh.commons.dingtalk.response.SsoAccessTokenResponse;
 import io.github.wywuzh.commons.dingtalk.response.SuiteAccessTokenResponse;
 
 /**
- * 类TokenAPI的实现描述：获取凭证
+ * 类TokenAPI的实现描述：获取凭证(旧版)
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2021-01-30 20:24:14
  * @version v2.3.8
@@ -50,6 +50,8 @@ public class TokenAPI {
      *
      * @param appKey    应用的唯一标识key
      * @param appSecret 应用的密钥
+     * @see <a href="https://open.dingtalk.com/document/orgapp/obtain-orgapp-token">获取企业内部应用的access_token</a>
+     * @return 企业内部应用的access_token凭证
      */
     public static AccessTokenResponse getToken(String appKey, String appSecret) throws DingtalkException {
         Assert.notNull(appKey, "appKey参数为空");
@@ -71,24 +73,30 @@ public class TokenAPI {
     }
 
     /**
-     * 获取第三方企业应用的access_token
+     * 获取定制应用的access_token(HTTP请求)
      *
-     * @param accessKey    如果是定制应用，输入定制应用的CustomKey；如果是第三方企业应用，输入第三方企业应用的SuiteKey
-     * @param accessSecret 如果是定制应用，输入定制应用的CustomSecret；如果是第三方企业应用，输入第三方企业应用的SuiteSecret
-     * @param suiteTicket  钉钉推送的suiteTicket：定制应用可随意填写；第三方企业应用使用钉钉开放平台向应用推送的suite_ticket
-     * @param signature    签名
-     * @param authCorpid   授权企业的CorpId
-     * @return
-     * @throws DingtalkException
+     * @param accessKey   如果是定制应用，输入定制应用的CustomKey；如果是第三方企业应用，输入第三方企业应用的SuiteKey
+     * @param timestamp   当前时间戳，单位是毫秒
+     * @param suiteTicket 钉钉推送的suiteTicket：定制应用可随意填写；第三方企业应用使用钉钉开放平台向应用推送的suite_ticket
+     * @param signature   签名
+     * @param authCorpid  授权企业的CorpId
+     * @see <a href="https://open.dingtalk.com/document/orgapp/obtains-the-enterprise-authorized-credential">获取定制应用的access_token</a>
+     * @see <a href=
+     *      "https://open.dingtalk.com/document/direction-test/signature-calculation-method-for-third-party-access-interfaces?spm=ding_open_doc.document.0.0.66d84a97IjCGKC">企业内部应用，访问接口的signature签名计算方法</a>
+     * @see <a href="https://open.dingtalk.com/document/isvapp/signature-calculation-method-for-third-party-access-interfaces-1">第三方企业应用，访问接口的signature签名计算方法</a>
+     * @return 第三方企业应用的access_token凭证
      */
-    public static AccessTokenResponse getCorpToken(String accessKey, String accessSecret, String suiteTicket, String signature, String authCorpid) throws DingtalkException {
+    public static AccessTokenResponse getCorpToken(String accessKey, Long timestamp, String suiteTicket, String signature, String authCorpid) throws DingtalkException {
         Assert.notNull(accessKey, "accessKey参数为空");
-        Assert.notNull(accessSecret, "accessSecret参数为空");
-        log.info("accessKey={}, accessSecret={} 获取第三方企业应用的access_token", accessKey, accessSecret);
+        Assert.notNull(timestamp, "timestamp参数为空");
+        Assert.notNull(suiteTicket, "suiteTicket参数为空");
+        Assert.notNull(signature, "signature参数为空");
+        Assert.notNull(authCorpid, "authCorpid参数为空");
+        log.info("accessKey={}, accessSecret={} 获取第三方企业应用的access_token", accessKey, timestamp);
 
         Map<String, String> queryParams = new HashMap<>();
         queryParams.put("accessKey", accessKey);
-        queryParams.put("accessSecret", accessSecret);
+        queryParams.put("timestamp", String.valueOf(timestamp));
         queryParams.put("suiteTicket", suiteTicket);
         queryParams.put("signature", signature);
         queryParams.put("auth_corpid", authCorpid);
@@ -109,8 +117,7 @@ public class TokenAPI {
      * @param suiteKey    第三方应用的suiteKey
      * @param suiteSecret 第三方应用的suiteSecret
      * @param suiteTicket 钉钉开放平台会向应用的回调URL推送的suite_ticket
-     * @return
-     * @throws DingtalkException
+     * @return 第三方企业应用的suite_ticket凭证
      */
     public static SuiteAccessTokenResponse getSuiteToken(String suiteKey, String suiteSecret, String suiteTicket) throws DingtalkException {
         Assert.notNull(suiteKey, "suiteKey参数为空");
@@ -137,8 +144,8 @@ public class TokenAPI {
      * 获取jsapi_ticket
      *
      * @param accessToken 调用服务端API的应用凭证
-     * @return
-     * @throws DingtalkException
+     * @see <a href="https://open.dingtalk.com/document/orgapp/obtain-jsapi_ticket">获取jsapi_ticket</a>
+     * @return jsapi_ticket凭证
      */
     public static JsapiTicketResponse getJsapiTicket(String accessToken) throws DingtalkException {
         Assert.notNull(accessToken, "accessToken参数为空");
@@ -162,6 +169,8 @@ public class TokenAPI {
      *
      * @param corpId     企业的corpid
      * @param corpSecret 微应用管理后台SSOSecret
+     * @see <a href="https://open.dingtalk.com/document/orgapp/obtain-the-ssotoken-for-micro-application-background-logon-free">获取微应用后台免登的access_token</a>
+     * @return 微应用后台免登的access_token凭证
      */
     public static SsoAccessTokenResponse ssoGettoken(String corpId, String corpSecret) throws DingtalkException {
         Assert.notNull(corpId, "corpid参数为空");
