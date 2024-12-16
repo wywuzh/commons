@@ -30,6 +30,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.FormattingTuple;
+import org.slf4j.helpers.MessageFormatter;
 
 /**
  * 类StringHelper.java的实现描述：字符串
@@ -613,6 +615,19 @@ public class StringHelper {
             }
         }
         return valueLength;
+    }
+
+    /**
+     * 字符串格式化
+     *
+     * @param pattern 格式数据
+     * @param args    参数
+     * @return
+     * @since v3.3.0
+     */
+    public static String format(String pattern, Object... args) {
+        FormattingTuple formattingTuple = MessageFormatter.arrayFormat(pattern, args);
+        return formattingTuple.getMessage();
     }
 
 }
