@@ -35,15 +35,16 @@ import io.github.wywuzh.commons.dingtalk.response.SuiteAccessTokenResponse;
 @Slf4j
 public class TokenAPITest {
 
+    // 获取定制应用的access_token(HTTP请求)
     @Test
     public void getCorpToken() {
         String accessKey = "XXX";
-        String accessSecret = "XXX";
+        Long timestamp = System.currentTimeMillis();
         String suiteTicket = "XXX";
         String signature = "XXX";
         String authCorpid = "XXX";
-        AccessTokenResponse accessTokenResponse = TokenAPI.getCorpToken(accessKey, accessSecret, suiteTicket, signature, authCorpid);
-        log.info("获取第三方企业应用的access_token：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(accessTokenResponse));
+        AccessTokenResponse accessTokenResponse = TokenAPI.getCorpToken(accessKey, timestamp, suiteTicket, signature, authCorpid);
+        log.info("获取第三方企业应用的access_token(HTTP请求)：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(accessTokenResponse));
     }
 
     @Test

@@ -23,10 +23,17 @@
         </dependency>
 
         <!-- Alibaba Dingtalk -->
+        <!-- 旧版服务端API：https://open.dingtalk.com/document/orgapp/download-the-server-side-sdk -->
         <dependency>
             <groupId>com.aliyun</groupId>
             <artifactId>alibaba-dingtalk-service-sdk</artifactId>
             <version>${alibaba-dingtalk-service-sdk.version}</version>
+        </dependency>
+        <!-- 新版服务端API：https://open.dingtalk.com/document/orgapp/sdk-download -->
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>dingtalk</artifactId>
+            <version>${dingtalk.version}</version>
         </dependency>
     </dependencies>
 
