@@ -15,6 +15,8 @@
  */
 package io.github.wywuzh.commons.dingtalk.api;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.junit.Test;
 
 import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
@@ -22,7 +24,6 @@ import io.github.wywuzh.commons.dingtalk.response.AccessTokenResponse;
 import io.github.wywuzh.commons.dingtalk.response.JsapiTicketResponse;
 import io.github.wywuzh.commons.dingtalk.response.SsoAccessTokenResponse;
 import io.github.wywuzh.commons.dingtalk.response.SuiteAccessTokenResponse;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * 类TokenAPITest的实现描述：获取凭证
