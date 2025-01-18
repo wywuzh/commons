@@ -15,11 +15,6 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
-import java.security.KeyPairGenerator;
-import java.security.SecureRandom;
-
-import org.apache.commons.codec.digest.DigestUtils;
-
 /**
  * 加密算法工具类
  *
@@ -86,23 +81,4 @@ public class MessageDigest {
         return null;
     }
 
-    @SuppressWarnings("unused")
-    public static void main(String[] args) {
-        try {
-            System.out.println(getMD5("000000"));
-            System.out.println(DigestUtils.md5Hex("000000"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
-            SecureRandom secure = new SecureRandom();
-            secure.setSeed("123456".getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(DigestUtils.sha1Hex("admin123456"));
-    }
 }
