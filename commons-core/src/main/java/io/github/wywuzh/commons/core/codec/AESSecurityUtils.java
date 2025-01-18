@@ -15,16 +15,14 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
-import java.security.SecureRandom;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
+import java.security.SecureRandom;
 
 /**
  * 类AESSecurityUtils.java的实现描述：AES加密、解密工具类
@@ -47,14 +45,14 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class AESSecurityUtils {
 
-    private static final String ALGORITHM = "AES";
-    private static final String CIPHER = "AES/ECB/PKCS5Padding";
-    private static final String IV_PARAMETER = "****************";
+    public static final String ALGORITHM = "AES";
+    public static final String CIPHER = "AES/ECB/PKCS5Padding";
+    public static final String IV_PARAMETER = "****************";
 
     /**
      * 默认字符集
      */
-    private static final String CHARSET_NAME = "UTF-8";
+    public static final String CHARSET_NAME = "UTF-8";
 
     /**
      * 加密
@@ -120,43 +118,6 @@ public class AESSecurityUtils {
 
     public static String decryptHex(String content, String password) throws Exception {
         return new String(decrypt(Hex.decodeHex(content), password));
-    }
-
-    public static void main(String[] args) {
-        String content = "public";
-        String password = "admin";
-
-        try {
-            // 生成密钥
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            SecureRandom secureRandom = new SecureRandom(password.getBytes());
-            keyGenerator.init(128, secureRandom);
-            SecretKey generateKey = keyGenerator.generateKey();
-            byte[] encoded = generateKey.getEncoded();
-            // 注意：应该将securitySalt值给到用户
-            String securitySalt = new String(Base64.encodeBase64(encoded));
-
-            // 用KeyGenerator生成的SecretKey值来SecretKeySpec对象
-            SecretKeySpec secretKeySpec = new SecretKeySpec(encoded, ALGORITHM);
-
-            // 加密
-            Cipher encryptCipher = Cipher.getInstance(CIPHER);
-            IvParameterSpec ivParameter = new IvParameterSpec(IV_PARAMETER.getBytes());
-            encryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec/* , ivParameter */);
-            byte[] encrypt = encryptCipher.doFinal(content.getBytes(CHARSET_NAME));
-            // 信息加密时，将数据进行编码
-            String encodeBase64 = new String(Base64.encodeBase64(encrypt));
-            System.out.println("加密后的值：" + encodeBase64);
-
-            // 解密
-            Cipher decryptCipher = Cipher.getInstance(CIPHER);
-            decryptCipher.init(Cipher.DECRYPT_MODE, secretKeySpec/* , ivParameter */);
-            // 信息解密时，将数据进行解码
-            byte[] decrypt = decryptCipher.doFinal(Base64.decodeBase64(encodeBase64));
-            System.out.println("解密后的值" + new String(decrypt));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }
