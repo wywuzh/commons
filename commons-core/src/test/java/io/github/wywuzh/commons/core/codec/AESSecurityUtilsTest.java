@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ public class AESSecurityUtilsTest {
             Cipher encryptCipher = Cipher.getInstance(AESSecurityUtils.CIPHER);
             IvParameterSpec ivParameter = new IvParameterSpec(AESSecurityUtils.IV_PARAMETER.getBytes());
             encryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec/* , ivParameter */);
-            byte[] encrypt = encryptCipher.doFinal(content.getBytes(AESSecurityUtils.CHARSET_NAME));
+            byte[] encrypt = encryptCipher.doFinal(content.getBytes(AESSecurityUtils.DEFAULT_CHARSET));
             // 信息加密时，将数据进行编码
             String encodeBase64 = new String(Base64.encodeBase64(encrypt));
             System.out.println("加密后的值：" + encodeBase64);

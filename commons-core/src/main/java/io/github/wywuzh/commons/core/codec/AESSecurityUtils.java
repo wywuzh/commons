@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,17 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
+import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.SecureRandom;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+
+import io.github.wywuzh.commons.core.common.CharacterSet;
 
 /**
  * 类AESSecurityUtils.java的实现描述：AES加密、解密工具类
@@ -52,7 +55,7 @@ public class AESSecurityUtils {
     /**
      * 默认字符集
      */
-    public static final String CHARSET_NAME = "UTF-8";
+    public static final String DEFAULT_CHARSET = CharacterSet.UTF_8;
 
     /**
      * 加密
@@ -65,7 +68,7 @@ public class AESSecurityUtils {
         // 1.构造密钥生成器，指定为AES算法,不区分大小写
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         // 2.初始化密钥生成器，生成一个128位的随机源,根据传入的字节数组
-        keyGenerator.init(128, new SecureRandom(password.getBytes(CHARSET_NAME)));
+        keyGenerator.init(128, new SecureRandom(password.getBytes(DEFAULT_CHARSET)));
         // 3.生成对称密钥
         SecretKey secretKey = keyGenerator.generateKey();
 
@@ -76,7 +79,7 @@ public class AESSecurityUtils {
         Cipher cipher = Cipher.getInstance(CIPHER);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 
-        return cipher.doFinal(content.getBytes(CHARSET_NAME));
+        return cipher.doFinal(content.getBytes(DEFAULT_CHARSET));
     }
 
     public static String encryptBase64(String content, String password) throws Exception {
@@ -98,7 +101,7 @@ public class AESSecurityUtils {
         // 1.构造密钥生成器，指定为AES算法,不区分大小写
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         // 2.初始化密钥生成器，生成一个128位的随机源,根据传入的字节数组
-        keyGenerator.init(128, new SecureRandom(password.getBytes(CHARSET_NAME)));
+        keyGenerator.init(128, new SecureRandom(password.getBytes(DEFAULT_CHARSET)));
         // 3.生成对称密钥
         SecretKey secretKey = keyGenerator.generateKey();
 

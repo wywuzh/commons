@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 package io.github.wywuzh.commons.core.common;
-
-import java.nio.charset.Charset;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.SortedMap;
 
 /**
  * 类CharacterSet.java的实现描述：字符集编码
@@ -58,13 +53,5 @@ public class CharacterSet {
      */
     public static final String GBK = "GBK";
     public static final String GB2312 = "GB2312";
-
-    public static void main(String[] args) {
-        SortedMap<String, Charset> availableCharsets = Charset.availableCharsets();
-        for (Iterator<Entry<String, Charset>> iterator = availableCharsets.entrySet().iterator(); iterator.hasNext();) {
-            Entry<String, Charset> entry = iterator.next();
-            System.out.println(entry.getKey() + "\t" + entry.getValue());
-        }
-    }
 
 }

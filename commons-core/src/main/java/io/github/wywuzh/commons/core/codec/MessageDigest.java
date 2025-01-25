@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
+import io.github.wywuzh.commons.core.common.CharacterSet;
+
 /**
  * 加密算法工具类
  *
@@ -29,7 +31,7 @@ public class MessageDigest {
     protected static final String KEY_SHA512 = "SHA-512";
     protected static final String CHARSET_GBK = "GBK";
 
-    private static final String CHARSET_UTF8 = "UTF-8";
+    private static final String DEFAULT_CHARSET = CharacterSet.UTF_8;
 
     /**
      * MD5密码加密算法
@@ -40,7 +42,7 @@ public class MessageDigest {
      */
     public static String getMD5(String mess) throws Exception {
         java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_MD5);
-        md.update(mess.getBytes(CHARSET_UTF8));
+        md.update(mess.getBytes(DEFAULT_CHARSET));
         byte[] digest = md.digest();
         return byte2hex(digest);
     }
@@ -54,7 +56,7 @@ public class MessageDigest {
      */
     public static String getSHA(String mess) throws Exception {
         java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_SHA);
-        md.update(mess.getBytes(CHARSET_UTF8));
+        md.update(mess.getBytes(DEFAULT_CHARSET));
         byte[] digest = md.digest();
         return byte2hex(digest);
     }
