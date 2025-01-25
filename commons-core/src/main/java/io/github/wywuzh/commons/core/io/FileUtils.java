@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -269,15 +269,4 @@ public class FileUtils {
         outputStream.close();
     }
 
-    public static void main(String[] args) {
-        // try {
-        // String read = read("F:\\work\\frame\\document\\html\\scripts\\util\\easyui-util.js");
-        // System.out.println(read);
-        // } catch (IOException e) {
-        // e.printStackTrace();
-        // }
-
-        // delete("F://bank.txt");
-        writer(new File("F://bank.txt"), "eeeeeeeeee===========ppp=============eee");
-    }
 }

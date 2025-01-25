@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package io.github.wywuzh.commons.core.codec;
 import java.security.SecureRandom;
 
 import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import lombok.extern.slf4j.Slf4j;
@@ -64,6 +65,39 @@ public class AESSecurityUtilsTest {
     public static void main(String[] args) throws Exception {
         String content = "public";
         String password = "admin";
+
+        try {
+            // 生成密钥
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            SecureRandom secureRandom = new SecureRandom(password.getBytes());
+            keyGenerator.init(128, secureRandom);
+            SecretKey generateKey = keyGenerator.generateKey();
+            byte[] encoded = generateKey.getEncoded();
+            // 注意：应该将securitySalt值给到用户
+            String securitySalt = new String(Base64.encodeBase64(encoded));
+
+            // 用KeyGenerator生成的SecretKey值来SecretKeySpec对象
+            SecretKeySpec secretKeySpec = new SecretKeySpec(encoded, AESSecurityUtils.ALGORITHM);
+
+            // 加密
+            Cipher encryptCipher = Cipher.getInstance(AESSecurityUtils.CIPHER);
+            IvParameterSpec ivParameter = new IvParameterSpec(AESSecurityUtils.IV_PARAMETER.getBytes());
+            encryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec/* , ivParameter */);
+            byte[] encrypt = encryptCipher.doFinal(content.getBytes(AESSecurityUtils.DEFAULT_CHARSET));
+            // 信息加密时，将数据进行编码
+            String encodeBase64 = new String(Base64.encodeBase64(encrypt));
+            System.out.println("加密后的值：" + encodeBase64);
+
+            // 解密
+            Cipher decryptCipher = Cipher.getInstance(AESSecurityUtils.CIPHER);
+            decryptCipher.init(Cipher.DECRYPT_MODE, secretKeySpec/* , ivParameter */);
+            // 信息解密时，将数据进行解码
+            byte[] decrypt = decryptCipher.doFinal(Base64.decodeBase64(encodeBase64));
+            System.out.println("解密后的值" + new String(decrypt));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         byte[] encrypt = AESSecurityUtils.encrypt(content, password);
         String secretKey = new String(Base64.encodeBase64(encrypt));
         log.info("Base64加密结果：{}", secretKey);
