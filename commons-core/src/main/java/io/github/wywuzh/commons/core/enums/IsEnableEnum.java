@@ -15,6 +15,9 @@
  */
 package io.github.wywuzh.commons.core.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 类IsEnableEnum的实现描述：是否启用
  *
@@ -58,4 +61,27 @@ public enum IsEnableEnum {
         }
         return null;
     }
+
+    /**
+     * @return 是否启用代号映射：key=是否启用代号，value=是否启用描述
+     */
+    public static Map<Integer, String> getFlagValueMap() {
+        Map<Integer, String> flagValueMap = new HashMap<>();
+        for (IsEnableEnum item : values()) {
+            flagValueMap.put(item.getValue(), item.getDesc());
+        }
+        return flagValueMap;
+    }
+
+    /**
+     * @return 是否启用描述映射：key=是否启用描述，value=是否启用代号
+     */
+    public static Map<String, Integer> getFlagDescMap() {
+        Map<String, Integer> flagDescMap = new HashMap<>();
+        for (IsEnableEnum item : values()) {
+            flagDescMap.put(item.getDesc(), item.getValue());
+        }
+        return flagDescMap;
+    }
+
 }

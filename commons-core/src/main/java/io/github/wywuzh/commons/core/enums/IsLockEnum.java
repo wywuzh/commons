@@ -15,6 +15,9 @@
  */
 package io.github.wywuzh.commons.core.enums;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 类IsLockEnum的实现描述：是否锁定
  *
@@ -58,4 +61,27 @@ public enum IsLockEnum {
         }
         return null;
     }
+
+    /**
+     * @return 是否锁定代号映射：key=是否锁定代号，value=是否锁定描述
+     */
+    public static Map<Integer, String> getFlagValueMap() {
+        Map<Integer, String> flagValueMap = new HashMap<>();
+        for (IsLockEnum item : values()) {
+            flagValueMap.put(item.getValue(), item.getDesc());
+        }
+        return flagValueMap;
+    }
+
+    /**
+     * @return 是否锁定描述映射：key=是否锁定描述，value=是否锁定代号
+     */
+    public static Map<String, Integer> getFlagDescMap() {
+        Map<String, Integer> flagDescMap = new HashMap<>();
+        for (IsLockEnum item : values()) {
+            flagDescMap.put(item.getDesc(), item.getValue());
+        }
+        return flagDescMap;
+    }
+
 }
