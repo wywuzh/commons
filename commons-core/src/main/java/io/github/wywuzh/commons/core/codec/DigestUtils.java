@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import java.security.NoSuchAlgorithmException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 
+import io.github.wywuzh.commons.core.common.CharacterSet;
+
 /**
  * 类DigestUtils.java的实现描述：摘要信息算法工具类
  *
@@ -34,7 +36,7 @@ public class DigestUtils {
     /**
      * 默认编码字符集
      */
-    public static String DEFAULT_CHARSET = "UTF-8";
+    public static String DEFAULT_CHARSET = CharacterSet.UTF_8;
 
     /**
      * 内容信息编码

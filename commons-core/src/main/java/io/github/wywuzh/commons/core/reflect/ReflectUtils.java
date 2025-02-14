@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,8 +77,6 @@ public class ReflectUtils {
      */
     public static <T> T getValue(Object instance, String fieldName) throws IllegalAccessException {
         try {
-//            Field declaredField = FieldUtils.getField(instance.getClass(), fieldName, true);
-//            return (T) declaredField.get(instance);
             Object realValue = null;
             if (instance instanceof Map) {
                 realValue = ((Map) instance).get(fieldName);
@@ -128,8 +126,12 @@ public class ReflectUtils {
      */
     public static <T> void setValue(Object instance, String fieldName, T value) throws Exception {
         try {
-            Field declaredField = FieldUtils.getField(instance.getClass(), fieldName, true);
-            declaredField.set(instance, value);
+            if (instance instanceof Map) {
+                ((Map) instance).put(fieldName, value);
+            } else {
+                Field declaredField = FieldUtils.getField(instance.getClass(), fieldName, true);
+                declaredField.set(instance, value);
+            }
         } catch (Exception e) {
             LOGGER.error("instance={}, fieldName={} 字段设置值失败：", instance.getClass(), fieldName, e);
             throw new IllegalAccessException(e.getMessage());

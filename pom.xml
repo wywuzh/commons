@@ -112,7 +112,7 @@
         <commons_compress_version>1.26.2</commons_compress_version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-configuration2.version>2.11.0</commons-configuration2.version>
-        <commons-io.version>2.11.0</commons-io.version>
+        <commons-io.version>2.16.1</commons-io.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <commons-validator.version>1.7</commons-validator.version>
         <commons-net.version>3.8.0</commons-net.version>

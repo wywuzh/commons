@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,7 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
-import java.security.KeyPairGenerator;
-import java.security.SecureRandom;
-
-import org.apache.commons.codec.digest.DigestUtils;
+import io.github.wywuzh.commons.core.common.CharacterSet;
 
 /**
  * 加密算法工具类
@@ -34,7 +31,7 @@ public class MessageDigest {
     protected static final String KEY_SHA512 = "SHA-512";
     protected static final String CHARSET_GBK = "GBK";
 
-    private static final String CHARSET_UTF8 = "UTF-8";
+    private static final String DEFAULT_CHARSET = CharacterSet.UTF_8;
 
     /**
      * MD5密码加密算法
@@ -45,7 +42,7 @@ public class MessageDigest {
      */
     public static String getMD5(String mess) throws Exception {
         java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_MD5);
-        md.update(mess.getBytes(CHARSET_UTF8));
+        md.update(mess.getBytes(DEFAULT_CHARSET));
         byte[] digest = md.digest();
         return byte2hex(digest);
     }
@@ -59,7 +56,7 @@ public class MessageDigest {
      */
     public static String getSHA(String mess) throws Exception {
         java.security.MessageDigest md = java.security.MessageDigest.getInstance(KEY_SHA);
-        md.update(mess.getBytes(CHARSET_UTF8));
+        md.update(mess.getBytes(DEFAULT_CHARSET));
         byte[] digest = md.digest();
         return byte2hex(digest);
     }
@@ -86,23 +83,4 @@ public class MessageDigest {
         return null;
     }
 
-    @SuppressWarnings("unused")
-    public static void main(String[] args) {
-        try {
-            System.out.println(getMD5("000000"));
-            System.out.println(DigestUtils.md5Hex("000000"));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        try {
-            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("DSA");
-            SecureRandom secure = new SecureRandom();
-            secure.setSeed("123456".getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        System.out.println(DigestUtils.sha1Hex("admin123456"));
-    }
 }
