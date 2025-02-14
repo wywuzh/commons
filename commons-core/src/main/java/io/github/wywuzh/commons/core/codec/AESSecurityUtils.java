@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,12 @@ import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
+
+import io.github.wywuzh.commons.core.common.CharacterSet;
 
 /**
  * 类AESSecurityUtils.java的实现描述：AES加密、解密工具类
@@ -47,14 +48,14 @@ import org.apache.commons.codec.binary.Hex;
  */
 public class AESSecurityUtils {
 
-    private static final String ALGORITHM = "AES";
-    private static final String CIPHER = "AES/ECB/PKCS5Padding";
-    private static final String IV_PARAMETER = "****************";
+    public static final String ALGORITHM = "AES";
+    public static final String CIPHER = "AES/ECB/PKCS5Padding";
+    public static final String IV_PARAMETER = "****************";
 
     /**
      * 默认字符集
      */
-    private static final String CHARSET_NAME = "UTF-8";
+    public static final String DEFAULT_CHARSET = CharacterSet.UTF_8;
 
     /**
      * 加密
@@ -67,7 +68,7 @@ public class AESSecurityUtils {
         // 1.构造密钥生成器，指定为AES算法,不区分大小写
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         // 2.初始化密钥生成器，生成一个128位的随机源,根据传入的字节数组
-        keyGenerator.init(128, new SecureRandom(password.getBytes(CHARSET_NAME)));
+        keyGenerator.init(128, new SecureRandom(password.getBytes(DEFAULT_CHARSET)));
         // 3.生成对称密钥
         SecretKey secretKey = keyGenerator.generateKey();
 
@@ -78,7 +79,7 @@ public class AESSecurityUtils {
         Cipher cipher = Cipher.getInstance(CIPHER);
         cipher.init(Cipher.ENCRYPT_MODE, keySpec);
 
-        return cipher.doFinal(content.getBytes(CHARSET_NAME));
+        return cipher.doFinal(content.getBytes(DEFAULT_CHARSET));
     }
 
     public static String encryptBase64(String content, String password) throws Exception {
@@ -100,7 +101,7 @@ public class AESSecurityUtils {
         // 1.构造密钥生成器，指定为AES算法,不区分大小写
         KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
         // 2.初始化密钥生成器，生成一个128位的随机源,根据传入的字节数组
-        keyGenerator.init(128, new SecureRandom(password.getBytes(CHARSET_NAME)));
+        keyGenerator.init(128, new SecureRandom(password.getBytes(DEFAULT_CHARSET)));
         // 3.生成对称密钥
         SecretKey secretKey = keyGenerator.generateKey();
 
@@ -120,43 +121,6 @@ public class AESSecurityUtils {
 
     public static String decryptHex(String content, String password) throws Exception {
         return new String(decrypt(Hex.decodeHex(content), password));
-    }
-
-    public static void main(String[] args) {
-        String content = "public";
-        String password = "admin";
-
-        try {
-            // 生成密钥
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
-            SecureRandom secureRandom = new SecureRandom(password.getBytes());
-            keyGenerator.init(128, secureRandom);
-            SecretKey generateKey = keyGenerator.generateKey();
-            byte[] encoded = generateKey.getEncoded();
-            // 注意：应该将securitySalt值给到用户
-            String securitySalt = new String(Base64.encodeBase64(encoded));
-
-            // 用KeyGenerator生成的SecretKey值来SecretKeySpec对象
-            SecretKeySpec secretKeySpec = new SecretKeySpec(encoded, ALGORITHM);
-
-            // 加密
-            Cipher encryptCipher = Cipher.getInstance(CIPHER);
-            IvParameterSpec ivParameter = new IvParameterSpec(IV_PARAMETER.getBytes());
-            encryptCipher.init(Cipher.ENCRYPT_MODE, secretKeySpec/* , ivParameter */);
-            byte[] encrypt = encryptCipher.doFinal(content.getBytes(CHARSET_NAME));
-            // 信息加密时，将数据进行编码
-            String encodeBase64 = new String(Base64.encodeBase64(encrypt));
-            System.out.println("加密后的值：" + encodeBase64);
-
-            // 解密
-            Cipher decryptCipher = Cipher.getInstance(CIPHER);
-            decryptCipher.init(Cipher.DECRYPT_MODE, secretKeySpec/* , ivParameter */);
-            // 信息解密时，将数据进行解码
-            byte[] decrypt = decryptCipher.doFinal(Base64.decodeBase64(encodeBase64));
-            System.out.println("解密后的值" + new String(decrypt));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 }

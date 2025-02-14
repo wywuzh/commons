@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.FormattingTuple;
+import org.slf4j.helpers.MessageFormatter;
+
+import io.github.wywuzh.commons.core.common.CharacterSet;
 
 /**
  * 类StringHelper.java的实现描述：字符串
@@ -440,21 +444,29 @@ public class StringHelper {
 
     /**
      * 字符串编码(默认使用UTF-8)
+     *
+     * @param target 目标字符
      */
-    public static String stringEncode(String value) {
-        return stringEncode(value, "UTF-8");
+    public static String stringEncode(String target) {
+        return stringEncode(target, CharacterSet.UTF_8);
     }
 
-    public static String stringEncode(String value, String encoding) {
+    /**
+     * 字符串编码
+     *
+     * @param target      目标字符
+     * @param charsetName 字符编码
+     */
+    public static String stringEncode(String target, String charsetName) {
         String result = null;
-        if (StringUtils.isNotBlank(value)) {
+        if (StringUtils.isNotBlank(target)) {
             try {
-                if (StringUtils.isBlank(encoding)) {
-                    encoding = "UTF-8";
+                if (StringUtils.isBlank(charsetName)) {
+                    charsetName = CharacterSet.UTF_8;
                 }
-                result = new String(value.getBytes("ISO-8859-1"), encoding);
+                result = new String(target.getBytes(CharacterSet.ISO_8859_1), charsetName);
             } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+                LOGGER.error("target={}, charsetName={} 字符编码失败：", target, charsetName);
             }
         }
         return result;
@@ -613,6 +625,23 @@ public class StringHelper {
             }
         }
         return valueLength;
+    }
+
+    /**
+     * 字符串格式化
+     *
+     * <pre>
+     * StringHelper.format(&quot;Hi {}. My name is {}.&quot;, &quot;Alice&quot;, &quot;Bob&quot;);
+     * </pre>
+     *
+     * @param pattern 格式数据
+     * @param args    参数
+     * @return
+     * @since v3.3.0
+     */
+    public static String format(String pattern, Object... args) {
+        FormattingTuple formattingTuple = MessageFormatter.arrayFormat(pattern, args);
+        return formattingTuple.getMessage();
     }
 
 }

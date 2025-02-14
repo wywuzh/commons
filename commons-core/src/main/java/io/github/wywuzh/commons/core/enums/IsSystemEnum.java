@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2024 the original author or authors.
+ * Copyright 2015-2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,9 @@
  * limitations under the License.
  */
 package io.github.wywuzh.commons.core.enums;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 类IsSystemEnum的实现描述：是否系统内置
@@ -58,4 +61,27 @@ public enum IsSystemEnum {
         }
         return null;
     }
+
+    /**
+     * @return 是否系统内置代号映射：key=是否系统内置代号，value=是否系统内置描述
+     */
+    public static Map<Integer, String> getFlagValueMap() {
+        Map<Integer, String> flagValueMap = new HashMap<>();
+        for (IsSystemEnum item : values()) {
+            flagValueMap.put(item.getValue(), item.getDesc());
+        }
+        return flagValueMap;
+    }
+
+    /**
+     * @return 是否系统内置描述映射：key=是否系统内置描述，value=是否系统内置代号
+     */
+    public static Map<String, Integer> getFlagDescMap() {
+        Map<String, Integer> flagDescMap = new HashMap<>();
+        for (IsSystemEnum item : values()) {
+            flagDescMap.put(item.getDesc(), item.getValue());
+        }
+        return flagDescMap;
+    }
+
 }
