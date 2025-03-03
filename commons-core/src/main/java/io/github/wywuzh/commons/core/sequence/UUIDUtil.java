@@ -91,12 +91,4 @@ public class UUIDUtil implements Serializable {
         return getUUID(name).toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(getUUID36());
-        System.out.println(getUUID36().length());
-
-        System.out.println(getUUID32());
-        System.out.println(getUUID32().length());
-    }
-
 }
