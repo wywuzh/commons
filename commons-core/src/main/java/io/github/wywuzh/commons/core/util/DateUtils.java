@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +55,7 @@ public class DateUtils {
 
     public static final String PATTERN_YYYY = "yyyy";
     public static final String PATTERN_YYYY_MM = "yyyy-MM";
+    public static final String PATTERN_YYYYMM = "yyyyMM";
     public static final String PATTERN_DATE = "yyyy-MM-dd";
     public static final String PATTERN_YYYY_MM_DD_24HH = "yyyy-MM-dd HH";
     public static final String PATTERN_YYYY_MM_DD_24HH_MI = "yyyy-MM-dd HH:mm";
@@ -375,15 +377,17 @@ public class DateUtils {
     /**
      * 获取传入月当月的开始时间
      *
-     * @param monthly 月份，yyyy-MM格式
+     * @param monthly 月份，yyyy-MM/yyyyMM格式
      * @return 如果传入参数值为空，返回空
      */
     public static Date getFirstMonthly(String monthly) {
         Assert.notBlank(monthly, "[Assertion failed] - the monthly argument must be blank");
 
-        Date parse = parse(monthly, PATTERN_YYYY_MM);
+        // 年月：统一转为“yyyyMM”格式
+        String YYYYMM = StringUtils.replace(monthly, "-", "");
+        Date parse = parse(YYYYMM, PATTERN_YYYYMM);
         if (parse == null) {
-            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM-dd格式");
+            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM/yyyyMM格式");
         }
         return getFirstMonthly(parse);
     }
@@ -397,9 +401,11 @@ public class DateUtils {
     public static long getFirstMonthlyTime(String monthly) {
         Assert.notBlank(monthly, "[Assertion failed] - the monthly argument must be blank");
 
-        Date parse = parse(monthly, PATTERN_YYYY_MM);
+        // 年月：统一转为“yyyyMM”格式
+        String YYYYMM = StringUtils.replace(monthly, "-", "");
+        Date parse = parse(YYYYMM, PATTERN_YYYYMM);
         if (parse == null) {
-            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM-dd格式");
+            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM/yyyyMM格式");
         }
         Date firstMonthly = getFirstMonthly(parse);
         return firstMonthly == null ? 0 : firstMonthly.getTime();
@@ -447,9 +453,11 @@ public class DateUtils {
     public static Date getLastMonthly(String monthly) {
         Assert.notBlank(monthly, "[Assertion failed] - the monthly argument must be blank");
 
-        Date parse = parse(monthly, PATTERN_YYYY_MM);
+        // 年月：统一转为“yyyyMM”格式
+        String YYYYMM = StringUtils.replace(monthly, "-", "");
+        Date parse = parse(YYYYMM, PATTERN_YYYYMM);
         if (parse == null) {
-            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM格式");
+            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM/yyyyMM格式");
         }
         return getLastMonthly(parse);
     }
@@ -463,9 +471,11 @@ public class DateUtils {
     public static long getLastMonthlyTime(String monthly) {
         Assert.notBlank(monthly, "[Assertion failed] - the monthly argument must be blank");
 
-        Date parse = parse(monthly, PATTERN_YYYY_MM);
+        // 年月：统一转为“yyyyMM”格式
+        String YYYYMM = StringUtils.replace(monthly, "-", "");
+        Date parse = parse(YYYYMM, PATTERN_YYYYMM);
         if (parse == null) {
-            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM格式");
+            throw new IllegalArgumentException("数据格式有误，必须是yyyy-MM/yyyyMM格式");
         }
         Date lastMonthly = getLastMonthly(parse);
         return lastMonthly == null ? 0 : lastMonthly.getTime();
@@ -626,15 +636,17 @@ public class DateUtils {
     /**
      * 获取上一年月
      *
-     * @param yearMonth 年月，yyyy-MM格式
+     * @param yearMonth 年月，yyyy-MM/yyyyMM格式
      * @return 上一年月
      * @since v2.5.2
      */
     public static String getPreYearMonth(String yearMonth) {
         Assert.notBlank(yearMonth, "[Assertion failed] - the yearMonth argument must be blank");
 
-        Date yearMonthForDate = DateUtils.parse(yearMonth, DateUtils.PATTERN_YYYY_MM);
-        Assert.notNull(yearMonthForDate, "数据格式有误，必须是yyyy-MM格式");
+        // 年月：统一转为“yyyyMM”格式
+        String YYYYMM = StringUtils.replace(yearMonth, "-", "");
+        Date yearMonthForDate = DateUtils.parse(YYYYMM, DateUtils.PATTERN_YYYYMM);
+        Assert.notNull(yearMonthForDate, "数据格式有误，必须是yyyy-MM/yyyyMM格式");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(yearMonthForDate);
@@ -651,15 +663,17 @@ public class DateUtils {
     /**
      * 获取下一年月
      *
-     * @param yearMonth 年月，yyyy-MM格式
+     * @param yearMonth 年月，yyyy-MM/yyyyMM格式
      * @return 下一年月
      * @since v2.5.2
      */
     public static String getNextYearMonth(String yearMonth) {
         Assert.notBlank(yearMonth, "[Assertion failed] - the yearMonth argument must be blank");
 
-        Date yearMonthForDate = DateUtils.parse(yearMonth, DateUtils.PATTERN_YYYY_MM);
-        Assert.notNull(yearMonthForDate, "数据格式有误，必须是yyyy-MM格式");
+        // 年月：统一转为“yyyyMM”格式
+        String YYYYMM = StringUtils.replace(yearMonth, "-", "");
+        Date yearMonthForDate = DateUtils.parse(YYYYMM, DateUtils.PATTERN_YYYYMM);
+        Assert.notNull(yearMonthForDate, "数据格式有误，必须是yyyy-MM/yyyyMM格式");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(yearMonthForDate);
@@ -755,8 +769,8 @@ public class DateUtils {
     /**
      * 计算两个日期的月份间隔
      *
-     * @param startYearMonth    开始年月：yyyy-MM格式
-     * @param endYearMonth      结束年月：yyyy-MM格式
+     * @param startYearMonth    开始年月：yyyy-MM/yyyyMM格式
+     * @param endYearMonth      结束年月：yyyy-MM/yyyyMM格式
      * @param includeCurrentDay 是否包含当前月份：0=否，1=是。默认为0
      * @returns 月份间隔
      * @since v2.5.2
@@ -765,10 +779,10 @@ public class DateUtils {
         Assert.notBlank(startYearMonth, "[Assertion failed] - the startYearMonth argument must not be null");
         Assert.notBlank(endYearMonth, "[Assertion failed] - the endYearMonth argument must not be null");
 
-        Date startDate = DateUtils.parse(startYearMonth, DateUtils.PATTERN_YYYY_MM);
-        Assert.notNull(startDate, "数据格式有误，必须是yyyy-MM格式");
-        Date endDate = DateUtils.parse(endYearMonth, DateUtils.PATTERN_YYYY_MM);
-        Assert.notNull(endDate, "数据格式有误，必须是yyyy-MM格式");
+        Date startDate = DateUtils.parse(StringUtils.replace(startYearMonth, "-", ""), DateUtils.PATTERN_YYYYMM);
+        Assert.notNull(startDate, "数据格式有误，必须是yyyy-MM/yyyyMM格式");
+        Date endDate = DateUtils.parse(StringUtils.replace(endYearMonth, "-", ""), DateUtils.PATTERN_YYYYMM);
+        Assert.notNull(endDate, "数据格式有误，必须是yyyy-MM/yyyyMM格式");
 
         return DateUtils.getMonthInterval(startDate, endDate, includeCurrentDay);
     }
@@ -776,15 +790,15 @@ public class DateUtils {
     /**
      * 获取指定年月下的所有日期
      *
-     * @param yearMonth 年月：yyyy-MM格式
+     * @param yearMonth 年月：yyyy-MM/yyyyMM格式
      * @return 年月下的所有日期
      * @since v2.7.0
      */
     public static List<String> getMonthFullDay(String yearMonth) {
         Assert.notBlank(yearMonth, "[Assertion failed] - the yearMonth argument must not be null");
 
-        Date yearMonthDate = DateUtils.parse(yearMonth, DateUtils.PATTERN_YYYY_MM);
-        Assert.notNull(yearMonthDate, "数据格式有误，必须是yyyy-MM格式");
+        Date yearMonthDate = DateUtils.parse(StringUtils.replace(yearMonth, "-", ""), DateUtils.PATTERN_YYYY_MM);
+        Assert.notNull(yearMonthDate, "数据格式有误，必须是yyyy-MM/yyyyMM格式");
         return getMonthFullDay(yearMonthDate);
     }
 
