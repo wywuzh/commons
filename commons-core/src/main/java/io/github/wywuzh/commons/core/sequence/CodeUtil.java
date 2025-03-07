@@ -19,6 +19,9 @@ import java.math.BigDecimal;
 
 import org.apache.commons.lang3.StringUtils;
 
+import io.github.wywuzh.commons.core.math.CalculationUtils;
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * code编码工具类
  *
@@ -26,13 +29,41 @@ import org.apache.commons.lang3.StringUtils;
  * @version 4.0.0
  * @since JDK 1.6.0_20
  */
+@Slf4j
 public class CodeUtil {
+
+    /**
+     * 计算下一个编码
+     *
+     * @param code   当前编码
+     * @param length 编码长度
+     * @param prefix 编码前缀
+     * @return 下一个编码
+     * @since v3.3.0
+     */
+    public static synchronized String nextCode(String code, int length, String prefix) {
+        Long suffix = 0L;
+        if (StringUtils.isNotBlank(code)) {
+            try {
+                suffix = Long.parseLong(StringUtils.replace(code, prefix, ""));
+            } catch (Exception e) {
+                log.warn("code={} 获取编码后缀失败：", code, e);
+                suffix = 0L;
+            }
+        }
+        // 下一个编码：+1
+        BigDecimal nextCode = CalculationUtils.add(new BigDecimal(suffix), CalculationUtils.DEFAULT_ONE, 0);
+        return StringUtils.join(prefix, StringUtils.leftPad(nextCode.toString(), length, "0"));
+    }
+
     /**
      * 计算下一个编码
      *
      * @param code
      * @return
+     * @deprecated 已废弃，请使用 {@link #nextCode(String, int, String)} 方法
      */
+    @Deprecated
     public static String nextCode(String code) {
         if (StringUtils.isEmpty(code)) {
             return null;
@@ -70,7 +101,9 @@ public class CodeUtil {
      * </pre>
      *
      * @return
+     * @deprecated 已废弃，请使用 {@link #nextCode(String, int, String)} 方法
      */
+    @Deprecated
     public static String firstCode() {
         StringBuffer code = new StringBuffer("A");
         for (int i = 1; i < 12; i++) {
@@ -85,7 +118,9 @@ public class CodeUtil {
      *
      * @param number
      * @return
+     * @deprecated 已废弃，请使用 {@link #nextCode(String, int, String)} 方法
      */
+    @Deprecated
     public static String firstCode(int number) {
         StringBuffer code = new StringBuffer("A");
         for (int i = 1; i < number - 1; i++) {
@@ -95,27 +130,4 @@ public class CodeUtil {
         return code.toString();
     }
 
-    public static void main(String[] args) {
-        String code = "A000000000001";
-        System.out.println(code.length());
-
-        // String substring = code.substring(1);
-        // System.out.println(substring);
-        // String c = code.substring(0, 1);
-        // char[] charArray = c.toCharArray();
-        // char cc = charArray[0];
-        // System.out.println((char) (cc + 1));
-
-        long startTime = System.currentTimeMillis();
-        for (int i = 0; i < 1000; i++) {
-            code = nextCode(code);
-            System.out.println(code);
-        }
-        long endTime = System.currentTimeMillis();
-        System.out.println(endTime - startTime);
-        System.out.println(new BigDecimal(endTime - startTime).divide(new BigDecimal(1000)).setScale(3, 0).toString());
-
-        System.out.println(firstCode());
-        System.out.println(firstCode(3));
-    }
 }
