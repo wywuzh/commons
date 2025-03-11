@@ -425,6 +425,9 @@ public class ExcelUtils {
         if (excelExportRequest.getDataColl() != null) {
             Iterator<?> iterator = excelExportRequest.getDataColl().iterator();
             int index = firstRowNumber;
+
+            // key=columnName, value=CellStyle
+            Map<String, CellStyle> cellStyleMap = new HashMap<>();
             while (iterator.hasNext()) {
                 Object data = iterator.next();
                 if (data == null) {
@@ -437,15 +440,39 @@ public class ExcelUtils {
 
                 for (int k = 0; k < columns.length; k++) {
                     // 生成第k列 - 单元格
+                    int columnIndex = k;
                     Cell cell = sheetRow.createCell(k);
                     String columnName = columns[k];
-                    CellStyle columnStyle = Optional.ofNullable(sheet.getColumnStyle(k)).orElse(contentStyle);
 
                     Object realValue = getRealValue(data, columnName);
                     // 设置cell列字段值
                     setCellValue(workbook, cell, data, columnName, realValue);
                     // 设置cell列style样式
-                    setCellStyle(workbook, cell, columnStyle, data, columnName);
+                    // 列样式顺序：自定义样式 > sheet列默认样式 > 内容列(单元格)样式
+                    CellStyle defaultCellStyle = Optional.ofNullable(sheet.getColumnStyle(k)).orElse(contentStyle);
+                    CellStyle columnStyle = cellStyleMap.computeIfAbsent(columnName, (key)->{
+                        // 自定义样式。eg：@ExcelCell(value = "出生日期", cellType = CellTypeEnum.Date, format = "yyyy-MM-dd", index = 5)
+                        short cellDateFormat = getCellDateFormat(workbook, data, columnName);
+                        if (cellDateFormat != -1) {
+                            CellStyle cellStyle = CellStyleTools.createContentStyle(workbook);
+                            cellStyle.cloneStyleFrom(defaultCellStyle);
+                            cellStyle.setDataFormat(cellDateFormat);
+                            return cellStyle;
+                        }
+                        // sheet列默认样式
+                        CellStyle cellStyleForSheet = sheet.getColumnStyle(columnIndex);
+                        if (cellStyleForSheet == null) {
+                            return defaultCellStyle;
+                        }
+                        // 内容列(单元格)样式
+                        // tips: 参考 org.apache.poi.xssf.usermodel.XSSFSheet#getColumnStyle 方法，“idx=0”代表sheet未定义默认列样式，用了一个默认的
+                        CellStyle cellStyleForWorkbook = workbook.getCellStyleAt(0);
+                        if (cellStyleForWorkbook.equals(cellStyleForSheet)) {
+                            return defaultCellStyle;
+                        }
+                        return cellStyleForSheet;
+                    });
+                    cell.setCellStyle(columnStyle);
 
                     // 列宽有设置时以设置为准，否则通过字段值长度计算列宽
                     if (columnLengths != null && columnLengths.length > 0) {
@@ -469,6 +496,7 @@ public class ExcelUtils {
         return sheet;
     }
 
+    @Deprecated
     private static void setCellStyle(Workbook workbook, Cell cell, CellStyle defaultCellStyle, Object data, String columnName) {
         short cellDateFormat = getCellDateFormat(workbook, data, columnName);
         if (cellDateFormat != -1) {
@@ -483,7 +511,7 @@ public class ExcelUtils {
 
     public static short getCellDateFormat(Workbook workbook, Object data, String columnName) {
         // 取到columnName对应的实际字段/方法
-        Object realField = getRealField(data, columnName);
+        Object realField = ReflectUtils.getRealField(data, columnName);
         Short dataFormat = -1;
         if (realField != null) {
             dataFormat = getCellDateFormat(workbook, realField);
@@ -514,6 +542,12 @@ public class ExcelUtils {
         return dataFormat;
     }
 
+    /**
+     * @param workbook 工作簿
+     * @param cellTypeEnum Excel单元格列类型
+     * @return format对应的索引值
+     * @see org.apache.poi.ss.usermodel.BuiltinFormats
+     */
     public static short getCellDateFormat(Workbook workbook, CellTypeEnum cellTypeEnum) {
         String format = getFormat(cellTypeEnum);
         if (StringUtils.isBlank(format)) {
@@ -556,6 +590,10 @@ public class ExcelUtils {
 //        return -1;
     }
 
+    /**
+     * @param cellTypeEnum Excel单元格列类型
+     * @return 系统预设的format
+     */
     public static String getFormat(CellTypeEnum cellTypeEnum) {
         switch (cellTypeEnum) {
         case String: // 字符串文本
@@ -582,6 +620,7 @@ public class ExcelUtils {
         return null;
     }
 
+    @Deprecated
     private static Object getRealField(Object data, String columnName) {
         // 如果行对象为Map类型，则不需要取字段的类型
         if (data instanceof Map) {
@@ -618,7 +657,7 @@ public class ExcelUtils {
 
     private static ExcelCell getExcelCell(Object data, String columnName) {
         // 取到columnName对应的实际字段/方法
-        Object realField = getRealField(data, columnName);
+        Object realField = ReflectUtils.getRealField(data, columnName);
         ExcelCell excelCell = null;
         if (realField instanceof Field) {
             excelCell = ((Field) realField).getAnnotation(ExcelCell.class);
