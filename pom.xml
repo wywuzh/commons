@@ -92,6 +92,7 @@
         <snakeyaml_version>2.2</snakeyaml_version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpclient_version>4.5.14</httpclient_version>
+        <httpclient5.version>5.3.1</httpclient5.version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
