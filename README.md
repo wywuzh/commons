@@ -4,6 +4,17 @@
 
 ### 依赖资源
 
+#### SpringBoot/v3.4.x
+* spring-boot：3.4.x
+* spring-cloud：2023.0.x
+* spring-kafka：3.3.x
+* mybatis：3.5.17
+* mybatis-spring：3.0.4
+* mybatis-spring-boot：3.0.4
+* dubbo：3.3.x
+* poi：5.2.x
+
+
 #### SpringBoot/v3.2.x
 * spring-boot：3.2.x
 * spring-cloud：2022.0.x
