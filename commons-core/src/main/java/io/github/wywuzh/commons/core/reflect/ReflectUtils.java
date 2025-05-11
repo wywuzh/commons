@@ -21,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Map;
 
+import io.github.wywuzh.commons.core.poi.annotation.ExcelCell;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
@@ -67,13 +68,53 @@ public class ReflectUtils {
     }
 
     /**
+     * 取到fieldName对应的实际字段/方法
+     *
+     * @param instance  实例对象
+     * @param fieldName 字段名称
+     * @return fieldName对应的实际字段/方法
+     * @since v3.3.0
+     */
+    public static Object getRealField(Object instance, String fieldName) {
+        // 如果对象为Map类型，则不需要取字段的类型
+        if (instance instanceof Map) {
+            return null;
+        }
+
+        // tips：先根据fieldName取Field，如果取不到就去找Method
+        Class<?> clazz = instance.getClass();
+        Field field = FieldUtils.getField(clazz, fieldName, true);
+        if (field != null) {
+            return field;
+        }
+
+        // 如果field字段无法取到值，则通过Getter方法取
+        // 将第一个字符转换为大写
+        String firstChar = fieldName.substring(0, 1);
+        String lastChar = fieldName.substring(1);
+        fieldName = firstChar.toUpperCase() + lastChar;
+        Method fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
+        if (fieldMethod == null) {
+            // 此处为解决实体类字段第二个字符为大写的问题
+            // 注意：这里是为了兼容第二个字符为大写的字段，在设计表结构的时候，尽量不要采用这种方式，这种设计方式不合理，会在Getter、Setter方法以及接口返回的时候出现意料之外的结果
+            firstChar = fieldName.substring(0, 2);
+            lastChar = fieldName.substring(2);
+            fieldName = firstChar.toUpperCase() + lastChar;
+            fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
+        }
+        if (fieldMethod != null) {
+            fieldMethod.setAccessible(true);
+        }
+
+        return fieldMethod;
+    }
+
+    /**
      * 获取字段值
      *
      * @param instance  实例对象
      * @param fieldName 字段名称
-     * @param <T>
-     * @return
-     * @throws IllegalAccessException
+     * @return 字段值
      */
     public static <T> T getValue(Object instance, String fieldName) throws IllegalAccessException {
         try {
@@ -81,31 +122,46 @@ public class ReflectUtils {
             if (instance instanceof Map) {
                 realValue = ((Map) instance).get(fieldName);
             } else {
-                Class<?> clazz = instance.getClass();
-                Field field = FieldUtils.getField(clazz, fieldName, true);
-
-                if (field == null) {
-                    // 如果field字段无法取到值，则通过Getter方法取
-                    // 将第一个字符转换为大写
-                    String firstChar = fieldName.substring(0, 1);
-                    String lastChar = fieldName.substring(1);
-                    fieldName = firstChar.toUpperCase() + lastChar;
-                    Method fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
-                    if (fieldMethod == null) {
-                        // 此处为解决实体类字段第二个字符为大写的问题
-                        // 注意：这里是为了兼容第二个字符为大写的字段，在设计表结构的时候，尽量不要采用这种方式，这种设计方式不合理，会在Getter、Setter方法以及接口返回的时候出现意料之外的结果
-                        firstChar = fieldName.substring(0, 2);
-                        lastChar = fieldName.substring(2);
-                        fieldName = firstChar.toUpperCase() + lastChar;
-                        fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
-                    }
-                    fieldMethod.setAccessible(true);
-                    realValue = MethodUtils.invokeMethod(instance, fieldMethod.getName());
-                } else {
-                    realValue = field.get(instance);
+                // 取到fieldName对应的实际字段/方法
+                Object realField = getRealField(instance, fieldName);
+                if (realField instanceof Field) {
+                    realValue = ((Field) realField).get(instance);
+                } else if (realField instanceof Method) {
+                    realValue = MethodUtils.invokeMethod(instance, ((Method) realField).getName());
                 }
             }
+
             return (T) realValue;
+
+//            Object realValue = null;
+//            if (instance instanceof Map) {
+//                realValue = ((Map) instance).get(fieldName);
+//            } else {
+//                Class<?> clazz = instance.getClass();
+//                Field field = FieldUtils.getField(clazz, fieldName, true);
+//
+//                if (field == null) {
+//                    // 如果field字段无法取到值，则通过Getter方法取
+//                    // 将第一个字符转换为大写
+//                    String firstChar = fieldName.substring(0, 1);
+//                    String lastChar = fieldName.substring(1);
+//                    fieldName = firstChar.toUpperCase() + lastChar;
+//                    Method fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
+//                    if (fieldMethod == null) {
+//                        // 此处为解决实体类字段第二个字符为大写的问题
+//                        // 注意：这里是为了兼容第二个字符为大写的字段，在设计表结构的时候，尽量不要采用这种方式，这种设计方式不合理，会在Getter、Setter方法以及接口返回的时候出现意料之外的结果
+//                        firstChar = fieldName.substring(0, 2);
+//                        lastChar = fieldName.substring(2);
+//                        fieldName = firstChar.toUpperCase() + lastChar;
+//                        fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
+//                    }
+//                    fieldMethod.setAccessible(true);
+//                    realValue = MethodUtils.invokeMethod(instance, fieldMethod.getName());
+//                } else {
+//                    realValue = field.get(instance);
+//                }
+//            }
+//            return (T) realValue;
         } catch (IllegalAccessException e) {
             LOGGER.error("instance={}, fieldName={} 字段获取值失败：", instance.getClass(), fieldName, e);
             throw e;
