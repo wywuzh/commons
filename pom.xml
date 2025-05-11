@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.6</version>
+        <version>3.4.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -60,45 +60,45 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
-        <revision>3.3.6.RELEASE</revision>
-        <spring-boot.version>3.3.6</spring-boot.version>
+        <revision>3.4.0.RELEASE</revision>
+        <spring-boot.version>3.4.0</spring-boot.version>
         <spring-cloud.version>2023.0.4</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
         1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
         -->
-        <spring-framework.version>6.1.15</spring-framework.version>
-        <spring_version>6.1.15</spring_version>
-        <spring-security.version>6.3.5</spring-security.version>
+        <spring-framework.version>6.2.0</spring-framework.version>
+        <spring_version>6.2.0</spring_version>
+        <spring-security.version>6.4.1</spring-security.version>
         <netty.version>4.1.115.Final</netty.version>
         <netty4_version>4.1.115.Final</netty4_version>
-        <log4j2.version>2.23.1</log4j2.version>
-        <log4j2_version>2.23.1</log4j2_version>
+        <log4j2.version>2.24.1</log4j2.version>
+        <log4j2_version>2.24.1</log4j2_version>
         <logback.version>1.5.12</logback.version>
         <logback_version>1.5.12</logback_version>
         <slf4j.version>2.0.16</slf4j.version>
         <slf4j_version>2.0.16</slf4j_version>
-        <commons-lang3.version>3.14.0</commons-lang3.version>
-        <commons_lang3_version>3.14.0</commons_lang3_version>
-        <gson.version>2.10.1</gson.version>
-        <gson_version>2.10.1</gson_version>
+        <commons-lang3.version>3.17.0</commons-lang3.version>
+        <commons_lang3_version>3.17.0</commons_lang3_version>
+        <gson.version>2.11.0</gson.version>
+        <gson_version>2.11.0</gson_version>
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <javax_annotation-api_version>1.3.2</javax_annotation-api_version>
         <tomcat.version>10.1.33</tomcat.version>
         <tomcat_embed_version>10.1.33</tomcat_embed_version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
         <hibernate_validator_new_version>8.0.1.Final</hibernate_validator_new_version>
-        <snakeyaml.version>2.2</snakeyaml.version>
-        <snakeyaml_version>2.2</snakeyaml_version>
+        <snakeyaml.version>2.3</snakeyaml.version>
+        <snakeyaml_version>2.3</snakeyaml_version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpclient_version>4.5.14</httpclient_version>
-        <httpclient5.version>5.3.1</httpclient5.version>
+        <httpclient5.version>5.4.1</httpclient5.version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
-        <jackson-bom.version>2.17.3</jackson-bom.version>
-        <commons-codec.version>1.16.1</commons-codec.version>
-        <spring-kafka.version>3.2.5</spring-kafka.version>
+        <jackson-bom.version>2.18.1</jackson-bom.version>
+        <commons-codec.version>1.17.1</commons-codec.version>
+        <spring-kafka.version>3.3.0</spring-kafka.version>
         -->
 
         <json-lib.version>2.4</json-lib.version>
@@ -113,7 +113,7 @@
         <commons_compress_version>1.27.1</commons_compress_version>
         <commons-configuration.version>1.10</commons-configuration.version>
         <commons-configuration2.version>2.11.0</commons-configuration2.version>
-        <commons-io.version>2.17.0</commons-io.version>
+        <commons-io.version>2.18.0</commons-io.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <commons-validator.version>1.7</commons-validator.version>
         <commons-net.version>3.8.0</commons-net.version>
@@ -134,7 +134,7 @@
         <apollo_client_version>2.3.0</apollo_client_version>
 
         <commons-dbutils.version>1.7</commons-dbutils.version>
-        <mybatis-spring-boot.version>3.0.3</mybatis-spring-boot.version>
+        <mybatis-spring-boot.version>3.0.4</mybatis-spring-boot.version>
         <mybatis-generator-core.version>1.3.7</mybatis-generator-core.version>
         <mybatis-generator-plugin.version>1.3.8</mybatis-generator-plugin.version>
         <pagehelper-spring-boot.version>2.1.0</pagehelper-spring-boot.version>
@@ -142,10 +142,10 @@
         <druid.version>1.2.24</druid.version>
 
         <!-- 注：curator、hessian、hessian-lite 的版本要和 dubbo-dependencies-bom 中引入的版本保持一致 -->
-        <curator_version>5.1.0</curator_version>
+        <curator_version>5.7.1</curator_version>
         <hessian_version>4.0.66</hessian_version>
-        <hessian_lite_version>3.2.13</hessian_lite_version>
-        <dubbo.version>3.2.16</dubbo.version>
+        <hessian_lite_version>4.0.3</hessian_lite_version>
+        <dubbo.version>3.3.2</dubbo.version>
         <shiro.version>2.0.2</shiro.version>
 
         <alibaba-dingtalk-service-sdk.version>2.0.0</alibaba-dingtalk-service-sdk.version>
@@ -633,7 +633,7 @@
                 <version>${hessian_version}</version>
             </dependency>
             <dependency>
-                <groupId>com.alibaba</groupId>
+                <groupId>org.apache.dubbo</groupId>
                 <artifactId>hessian-lite</artifactId>
                 <version>${hessian_lite_version}</version>
             </dependency>
