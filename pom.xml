@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.6</version>
+        <version>3.3.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -60,18 +60,18 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
-        <revision>3.3.6.RELEASE</revision>
-        <spring-boot.version>3.3.6</spring-boot.version>
+        <revision>3.3.7.RELEASE</revision>
+        <spring-boot.version>3.3.7</spring-boot.version>
         <spring-cloud.version>2023.0.4</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
         1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
         -->
-        <spring-framework.version>6.1.15</spring-framework.version>
-        <spring_version>6.1.15</spring_version>
-        <spring-security.version>6.3.5</spring-security.version>
-        <netty.version>4.1.115.Final</netty.version>
-        <netty4_version>4.1.115.Final</netty4_version>
+        <spring-framework.version>6.1.16</spring-framework.version>
+        <spring_version>6.1.16</spring_version>
+        <spring-security.version>6.3.6</spring-security.version>
+        <netty.version>4.1.116.Final</netty.version>
+        <netty4_version>4.1.116.Final</netty4_version>
         <log4j2.version>2.23.1</log4j2.version>
         <log4j2_version>2.23.1</log4j2_version>
         <logback.version>1.5.12</logback.version>
@@ -84,8 +84,8 @@
         <gson_version>2.10.1</gson_version>
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <javax_annotation-api_version>1.3.2</javax_annotation-api_version>
-        <tomcat.version>10.1.33</tomcat.version>
-        <tomcat_embed_version>10.1.33</tomcat_embed_version>
+        <tomcat.version>10.1.34</tomcat.version>
+        <tomcat_embed_version>10.1.34</tomcat_embed_version>
         <hibernate-validator.version>8.0.1.Final</hibernate-validator.version>
         <hibernate_validator_new_version>8.0.1.Final</hibernate_validator_new_version>
         <snakeyaml.version>2.2</snakeyaml.version>
@@ -98,7 +98,7 @@
         <!--
         <jackson-bom.version>2.17.3</jackson-bom.version>
         <commons-codec.version>1.16.1</commons-codec.version>
-        <spring-kafka.version>3.2.5</spring-kafka.version>
+        <spring-kafka.version>3.2.6</spring-kafka.version>
         -->
 
         <json-lib.version>2.4</json-lib.version>
@@ -118,7 +118,7 @@
         <commons-validator.version>1.7</commons-validator.version>
         <commons-net.version>3.8.0</commons-net.version>
         <jsch.version>0.1.55</jsch.version>
-        <guava.version>33.3.1-jre</guava.version>
+        <guava.version>33.4.0-jre</guava.version>
 
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <apache-poi.version>5.2.5</apache-poi.version>
@@ -128,7 +128,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
-        <hutool.version>5.8.34</hutool.version>
+        <hutool.version>5.8.35</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
         <apollo-client.version>2.3.0</apollo-client.version>
         <apollo_client_version>2.3.0</apollo_client_version>
