@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -60,9 +60,9 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
-        <revision>3.4.0.RELEASE</revision>
-        <spring-boot.version>3.4.0</spring-boot.version>
-        <spring-cloud.version>2023.0.4</spring-cloud.version>
+        <revision>3.4.1.RELEASE</revision>
+        <spring-boot.version>3.4.1</spring-boot.version>
+        <spring-cloud.version>2024.0.0</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
         1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
@@ -118,7 +118,7 @@
         <commons-validator.version>1.7</commons-validator.version>
         <commons-net.version>3.8.0</commons-net.version>
         <jsch.version>0.1.55</jsch.version>
-        <guava.version>33.3.1-jre</guava.version>
+        <guava.version>33.4.0-jre</guava.version>
 
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <apache-poi.version>5.2.5</apache-poi.version>
@@ -128,7 +128,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
-        <hutool.version>5.8.34</hutool.version>
+        <hutool.version>5.8.35</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
         <apollo-client.version>2.3.0</apollo-client.version>
         <apollo_client_version>2.3.0</apollo_client_version>
