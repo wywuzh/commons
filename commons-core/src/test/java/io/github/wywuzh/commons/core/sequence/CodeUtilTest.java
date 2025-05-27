@@ -15,10 +15,11 @@
  */
 package io.github.wywuzh.commons.core.sequence;
 
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-
 import java.math.BigDecimal;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.Test;
 
 /**
  * 类CodeUtilTest的实现描述：code编码工具类
