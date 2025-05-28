@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.10</version>
+        <version>3.3.11</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -60,8 +60,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
-        <revision>3.3.10.RELEASE</revision>
-        <spring-boot.version>3.3.10</spring-boot.version>
+        <revision>3.3.11.RELEASE</revision>
+        <spring-boot.version>3.3.11</spring-boot.version>
         <spring-cloud.version>2023.0.4</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
@@ -108,17 +108,17 @@
 
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <commons-collections.version>3.2.2</commons-collections.version>
-        <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-collections4.version>4.5.0</commons-collections4.version>
         <commons-compress.version>1.27.1</commons-compress.version>
         <commons_compress_version>1.27.1</commons_compress_version>
         <commons-configuration.version>1.10</commons-configuration.version>
-        <commons-configuration2.version>2.11.0</commons-configuration2.version>
-        <commons-io.version>2.17.0</commons-io.version>
+        <commons-configuration2.version>2.12.0</commons-configuration2.version>
+        <commons-io.version>2.19.0</commons-io.version>
         <commons-math3.version>3.6.1</commons-math3.version>
         <commons-validator.version>1.7</commons-validator.version>
         <commons-net.version>3.8.0</commons-net.version>
         <jsch.version>0.1.55</jsch.version>
-        <guava.version>33.4.6-jre</guava.version>
+        <guava.version>33.4.8-jre</guava.version>
 
         <commons-fileupload.version>1.4</commons-fileupload.version>
         <apache-poi.version>5.2.5</apache-poi.version>
@@ -128,7 +128,7 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <UserAgentUtils.version>1.21</UserAgentUtils.version>
         <jep.version>2.24</jep.version>
-        <hutool.version>5.8.36</hutool.version>
+        <hutool.version>5.8.37</hutool.version>
         <springfox-swagger.version>2.10.5</springfox-swagger.version>
         <apollo-client.version>2.4.0</apollo-client.version>
         <apollo_client_version>2.4.0</apollo_client_version>
