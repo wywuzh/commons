@@ -47,7 +47,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.5</version>
+        <version>3.4.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -60,8 +60,8 @@
         <maven.compiler.target>17</maven.compiler.target>
         <java.version>17</java.version>
 
-        <revision>3.4.5.RELEASE</revision>
-        <spring-boot.version>3.4.5</spring-boot.version>
+        <revision>3.4.6.RELEASE</revision>
+        <spring-boot.version>3.4.6</spring-boot.version>
         <spring-cloud.version>2024.0.0</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
