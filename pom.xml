@@ -62,7 +62,7 @@
 
         <revision>3.4.4.RELEASE</revision>
         <spring-boot.version>3.4.4</spring-boot.version>
-        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
         1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
