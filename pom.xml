@@ -62,43 +62,43 @@
 
         <revision>3.4.6.RELEASE</revision>
         <spring-boot.version>3.4.6</spring-boot.version>
-        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
 
         <!-- 注：以下依赖包在spring-boot-dependencies和dubbo-dependencies-bom中都有内置，版本号以spring-boot-dependencies中内置版本为准
         1. “.version”结尾的属于spring-boot-dependencies内置依赖包版本，“_version”结尾的属于dubbo-dependencies-bom内置依赖包版本
         -->
-        <spring-framework.version>6.2.1</spring-framework.version>
-        <spring_version>6.2.1</spring_version>
-        <spring-security.version>6.4.3</spring-security.version>
-        <netty.version>4.1.116.Final</netty.version>
-        <netty4_version>4.1.116.Final</netty4_version>
+        <spring-framework.version>6.2.5</spring-framework.version>
+        <spring_version>6.2.5</spring_version>
+        <spring-security.version>6.4.4</spring-security.version>
+        <netty.version>4.1.119.Final</netty.version>
+        <netty4_version>4.1.119.Final</netty4_version>
         <log4j2.version>2.24.3</log4j2.version>
         <log4j2_version>2.24.3</log4j2_version>
-        <logback.version>1.5.12</logback.version>
-        <logback_version>1.5.12</logback_version>
-        <slf4j.version>2.0.16</slf4j.version>
-        <slf4j_version>2.0.16</slf4j_version>
+        <logback.version>1.5.18</logback.version>
+        <logback_version>1.5.18</logback_version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <slf4j_version>2.0.17</slf4j_version>
         <commons-lang3.version>3.17.0</commons-lang3.version>
         <commons_lang3_version>3.17.0</commons_lang3_version>
         <gson.version>2.11.0</gson.version>
         <gson_version>2.11.0</gson_version>
         <javax-annotation.version>1.3.2</javax-annotation.version>
         <javax_annotation-api_version>1.3.2</javax_annotation-api_version>
-        <tomcat.version>10.1.34</tomcat.version>
-        <tomcat_embed_version>10.1.34</tomcat_embed_version>
+        <tomcat.version>10.1.39</tomcat.version>
+        <tomcat_embed_version>10.1.39</tomcat_embed_version>
         <hibernate-validator.version>8.0.2.Final</hibernate-validator.version>
         <hibernate_validator_new_version>8.0.2.Final</hibernate_validator_new_version>
         <snakeyaml.version>2.3</snakeyaml.version>
         <snakeyaml_version>2.3</snakeyaml_version>
         <httpclient.version>4.5.14</httpclient.version>
         <httpclient_version>4.5.14</httpclient_version>
-        <httpclient5.version>5.4.1</httpclient5.version>
+        <httpclient5.version>5.4.2</httpclient5.version>
 
         <!-- 注：以下依赖包spring-boot中已经内置，请保持相同版本号，避免版本冲突 -->
         <!--
-        <jackson-bom.version>2.18.2</jackson-bom.version>
-        <commons-codec.version>1.17.1</commons-codec.version>
-        <spring-kafka.version>3.3.1</spring-kafka.version>
+        <jackson-bom.version>2.18.3</jackson-bom.version>
+        <commons-codec.version>1.17.2</commons-codec.version>
+        <spring-kafka.version>3.3.4</spring-kafka.version>
         -->
 
         <json-lib.version>2.4</json-lib.version>
