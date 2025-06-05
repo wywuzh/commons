@@ -450,7 +450,7 @@ public class ExcelUtils {
                     // 设置cell列style样式
                     // 列样式顺序：自定义样式 > sheet列默认样式 > 内容列(单元格)样式
                     CellStyle defaultCellStyle = Optional.ofNullable(sheet.getColumnStyle(k)).orElse(contentStyle);
-                    CellStyle columnStyle = cellStyleMap.computeIfAbsent(columnName, (key)->{
+                    CellStyle columnStyle = cellStyleMap.computeIfAbsent(columnName, (key) -> {
                         // 自定义样式。eg：@ExcelCell(value = "出生日期", cellType = CellTypeEnum.Date, format = "yyyy-MM-dd", index = 5)
                         short cellDateFormat = getCellDateFormat(workbook, data, columnName);
                         if (cellDateFormat != -1) {
@@ -543,7 +543,7 @@ public class ExcelUtils {
     }
 
     /**
-     * @param workbook 工作簿
+     * @param workbook     工作簿
      * @param cellTypeEnum Excel单元格列类型
      * @return format对应的索引值
      * @see org.apache.poi.ss.usermodel.BuiltinFormats
