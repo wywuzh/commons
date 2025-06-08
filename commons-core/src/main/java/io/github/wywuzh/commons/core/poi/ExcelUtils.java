@@ -15,29 +15,6 @@
  */
 package io.github.wywuzh.commons.core.poi;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.MessageFormat;
-import java.text.NumberFormat;
-import java.util.*;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
-import org.apache.commons.lang3.reflect.MethodUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.usermodel.XSSFDataValidation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.Assert;
-
 import io.github.wywuzh.commons.core.common.ContentType;
 import io.github.wywuzh.commons.core.math.CalculationUtils;
 import io.github.wywuzh.commons.core.poi.annotation.ExcelCell;
@@ -53,6 +30,29 @@ import io.github.wywuzh.commons.core.util.SortUtils;
 import io.github.wywuzh.commons.core.util.StringHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.ss.util.CellRangeAddressList;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
+
+import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
+import java.text.NumberFormat;
+import java.util.*;
 
 /**
  * 类ExcelUtils的实现描述：Excel 工具
@@ -152,7 +152,7 @@ public class ExcelUtils {
      * @throws InvocationTargetException
      */
     public static <T> void exportData(HttpServletRequest request, HttpServletResponse response, String fileName, String sheetName, String[] sheetColumnNames, String[] sheetColumnComments,
-            Collection<T> dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+                                      Collection<T> dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         ExcelExportRequest excelExportRequest = new ExcelExportRequest();
         excelExportRequest.setSheetName(sheetName);
         excelExportRequest.setColumns(sheetColumnNames);
@@ -178,7 +178,7 @@ public class ExcelUtils {
      * @throws InvocationTargetException
      */
     public static <T> void exportData(HttpServletRequest request, HttpServletResponse response, String fileName, String[] sheetNames, String[][] sheetColumnNames, String[][] sheetColumnComments,
-            Collection<T>[] dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+                                      Collection<T>[] dataColl) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         // 创建workbook
         Workbook workbook = createWorkbook(fileName);
         for (int i = 0; i < sheetNames.length; i++) {
@@ -220,6 +220,34 @@ public class ExcelUtils {
     }
 
     /**
+     * 导出大数据
+     *
+     * @param request            请求信息
+     * @param response           响应信息
+     * @param fileName           导出文件名，注意需要包含文件后缀
+     * @param excelExportRequest 导出数据请求条件
+     * @since v3.5.0
+     */
+    public static void exportLargeData(HttpServletRequest request, HttpServletResponse response, String fileName, ExcelExportRequest excelExportRequest)
+            throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+        SXSSFWorkbook workbook = null;
+        try {
+            // 创建workbook
+            workbook = new SXSSFWorkbook();
+            // 创建sheet
+            Sheet sheet = createSheet(workbook, excelExportRequest);
+            // 写入内容
+            writeData(workbook, sheet, excelExportRequest);
+
+            // 将workbook工作簿内容写入输出流中
+            writeWorkbook(request, response, workbook, fileName);
+        } finally {
+            // 清除临时文件
+            workbook.dispose();
+        }
+    }
+
+    /**
      * 将workbook工作簿内容写入输出流中
      *
      * @param request
@@ -258,6 +286,27 @@ public class ExcelUtils {
         boolean xssf = StringUtils.endsWithIgnoreCase(fileName, ".xlsx") ? true : false;
         Workbook workbook = WorkbookFactory.create(xssf);
         return workbook;
+    }
+
+    /**
+     * 创建SXSSFWorkbook
+     *
+     * @return SXSSF格式的工作簿，XSSFWorkbook的流式版本，专门用于解决内存溢出问题
+     * @since v3.5.0
+     */
+    public static SXSSFWorkbook createSXSSFWorkbook() {
+        return new SXSSFWorkbook();
+    }
+
+    /**
+     * 创建SXSSFWorkbook
+     *
+     * @param workbook XSSF格式的工作簿
+     * @return SXSSF格式的工作簿，XSSFWorkbook的流式版本，专门用于解决内存溢出问题
+     * @since v3.5.0
+     */
+    public static SXSSFWorkbook createSXSSFWorkbook(XSSFWorkbook workbook) {
+        return new SXSSFWorkbook(workbook);
     }
 
     /**
@@ -555,39 +604,6 @@ public class ExcelUtils {
         }
         DataFormat dataFormat = workbook.createDataFormat();
         return dataFormat.getFormat(format);
-//        if (CellTypeEnum.String.equals(cellTypeEnum)) { // 字符串文本
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_String);
-//        } else if (CellTypeEnum.Percent.equals(cellTypeEnum)) { // 百分比
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Percent);
-//        } else if (CellTypeEnum.Integer.equals(cellTypeEnum)) { // 整型数值
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Integer);
-//        } else if (CellTypeEnum.BigDecimal.equals(cellTypeEnum)) { // 数值，保留2位小数
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_BigDecimal);
-//        } else if (CellTypeEnum.Money.equals(cellTypeEnum)) { // 金额，保留2位小数
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Money);
-//        } else if (CellTypeEnum.Rate.equals(cellTypeEnum)) { // 率，保留4位小数
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Rate);
-//        } else if (CellTypeEnum.Accounting.equals(cellTypeEnum)) { // 会计专用
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            // 金额格式：会计专用格式
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Accounting);
-//        } else if (CellTypeEnum.Date.equals(cellTypeEnum)) { // 日期
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Date);
-//        } else if (CellTypeEnum.Time.equals(cellTypeEnum)) { // 时间
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_Time);
-//        } else if (CellTypeEnum.DateTime.equals(cellTypeEnum)) { // 日期时间
-//            DataFormat dataFormat = workbook.createDataFormat();
-//            return dataFormat.getFormat(CellStyleConstants.STYLE_FORMAT_DateTime);
-//        }
-//        return -1;
     }
 
     /**
@@ -595,64 +611,42 @@ public class ExcelUtils {
      * @return 系统预设的format
      */
     public static String getFormat(CellTypeEnum cellTypeEnum) {
+        String format = null;
         switch (cellTypeEnum) {
-        case String: // 字符串文本
-            return CellStyleConstants.STYLE_FORMAT_String;
-        case Percent: // 百分比
-            return CellStyleConstants.STYLE_FORMAT_Percent;
-        case Integer: // 整型数值
-            return CellStyleConstants.STYLE_FORMAT_Integer;
-        case BigDecimal: // 数值，保留2位小数
-            return CellStyleConstants.STYLE_FORMAT_BigDecimal;
-        case Money: // 金额，保留2位小数
-            return CellStyleConstants.STYLE_FORMAT_Money;
-        case Rate: // 率，保留4位小数
-            return CellStyleConstants.STYLE_FORMAT_Rate;
-        case Accounting: // 会计专用，保留2位小数
-            return CellStyleConstants.STYLE_FORMAT_Accounting;
-        case Date: // 日期：yyyy-MM-dd格式
-            return CellStyleConstants.STYLE_FORMAT_Date;
-        case Time: // 时间：HH:mm:ss格式
-            return CellStyleConstants.STYLE_FORMAT_Time;
-        case DateTime: // 日期时间：yyyy-MM-dd HH:mm:ss格式
-            return CellStyleConstants.STYLE_FORMAT_DateTime;
+            case String: // 字符串文本
+                format = CellStyleConstants.STYLE_FORMAT_String;
+                break;
+            case Percent: // 百分比
+                format = CellStyleConstants.STYLE_FORMAT_Percent;
+                break;
+            case Integer: // 整型数值
+                format = CellStyleConstants.STYLE_FORMAT_Integer;
+                break;
+            case BigDecimal: // 数值，保留2位小数
+                format = CellStyleConstants.STYLE_FORMAT_BigDecimal;
+                break;
+            case Money: // 金额，保留2位小数
+                format = CellStyleConstants.STYLE_FORMAT_Money;
+                break;
+            case Rate: // 率，保留4位小数
+                format = CellStyleConstants.STYLE_FORMAT_Rate;
+                break;
+            case Accounting: // 会计专用，保留2位小数
+                format = CellStyleConstants.STYLE_FORMAT_Accounting;
+                break;
+            case Date: // 日期：yyyy-MM-dd格式
+                format = CellStyleConstants.STYLE_FORMAT_Date;
+                break;
+            case Time: // 时间：HH:mm:ss格式
+                format = CellStyleConstants.STYLE_FORMAT_Time;
+                break;
+            case DateTime: // 日期时间：yyyy-MM-dd HH:mm:ss格式
+                format = CellStyleConstants.STYLE_FORMAT_DateTime;
+                break;
+            default:
+                break;
         }
-        return null;
-    }
-
-    @Deprecated
-    private static Object getRealField(Object data, String columnName) {
-        // 如果行对象为Map类型，则不需要取字段的类型
-        if (data instanceof Map) {
-            return null;
-        }
-
-        // tips：先根据columnName取Field，如果取不到就去找Method
-        Class<?> clazz = data.getClass();
-        Field field = FieldUtils.getField(clazz, columnName, true);
-        if (field != null) {
-            return field;
-        }
-
-        // 如果field字段无法取到值，则通过Getter方法取
-        // 将第一个字符转换为大写
-        String firstChar = columnName.substring(0, 1);
-        String lastChar = columnName.substring(1);
-        columnName = firstChar.toUpperCase() + lastChar;
-        Method fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + columnName);
-        if (fieldMethod == null) {
-            // 此处为解决实体类字段第二个字符为大写的问题
-            // 注意：这里是为了兼容第二个字符为大写的字段，在设计表结构的时候，尽量不要采用这种方式，这种设计方式不合理，会在Getter、Setter方法以及接口返回的时候出现意料之外的结果
-            firstChar = columnName.substring(0, 2);
-            lastChar = columnName.substring(2);
-            columnName = firstChar.toUpperCase() + lastChar;
-            fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + columnName);
-        }
-        if (fieldMethod != null) {
-            fieldMethod.setAccessible(true);
-        }
-
-        return fieldMethod;
+        return format;
     }
 
     private static ExcelCell getExcelCell(Object data, String columnName) {
@@ -905,9 +899,9 @@ public class ExcelUtils {
         // 参考地址：https://www.cnblogs.com/zouhao/p/11346243.html
         // 创建sheet，写入枚举项
         // 隐藏sheet特殊字符处理
-        String prefixName = StringUtils.replaceEach(columnTitle, new String[] {
+        String prefixName = StringUtils.replaceEach(columnTitle, new String[]{
                 "-", "/", "\\", "?", "*", "[", "]", ":"
-        }, new String[] {
+        }, new String[]{
                 "", "", "", "", "", "", "", ""
         });
         // 已经创建了隐藏sheet，直接使用原来的就行
@@ -1065,7 +1059,7 @@ public class ExcelUtils {
             return columns;
         }
         // 排序：索引、排序、字段标题
-        SortUtils.sort(excelCellFieldList, new String[] {
+        SortUtils.sort(excelCellFieldList, new String[]{
                 "index"/* , "sortNo", "fieldTitle" */
         });
 
