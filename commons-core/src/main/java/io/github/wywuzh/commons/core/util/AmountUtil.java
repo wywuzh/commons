@@ -19,6 +19,8 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 
 import io.github.wywuzh.commons.core.exception.AmountException;
@@ -30,6 +32,7 @@ import io.github.wywuzh.commons.core.exception.AmountException;
  * @version 1.0.0
  * @since JDK 1.6.0_20
  */
+@Slf4j
 public class AmountUtil {
     private static final DecimalFormat FORMAT = new DecimalFormat("###,##0.00");
     private static final String PREFIX = "￥";
@@ -38,8 +41,8 @@ public class AmountUtil {
      * 将byte类型金额数值转换成金额类型
      *
      * @param amount
-     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      * @return 返回转换后的金额字符串，格式为￥###,##0.00
+     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      */
     public static String format(byte amount) {
         return PREFIX + FORMAT.format(amount);
@@ -49,8 +52,8 @@ public class AmountUtil {
      * 将short类型金额数值转换成金额类型
      *
      * @param amount
-     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      * @return 返回转换后的金额字符串，格式为￥###,##0.00
+     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      */
     public static String format(short amount) {
         return PREFIX + FORMAT.format(amount);
@@ -60,8 +63,8 @@ public class AmountUtil {
      * 将int类型金额数值转换成金额类型
      *
      * @param amount
-     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      * @return 返回转换后的金额字符串，格式为￥###,##0.00
+     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      */
     public static String format(int amount) {
         return PREFIX + FORMAT.format(amount);
@@ -71,8 +74,8 @@ public class AmountUtil {
      * 将float类型金额数值转换成金额类型
      *
      * @param amount
-     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      * @return 返回转换后的金额字符串，格式为￥###,##0.00
+     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      */
     public static String format(float amount) {
         return PREFIX + FORMAT.format(amount);
@@ -88,12 +91,11 @@ public class AmountUtil {
      * 不建议传入char类型的数据，虽然char型数据可以直接转成double类型，但我们应该明确char数值代表的是字符位。
      * </pre>
      *
-     * @param number
-     *                   数值
+     * @param number 数值
      * @return 格式化之后的金额字符串
+     * @return 返回转换后的金额字符串，格式为￥###,##0.00
      * @author <a href="mailto:wywuzh@163.com">wuzh</a>, 12/24/2013
      * @author <a href="mailto:wywuzh@163.com">wuzh</a>, 02/20/2014
-     * @return 返回转换后的金额字符串，格式为￥###,##0.00
      */
     public static String format(double number) {
         return PREFIX + FORMAT.format(number);
@@ -104,8 +106,8 @@ public class AmountUtil {
      *
      * @param number
      * @return 格式化之后的金额字符串
-     * @author <a href="mailto:wywuzh@163.com">wuzh</a>, 02/20/2014
      * @return 返回转换后的金额字符串，格式为￥###,##0.00
+     * @author <a href="mailto:wywuzh@163.com">wuzh</a>, 02/20/2014
      */
     public static String format(long number) {
         return PREFIX + FORMAT.format(number);
@@ -115,8 +117,8 @@ public class AmountUtil {
      * 将BigDecimal类型金额数值转换成金额类型
      *
      * @param amount
-     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      * @return 返回转换后的金额字符串，格式为￥###,##0.00
+     * @author <a href="mailto:wywuzh@163.com">wywuzh</a>, 08/06/2015
      */
     public static String format(BigDecimal amount) {
         if (null == amount) {
@@ -139,9 +141,9 @@ public class AmountUtil {
     /**
      * 将字符串格式的金额解析为float类型的金额
      *
-     * @author wywuzh 2016年5月6日 下午12:05:15
      * @param amount
      * @return
+     * @author wywuzh 2016年5月6日 下午12:05:15
      */
     public static float parseFloat(String amount) {
         return parse(amount).floatValue();
@@ -150,10 +152,9 @@ public class AmountUtil {
     /**
      * 将字符串格式的金额解析为double类型的金额
      *
-     * @param amount
-     *                   字符串格式的金额。金额格式为“###,##0.00”，前缀可以为空，或者也可以为“$”、“￥”
-     * @author <a href="mailto:wywuzh@163.com">wuzh</a>, 02/20/2014
+     * @param amount 字符串格式的金额。金额格式为“###,##0.00”，前缀可以为空，或者也可以为“$”、“￥”
      * @return double类型的金额
+     * @author <a href="mailto:wywuzh@163.com">wuzh</a>, 02/20/2014
      */
     public static double parseDouble(String amount) {
         return parse(amount).doubleValue();
@@ -162,9 +163,9 @@ public class AmountUtil {
     /**
      * 将字符串格式的金额解析为long类型的金额
      *
-     * @author wywuzh 2016年5月6日 下午12:05:17
      * @param amount
      * @return
+     * @author wywuzh 2016年5月6日 下午12:05:17
      */
     public static long parseLong(String amount) {
         return parse(amount).longValue();
@@ -173,10 +174,9 @@ public class AmountUtil {
     /**
      * 将字符串格式的金额解析为BigDecimal类型的金额
      *
-     * @author 伍章红 2015年5月8日 ( 下午4:00:11 )
-     * @param amount
-     *                   字符串格式的金额。金额格式为“###,##0.00”，前缀可以为空，或者也可以为“$”、“￥”
+     * @param amount 字符串格式的金额。金额格式为“###,##0.00”，前缀可以为空，或者也可以为“$”、“￥”
      * @return
+     * @author 伍章红 2015年5月8日 ( 下午4:00:11 )
      */
     public static BigDecimal parse(String amount) {
         if (null == amount) {
@@ -193,7 +193,7 @@ public class AmountUtil {
             amount = amount.substring(amount.indexOf(PREFIX) + 1);
             return new BigDecimal(FORMAT.parse(amount).toString());
         } catch (ParseException e) {
-            e.printStackTrace();
+            log.error("amount={} 金额格式解析失败：", e);
             throw new NumberFormatException("金额格式传入错误");
         }
     }
@@ -207,8 +207,7 @@ public class AmountUtil {
      * 不建议传入char类型的数据，虽然char型数据可以直接转成double类型，但我们应该明确char数值代表的是字符位。
      * </pre>
      *
-     * @param amount
-     *                   金额数值
+     * @param amount 金额数值
      * @return 返回大写金额
      * @author <a href="mailto:wywuzh@163.com">wuzh</a>, 12/24/2013
      */
@@ -251,56 +250,4 @@ public class AmountUtil {
         return head + result.replaceAll("(零.)*零元", "元").replaceFirst("(零.)+", "").replaceAll("(零.)+", "零").replaceAll("^整$", "零元整");
     }
 
-    public static void main(String[] args) {
-        // System.out.println(parseAmount("12,000,00.006"));
-        //
-        // double amountDouble = 0.006;
-        // long amountStr = 12012012012000L;
-        // // NumberFormat formater = new
-        // DecimalFormat("##,###,###,###,###.000");
-        // System.out.println(FORMAT.format(amountDouble));
-        // System.out.println(FORMAT.format(amountStr));
-        //
-        // try {
-        // Number number = FORMAT.parse("12,012,012,012,034.01");
-        // System.out.println(number.longValue());
-        // } catch (ParseException e) {
-        // e.printStackTrace();
-        // }
-
-        String amount = "￥012,012,034.01";
-        System.out.println(parseDouble(amount));
-        System.out.println(parse(amount));
-
-        // 整数
-        System.out.println(toCapitalAmount(0));              // 零元整
-        System.out.println(toCapitalAmount(123));            // 壹佰贰拾叁元整
-        System.out.println(toCapitalAmount(1000000));        // 壹佰万元整
-        System.out.println(toCapitalAmount(100000001));      // 壹亿零壹元整
-        System.out.println(toCapitalAmount(1000000000));     // 壹拾亿元整
-        System.out.println(toCapitalAmount(1234567890));     // 壹拾贰亿叁仟肆佰伍拾陆万柒仟捌佰玖拾元整
-        System.out.println(toCapitalAmount(1001100101));     // 壹拾亿零壹佰壹拾万零壹佰零壹元整
-        System.out.println(toCapitalAmount(110101010));      // 壹亿壹仟零壹拾万壹仟零壹拾元整
-
-        // 小数
-        System.out.println(toCapitalAmount(0.12));          // 壹角贰分
-        System.out.println(toCapitalAmount(123.34));        // 壹佰贰拾叁元叁角肆分
-        System.out.println(toCapitalAmount(1000000.56));    // 壹佰万元伍角陆分
-        System.out.println(toCapitalAmount(100000001.78));  // 壹亿零壹元柒角捌分
-        System.out.println(toCapitalAmount(1000000000.90)); // 壹拾亿元玖角
-        System.out.println(toCapitalAmount(1234567890.03)); // 壹拾贰亿叁仟肆佰伍拾陆万柒仟捌佰玖拾元叁分
-        System.out.println(toCapitalAmount(1001100101.00)); // 壹拾亿零壹佰壹拾万零壹佰零壹元整
-        System.out.println(toCapitalAmount(110101010.10));  // 壹亿壹仟零壹拾万壹仟零壹拾元壹角
-
-        // 负数
-        System.out.println(toCapitalAmount(-0.12));          // 负壹角贰分
-        System.out.println(toCapitalAmount(-123.34));        // 负壹佰贰拾叁元叁角肆分
-        System.out.println(toCapitalAmount(-1000000.56));    // 负壹佰万元伍角陆分
-        System.out.println(toCapitalAmount(-100000001.78));  // 负壹亿零壹元柒角捌分
-        System.out.println(toCapitalAmount(-1000000000.90)); // 负壹拾亿元玖角
-        System.out.println(toCapitalAmount(-1234567890.03)); // 负壹拾贰亿叁仟肆佰伍拾陆万柒仟捌佰玖拾元叁分
-        System.out.println(toCapitalAmount(-1001100101.00)); // 负壹拾亿零壹佰壹拾万零壹佰零壹元整
-        System.out.println(toCapitalAmount(-110101010.10));  // 负壹亿壹仟零壹拾万壹仟零壹拾元壹角
-
-    }
 }
