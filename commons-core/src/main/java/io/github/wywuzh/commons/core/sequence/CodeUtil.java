@@ -17,10 +17,11 @@ package io.github.wywuzh.commons.core.sequence;
 
 import java.math.BigDecimal;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 
 import io.github.wywuzh.commons.core.math.CalculationUtils;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * code编码工具类
