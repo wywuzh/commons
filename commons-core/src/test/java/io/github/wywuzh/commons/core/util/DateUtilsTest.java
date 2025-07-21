@@ -16,9 +16,13 @@
 package io.github.wywuzh.commons.core.util;
 
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
@@ -34,10 +38,55 @@ import org.junit.Test;
 public class DateUtilsTest {
 
     @Test
+    public void nativeParseForDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateUtils.PATTERN_YYYY_MM);
+        TemporalAccessor temporalAccessor = formatter.parse("2025-07");
+
+        LocalDateTime localDateTime = LocalDateTimeUtil.of(temporalAccessor);
+
+        // 转换为Instant
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        log.info("采用DateTimeFormatter原生解析结果：{}", date);
+        log.info("format结果：{}", DateUtils.format(date, DateUtils.PATTERN_YYYY_MM));
+
+        log.info("new Date() 日期结果：{}", new Date());
+        log.info("new Date() format结果：{}", DateUtils.format(new Date(), DateUtils.PATTERN_YYYY_MM));
+    }
+
+    @Test
+    public void nativeParseForYearMonth() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DateUtils.PATTERN_YYYY_MM).withZone(ZoneId.of("GMT+8"));
+        TemporalAccessor temporalAccessor = formatter.parse("2025-07");
+
+        /*LocalDateTime localDateTime = null;
+        if (temporalAccessor instanceof Instant) {
+            localDateTime = LocalDateTime.ofInstant((Instant) temporalAccessor, ZoneId.systemDefault());
+        } else if (temporalAccessor instanceof LocalDate) {
+            localDateTime = ((LocalDate) temporalAccessor).atStartOfDay();
+        } else if (temporalAccessor instanceof YearMonth) {
+            localDateTime = ((YearMonth) temporalAccessor).atEndOfMonth().atStartOfDay();
+        } else {
+            localDateTime = LocalDateTime.from(temporalAccessor);
+        }*/
+        LocalDateTime localDateTime = LocalDateTimeUtil.of(temporalAccessor);
+
+        // 转换为Instant
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
+        log.info("采用DateTimeFormatter原生解析结果：{}", date);
+        log.info("format结果：{}", DateUtils.format(date, DateUtils.PATTERN_YYYY_MM));
+
+        log.info("new Date()结果：{}", new Date());
+        log.info("new Date()结果：{}", DateUtils.format(new Date(), DateUtils.PATTERN_YYYY_MM));
+    }
+
+    @Test
     public void parse() {
         log.info("parse解析结果：{}", DateUtils.parse("2023-02-01", DateUtils.PATTERN_DATE, false));
         log.info("parse解析结果：{}", DateUtils.parse("2023-02-01 18:31:00", DateUtils.PATTERN_DATE_TIME, false));
         log.info("parse解析结果：{}", DateUtils.parse("18:31:00", DateUtils.PATTERN_TIME, false));
+        log.info("parse解析结果：{}", DateUtils.parse("02-01", "MM-dd", false));
     }
 
     // 根据时间类型添加num值
@@ -99,33 +148,38 @@ public class DateUtilsTest {
     }
 
     public static void main(String[] args) {
-        SimpleDateFormat instance = DateUtils.getInstance();
-        System.out.println(instance.format(new Date()));
-        System.out.println(DateUtils.format(new Date()));
+        log.info("DateTimeFormatter.format结果：{}", DateUtils.getFormatter().format(new Date().toInstant()));
+        log.info("SimpleDateFormat.format结果：{}", DateUtils.format(new Date()));
 
         String ym = "2014-10";
         Date parseDate = DateUtils.parse(ym, DateUtils.PATTERN_YYYY_MM);
-        System.out.println("parseDate:" + DateUtils.format(parseDate, DateUtils.PATTERN_DATE_TIME));
+        log.info("SimpleDateFormat.parse结果：{}", parseDate);
+        log.info("SimpleDateFormat.format结果：{}", DateUtils.format(parseDate, DateUtils.PATTERN_DATE_TIME));
 
         Date currentDate = new Date();
-        System.out.println("addNumWithType:" + DateUtils.format(DateUtils.addNumWithType(currentDate, DateUtils.FIELD_DATE, -10), DateUtils.PATTERN_DATE_TIME));
+        log.info("currentDate：{}", currentDate);
+        log.info("DateUtils.format(currentDate, DateUtils.PATTERN_DATE_TIME)：{}", DateUtils.format(currentDate, "yyyy-MM-dd HH:mm:ss"));
+        Date addNumWithType = DateUtils.addNumWithType(currentDate, DateUtils.FIELD_DATE, -10);
+        log.info("DateUtils.addNumWithType(currentDate, DateUtils.FIELD_DATE, -10)：{}", addNumWithType);
+        log.info("DateUtils.format(addNumWithType, DateUtils.PATTERN_DATE_TIME)：{}", DateUtils.format(addNumWithType, "yyyy-MM-dd HH:mm:ss"));
+        log.info("DateUtils.format(addNumWithType, DateUtils.PATTERN_DATE_TIME)：{}", DateUtils.format(addNumWithType, DateUtils.PATTERN_DATE_TIME));
 
         // 日期
         String daily = "2015-08-06";
-        System.out.println(DateUtils.format(DateUtils.getFirstDaily(daily), DateUtils.PATTERN_DATE_TIME));
-        System.out.println(DateUtils.format(DateUtils.getLastDaily(daily), DateUtils.PATTERN_DATE_TIME));
+        log.info(DateUtils.format(DateUtils.getFirstDaily(daily), DateUtils.PATTERN_DATE_TIME));
+        log.info(DateUtils.format(DateUtils.getLastDaily(daily), DateUtils.PATTERN_DATE_TIME));
 
         // 月份
         String monthly = "2015-08";
-        System.out.println("getFirstMonthly:" + DateUtils.format(DateUtils.getFirstMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
-        System.out.println("getLastMonthly:" + DateUtils.format(DateUtils.getLastMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
+        log.info("getFirstMonthly:" + DateUtils.format(DateUtils.getFirstMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
+        log.info("getLastMonthly:" + DateUtils.format(DateUtils.getLastMonthly(monthly), DateUtils.PATTERN_DATE_TIME));
 
         // 季度
         Date quarter = new Date();
-        System.out.println("getFirstQuarter:" + DateUtils.format(DateUtils.getFirstQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
-        System.out.println("getLastQuarter:" + DateUtils.format(DateUtils.getLastQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
+        log.info("getFirstQuarter:" + DateUtils.format(DateUtils.getFirstQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
+        log.info("getLastQuarter:" + DateUtils.format(DateUtils.getLastQuarter(quarter), DateUtils.PATTERN_DATE_TIME));
 
         long times = 1443715200000L;
-        System.out.println(DateUtils.format(new Date(times), DateUtils.PATTERN_DATE_TIME));
+        log.info(DateUtils.format(new Date(times), DateUtils.PATTERN_DATE_TIME));
     }
 }

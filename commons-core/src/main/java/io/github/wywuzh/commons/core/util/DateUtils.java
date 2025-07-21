@@ -15,20 +15,22 @@
  */
 package io.github.wywuzh.commons.core.util;
 
-import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
+import cn.hutool.core.date.LocalDateTimeUtil;
+import io.github.wywuzh.commons.core.common.Constants;
+import io.github.wywuzh.commons.core.math.CalculationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.github.wywuzh.commons.core.common.Constants;
-import io.github.wywuzh.commons.core.math.CalculationUtils;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
+import java.time.temporal.TemporalField;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 类DateUtil.java的实现描述：时间工具类
@@ -72,15 +74,65 @@ public class DateUtils {
     public static final int FIELD_SECOND = Calendar.SECOND;
     public static final int FIELD_MILLISECOND = Calendar.MILLISECOND;
 
+
+    // -------------------------------------------------------------------- Java 8+ DateTimeFormatter >>> start
     /**
-     * 时间格式化工具
+     * 时间格式化工具：key=pattern, value=DateTimeFormatter。为每种 pattern 维护独立的 DateTimeFormatter
+     *
+     * @since v3.5.0
      */
-    private static ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(PATTERN_DATE_TIME);
-        }
-    };
+    public static final Map<String, DateTimeFormatter> PATTERN_FORMATTER_CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * 获取DateTimeFormatter实例
+     *
+     * <pre>
+     *  创建DateTimeFormatter实例，pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
+     *
+     *  DateUtil工具在创建DateTimeFormatter实例时，采用single单例模式，确保DateUtils类对象中永远只有一个DateTimeFormatter实例
+     * </pre>
+     *
+     * @return DateTimeFormatter实例
+     * @since v3.5.0
+     */
+    public static DateTimeFormatter getFormatter() {
+        return getFormatter(PATTERN_DATE_TIME);
+    }
+
+    /**
+     * 获取pattern格式的DateTimeFormatter实例
+     *
+     * <pre>
+     * 根据传入的pattern格式创建DateTimeFormatter实例，如果传入pattern参数为空，则pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
+     *
+     * DateUtil工具在创建DateTimeFormatter实例时，采用single单例模式，确保DateUtils类对象中永远只有一个DateTimeFormatter实例
+     * </pre>
+     *
+     * @param pattern 时间格式
+     * @return DateTimeFormatter实例
+     * @since v3.5.0
+     */
+    public static DateTimeFormatter getFormatter(String pattern) {
+        Assert.notBlank(pattern, "Pattern must not be blank");
+        return PATTERN_FORMATTER_CACHE.computeIfAbsent(pattern, p -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("GMT+8"));
+            return formatter;
+        });
+    }
+    // -------------------------------------------------------------------- Java 8+ DateTimeFormatter <<< End
+
+
+    /**
+     * 时间格式化工具：key=pattern, value=ThreadLocal。为每种 pattern 维护独立的 ThreadLocal
+     */
+    public static final Map<String, ThreadLocal<SimpleDateFormat>> PATTERN_CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * 清理 ThreadLocal（避免内存泄漏）
+     */
+    public static void clear() {
+        PATTERN_CACHE.values().forEach(ThreadLocal::remove);
+    }
 
     /**
      * 获取SimpleDateFormat实例
@@ -88,7 +140,7 @@ public class DateUtils {
      * <pre>
      *  创建SimpleDateFormat实例，pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
      *
-     *  DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtil类对象中永远只有一个SimpleDateFormat实例
+     *  DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtils类对象中永远只有一个SimpleDateFormat实例
      * </pre>
      *
      * @return SimpleDateFormat实例
@@ -103,7 +155,7 @@ public class DateUtils {
      * <pre>
      * 根据传入的pattern格式创建SimpleDateFormat实例，如果传入pattern参数为空，则pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
      *
-     * DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtil类对象中永远只有一个SimpleDateFormat实例
+     * DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtils类对象中永远只有一个SimpleDateFormat实例
      * </pre>
      *
      * @param pattern 时间格式
@@ -112,9 +164,11 @@ public class DateUtils {
     public static SimpleDateFormat getInstance(String pattern) {
         Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must not be null");
 
-        SimpleDateFormat dateFormat = threadLocal.get();
-        dateFormat.applyPattern(pattern);
-        return dateFormat;
+        return PATTERN_CACHE.computeIfAbsent(pattern, p -> ThreadLocal.withInitial(() -> {
+            SimpleDateFormat sdf = new SimpleDateFormat(p);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            return sdf;
+        })).get();
     }
 
     /**
@@ -126,7 +180,7 @@ public class DateUtils {
     public static String format(Date date) {
         Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
 
-        return getInstance(PATTERN_DATE_TIME).format(date);
+        return format(date, PATTERN_DATE_TIME);
     }
 
     /**
@@ -145,6 +199,8 @@ public class DateUtils {
         Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must not be null");
 
         return getInstance(pattern).format(date);
+        /*Instant instant = date.toInstant();
+        return getFormatter(pattern).format(instant);*/
     }
 
     /**
@@ -184,7 +240,21 @@ public class DateUtils {
         Date date = null;
         try {
             date = getInstance(pattern).parse(parseDate);
-        } catch (ParseException e) {
+
+            /*DateTimeFormatter formatter = getFormatter(pattern);
+            TemporalAccessor temporalAccessor = formatter.parse(parseDate);
+            LocalDateTime localDateTime = LocalDateTimeUtil.of(temporalAccessor);
+            if (localDateTime.getYear() < 0) { // !temporalAccessor.isSupported(ChronoField.YEAR)
+
+                // tips：year小于0时，代表传入的时间字符串未年份，此处设置一个默认的日期1970-01-01
+                LocalTime localTime = LocalTime.from(temporalAccessor);
+                localDateTime = localTime.atDate(LocalDate.EPOCH);
+            }
+
+            // 转换为Instant
+            Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+            date = Date.from(instant);*/
+        } catch (Exception e) {
             LOGGER.error("parseDate={}, pattern={} 解析失败：", parseDate, pattern, e);
             if (!quietly) {
                 throw new RuntimeException(e.getMessage(), e);
