@@ -29,9 +29,9 @@ public enum FlagEnum {
 
     TRUE(1, true, "是"), FALSE(0, false, "否");
 
-    private Integer value;
-    private boolean flag;
-    private String desc;
+    private final Integer value;
+    private final boolean flag;
+    private final String desc;
 
     FlagEnum(Integer value, boolean flag, String desc) {
         this.value = value;

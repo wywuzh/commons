@@ -36,8 +36,8 @@ public enum DeleteTypeEnum {
      */
     PHYSICS("PHYSICS", "物理删除");
 
-    private String type;
-    private String desc;
+    private final String type;
+    private final String desc;
 
     DeleteTypeEnum(String type, String desc) {
         this.type = type;

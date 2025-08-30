@@ -28,8 +28,8 @@ import java.util.Map;
 public enum IsEnableEnum {
     TRUE(1, "是"), FALSE(0, "否");
 
-    private Integer value;
-    private String desc;
+    private final Integer value;
+    private final String desc;
 
     IsEnableEnum(Integer value, String desc) {
         this.value = value;
