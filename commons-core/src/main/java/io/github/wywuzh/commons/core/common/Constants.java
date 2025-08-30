@@ -85,9 +85,15 @@ public class Constants {
      */
     public static final String SEPARATE_SEMICOLON = ";";
     /**
-     * 分割符：冒号
+     * 分割符：英文冒号
      */
     public static final String SEPARATE_COLON = ":";
+    /**
+     * 分割符：中文冒号
+     *
+     * @since v3.5.0
+     */
+    public static final String SEPARATE_COLON_ZH = "：";
     /**
      * 分隔符：下划线
      */
@@ -112,6 +118,18 @@ public class Constants {
      * 分隔符：双竖
      */
     public static final String SEPARATE_DOUBLE_VERTICAL = "||";
+    /**
+     * 分隔符：美元
+     *
+     * @since v3.5.0
+     */
+    public static final String SEPARATE_DOLLAR = "$";
+    /**
+     * 分隔符：人民币
+     *
+     * @since v3.5.0
+     */
+    public static final String SEPARATE_RMB = "￥";
 
     /**
      * 星号
@@ -144,6 +162,31 @@ public class Constants {
      * 不等于：SQL、Excel公式中常用该符号
      */
     public static final String UN_EQUALS_FORMULA = "<>";
+
+    /**
+     * 空/无标记
+     *
+     * @since v3.5.0
+     */
+    public static final String BLANK_ITEM = "BLANK_ITEM";
+    /**
+     * 空/无标记：文本
+     *
+     * @see Constants#BLANK_ITEM
+     * @since v3.5.0
+     */
+    public static final String BLANK_ITEM_TEXT = "空值";
+    /**
+     * 空字符编码
+     *
+     * @since v3.5.0
+     */
+    public static final String EMPTY_ENCODE = "$BLANK$";
+
+    /**
+     * @since v3.5.0
+     */
+    public static final String ALL = "ALL";
 
     /**
      * 参数名：页码
@@ -181,6 +224,7 @@ public class Constants {
      * @since v2.3.3
      * @deprecated 废弃，请使用 {@link #PARAMETER_SORT_LIST} 字段
      */
+    @Deprecated
     public static final String SORT_CONDITIONS = "sortConditions";
 
     /**
