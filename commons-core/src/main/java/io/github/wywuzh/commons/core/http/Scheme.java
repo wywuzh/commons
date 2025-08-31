@@ -29,7 +29,7 @@ public enum Scheme {
     /**
      * 协议名称
      */
-    private String name;
+    private final String name;
 
     private Scheme(String name) {
         this.name = name;
