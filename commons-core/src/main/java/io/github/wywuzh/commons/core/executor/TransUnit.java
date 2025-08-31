@@ -23,5 +23,5 @@ package io.github.wywuzh.commons.core.executor;
  */
 public interface TransUnit {
 
-    public void excute();
+    void execute();
 }
