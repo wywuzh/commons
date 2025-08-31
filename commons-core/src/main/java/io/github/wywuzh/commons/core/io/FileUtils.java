@@ -193,53 +193,6 @@ public class FileUtils {
     }
 
     /**
-     * 将content内容写入到的destFile文件中
-     *
-     * @param destFile
-     * @param content
-     * @author 伍章红 2016年4月7日 下午8:50:38
-     */
-    public static void writer(File destFile, String content) {
-        Assert.notNull(destFile, "destFile must not be null");
-        Assert.notNull(content, "content must not be null");
-
-        OutputStreamWriter writer = null;
-        try {
-            writer = new OutputStreamWriter(new FileOutputStream(destFile));
-            BufferedWriter bufferedWriter = new BufferedWriter(writer);
-
-            bufferedWriter.write(content);
-            bufferedWriter.flush();
-            bufferedWriter.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (null != writer) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    /**
-     * TODO 将content内容追加到的destFile文件中
-     *
-     * @param destFile
-     * @param content
-     * @author 伍章红 2016年4月7日 下午9:38:13
-     */
-    public static void append(File destFile, String content) {
-        Assert.notNull(destFile, "destFile must not be null");
-        Assert.notNull(content, "content must not be null");
-    }
-
-    /**
      * 下载文件
      *
      * @param response
