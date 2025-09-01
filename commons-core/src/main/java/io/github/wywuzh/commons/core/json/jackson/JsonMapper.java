@@ -21,14 +21,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
-
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.List;
-
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * java对象和json相互转化 https://suipian1029.iteye.com/blog/2002536
@@ -40,7 +39,10 @@ import org.slf4j.LoggerFactory;
 public class JsonMapper {
     private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);
 
-    public static JsonMapper DEFAULT_JSON_MAPPER = JsonMapper.buildNormalMapper();
+    public static final JsonMapper DEFAULT_JSON_MAPPER = JsonMapper.buildNormalMapper();
+    public static final JsonMapper JSON_MAPPER_NON_NULL = JsonMapper.buildNonNullMapper();
+    public static final JsonMapper JSON_MAPPER_NON_DEFAULT = JsonMapper.buildNonDefaultMapper();
+    public static final JsonMapper JSON_MAPPER_NON_EMPTY = JsonMapper.buildNonEmptyMapper();
 
     private ObjectMapper objectMapper;
 
@@ -56,8 +58,11 @@ public class JsonMapper {
         objectMapper.configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, false);
         // 忽略空Bean转json的错误
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true);
-        // 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        /*// 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
+        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));*/
+        // 使用 Jackson 的 JavaTimeModule 来处理日期
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         // 忽略在json字符串中存在，但是在Java对象中不存在对应属性的情况
         // 有时JSON字符串中含有我们并不需要的字段，那么当对应的实体类中不含有该字段时，会抛出一个异常，告诉你有些字段（java 原始类型）没有在实体类中找到
         // 设置为false即不抛出异常
@@ -101,8 +106,8 @@ public class JsonMapper {
             return objectMapper.writeValueAsString(object);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException("JSON serialization failed", e);
         }
-        return null;
     }
 
     /**
@@ -114,8 +119,8 @@ public class JsonMapper {
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException("JSON serialization failed", e);
         }
-        return null;
     }
 
     /**
@@ -135,8 +140,8 @@ public class JsonMapper {
             return objectMapper.readValue(jsonString, clazz);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException("JSON deserialization failed", e);
         }
-        return null;
     }
 
     /**
@@ -157,8 +162,8 @@ public class JsonMapper {
             return (T) objectMapper.readValue(jsonString, javaType);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException("JSON deserialization failed", e);
         }
-        return null;
     }
 
     public <T> T fromJson(String jsonString, TypeReference<T> valueTypeRef) {
@@ -170,8 +175,8 @@ public class JsonMapper {
             return (T) objectMapper.readValue(jsonString, valueTypeRef);
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException("JSON deserialization failed", e);
         }
-        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -256,7 +261,7 @@ public class JsonMapper {
      * @return
      */
     public static String toNormalJson(Object object) {
-        return new JsonMapper(JsonInclude.Include.ALWAYS).toJson(object);
+        return DEFAULT_JSON_MAPPER.toJson(object);
     }
 
     /**
@@ -266,7 +271,7 @@ public class JsonMapper {
      * @return
      */
     public static String toNonNullJson(Object object) {
-        return new JsonMapper(JsonInclude.Include.NON_NULL).toJson(object);
+        return JSON_MAPPER_NON_NULL.toJson(object);
     }
 
     /**
@@ -276,7 +281,7 @@ public class JsonMapper {
      * @return
      */
     public static String toNonDefaultJson(Object object) {
-        return new JsonMapper(JsonInclude.Include.NON_DEFAULT).toJson(object);
+        return JSON_MAPPER_NON_DEFAULT.toJson(object);
     }
 
     /**
@@ -286,17 +291,7 @@ public class JsonMapper {
      * @return
      */
     public static String toNonEmptyJson(Object object) {
-        return new JsonMapper(JsonInclude.Include.NON_EMPTY).toJson(object);
-    }
-
-    public void setDateFormat(String dateFormat) {
-        objectMapper.setDateFormat(new SimpleDateFormat(dateFormat));
-    }
-
-    public static String toLogJson(Object object) {
-        JsonMapper jsonMapper = new JsonMapper(JsonInclude.Include.NON_EMPTY);
-        jsonMapper.setDateFormat("yyyy-MM-dd HH:mm:ss");
-        return jsonMapper.toJson(object);
+        return JSON_MAPPER_NON_EMPTY.toJson(object);
     }
 
 }
