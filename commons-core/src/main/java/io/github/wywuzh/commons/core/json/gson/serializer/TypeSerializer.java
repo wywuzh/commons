@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.wywuzh.commons.core.json.gson;
+package io.github.wywuzh.commons.core.json.gson.serializer;
 
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
