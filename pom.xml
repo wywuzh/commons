@@ -1067,10 +1067,10 @@
     </build>
 
     <repositories>
-        <!-- 阿里云Maven私服 -->
+        <!-- 默认的中央仓库 -->
         <repository>
-            <id>maven-ali</id>
-            <url>https://maven.aliyun.com/repository/public</url>
+            <id>central</id>
+            <url>https://repo.maven.apache.org/maven2</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
