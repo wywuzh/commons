@@ -26,16 +26,19 @@ public class Product {
     /**
      * 数据库类型
      */
-    private Type type;
+    private final Type type;
     /**
      * 数据库版本
      */
-    private String version;
+    private final String version;
+
+    public Product(Type type, String version) {
+        this.type = type;
+        this.version = version;
+    }
 
     public Product(String name, String version) {
-        super();
-        this.type = Type.findBy(name);
-        this.version = version;
+        this(Type.findBy(name), version);
     }
 
     public Type getType() {

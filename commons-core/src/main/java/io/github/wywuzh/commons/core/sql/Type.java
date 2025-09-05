@@ -15,6 +15,11 @@
  */
 package io.github.wywuzh.commons.core.sql;
 
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 类Type的实现描述：数据库类型
  *
@@ -23,11 +28,21 @@ package io.github.wywuzh.commons.core.sql;
  * @since JDK 1.8
  */
 public enum Type {
-    MySQL("MySQL"), Oracle("Oracle"), UNKNOW(""),;
+    MySQL("MySQL"), Oracle("Oracle"), UNKNOWN(""),
+    ;
 
-    private String name;
+    private final String name;
+    private static final Map<String, Type> NAME_MAP = new HashMap<>();
 
-    private Type(String name) {
+    static {
+        for (Type type : values()) {
+            if (type != UNKNOWN) {
+                NAME_MAP.put(type.name.toLowerCase(), type);
+            }
+        }
+    }
+
+    Type(String name) {
         this.name = name;
     }
 
@@ -36,11 +51,16 @@ public enum Type {
     }
 
     public static Type findBy(String name) {
-        for (Type type : values()) {
-            if (type.name.equals(name)) {
-                return type;
-            }
+        if (StringUtils.isBlank(name)) {
+            return UNKNOWN;
         }
-        return UNKNOW;
+
+        String normalizedName = name.trim().toLowerCase();
+        return NAME_MAP.getOrDefault(normalizedName, UNKNOWN);
     }
+
+    public boolean isKnown() {
+        return this != UNKNOWN;
+    }
+
 }
