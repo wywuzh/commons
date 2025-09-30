@@ -16,12 +16,18 @@
 package io.github.wywuzh.commons.core.executor;
 
 /**
- * 类TransUnit.java的实现描述：业务执行
+ * 类TransUnit.java的实现描述：业务执行 - 定义在事务中执行的业务操作
  *
  * @author 伍章红 2014-7-29 上午10:59:43
  * @since JDK 1.6.0_20
  */
+@FunctionalInterface
 public interface TransUnit {
 
+    /**
+     * 在事务中执行的业务逻辑
+     *
+     * @throws Exception 执行过程中可能抛出的异常
+     */
     void execute();
 }
