@@ -37,4 +37,10 @@ public class Assert extends org.springframework.util.Assert {
         }
     }
 
+    public static void notEmpty(@Nullable byte[] array, String message) {
+        if (array == null || array.length == 0) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
 }
