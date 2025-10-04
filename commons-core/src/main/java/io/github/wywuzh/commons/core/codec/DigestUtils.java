@@ -43,17 +43,23 @@ public class DigestUtils {
 
     /**
      * 默认字符集对象
+     *
+     * @since v3.5.0
      */
     public static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
     /**
      * MessageDigest 实例缓存，提高性能
+     *
+     * @since v3.5.0
      */
     private static final ConcurrentMap<String, MessageDigest> DIGEST_CACHE = new ConcurrentHashMap<>();
 
 
     /**
      * 私有构造方法，防止实例化
+     *
+     * @since v3.5.0
      */
     private DigestUtils() {
         throw new UnsupportedOperationException("工具类不允许实例化");
@@ -116,6 +122,7 @@ public class DigestUtils {
      * @param algorithm 算法类型，不能为空
      * @return 根据指定的algorithm算法计算摘要，并返回十六进制字符串
      * @throws IllegalArgumentException 如果参数为空或算法不支持
+     * @since v3.5.0
      */
     public static String encode(byte[] data, MessageDigestAlgorithm algorithm) {
         Assert.notEmpty(data, "数据字节数组不能为空");
@@ -149,6 +156,8 @@ public class DigestUtils {
 
     /**
      * 带锁的编码方法，确保线程安全
+     *
+     * @since v3.5.0
      */
     private static String encodeWithLock(MessageDigest messageDigest, byte[] data) {
         synchronized (messageDigest) {
@@ -163,6 +172,7 @@ public class DigestUtils {
      *
      * @param content 需要编码的内容
      * @return MD5摘要的十六进制字符串
+     * @since v3.5.0
      */
     public static String md5(String content) {
         return encode(content, MessageDigestAlgorithm.MD5);
@@ -173,6 +183,7 @@ public class DigestUtils {
      *
      * @param content 需要编码的内容
      * @return SHA-1摘要的十六进制字符串
+     * @since v3.5.0
      */
     public static String sha1(String content) {
         return encode(content, MessageDigestAlgorithm.SHA_1);
@@ -183,6 +194,7 @@ public class DigestUtils {
      *
      * @param content 需要编码的内容
      * @return SHA-256摘要的十六进制字符串
+     * @since v3.5.0
      */
     public static String sha256(String content) {
         return encode(content, MessageDigestAlgorithm.SHA_256);
@@ -193,6 +205,7 @@ public class DigestUtils {
      *
      * @param content 需要编码的内容
      * @return SHA-512摘要的十六进制字符串
+     * @since v3.5.0
      */
     public static String sha512(String content) {
         return encode(content, MessageDigestAlgorithm.SHA_512);
@@ -200,6 +213,8 @@ public class DigestUtils {
 
     /**
      * 清理缓存（主要用于测试或内存敏感场景）
+     *
+     * @since v3.5.0
      */
     public static void clearCache() {
         DIGEST_CACHE.clear();
@@ -207,6 +222,8 @@ public class DigestUtils {
 
     /**
      * 获取当前缓存的算法数量
+     *
+     * @since v3.5.0
      */
     public static int getCacheSize() {
         return DIGEST_CACHE.size();
@@ -217,6 +234,7 @@ public class DigestUtils {
      *
      * @param algorithm 算法名称
      * @return 是否支持该算法
+     * @since v3.5.0
      */
     public static boolean isAlgorithmSupported(String algorithm) {
         if (StringUtils.isBlank(algorithm)) {
