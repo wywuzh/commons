@@ -27,6 +27,7 @@ import org.apache.commons.codec.digest.DigestUtils;
  * @version v3.3.0
  * @since JDK 1.8
  */
+@Deprecated
 public class MessageDigestTest {
 
     @SuppressWarnings("unused")

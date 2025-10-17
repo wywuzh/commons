@@ -35,6 +35,7 @@ import cn.hutool.crypto.SecureUtil;
  * @since JDK 1.8
  */
 @Slf4j
+@Deprecated
 public class AESSecurityUtilsTest {
 
     /**

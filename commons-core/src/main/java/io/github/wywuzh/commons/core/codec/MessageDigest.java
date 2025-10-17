@@ -23,7 +23,9 @@ import io.github.wywuzh.commons.core.common.CharacterSet;
  * @author wuzh
  * @version 1.0, 05/16/2013
  * @since JDK 1.6
+ * @deprecated 已废弃，请使用 {@link DigestUtils} 工具
  */
+@Deprecated
 public class MessageDigest {
     protected static final String KEY_MD5 = "MD5";
     protected static final String KEY_SHA = "SHA";
