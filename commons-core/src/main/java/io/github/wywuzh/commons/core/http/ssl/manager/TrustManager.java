@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.wywuzh.commons.core.http;
+package io.github.wywuzh.commons.core.http.ssl.manager;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;

@@ -15,21 +15,8 @@
  */
 package io.github.wywuzh.commons.core.http;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.charset.Charset;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.SSLContext;
-
+import io.github.wywuzh.commons.core.http.ssl.manager.TrustManager;
+import io.github.wywuzh.commons.core.json.gson.GsonUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -63,7 +50,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
-import io.github.wywuzh.commons.core.json.gson.GsonUtil;
+import javax.net.ssl.SSLContext;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 类HttpUtil.java的实现描述：HTTP、HTTPS调用工具类
@@ -716,7 +715,7 @@ public class HttpClientUtils {
                 if (connectionSocketFactory == null) {
                     try {
                         SSLContext sslContext = SSLContext.getInstance("TLS");
-                        sslContext.init(null, new TrustManager[] {
+                        sslContext.init(null, new TrustManager[]{
                                 new TrustManager()
                         }, null);
 
@@ -754,7 +753,7 @@ public class HttpClientUtils {
                 .setTargetPreferredAuthSchemes(Arrays.asList(AuthSchemes.NTLM, AuthSchemes.DIGEST)).setProxyPreferredAuthSchemes(Arrays.asList(AuthSchemes.BASIC)).setConnectTimeout(30 * 1000)
                 .setSocketTimeout(30 * 1000).setConnectionRequestTimeout(30 * 1000).build();
         // 创建可用Scheme
-        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
                 .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
         // 创建ConnectionManager
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
@@ -815,7 +814,7 @@ public class HttpClientUtils {
                 // 设置从连接池中获取连接的超时为10秒，单位为毫秒
                 .setConnectionRequestTimeout(10 * 1000).build();
         // 创建可用Scheme
-        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
+        Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
                 .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
         // 创建ConnectionManager
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
@@ -879,7 +878,7 @@ public class HttpClientUtils {
                     // 设置从连接池中获取连接的超时为10秒，单位为毫秒
                     .setConnectionRequestTimeout(10 * 1000).build();
             // 创建可用Scheme
-            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory> create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
+            Registry<ConnectionSocketFactory> socketFactoryRegistry = RegistryBuilder.<ConnectionSocketFactory>create().register(Scheme.HTTP.name(), PlainConnectionSocketFactory.INSTANCE)
                     .register(Scheme.HTTPS.name(), getConnectionSocketFactory()).build();
             // 创建ConnectionManager
             PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
