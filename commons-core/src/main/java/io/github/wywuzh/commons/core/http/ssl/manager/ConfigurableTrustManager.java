@@ -1,8 +1,24 @@
+/*
+ * Copyright 2015-2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package io.github.wywuzh.commons.core.http.ssl.manager;
 
-import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.X509TrustManager;
 
 /**
  * 可配置的信任管理器
@@ -14,8 +30,7 @@ import java.security.cert.X509Certificate;
  */
 public class ConfigurableTrustManager implements X509TrustManager {
 
-    private static final boolean STRICT_MODE =
-            Boolean.parseBoolean(System.getProperty("ssl.strict.mode", "true"));
+    private static final boolean STRICT_MODE = Boolean.parseBoolean(System.getProperty("ssl.strict.mode", "true"));
 
     private final X509TrustManager strictTrustManager;
     private final X509TrustManager lenientTrustManager;
@@ -26,8 +41,7 @@ public class ConfigurableTrustManager implements X509TrustManager {
     }
 
     @Override
-    public void checkClientTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
+    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         if (STRICT_MODE) {
             strictTrustManager.checkClientTrusted(chain, authType);
         } else {
@@ -36,8 +50,7 @@ public class ConfigurableTrustManager implements X509TrustManager {
     }
 
     @Override
-    public void checkServerTrusted(X509Certificate[] chain, String authType)
-            throws CertificateException {
+    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
         if (STRICT_MODE) {
             strictTrustManager.checkServerTrusted(chain, authType);
         } else {
@@ -47,15 +60,11 @@ public class ConfigurableTrustManager implements X509TrustManager {
 
     @Override
     public X509Certificate[] getAcceptedIssuers() {
-        return STRICT_MODE ?
-                strictTrustManager.getAcceptedIssuers() :
-                lenientTrustManager.getAcceptedIssuers();
+        return STRICT_MODE ? strictTrustManager.getAcceptedIssuers() : lenientTrustManager.getAcceptedIssuers();
     }
 
     private X509TrustManager createDefaultTrustManager() throws Exception {
-        javax.net.ssl.TrustManagerFactory tmf =
-                javax.net.ssl.TrustManagerFactory.getInstance(
-                        javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
+        javax.net.ssl.TrustManagerFactory tmf = javax.net.ssl.TrustManagerFactory.getInstance(javax.net.ssl.TrustManagerFactory.getDefaultAlgorithm());
         tmf.init((java.security.KeyStore) null);
 
         for (javax.net.ssl.TrustManager tm : tmf.getTrustManagers()) {

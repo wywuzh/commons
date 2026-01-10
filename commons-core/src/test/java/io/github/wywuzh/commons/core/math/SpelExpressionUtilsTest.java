@@ -15,16 +15,16 @@
  */
 package io.github.wywuzh.commons.core.math;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import static org.junit.Assert.*;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 /**
  * 类SpelExpressionUtilsTest的实现描述：TODO 类实现描述
@@ -65,8 +65,7 @@ public class SpelExpressionUtilsTest {
         String calcFieldTitle = "鞋,总部无税成本";
         String expression = "(鞋+总部无税成本)*2";
 
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         assertEquals("基础算术运算测试", new BigDecimal("602.50"), result);
     }
@@ -77,8 +76,7 @@ public class SpelExpressionUtilsTest {
         String calcFieldTitle = "鞋,总部无税成本,数量,单价";
         String expression = "((鞋+总部无税成本)/1.08*0.08+数量*单价)";
 
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         // 预期结果: ((100.50+200.75)/1.08*0.08 + 5*50.25) ≈ 22.31 + 251.25 = 273.56
         assertTrue("复杂表达式测试", result.compareTo(new BigDecimal("273.56")) == 0);
@@ -90,8 +88,7 @@ public class SpelExpressionUtilsTest {
         String calcFieldTitle = "鞋,总部无税成本";
         String expression = "=鞋+总部无税成本";
 
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         assertEquals("带等号表达式测试", new BigDecimal("301.25"), result);
     }
@@ -134,8 +131,7 @@ public class SpelExpressionUtilsTest {
         // 测试 and/or/<> 替换为 &&/||/!=
         String expression = "鞋>100 and 总部无税成本<300 or 鞋<>总部无税成本";
 
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         // 布尔表达式在数学上下文中，true=1, false=0
         assertEquals("逻辑运算符替换测试", BigDecimal.ONE, result);
@@ -147,8 +143,7 @@ public class SpelExpressionUtilsTest {
         String calcFieldTitle = "鞋,总部无税成本";
         String expression = "（鞋：+总部无税成本：）"; // 包含中文括号和冒号
 
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         assertEquals("中文符号清理测试", new BigDecimal("301.25"), result);
     }
@@ -170,8 +165,7 @@ public class SpelExpressionUtilsTest {
         String calcFieldTitle = "鞋,数量";
         String expression = "鞋/数量";
 
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         // 100.50 / 5 = 20.10
         assertEquals("有效除法测试", new BigDecimal("20.10"), result);
@@ -240,8 +234,7 @@ public class SpelExpressionUtilsTest {
         String expression = "鞋 + 未知字段"; // 未知字段不会被替换
 
         // 由于未知字段没有值，应该使用默认值0
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         assertEquals("未映射字段名测试", new BigDecimal("100.50"), result); // 100.50 + 0
     }
@@ -254,8 +247,7 @@ public class SpelExpressionUtilsTest {
         String calcFieldTitle = "鞋,总部无税成本";
         String expression = "鞋/3"; // 100.50 / 3 = 33.5
 
-        BigDecimal result = SpelExpressionUtils.getCalcValue(
-                calcFieldName, calcFieldTitle, expression, testEntity);
+        BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
 
         // 应该保留6位小数
         assertEquals("小数精度测试", new BigDecimal("33.500000"), result);
@@ -273,8 +265,7 @@ public class SpelExpressionUtilsTest {
 
         // 执行100次计算
         for (int i = 0; i < 100; i++) {
-            BigDecimal result = SpelExpressionUtils.getCalcValue(
-                    calcFieldName, calcFieldTitle, expression, testEntity);
+            BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
             assertNotNull("性能测试 - 结果不应为空", result);
         }
 
@@ -297,8 +288,7 @@ public class SpelExpressionUtilsTest {
             SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, testEntity);
             fail("应该抛出CalculationException异常");
         } catch (SpelExpressionUtils.CalculationException e) {
-            assertTrue("异常信息应包含原表达式",
-                    e.getMessage().contains(expression));
+            assertTrue("异常信息应包含原表达式", e.getMessage().contains(expression));
         }
     }
 
@@ -317,8 +307,7 @@ public class SpelExpressionUtilsTest {
         String expression = "基础信息.鞋 + 附加成本";
 
         try {
-            BigDecimal result = SpelExpressionUtils.getCalcValue(
-                    calcFieldName, calcFieldTitle, expression, nestedEntity);
+            BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, expression, nestedEntity);
             assertEquals("嵌套对象字段访问测试", new BigDecimal("150.50"), result);
         } catch (Exception e) {
             // 如果反射工具不支持嵌套访问，这个测试可能会失败，这是正常的
@@ -344,17 +333,11 @@ public class SpelExpressionUtilsTest {
         };
 
         BigDecimal[] expectedResults = {
-                BigDecimal.ONE,
-                BigDecimal.ZERO,
-                BigDecimal.ONE,
-                BigDecimal.ONE,
-                BigDecimal.ONE,
-                BigDecimal.ZERO
+                BigDecimal.ONE, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ONE, BigDecimal.ZERO
         };
 
         for (int i = 0; i < booleanExpressions.length; i++) {
-            BigDecimal result = SpelExpressionUtils.getCalcValue(
-                    calcFieldName, calcFieldTitle, booleanExpressions[i], testEntity);
+            BigDecimal result = SpelExpressionUtils.getCalcValue(calcFieldName, calcFieldTitle, booleanExpressions[i], testEntity);
             assertEquals("布尔表达式测试[" + i + "]", expectedResults[i], result);
         }
     }
@@ -369,30 +352,65 @@ public class SpelExpressionUtilsTest {
         private BigDecimal zeroValue;
 
         // getters and setters
-        public BigDecimal getShoes() { return shoes; }
-        public void setShoes(BigDecimal shoes) { this.shoes = shoes; }
+        public BigDecimal getShoes() {
+            return shoes;
+        }
 
-        public BigDecimal getHqNotaxCost() { return hqNotaxCost; }
-        public void setHqNotaxCost(BigDecimal hqNotaxCost) { this.hqNotaxCost = hqNotaxCost; }
+        public void setShoes(BigDecimal shoes) {
+            this.shoes = shoes;
+        }
 
-        public Integer getQuantity() { return quantity; }
-        public void setQuantity(Integer quantity) { this.quantity = quantity; }
+        public BigDecimal getHqNotaxCost() {
+            return hqNotaxCost;
+        }
 
-        public BigDecimal getPrice() { return price; }
-        public void setPrice(BigDecimal price) { this.price = price; }
+        public void setHqNotaxCost(BigDecimal hqNotaxCost) {
+            this.hqNotaxCost = hqNotaxCost;
+        }
 
-        public BigDecimal getZeroValue() { return zeroValue; }
-        public void setZeroValue(BigDecimal zeroValue) { this.zeroValue = zeroValue; }
+        public Integer getQuantity() {
+            return quantity;
+        }
+
+        public void setQuantity(Integer quantity) {
+            this.quantity = quantity;
+        }
+
+        public BigDecimal getPrice() {
+            return price;
+        }
+
+        public void setPrice(BigDecimal price) {
+            this.price = price;
+        }
+
+        public BigDecimal getZeroValue() {
+            return zeroValue;
+        }
+
+        public void setZeroValue(BigDecimal zeroValue) {
+            this.zeroValue = zeroValue;
+        }
     }
 
     public static class TestEntityWithNestedObject {
         private TestEntity basicInfo;
         private BigDecimal additionalCost;
 
-        public TestEntity getBasicInfo() { return basicInfo; }
-        public void setBasicInfo(TestEntity basicInfo) { this.basicInfo = basicInfo; }
+        public TestEntity getBasicInfo() {
+            return basicInfo;
+        }
 
-        public BigDecimal getAdditionalCost() { return additionalCost; }
-        public void setAdditionalCost(BigDecimal additionalCost) { this.additionalCost = additionalCost; }
+        public void setBasicInfo(TestEntity basicInfo) {
+            this.basicInfo = basicInfo;
+        }
+
+        public BigDecimal getAdditionalCost() {
+            return additionalCost;
+        }
+
+        public void setAdditionalCost(BigDecimal additionalCost) {
+            this.additionalCost = additionalCost;
+        }
     }
 }

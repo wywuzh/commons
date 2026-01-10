@@ -15,10 +15,6 @@
  */
 package io.github.wywuzh.commons.core.ftp;
 
-import com.jcraft.jsch.JSchException;
-
-import java.io.IOException;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;

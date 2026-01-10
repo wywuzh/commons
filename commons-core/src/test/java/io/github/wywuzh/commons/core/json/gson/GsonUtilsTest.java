@@ -19,11 +19,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import lombok.extern.slf4j.Slf4j;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 类GsonUtilsTest的实现描述：Google JSON转换工具

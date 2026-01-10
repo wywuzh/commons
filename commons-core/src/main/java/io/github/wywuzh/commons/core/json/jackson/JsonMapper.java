@@ -22,12 +22,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * java对象和json相互转化 https://suipian1029.iteye.com/blog/2002536
@@ -58,8 +59,10 @@ public class JsonMapper {
         objectMapper.configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, false);
         // 忽略空Bean转json的错误
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true);
-        /*// 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
-        objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));*/
+        /*
+         * // 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
+         * objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+         */
         // 使用 Jackson 的 JavaTimeModule 来处理日期
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);

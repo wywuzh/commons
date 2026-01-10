@@ -15,10 +15,10 @@
  */
 package io.github.wywuzh.commons.core.sql;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 类Type的实现描述：数据库类型
@@ -28,8 +28,7 @@ import java.util.Map;
  * @since JDK 1.8
  */
 public enum Type {
-    MySQL("MySQL"), Oracle("Oracle"), UNKNOWN(""),
-    ;
+    MySQL("MySQL"), Oracle("Oracle"), UNKNOWN(""),;
 
     private final String name;
     private static final Map<String, Type> NAME_MAP = new HashMap<>();

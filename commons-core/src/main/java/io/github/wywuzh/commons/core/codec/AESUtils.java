@@ -15,18 +15,19 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.Hex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.util.Arrays;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.security.SecureRandom;
-import java.util.Arrays;
+
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 类AESUtils的实现描述：AES加密、解密工具类
@@ -239,9 +240,7 @@ public class AESUtils {
      * 使用PBKDF2从密码派生密钥
      */
     private static SecretKey deriveKey(String password, byte[] salt, int keySize) throws Exception {
-        javax.crypto.spec.PBEKeySpec spec = new javax.crypto.spec.PBEKeySpec(
-                password.toCharArray(), salt, PBKDF2_ITERATIONS, keySize
-        );
+        javax.crypto.spec.PBEKeySpec spec = new javax.crypto.spec.PBEKeySpec(password.toCharArray(), salt, PBKDF2_ITERATIONS, keySize);
         javax.crypto.SecretKeyFactory factory = javax.crypto.SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] keyBytes = factory.generateSecret(spec).getEncoded();
         return new SecretKeySpec(keyBytes, ALGORITHM);
@@ -274,8 +273,7 @@ public class AESUtils {
     }
 
     private static void validateDecryptionInput(EncryptionResult result, String password) {
-        if (result == null || result.getEncryptedData() == null ||
-                result.getSalt() == null || result.getIv() == null) {
+        if (result == null || result.getEncryptedData() == null || result.getSalt() == null || result.getIv() == null) {
             throw new IllegalArgumentException("解密参数不完整");
         }
         validatePassword(password);
