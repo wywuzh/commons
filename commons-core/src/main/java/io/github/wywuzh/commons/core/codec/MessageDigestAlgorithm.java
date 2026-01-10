@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,11 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 类MessageDigestAlgorithm.java的实现描述：信息摘要算法算法类型。支持常见的消息摘要算法，包括MD系列和SHA系列
@@ -82,9 +82,7 @@ public enum MessageDigestAlgorithm {
 
     // 初始化缓存
     static {
-        Arrays.stream(values()).forEach(algorithm ->
-                VALUE_CACHE.put(algorithm.value, algorithm)
-        );
+        Arrays.stream(values()).forEach(algorithm -> VALUE_CACHE.put(algorithm.value, algorithm));
     }
 
     /**
@@ -149,9 +147,7 @@ public enum MessageDigestAlgorithm {
      * @return 算法值数组
      */
     public static String[] getSupportedAlgorithms() {
-        return Arrays.stream(values())
-                .map(MessageDigestAlgorithm::getValue)
-                .toArray(String[]::new);
+        return Arrays.stream(values()).map(MessageDigestAlgorithm::getValue).toArray(String[]::new);
     }
 
     /**
@@ -197,21 +193,21 @@ public enum MessageDigestAlgorithm {
      */
     public String getRecommendedUsage() {
         switch (this) {
-            case MD2:
-            case MD5:
-                return "不推荐使用，仅用于兼容旧系统";
-            case SHA_1:
-                return "不推荐用于安全场景，可用于校验和数据完整性检查";
-            case SHA_256:
-                return "推荐用于一般安全场景，如密码哈希、数据完整性验证";
-            case SHA_384:
-            case SHA_512:
-                return "推荐用于高安全场景，如数字签名、证书";
-            case SHA3_256:
-            case SHA3_512:
-                return "推荐用于新项目，抗碰撞性更强";
-            default:
-                return "通用摘要算法";
+        case MD2:
+        case MD5:
+            return "不推荐使用，仅用于兼容旧系统";
+        case SHA_1:
+            return "不推荐用于安全场景，可用于校验和数据完整性检查";
+        case SHA_256:
+            return "推荐用于一般安全场景，如密码哈希、数据完整性验证";
+        case SHA_384:
+        case SHA_512:
+            return "推荐用于高安全场景，如数字签名、证书";
+        case SHA3_256:
+        case SHA3_512:
+            return "推荐用于新项目，抗碰撞性更强";
+        default:
+            return "通用摘要算法";
         }
     }
 
