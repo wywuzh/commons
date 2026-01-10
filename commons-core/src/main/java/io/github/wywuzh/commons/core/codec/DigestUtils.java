@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,18 @@
  */
 package io.github.wywuzh.commons.core.codec;
 
-import io.github.wywuzh.commons.core.common.CharacterSet;
-import io.github.wywuzh.commons.core.util.Assert;
-import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.lang3.StringUtils;
-
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
+
+import io.github.wywuzh.commons.core.common.CharacterSet;
+import io.github.wywuzh.commons.core.util.Assert;
 
 /**
  * 类DigestUtils.java的实现描述：摘要信息算法工具类
@@ -54,7 +55,6 @@ public class DigestUtils {
      * @since v3.5.0
      */
     private static final ConcurrentMap<String, MessageDigest> DIGEST_CACHE = new ConcurrentHashMap<>();
-
 
     /**
      * 私有构造方法，防止实例化
@@ -90,9 +90,7 @@ public class DigestUtils {
         Assert.notBlank(content, "内容不能为空");
         Assert.notNull(algorithm, "算法类型不能为空");
 
-        Charset charset = StringUtils.isEmpty(charsetName)
-                ? DEFAULT_CHARSET
-                : Charset.forName(charsetName);
+        Charset charset = StringUtils.isEmpty(charsetName) ? DEFAULT_CHARSET : Charset.forName(charsetName);
         return encode(content, charset, algorithm);
     }
 

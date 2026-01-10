@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,6 @@
  */
 package io.github.wywuzh.commons.core.math;
 
-import io.github.wywuzh.commons.core.common.Constants;
-import io.github.wywuzh.commons.core.reflect.ReflectUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.expression.Expression;
-import org.springframework.expression.ExpressionParser;
-import org.springframework.expression.spel.standard.SpelExpressionParser;
-import org.springframework.expression.spel.support.StandardEvaluationContext;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
@@ -33,6 +23,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.expression.Expression;
+import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.StandardEvaluationContext;
+
+import io.github.wywuzh.commons.core.common.Constants;
+import io.github.wywuzh.commons.core.reflect.ReflectUtils;
 
 /**
  * 计算公式解析工具类
@@ -88,8 +89,7 @@ public class SpelExpressionUtils {
      * @param target         计算目标类
      * @return 计算结果
      */
-    public static BigDecimal getCalcValue(final String calcFieldName, final String calcFieldTitle,
-                                          final String calcExpression, Object target) {
+    public static BigDecimal getCalcValue(final String calcFieldName, final String calcFieldTitle, final String calcExpression, Object target) {
         // 参数验证
         validateParameters(calcFieldName, calcFieldTitle, calcExpression, target);
 
@@ -114,8 +114,7 @@ public class SpelExpressionUtils {
             throw e;
         } catch (Exception e) {
             // 未知异常，包装后抛出
-            LOGGER.error("计算公式解析发生未知错误: calcExpression={}, target={}",
-                    calcExpression, getTargetInfo(target), e);
+            LOGGER.error("计算公式解析发生未知错误: calcExpression={}, target={}", calcExpression, getTargetInfo(target), e);
             throw new CalculationException("计算公式解析失败: " + calcExpression, e);
         }
     }
@@ -127,8 +126,7 @@ public class SpelExpressionUtils {
      * @param fieldValueMap  字段值映射
      * @return 计算结果
      */
-    public static BigDecimal getCalcValue(final String calcExpression,
-                                          Map<String, BigDecimal> fieldValueMap) {
+    public static BigDecimal getCalcValue(final String calcExpression, Map<String, BigDecimal> fieldValueMap) {
         // 参数验证
         validateParameters(calcExpression, fieldValueMap);
 
@@ -145,8 +143,7 @@ public class SpelExpressionUtils {
         } catch (CalculationException e) {
             throw e;
         } catch (Exception e) {
-            LOGGER.error("计算公式解析发生未知错误: calcExpression={}, fieldValueMap={}",
-                    calcExpression, fieldValueMap, e);
+            LOGGER.error("计算公式解析发生未知错误: calcExpression={}, fieldValueMap={}", calcExpression, fieldValueMap, e);
             throw new CalculationException("计算公式解析失败: " + calcExpression, e);
         }
     }
@@ -156,8 +153,7 @@ public class SpelExpressionUtils {
     /**
      * 参数验证
      */
-    private static void validateParameters(String calcFieldName, String calcFieldTitle,
-                                           String calcExpression, Object target) {
+    private static void validateParameters(String calcFieldName, String calcFieldTitle, String calcExpression, Object target) {
         if (StringUtils.isBlank(calcExpression)) {
             LOGGER.warn("计算公式为空，直接返回0。target: {}", getTargetInfo(target));
             throw new CalculationException("计算公式不能为空");
@@ -259,8 +255,7 @@ public class SpelExpressionUtils {
     /**
      * 替换字段名
      */
-    private static ExpressionParseResult replaceFieldNames(String expression,
-                                                           Map<String, String> fieldTitleMap) {
+    private static ExpressionParseResult replaceFieldNames(String expression, Map<String, String> fieldTitleMap) {
         Set<String> usedFieldNames = new LinkedHashSet<>();
         Pattern pattern = Pattern.compile("[\\u4e00-\\u9fa5]+[\\u4e00-\\u9fa5a-zA-Z0-9]*");
         Matcher matcher = pattern.matcher(expression);
@@ -295,8 +290,7 @@ public class SpelExpressionUtils {
                 Object value = extractFieldValue(fieldName, target);
                 context.setVariable(fieldName, value);
             } catch (Exception e) {
-                LOGGER.warn("字段取值失败: fieldName={}, target={}, 使用默认值0",
-                        fieldName, getTargetInfo(target));
+                LOGGER.warn("字段取值失败: fieldName={}, target={}, 使用默认值0", fieldName, getTargetInfo(target));
                 context.setVariable(fieldName, BigDecimal.ZERO);
             }
         }
@@ -345,9 +339,7 @@ public class SpelExpressionUtils {
     /**
      * 执行表达式计算
      */
-    private static BigDecimal evaluateExpression(String expression,
-                                                 StandardEvaluationContext context,
-                                                 String originalExpression) {
+    private static BigDecimal evaluateExpression(String expression, StandardEvaluationContext context, String originalExpression) {
         try {
             Expression parsedExpression = EXPRESSION_PARSER.parseExpression(expression);
             Object result = parsedExpression.getValue(context);
@@ -369,15 +361,13 @@ public class SpelExpressionUtils {
      */
     private static BigDecimal convertToBigDecimal(Object value, String originalExpression) {
         if (value instanceof Number) {
-            return BigDecimal.valueOf(((Number) value).doubleValue())
-                    .setScale(DEFAULT_SCALE, RoundingMode.HALF_UP);
+            return BigDecimal.valueOf(((Number) value).doubleValue()).setScale(DEFAULT_SCALE, RoundingMode.HALF_UP);
         }
 
         String stringValue = value.toString();
 
         // 检查特殊值
-        if ("Infinity".equalsIgnoreCase(stringValue) ||
-                "NaN".equalsIgnoreCase(stringValue)) {
+        if ("Infinity".equalsIgnoreCase(stringValue) || "NaN".equalsIgnoreCase(stringValue)) {
             throw new CalculationException("计算公式存在除零错误: " + originalExpression);
         }
 
@@ -395,8 +385,7 @@ public class SpelExpressionUtils {
         String errorMessage = e.getMessage();
 
         if (errorMessage != null) {
-            if (errorMessage.contains("divide by zero") ||
-                    errorMessage.contains("/ by zero")) {
+            if (errorMessage.contains("divide by zero") || errorMessage.contains("/ by zero")) {
                 throw new CalculationException("计算公式存在除零错误: " + originalExpression);
             }
         }
@@ -406,8 +395,7 @@ public class SpelExpressionUtils {
      * 检查是否包含中文
      */
     private static boolean containsChinese(String str) {
-        return str.codePoints().anyMatch(codepoint ->
-                Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
+        return str.codePoints().anyMatch(codepoint -> Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
     }
 
     /**
