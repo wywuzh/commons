@@ -17,12 +17,13 @@ package io.github.wywuzh.commons.core.json.gson;
 
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import io.github.wywuzh.commons.core.json.gson.serializer.TypeSerializer;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
+
+import io.github.wywuzh.commons.core.json.gson.serializer.TypeSerializer;
 
 /**
  * 类GsonFactory.java的实现描述：Google Gson工厂

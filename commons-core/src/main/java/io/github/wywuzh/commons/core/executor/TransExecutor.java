@@ -88,8 +88,7 @@ public class TransExecutor {
      * @param timeout             事务超时时间（秒）
      * @param readOnly            是否只读事务
      */
-    public void execute(TransUnit unit, int propagationBehavior, int isolationLevel,
-                        int timeout, boolean readOnly) {
+    public void execute(TransUnit unit, int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
         Assert.notNull(unit, "TransUnit must not be null");
 
         TransactionTemplate customTemplate = new TransactionTemplate(transactionTemplate.getTransactionManager());
@@ -117,11 +116,7 @@ public class TransExecutor {
      * @param unit 业务执行单元
      */
     public void executeInReadOnlyTransaction(TransUnit unit) {
-        execute(unit,
-                TransactionDefinition.PROPAGATION_REQUIRED,
-                TransactionDefinition.ISOLATION_READ_COMMITTED,
-                30,
-                true);
+        execute(unit, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED, 30, true);
     }
 
     /**

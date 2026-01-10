@@ -15,11 +15,12 @@
  */
 package io.github.wywuzh.commons.core.io;
 
-import io.github.wywuzh.commons.core.util.Assert;
-import lombok.extern.slf4j.Slf4j;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+
+import lombok.extern.slf4j.Slf4j;
+
+import io.github.wywuzh.commons.core.util.Assert;
 
 /**
  * 类AppendFile.java的实现描述：java IO追加文件的三种方式
@@ -71,7 +72,6 @@ public class AppendFileUtils {
         }
     }
 
-
     /**
      * 追加文件：使用FileWriter方式。如果需要明确控制字符编码，请使用 {@link #appendContentForBw(String, String)} 方法
      *
@@ -111,7 +111,6 @@ public class AppendFileUtils {
             throw e;
         }
     }
-
 
     /**
      * 追加文件：使用RandomAccessFile方式

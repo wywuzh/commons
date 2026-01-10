@@ -15,6 +15,8 @@
  */
 package io.github.wywuzh.commons.core.executor;
 
+import java.util.concurrent.Callable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -24,8 +26,6 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
-
-import java.util.concurrent.Callable;
 
 /**
  * 事务性任务执行器：为Runnable和Callable任务提供事务管理支持
@@ -130,11 +130,7 @@ public class TransactionalTaskExecutor {
      * @param task 要执行的任务
      */
     public void executeInReadOnlyTransaction(Runnable task) {
-        executeWithCustomAttributes(task,
-                TransactionDefinition.PROPAGATION_REQUIRED,
-                TransactionDefinition.ISOLATION_READ_COMMITTED,
-                30,
-                true);
+        executeWithCustomAttributes(task, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED, 30, true);
     }
 
     /**
@@ -145,11 +141,7 @@ public class TransactionalTaskExecutor {
      * @return 任务执行结果
      */
     public <T> T executeInReadOnlyTransaction(Callable<T> task) {
-        return executeWithCustomAttributes(task,
-                TransactionDefinition.PROPAGATION_REQUIRED,
-                TransactionDefinition.ISOLATION_READ_COMMITTED,
-                30,
-                true);
+        return executeWithCustomAttributes(task, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED, 30, true);
     }
 
     /**
@@ -161,15 +153,10 @@ public class TransactionalTaskExecutor {
      * @param timeout             事务超时时间（秒）
      * @param readOnly            是否只读事务
      */
-    public void executeWithCustomAttributes(Runnable task,
-                                            int propagationBehavior,
-                                            int isolationLevel,
-                                            int timeout,
-                                            boolean readOnly) {
+    public void executeWithCustomAttributes(Runnable task, int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
         Assert.notNull(task, "Runnable task must not be null");
 
-        TransactionTemplate customTemplate = createCustomTransactionTemplate(
-                propagationBehavior, isolationLevel, timeout, readOnly);
+        TransactionTemplate customTemplate = createCustomTransactionTemplate(propagationBehavior, isolationLevel, timeout, readOnly);
 
         try {
             customTemplate.execute(new TransactionCallbackWithoutResult() {
@@ -196,15 +183,10 @@ public class TransactionalTaskExecutor {
      * @param <T>                 返回结果类型
      * @return 任务执行结果
      */
-    public <T> T executeWithCustomAttributes(Callable<T> task,
-                                             int propagationBehavior,
-                                             int isolationLevel,
-                                             int timeout,
-                                             boolean readOnly) {
+    public <T> T executeWithCustomAttributes(Callable<T> task, int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
         Assert.notNull(task, "Callable task must not be null");
 
-        TransactionTemplate customTemplate = createCustomTransactionTemplate(
-                propagationBehavior, isolationLevel, timeout, readOnly);
+        TransactionTemplate customTemplate = createCustomTransactionTemplate(propagationBehavior, isolationLevel, timeout, readOnly);
 
         try {
             return customTemplate.execute(status -> {
@@ -228,10 +210,7 @@ public class TransactionalTaskExecutor {
     /**
      * 创建自定义事务模板
      */
-    private TransactionTemplate createCustomTransactionTemplate(int propagationBehavior,
-                                                                int isolationLevel,
-                                                                int timeout,
-                                                                boolean readOnly) {
+    private TransactionTemplate createCustomTransactionTemplate(int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
         TransactionTemplate customTemplate = new TransactionTemplate(transactionTemplate.getTransactionManager());
         customTemplate.setPropagationBehavior(propagationBehavior);
         customTemplate.setIsolationLevel(isolationLevel);

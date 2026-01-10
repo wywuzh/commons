@@ -16,12 +16,13 @@
 package io.github.wywuzh.commons.core.ftp;
 
 import com.jcraft.jsch.*;
-import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 类JschFtpUtils的实现描述：jsch FTP 文件传输工具
@@ -264,8 +265,7 @@ public class JschFtpUtils {
      * @throws IOException   文件操作异常
      * @throws SftpException SFTP操作异常
      */
-    public static void uploadFile(String ftpPath, String localFile, String remoteFilename)
-            throws IOException, SftpException {
+    public static void uploadFile(String ftpPath, String localFile, String remoteFilename) throws IOException, SftpException {
 
         if (!isConnected()) {
             throw new IllegalStateException("SFTP连接未开启或已关闭！");
@@ -305,9 +305,7 @@ public class JschFtpUtils {
      * @throws IOException   文件操作异常
      * @throws SftpException SFTP操作异常
      */
-    public static void uploadFile(String host, int port, String username, String password,
-                                  String ftpPath, String localFile, String remoteFilename)
-            throws JSchException, IOException, SftpException {
+    public static void uploadFile(String host, int port, String username, String password, String ftpPath, String localFile, String remoteFilename) throws JSchException, IOException, SftpException {
 
         try {
             // 开启连接
@@ -333,8 +331,7 @@ public class JschFtpUtils {
      * @throws IOException   文件操作异常
      * @throws SftpException SFTP操作异常
      */
-    public static void downloadFile(String remotePath, String remoteFilename, String localFile)
-            throws IOException, SftpException {
+    public static void downloadFile(String remotePath, String remoteFilename, String localFile) throws IOException, SftpException {
 
         if (!isConnected()) {
             throw new IllegalStateException("SFTP连接未开启或已关闭！");
@@ -366,8 +363,7 @@ public class JschFtpUtils {
      * @throws IOException   文件操作异常
      * @throws SftpException SFTP操作异常
      */
-    public static void downloadFile(String host, int port, String username, String password,
-                                    String remotePath, String remoteFilename, String localFile)
+    public static void downloadFile(String host, int port, String username, String password, String remotePath, String remoteFilename, String localFile)
             throws JSchException, IOException, SftpException {
 
         try {

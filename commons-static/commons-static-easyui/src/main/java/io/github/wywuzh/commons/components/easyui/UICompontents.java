@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -211,7 +211,7 @@ public class UICompontents {
      * @author 伍章红 2015年11月12日 下午10:01:22
      */
     public static Map<String, Object> transformTree(Tree<? extends Serializable> tree) {
-        JsonObject jsonObject = GsonUtil.gson.toJsonTree(tree).getAsJsonObject();
+        JsonObject jsonObject = GsonUtil.create().toJsonTree(tree).getAsJsonObject();
         return transformJsonTree(jsonObject);
     }
 
@@ -238,7 +238,7 @@ public class UICompontents {
      * @author 伍章红 2015年11月12日 下午9:58:54
      */
     public static Map<String, Object> transformTreeGrid(TreeGrid<? extends Serializable> treeGrid) {
-        JsonObject jsonObject = GsonUtil.gson.toJsonTree(treeGrid).getAsJsonObject();
+        JsonObject jsonObject = GsonUtil.create().toJsonTree(treeGrid).getAsJsonObject();
         return transformJsonTree(jsonObject);
     }
 
@@ -265,7 +265,7 @@ public class UICompontents {
      * @author 伍章红 2015年11月12日 下午10:00:52
      */
     public static Map<String, Object> transformCheckboxTree(CheckboxTree<? extends Serializable> checkboxTree) {
-        JsonObject jsonObject = GsonUtil.gson.toJsonTree(checkboxTree).getAsJsonObject();
+        JsonObject jsonObject = GsonUtil.create().toJsonTree(checkboxTree).getAsJsonObject();
         return transformJsonTree(jsonObject);
     }
 
