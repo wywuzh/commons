@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 package io.github.wywuzh.commons.core.codec;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.codec.binary.Base64;
 
 /**
@@ -37,11 +38,7 @@ public class AESUtilsTest {
 
         // 解密
         try {
-            AESUtils.EncryptionResult decryptResult = new AESUtils.EncryptionResult(
-                    Base64.decodeBase64(base64Encrypted),
-                    Base64.decodeBase64(base64Salt),
-                    Base64.decodeBase64(base64Iv)
-            );
+            AESUtils.EncryptionResult decryptResult = new AESUtils.EncryptionResult(Base64.decodeBase64(base64Encrypted), Base64.decodeBase64(base64Salt), Base64.decodeBase64(base64Iv));
             String decrypted = AESUtils.decryptWithGCM(decryptResult, "强密码");
             log.info("解密结果：{}", decrypted);
         } catch (Exception e) {
