@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,11 @@ package io.github.wywuzh.commons.core.sequence;
 
 import java.math.BigDecimal;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.lang3.StringUtils;
 
 import io.github.wywuzh.commons.core.math.CalculationUtils;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * code编码工具类
