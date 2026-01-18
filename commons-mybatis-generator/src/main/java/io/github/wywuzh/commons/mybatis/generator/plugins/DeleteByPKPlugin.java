@@ -291,12 +291,19 @@ public class DeleteByPKPlugin extends AbstractPlugin {
      */
     @Override
     public boolean clientGenerated(Interface interfaze, TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
+        // 更新人字段
+        IntrospectedColumn updateUser = obtainIntrospectedColumn(introspectedTable, MbgPropertyConstants.PROPERTY_UPDATE_USER, this.updateUserField);
+        String updateUserField = updateUser.getJavaProperty();
+        // 更新时间字段
+        IntrospectedColumn updateTime = obtainIntrospectedColumn(introspectedTable, MbgPropertyConstants.PROPERTY_UPDATE_TIME, this.updateTimeField);
+        String updateTimeField = updateTime.getJavaProperty();
+
         FullyQualifiedJavaType deleteByType = FullyQualifiedJavaType.getNewListInstance();
         deleteByType.addTypeArgument(Optional.ofNullable(getPrimaryKeyJavaType(introspectedTable)).orElse(FullyQualifiedJavaType.getStringInstance()));
         Method mBatchInsert = JavaElementGeneratorTools.generateMethod(DEFAULT_METHOD_NAME, JavaVisibility.DEFAULT, FullyQualifiedJavaType.getIntInstance(),
                 new Parameter(deleteByType, "ids", "@Param(\"ids\")"),
-                new Parameter(new FullyQualifiedJavaType("java.lang.String"), "updateUser", "@Param(\"updateUser\")"),
-                new Parameter(new FullyQualifiedJavaType("java.util.Date"), "updateTime", "@Param(\"updateTime\")"));
+                new Parameter(new FullyQualifiedJavaType("java.lang.String"), String.format("%s", updateUserField), String.format("@Param(\"%s\")", updateUserField)),
+                new Parameter(new FullyQualifiedJavaType("java.util.Date"), String.format("%s", updateTimeField), String.format("@Param(\"%s\")", updateTimeField)));
         commentGenerator.addGeneralMethodComment(mBatchInsert, introspectedTable);
         // interface 增加方法
         FormatTools.addMethodWithBestPosition(interfaze, mBatchInsert);
