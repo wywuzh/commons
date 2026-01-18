@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,19 @@ public class MbgPropertyConstants {
      */
     public static final String PROPERTY_CONDITIONS_INCLUDES = "conditionsIncludes";
 
+    /**
+     * 属性名：更新人字段
+     *
+     * @since v3.5.8
+     */
+    public static final String PROPERTY_UPDATE_USER = "updateUserField";
+    /**
+     * 属性名：更新时间字段
+     *
+     * @since v3.5.8
+     */
+    public static final String PROPERTY_UPDATE_TIME = "updateTimeField";
+
     // =======================>>> <property>属性默认值
     /**
      * 默认属性值：表是否开启逻辑删除，默认为true
@@ -84,5 +97,18 @@ public class MbgPropertyConstants {
      * @since 2.3.6
      */
     public static String excludeDeletedSql = "is_delete = 0";
+
+    /**
+     * 字段名：更新人
+     *
+     * @since v3.5.8
+     */
+    public static final String COLUMN_UPDATE_USER = "UPDATE_USER";
+    /**
+     * 字段名：更新时间
+     *
+     * @since v3.5.8
+     */
+    public static final String COLUMN_UPDATE_TIME = "UPDATE_TIME";
 
 }

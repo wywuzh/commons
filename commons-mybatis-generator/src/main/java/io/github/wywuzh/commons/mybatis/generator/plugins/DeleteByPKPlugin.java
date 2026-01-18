@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.itfsw.mybatis.generator.plugins.utils.XmlElementGeneratorTools;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +34,9 @@ import org.mybatis.generator.api.dom.xml.TextElement;
 import org.mybatis.generator.api.dom.xml.XmlElement;
 import org.mybatis.generator.codegen.mybatis3.MyBatis3FormattingUtilities;
 import org.mybatis.generator.config.TableConfiguration;
+
+import io.github.wywuzh.commons.mybatis.generator.constant.MbgPropertyConstants;
+import io.github.wywuzh.commons.mybatis.generator.utils.MbgPropertiesUtils;
 
 /**
  * 类DeleteByPKPlugin的实现描述：根据主键删除数据
@@ -119,6 +123,9 @@ public class DeleteByPKPlugin extends AbstractPlugin {
      */
     private String logicDeletedFlag = "1";
 
+    private String updateUserField = "update_user";
+    private String updateTimeField = "update_time";
+
     @Override
     public void initialized(IntrospectedTable introspectedTable) {
         super.initialized(introspectedTable);
@@ -127,20 +134,32 @@ public class DeleteByPKPlugin extends AbstractPlugin {
             throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTable() + " 检查到该表未定义主键字段，initialized方法初始化失败！");
         }
 
+        Properties properties = super.getProperties();
+
         // 表是否开启逻辑删除，默认为true
-        String enableLogicDelete = super.getProperties().getProperty(ENABLE_LOGIC_DELETE);
+        String enableLogicDelete = properties.getProperty(ENABLE_LOGIC_DELETE);
         if (StringUtils.isNotBlank(enableLogicDelete)) {
             this.enableLogicDelete = Boolean.valueOf(enableLogicDelete);
         }
         // 逻辑删除字段
-        String logicDeleteField = super.getProperties().getProperty(LOGIC_DELETE_FIELD);
+        String logicDeleteField = properties.getProperty(LOGIC_DELETE_FIELD);
         if (StringUtils.isNotBlank(logicDeleteField)) {
             this.logicDeleteField = logicDeleteField;
         }
         // 逻辑删除标识
-        String logicDeletedFlag = super.getProperties().getProperty(LOGIC_DELETED_FLAG);
+        String logicDeletedFlag = properties.getProperty(LOGIC_DELETED_FLAG);
         if (StringUtils.isNotBlank(logicDeletedFlag)) {
             this.logicDeletedFlag = logicDeletedFlag;
+        }
+        // 更新人字段
+        String updateUserField = properties.getProperty(MbgPropertyConstants.PROPERTY_UPDATE_USER);
+        if (StringUtils.isNotBlank(updateUserField)) {
+            this.updateUserField = updateUserField;
+        }
+        // 更新时间字段
+        String updateTimeField = properties.getProperty(MbgPropertyConstants.PROPERTY_UPDATE_TIME);
+        if (StringUtils.isNotBlank(updateTimeField)) {
+            this.updateTimeField = updateTimeField;
         }
     }
 
@@ -206,6 +225,30 @@ public class DeleteByPKPlugin extends AbstractPlugin {
     }
 
     /**
+     * 更新人字段
+     *
+     * @param tableConfiguration table配置
+     * @return 更新人字段
+     */
+    private String updateUserField(TableConfiguration tableConfiguration) {
+        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
+
+        return MbgPropertiesUtils.getProperty(tableConfiguration.getProperties(), MbgPropertyConstants.PROPERTY_UPDATE_USER, this.updateUserField);
+    }
+
+    /**
+     * 更新时间字段
+     *
+     * @param tableConfiguration table配置
+     * @return 更新时间字段
+     */
+    private String updateTimeField(TableConfiguration tableConfiguration) {
+        // 如果在<table>中有配置，以该配置为准，否则读取全局配置
+
+        return MbgPropertiesUtils.getProperty(tableConfiguration.getProperties(), MbgPropertyConstants.PROPERTY_UPDATE_TIME, this.updateTimeField);
+    }
+
+    /**
      * 获取主键字段
      *
      * @param introspectedTable table表信息
@@ -251,7 +294,8 @@ public class DeleteByPKPlugin extends AbstractPlugin {
         FullyQualifiedJavaType deleteByType = FullyQualifiedJavaType.getNewListInstance();
         deleteByType.addTypeArgument(Optional.ofNullable(getPrimaryKeyJavaType(introspectedTable)).orElse(FullyQualifiedJavaType.getStringInstance()));
         Method mBatchInsert = JavaElementGeneratorTools.generateMethod(DEFAULT_METHOD_NAME, JavaVisibility.DEFAULT, FullyQualifiedJavaType.getIntInstance(),
-                new Parameter(deleteByType, "ids", "@Param(\"ids\")"), new Parameter(new FullyQualifiedJavaType("java.lang.String"), "updateUser", "@Param(\"updateUser\")"),
+                new Parameter(deleteByType, "ids", "@Param(\"ids\")"),
+                new Parameter(new FullyQualifiedJavaType("java.lang.String"), "updateUser", "@Param(\"updateUser\")"),
                 new Parameter(new FullyQualifiedJavaType("java.util.Date"), "updateTime", "@Param(\"updateTime\")"));
         commentGenerator.addGeneralMethodComment(mBatchInsert, introspectedTable);
         // interface 增加方法
@@ -284,6 +328,34 @@ public class DeleteByPKPlugin extends AbstractPlugin {
     }
 
     /**
+     * 获取字段信息
+     *
+     * @param introspectedTable table表信息
+     * @param propertyName      属性名
+     * @param defaultColumnName 默认字段名
+     * @return
+     */
+    @Override
+    protected IntrospectedColumn obtainIntrospectedColumn(IntrospectedTable introspectedTable, String propertyName, String defaultColumnName) {
+        TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
+        // 更新人字段
+        String columnName = MbgPropertiesUtils.getProperty(tableConfiguration.getProperties(), propertyName, defaultColumnName);
+        if (StringUtils.isBlank(columnName)) {
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s, 属性名=%s 属性值定义为空，属性值检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime(), propertyName);
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
+        }
+        IntrospectedColumn column = introspectedTable.getColumn(columnName);
+        if (column == null) {
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s, 属性名=%s 检查到该表未定义[%s]字段，字段检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime(), propertyName,
+                    columnName);
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
+        }
+        return column;
+    }
+
+    /**
      * 逻辑删除
      *
      * @param document
@@ -294,25 +366,44 @@ public class DeleteByPKPlugin extends AbstractPlugin {
         TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
         // 主键字段
         IntrospectedColumn primaryKeyColumn = getPrimaryKeyColumn(introspectedTable);
-        IntrospectedColumn updateUser = introspectedTable.getColumn("UPDATE_USER");
-        IntrospectedColumn updateTime = introspectedTable.getColumn("UPDATE_TIME");
-        if (updateUser == null) {
-            logger.error("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " 检查到该表未定义UPDATE_USER字段，生成逻辑删除SQL语句失败！");
-            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " UPDATE_USER字段检验不通过！");
+        // 更新人字段
+        String updateUserField = MbgPropertiesUtils.getProperty(tableConfiguration.getProperties(), MbgPropertyConstants.PROPERTY_UPDATE_USER, this.updateUserField);
+        if (StringUtils.isBlank(updateUserField)) {
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s updateUserField属性值定义为空，属性值检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime());
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
         }
+        IntrospectedColumn updateUser = introspectedTable.getColumn(updateUserField);
+        if (updateUser == null) {
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s 检查到该表未定义[%s]字段，字段检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime(), updateUserField);
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
+        }
+        // 更新时间字段
+        String updateTimeField = MbgPropertiesUtils.getProperty(tableConfiguration.getProperties(), MbgPropertyConstants.PROPERTY_UPDATE_TIME, this.updateTimeField);
+        if (StringUtils.isBlank(updateTimeField)) {
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s updateTimeField属性值定义为空，属性值检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime());
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
+        }
+        IntrospectedColumn updateTime = introspectedTable.getColumn(updateTimeField);
         if (updateTime == null) {
-            logger.error("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " 检查到该表未定义UPDATE_TIME字段，生成逻辑删除SQL语句失败！");
-            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " UPDATE_TIME字段检验不通过！");
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s 检查到该表未定义[%s]字段，字段检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime(), updateTimeField);
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
         }
         String logicDeleteField = logicDeleteField(tableConfiguration);
         if (StringUtils.isBlank(logicDeleteField)) {
-            logger.error("DeleteByPKPlugin(根据主键删除数据插件):{} logicDeleteField属性值定义为空，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime());
-            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " logicDeleteField属性值检验不通过！");
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s logicDeleteField属性值定义为空，属性值检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime());
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
         }
         IntrospectedColumn deleteField = introspectedTable.getColumn(logicDeleteField);
         if (deleteField == null) {
-            logger.error("DeleteByPKPlugin(根据主键删除数据插件):{} 检查到该表未定义{}字段，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime(), logicDeleteField);
-            throw new IllegalArgumentException("DeleteByPKPlugin(根据主键删除数据插件):" + introspectedTable.getFullyQualifiedTableNameAtRuntime() + " logicDeleteField属性值检验不通过！");
+            String errorMsg = String.format("DeleteByPKPlugin(根据主键删除数据插件)：表名=%s, 逻辑删除字段名=%s 检查到该表未定义[%s]字段，字段检验不通过，生成逻辑删除SQL语句失败！", introspectedTable.getFullyQualifiedTableNameAtRuntime(),
+                    logicDeleteField, logicDeleteField);
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
         }
 
         deleteByEle.addElement(new TextElement("UPDATE " + introspectedTable.getFullyQualifiedTableNameAtRuntime()));

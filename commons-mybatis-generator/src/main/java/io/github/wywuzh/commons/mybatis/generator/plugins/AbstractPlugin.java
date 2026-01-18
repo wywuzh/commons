@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,11 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.config.TableConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 类AbstractPlugin的实现描述：基础plugin
@@ -34,6 +37,7 @@ import org.mybatis.generator.config.TableConfiguration;
  * @since JDK 1.8
  */
 public class AbstractPlugin extends BasePlugin {
+    protected static final Logger logger = LoggerFactory.getLogger(AbstractPlugin.class);
 
     /**
      * 数据库驱动
@@ -261,6 +265,33 @@ public class AbstractPlugin extends BasePlugin {
     protected BigDecimal getProperty(TableConfiguration tableConfiguration, Properties properties, String key, BigDecimal defaultValue) {
         String val = this.getProperty(tableConfiguration, properties, key);
         return StringUtils.isBlank(val) ? defaultValue : new BigDecimal(val);
+    }
+
+    /**
+     * 获取字段信息
+     *
+     * @param introspectedTable table表信息
+     * @param propertyName      属性名
+     * @param defaultColumnName 默认字段名
+     * @return 字段信息
+     * @since v3.5.8
+     */
+    protected IntrospectedColumn obtainIntrospectedColumn(IntrospectedTable introspectedTable, String propertyName, String defaultColumnName) {
+        TableConfiguration tableConfiguration = introspectedTable.getTableConfiguration();
+        // 更新人字段
+        String columnName = this.getProperty(tableConfiguration, propertyName, defaultColumnName);
+        if (StringUtils.isBlank(columnName)) {
+            String errorMsg = String.format("表名=%s, 属性名=%s 属性值定义为空，属性值检验不通！", introspectedTable.getFullyQualifiedTableNameAtRuntime(), propertyName);
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
+        }
+        IntrospectedColumn column = introspectedTable.getColumn(columnName);
+        if (column == null) {
+            String errorMsg = String.format("表名=%s, 属性名=%s 检查到该表未定义[%s]字段，字段检验不通！", introspectedTable.getFullyQualifiedTableNameAtRuntime(), propertyName, columnName);
+            logger.error(errorMsg);
+            throw new IllegalArgumentException(errorMsg);
+        }
+        return column;
     }
 
 }
