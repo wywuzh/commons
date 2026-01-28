@@ -15,42 +15,35 @@
  */
 package io.github.wywuzh.commons.core.executor;
 
+import io.github.wywuzh.commons.core.executor.exception.TransactionExecutionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
 /**
- * 类TransExecutor.java的实现描述：事物控制管理
+ * 事务执行器：提供基于TransUnit接口的事务管理
  *
- * @author 伍章红 2014-7-29 上午11:01:15
- * @since JDK 1.6.0_20
+ * @author 伍章红
+ * @since JDK 1.8
  */
 @Component
-public class TransExecutor {
-    private static final Logger logger = LoggerFactory.getLogger(TransExecutor.class);
+public class TransExecutor extends AbstractTransactionExecutor {
 
-    private final TransactionTemplate transactionTemplate;
+    private static final Logger logger = LoggerFactory.getLogger(TransExecutor.class);
 
     /**
      * 构造函数
      *
      * @param transactionManager 事务管理器
+     * @throws IllegalArgumentException 当transactionManager为null时抛出
      */
     public TransExecutor(PlatformTransactionManager transactionManager) {
-        Assert.notNull(transactionManager, "PlatformTransactionManager must not be null");
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
-
-        // 配置默认事务属性
-        this.transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        this.transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-        this.transactionTemplate.setTimeout(30); // 30秒超时
-        this.transactionTemplate.setReadOnly(false);
+        super(transactionManager);
     }
 
     /**
@@ -87,15 +80,13 @@ public class TransExecutor {
      * @param isolationLevel      事务隔离级别
      * @param timeout             事务超时时间（秒）
      * @param readOnly            是否只读事务
+     * @throws IllegalArgumentException      当unit为null时抛出
+     * @throws TransactionExecutionException 当事务执行失败时抛出
      */
     public void execute(TransUnit unit, int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
         Assert.notNull(unit, "TransUnit must not be null");
 
-        TransactionTemplate customTemplate = new TransactionTemplate(transactionTemplate.getTransactionManager());
-        customTemplate.setPropagationBehavior(propagationBehavior);
-        customTemplate.setIsolationLevel(isolationLevel);
-        customTemplate.setTimeout(timeout);
-        customTemplate.setReadOnly(readOnly);
+        TransactionTemplate customTemplate = createCustomTransactionTemplate(propagationBehavior, isolationLevel, timeout, readOnly);
 
         try {
             customTemplate.execute(new TransactionCallbackWithoutResult() {
@@ -114,31 +105,10 @@ public class TransExecutor {
      * 在只读事务中执行业务单元
      *
      * @param unit 业务执行单元
+     * @throws IllegalArgumentException      当unit为null时抛出
+     * @throws TransactionExecutionException 当事务执行失败时抛出
      */
     public void executeInReadOnlyTransaction(TransUnit unit) {
-        execute(unit, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED, 30, true);
-    }
-
-    /**
-     * 获取事务模板（用于更高级的定制）
-     *
-     * @return TransactionTemplate 实例
-     */
-    public TransactionTemplate getTransactionTemplate() {
-        return this.transactionTemplate;
-    }
-}
-
-/**
- * 事务执行异常
- */
-class TransactionExecutionException extends RuntimeException {
-
-    public TransactionExecutionException(String message) {
-        super(message);
-    }
-
-    public TransactionExecutionException(String message, Throwable cause) {
-        super(message, cause);
+        execute(unit, DEFAULT_PROPAGATION, DEFAULT_ISOLATION, DEFAULT_TIMEOUT, true);
     }
 }
