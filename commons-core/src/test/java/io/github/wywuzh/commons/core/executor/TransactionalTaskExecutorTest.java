@@ -21,7 +21,6 @@ import static org.mockito.Mockito.*;
 
 import java.util.concurrent.Callable;
 
-import io.github.wywuzh.commons.core.executor.exception.TransactionalTaskException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -32,6 +31,8 @@ import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
+
+import io.github.wywuzh.commons.core.executor.exception.TransactionalTaskException;
 
 /**
  * TransactionalTaskExecutor测试用例
