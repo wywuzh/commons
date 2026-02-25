@@ -17,7 +17,6 @@ package io.github.wywuzh.commons.core.executor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
@@ -32,7 +31,6 @@ import io.github.wywuzh.commons.core.executor.exception.TransactionExecutionExce
  * @author 伍章红
  * @since JDK 1.8
  */
-@Component
 public class TransExecutor extends AbstractTransactionExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(TransExecutor.class);

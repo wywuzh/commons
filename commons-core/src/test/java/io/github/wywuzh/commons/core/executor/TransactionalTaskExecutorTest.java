@@ -23,7 +23,6 @@ import java.util.concurrent.Callable;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -49,8 +48,20 @@ public class TransactionalTaskExecutorTest {
     @Mock
     private TransactionTemplate transactionTemplate;
 
-    @InjectMocks
     private TransactionalTaskExecutor transactionalTaskExecutor;
+
+    @org.junit.Before
+    public void setUp() {
+        transactionalTaskExecutor = new TransactionalTaskExecutor(transactionManager);
+        // 使用反射设置transactionTemplate字段
+        try {
+            java.lang.reflect.Field field = AbstractTransactionExecutor.class.getDeclaredField("transactionTemplate");
+            field.setAccessible(true);
+            field.set(transactionalTaskExecutor, transactionTemplate);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to inject transactionTemplate", e);
+        }
+    }
 
     @Test
     public void testExecuteRunnable_Success() throws Exception {
