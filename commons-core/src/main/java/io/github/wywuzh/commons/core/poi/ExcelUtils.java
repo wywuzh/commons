@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,8 @@ import io.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
 import io.github.wywuzh.commons.core.poi.modle.FreezePane;
 import io.github.wywuzh.commons.core.poi.style.CellStyleTools;
 import io.github.wywuzh.commons.core.reflect.ReflectUtils;
+import io.github.wywuzh.commons.core.sort.BeanSortUtils;
 import io.github.wywuzh.commons.core.util.DateUtils;
-import io.github.wywuzh.commons.core.util.SortUtils;
 import io.github.wywuzh.commons.core.util.StringHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -1062,7 +1062,7 @@ public class ExcelUtils {
             return columns;
         }
         // 排序：索引、排序、字段标题
-        SortUtils.sort(excelCellFieldList, new String[] {
+        BeanSortUtils.sort(excelCellFieldList, new String[] {
                 "index"/* , "sortNo", "fieldTitle" */
         });
 
