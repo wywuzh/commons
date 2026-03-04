@@ -27,14 +27,12 @@ import java.util.regex.Pattern;
 public class ValidateDateTimeTest {
 
     // 优化后的正则表达式
-    private static final String DATE_TIME_REGEX = "^(?:(?!0000)\\d{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\\d|2[0-8])|"
-            + "(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|"
-            + "(?:\\d{2}(?:0[48]|[2468][048]|[13579][26])|"
-            + "(?:0[48]|[2468][048]|[13579][26])00)-02-29)"
-            /*+ "\\s(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}$";*/
+    private static final String DATE_TIME_REGEX = "^(?:(?!0000)\\d{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1\\d|2[0-8])|" + "(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|"
+            + "(?:\\d{2}(?:0[48]|[2468][048]|[13579][26])|" + "(?:0[48]|[2468][048]|[13579][26])00)-02-29)"
+            /* + "\\s(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.\\d{3}$"; */
             + "\\s(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d\\.[0-9]{1,3}$";
 
-    private static final Pattern DATE_TIME_PATTERN = Pattern.compile(PatternType.PATTERN_DATE_TIME1.getPattern());
+    private static final Pattern DATE_TIME_PATTERN = Pattern.compile(PatternRegexEnum.PATTERN_DATE_TIME1.getRegex());
 
     public static boolean isValidDateTime(String dateTime) {
         return dateTime != null && DATE_TIME_PATTERN.matcher(dateTime).matches();
