@@ -15,16 +15,18 @@
  */
 package io.github.wywuzh.commons.core.sql.condition;
 
-import io.github.wywuzh.commons.core.common.Constants;
-import io.github.wywuzh.commons.core.util.StringHelper;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import io.github.wywuzh.commons.core.common.Constants;
+import io.github.wywuzh.commons.core.util.StringHelper;
 
 /**
  * 类ConditionUtils的实现描述：SQL Where条件工具类
@@ -35,7 +37,6 @@ import java.util.Map;
  */
 @Slf4j
 public class ConditionUtils {
-
 
     /**
      * SQL Where条件字段匹配类型
@@ -114,37 +115,37 @@ public class ConditionUtils {
             return null;
         }
         switch (conditionType) {
-            case "equals":
-                // 1、精确匹配
-                String columnName = conditionColumnMap.get(field);
-                conditionColumnName = columnName;
-                break;
-            case "like":
-                // 2、模糊匹配
-                String columnNameLike = getConditionColumnNameLike(conditionColumnMap, field);
-                conditionColumnName = columnNameLike;
-                break;
-            case "list":
-                // 3、foreach匹配
-                String columnNameForeach = getConditionColumnNameForeach(conditionColumnMap, field);
-                conditionColumnName = columnNameForeach;
-                break;
-            case "unions":
-                // 4、foreach匹配超过1000时改用union查询 or 模糊查询改用in查询
-                String columnNameForeachUnions = getConditionColumnNameForeachUnions(conditionColumnMap, field);
-                conditionColumnName = columnNameForeachUnions;
-                break;
-            case "column":
-                // 5、精确匹配表字段名：此方式出现在以表字段名为key传入的场景，例如导出时的子页签
-                conditionColumnName = field;
-                break;
-            case "notIn":
-                // 6、notIn匹配
-                String columnNameNotIn = getConditionColumnNameNotIn(conditionColumnMap, field);
-                conditionColumnName = columnNameNotIn;
-                break;
-            default:
-                break;
+        case "equals":
+            // 1、精确匹配
+            String columnName = conditionColumnMap.get(field);
+            conditionColumnName = columnName;
+            break;
+        case "like":
+            // 2、模糊匹配
+            String columnNameLike = getConditionColumnNameLike(conditionColumnMap, field);
+            conditionColumnName = columnNameLike;
+            break;
+        case "list":
+            // 3、foreach匹配
+            String columnNameForeach = getConditionColumnNameForeach(conditionColumnMap, field);
+            conditionColumnName = columnNameForeach;
+            break;
+        case "unions":
+            // 4、foreach匹配超过1000时改用union查询 or 模糊查询改用in查询
+            String columnNameForeachUnions = getConditionColumnNameForeachUnions(conditionColumnMap, field);
+            conditionColumnName = columnNameForeachUnions;
+            break;
+        case "column":
+            // 5、精确匹配表字段名：此方式出现在以表字段名为key传入的场景，例如导出时的子页签
+            conditionColumnName = field;
+            break;
+        case "notIn":
+            // 6、notIn匹配
+            String columnNameNotIn = getConditionColumnNameNotIn(conditionColumnMap, field);
+            conditionColumnName = columnNameNotIn;
+            break;
+        default:
+            break;
         }
         return conditionColumnName;
     }
@@ -248,8 +249,7 @@ public class ConditionUtils {
      * @param searchMap          页面查询请求条件
      * @return
      */
-    public static String createConditionSql(Map<String, String> columnNameAliasMap, Map<String, String> conditionColumnMap, String field,
-                                            Map<String, Object> searchMap) {
+    public static String createConditionSql(Map<String, String> columnNameAliasMap, Map<String, String> conditionColumnMap, String field, Map<String, Object> searchMap) {
         List<String> columnNameAliasList = new LinkedList<String>(columnNameAliasMap.keySet());
         return ConditionUtils.createConditionSql(columnNameAliasList, conditionColumnMap, field, searchMap);
     }
@@ -264,8 +264,7 @@ public class ConditionUtils {
      * @return
      * @since v2.1.6
      */
-    public static String createConditionSql(List<String> columnNameAliasList, Map<String, String> conditionColumnMap, String field,
-                                            Map<String, Object> searchMap) {
+    public static String createConditionSql(List<String> columnNameAliasList, Map<String, String> conditionColumnMap, String field, Map<String, Object> searchMap) {
         // Where条件字段匹配类型
         String conditionType = ConditionUtils.getConditionType(conditionColumnMap, field);
         // SQL Where条件字段名称
@@ -302,88 +301,87 @@ public class ConditionUtils {
     public static String createConditionSql(String conditionColumnName, String conditionType, Map<String, Object> searchMap, String field) {
         String conditionSql = null;
         switch (conditionType) {
-            case "equals":
-                // 1、精确匹配
-                String fieldValue = MapUtils.getString(searchMap, field);
-                if (StringUtils.isNotBlank(fieldValue)) {
-                    conditionSql = StringUtils.join("AND ", conditionColumnName, " = '", fieldValue, "'");
-                }
-                break;
-            case "like":
-                // 2、模糊匹配
-                String fieldValueLike = MapUtils.getString(searchMap, field);
-                if (StringUtils.isNotBlank(fieldValueLike)) {
-                    if (StringUtils.equals(fieldValueLike, "空值")) {
-                        // 空值格式。eg：AND ( basic.SHARE_MANAGE_REGION_NAME IS NULL or basic.SHARE_MANAGE_REGION_NAME = '' )
-                        conditionSql = String.format("AND ( %s IS NULL OR %s = '' )", conditionColumnName, conditionColumnName);
-                    } else {
-                        // 视图类型：basic=用户页面, monitor=后台监控页面
-                        String viewType = MapUtils.getString(searchMap, "viewType", "basic");
-                        // 支持逗号分隔的多字段查询
-                        if (StringUtils.contains(fieldValueLike, ",") && StringUtils.equals(viewType, "monitor")) {
-                            // 按逗号分割并去除空格
-                            String[] values = StringUtils.split(fieldValueLike, ",");
-                            List<String> likeConditions = new LinkedList<>();
-                            for (String value : values) {
-                                String trimmedValue = StringUtils.trim(value);
-                                if (StringUtils.isNotBlank(trimmedValue)) {
-                                    likeConditions.add(StringUtils.join(conditionColumnName, " LIKE '%", trimmedValue, "%'"));
-                                }
+        case "equals":
+            // 1、精确匹配
+            String fieldValue = MapUtils.getString(searchMap, field);
+            if (StringUtils.isNotBlank(fieldValue)) {
+                conditionSql = StringUtils.join("AND ", conditionColumnName, " = '", fieldValue, "'");
+            }
+            break;
+        case "like":
+            // 2、模糊匹配
+            String fieldValueLike = MapUtils.getString(searchMap, field);
+            if (StringUtils.isNotBlank(fieldValueLike)) {
+                if (StringUtils.equals(fieldValueLike, "空值")) {
+                    // 空值格式。eg：AND ( basic.SHARE_MANAGE_REGION_NAME IS NULL or basic.SHARE_MANAGE_REGION_NAME = '' )
+                    conditionSql = String.format("AND ( %s IS NULL OR %s = '' )", conditionColumnName, conditionColumnName);
+                } else {
+                    // 视图类型：basic=用户页面, monitor=后台监控页面
+                    String viewType = MapUtils.getString(searchMap, "viewType", "basic");
+                    // 支持逗号分隔的多字段查询
+                    if (StringUtils.contains(fieldValueLike, ",") && StringUtils.equals(viewType, "monitor")) {
+                        // 按逗号分割并去除空格
+                        String[] values = StringUtils.split(fieldValueLike, ",");
+                        List<String> likeConditions = new LinkedList<>();
+                        for (String value : values) {
+                            String trimmedValue = StringUtils.trim(value);
+                            if (StringUtils.isNotBlank(trimmedValue)) {
+                                likeConditions.add(StringUtils.join(conditionColumnName, " LIKE '%", trimmedValue, "%'"));
                             }
-                            if (CollectionUtils.isNotEmpty(likeConditions)) {
-                                // 多个条件用 OR 连接，并用括号包裹
-                                conditionSql = StringUtils.join("AND ( ", StringUtils.join(likeConditions, " OR "), " )");
-                            }
-                        } else {
-                            // 单个值的情况，保持原有逻辑
-                            conditionSql = StringUtils.join("AND ", conditionColumnName, " LIKE '%", fieldValueLike, "%'");
                         }
-                    }
-                }
-                break;
-            case "list":
-                // 3、foreach匹配
-                List<String> fieldValueForeach = (List<String>) searchMap.get(field);
-                if (CollectionUtils.isNotEmpty(fieldValueForeach)) {
-                    // 对查询条件中存在“无”的数据做兼容
-                    if (fieldValueForeach.contains(StringUtils.EMPTY) || fieldValueForeach.contains("BLANK_ITEM") || fieldValueForeach.contains("999")) {
-                        conditionSql = String.format("AND ( %s in ( '%s' ) OR %s IS NULL OR %s = '' )",
-                                conditionColumnName, StringUtils.join(fieldValueForeach, "','"), conditionColumnName, conditionColumnName);
+                        if (CollectionUtils.isNotEmpty(likeConditions)) {
+                            // 多个条件用 OR 连接，并用括号包裹
+                            conditionSql = StringUtils.join("AND ( ", StringUtils.join(likeConditions, " OR "), " )");
+                        }
                     } else {
-                        conditionSql = StringUtils.join("AND ", conditionColumnName, " in ( '", StringUtils.join(fieldValueForeach, "','"), "' )");
+                        // 单个值的情况，保持原有逻辑
+                        conditionSql = StringUtils.join("AND ", conditionColumnName, " LIKE '%", fieldValueLike, "%'");
                     }
                 }
-                break;
-            case "unions":
-                // 4、foreach匹配超过1000时改用union查询 or 模糊查询改用in查询
-                List<List<String>> fieldValueForeachUnions = (List<List<String>>) searchMap.get(field);
-                if (CollectionUtils.isNotEmpty(fieldValueForeachUnions)) {
-                    List<String> conditions = new LinkedList<>();
-                    for (List<String> list : fieldValueForeachUnions) {
-                        conditions.add(StringUtils.join(conditionColumnName, " in ( '", StringUtils.join(list, "','"), "' )"));
-                    }
-                    conditionSql = String.format("AND ( %s )", StringUtils.join(conditions, " or "));
+            }
+            break;
+        case "list":
+            // 3、foreach匹配
+            List<String> fieldValueForeach = (List<String>) searchMap.get(field);
+            if (CollectionUtils.isNotEmpty(fieldValueForeach)) {
+                // 对查询条件中存在“无”的数据做兼容
+                if (fieldValueForeach.contains(StringUtils.EMPTY) || fieldValueForeach.contains("BLANK_ITEM") || fieldValueForeach.contains("999")) {
+                    conditionSql = String.format("AND ( %s in ( '%s' ) OR %s IS NULL OR %s = '' )", conditionColumnName, StringUtils.join(fieldValueForeach, "','"), conditionColumnName,
+                            conditionColumnName);
+                } else {
+                    conditionSql = StringUtils.join("AND ", conditionColumnName, " in ( '", StringUtils.join(fieldValueForeach, "','"), "' )");
                 }
-                break;
-            case "column":
-                // 5、精确匹配表字段名：此方式出现在以表字段名为key传入的场景，例如导出时的子页签
-                String fieldValueColumn = MapUtils.getString(searchMap, field);
-                if (StringUtils.isNotBlank(fieldValueColumn)) {
-                    conditionSql = StringUtils.join("AND ", field, " = '", fieldValueColumn, "'");
+            }
+            break;
+        case "unions":
+            // 4、foreach匹配超过1000时改用union查询 or 模糊查询改用in查询
+            List<List<String>> fieldValueForeachUnions = (List<List<String>>) searchMap.get(field);
+            if (CollectionUtils.isNotEmpty(fieldValueForeachUnions)) {
+                List<String> conditions = new LinkedList<>();
+                for (List<String> list : fieldValueForeachUnions) {
+                    conditions.add(StringUtils.join(conditionColumnName, " in ( '", StringUtils.join(list, "','"), "' )"));
                 }
-                break;
-            case "notIn":
-                // 6、notIn匹配
-                List<String> fieldValueNotIn = (List<String>) searchMap.get(field);
-                if (CollectionUtils.isNotEmpty(fieldValueNotIn)) {
-                    conditionSql = StringUtils.join("AND ", conditionColumnName, " not in ( '", StringUtils.join(fieldValueNotIn, "','"), "' )");
-                }
-                break;
-            default:
-                break;
+                conditionSql = String.format("AND ( %s )", StringUtils.join(conditions, " or "));
+            }
+            break;
+        case "column":
+            // 5、精确匹配表字段名：此方式出现在以表字段名为key传入的场景，例如导出时的子页签
+            String fieldValueColumn = MapUtils.getString(searchMap, field);
+            if (StringUtils.isNotBlank(fieldValueColumn)) {
+                conditionSql = StringUtils.join("AND ", field, " = '", fieldValueColumn, "'");
+            }
+            break;
+        case "notIn":
+            // 6、notIn匹配
+            List<String> fieldValueNotIn = (List<String>) searchMap.get(field);
+            if (CollectionUtils.isNotEmpty(fieldValueNotIn)) {
+                conditionSql = StringUtils.join("AND ", conditionColumnName, " not in ( '", StringUtils.join(fieldValueNotIn, "','"), "' )");
+            }
+            break;
+        default:
+            break;
         }
         return conditionSql;
     }
-
 
 }

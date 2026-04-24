@@ -44,7 +44,7 @@ import io.github.wywuzh.commons.core.poi.style.CellStyleTools;
 @Slf4j
 public class ExcelUtilsTest {
 
-//    @Before
+    //    @Before
     public void init() {
         System.setProperty("font.name", "宋体");
         System.setProperty("font.height", "9");
@@ -112,7 +112,12 @@ public class ExcelUtilsTest {
 
         Map<String, String[]> columnValidation = new HashMap<>();
         String[] genders = {
-                "男", "女", "未知"
+                "男", "女", "未知", "其他",
+                "man", "woman",
+                "Mees", "Naised",
+                "Kişi", "Qadın",
+                "burrë", "grua",
+                "Fir", "mná",
         };
         columnValidation.put("性别", genders);
 

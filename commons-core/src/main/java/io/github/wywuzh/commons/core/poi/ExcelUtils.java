@@ -916,7 +916,7 @@ public class ExcelUtils {
         for (int i = 0; i < columnValidationData.length; i++) {
             hideSheet.createRow(i).createCell(0).setCellValue(columnValidationData[i]);
         }
-        // 创建名称，可被其他单元格引用
+        // 创建名称为 {prefixName}_hidden 的命名区域，可被其他单元格引用
         Name categoryName = workbook.createName();
         categoryName.setNameName(prefixName + "_hidden");
         // 设置名称引用的公式

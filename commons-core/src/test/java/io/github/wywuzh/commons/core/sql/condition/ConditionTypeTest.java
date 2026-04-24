@@ -15,9 +15,9 @@
  */
 package io.github.wywuzh.commons.core.sql.condition;
 
-import org.junit.Test;
-
 import lombok.extern.slf4j.Slf4j;
+
+import org.junit.Test;
 
 /**
  * 类ConditionTypeTest.java的实现描述：Where条件字段匹配类型测试
@@ -195,9 +195,7 @@ public class ConditionTypeTest {
 
         // 打印所有枚举值
         for (ConditionType type : values) {
-            log.info("枚举值: {}, 操作符: {}, 批量: {}, 区间: {}, 模糊: {}, 空值: {}",
-                    type.name(), type.getOperator(), type.isBatch(),
-                    type.isBetween(), type.isLike(), type.isNullCheck());
+            log.info("枚举值: {}, 操作符: {}, 批量: {}, 区间: {}, 模糊: {}, 空值: {}", type.name(), type.getOperator(), type.isBatch(), type.isBetween(), type.isLike(), type.isNullCheck());
         }
 
         // 验证枚举值的数量
