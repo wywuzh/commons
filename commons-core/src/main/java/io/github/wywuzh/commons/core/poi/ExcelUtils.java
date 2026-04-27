@@ -917,6 +917,7 @@ public class ExcelUtils {
             hideSheet.createRow(i).createCell(0).setCellValue(columnValidationData[i]);
         }
         // 创建名称为 {prefixName}_hidden 的命名区域，可被其他单元格引用
+        // tips：命名区域名称不能重复，否则会报“The workbook already contains this name:”的异常。如果是往已存在的模板中添加命名区域，则需要先删除已存在的命名区域(公式 -> 名称管理器)。
         Name categoryName = workbook.createName();
         categoryName.setNameName(prefixName + "_hidden");
         // 设置名称引用的公式
