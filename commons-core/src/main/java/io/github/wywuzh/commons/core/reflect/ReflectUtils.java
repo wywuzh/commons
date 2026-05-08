@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.Map;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.MethodUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +81,7 @@ public class ReflectUtils {
 
         // tips：先根据fieldName取Field，如果取不到就去找Method
         Class<?> clazz = instance.getClass();
-        Field field = FieldUtils.getField(clazz, fieldName, true);
+        Field field = ReflectFieldCache.getField(clazz, fieldName);
         if (field != null) {
             return field;
         }
@@ -131,36 +130,6 @@ public class ReflectUtils {
             }
 
             return (T) realValue;
-
-//            Object realValue = null;
-//            if (instance instanceof Map) {
-//                realValue = ((Map) instance).get(fieldName);
-//            } else {
-//                Class<?> clazz = instance.getClass();
-//                Field field = FieldUtils.getField(clazz, fieldName, true);
-//
-//                if (field == null) {
-//                    // 如果field字段无法取到值，则通过Getter方法取
-//                    // 将第一个字符转换为大写
-//                    String firstChar = fieldName.substring(0, 1);
-//                    String lastChar = fieldName.substring(1);
-//                    fieldName = firstChar.toUpperCase() + lastChar;
-//                    Method fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
-//                    if (fieldMethod == null) {
-//                        // 此处为解决实体类字段第二个字符为大写的问题
-//                        // 注意：这里是为了兼容第二个字符为大写的字段，在设计表结构的时候，尽量不要采用这种方式，这种设计方式不合理，会在Getter、Setter方法以及接口返回的时候出现意料之外的结果
-//                        firstChar = fieldName.substring(0, 2);
-//                        lastChar = fieldName.substring(2);
-//                        fieldName = firstChar.toUpperCase() + lastChar;
-//                        fieldMethod = MethodUtils.getAccessibleMethod(clazz, "get" + fieldName);
-//                    }
-//                    fieldMethod.setAccessible(true);
-//                    realValue = MethodUtils.invokeMethod(instance, fieldMethod.getName());
-//                } else {
-//                    realValue = field.get(instance);
-//                }
-//            }
-//            return (T) realValue;
         } catch (IllegalAccessException e) {
             LOGGER.error("instance={}, fieldName={} 字段获取值失败：", instance.getClass(), fieldName, e);
             throw e;
@@ -184,7 +153,7 @@ public class ReflectUtils {
             if (instance instanceof Map) {
                 ((Map) instance).put(fieldName, value);
             } else {
-                Field declaredField = FieldUtils.getField(instance.getClass(), fieldName, true);
+                Field declaredField = ReflectFieldCache.getField(instance.getClass(), fieldName);
                 declaredField.set(instance, value);
             }
         } catch (Exception e) {
@@ -238,7 +207,7 @@ public class ReflectUtils {
             String targetFieldName = targetFields[i];
 
             try {
-                Field targetField = FieldUtils.getField(targetInstance.getClass(), targetFieldName, true);
+                Field targetField = ReflectFieldCache.getField(targetInstance.getClass(), targetFieldName);
                 targetField.set(targetInstance, ReflectUtils.getValue(sourceInstance, sourceFieldName));
             } catch (Exception e) {
                 LOGGER.error("sourceInstance.class={}, targetInstance.class={}, sourceFieldName={}, targetFieldName={} 获取源字段值、设置目标字段值失败：", sourceInstance.getClass(), targetInstance.getClass(),
@@ -294,9 +263,9 @@ public class ReflectUtils {
 
             try {
                 // source
-                Field sourceField = FieldUtils.getField(sourceInstance.getClass(), sourceFieldName, true);
+                Field sourceField = ReflectFieldCache.getField(sourceInstance.getClass(), sourceFieldName);
                 // target
-                Field targetField = FieldUtils.getField(targetInstance.getClass(), targetFieldName, true);
+                Field targetField = ReflectFieldCache.getField(targetInstance.getClass(), targetFieldName);
                 if (!sourceField.getType().equals(targetField.getType())) {
                     throw new IllegalArgumentException("sourceFields和targetFields的数组字段类型不匹配！");
                 }

@@ -20,7 +20,6 @@
         <module>commons-static-layui</module>
         <module>commons-static-easyui</module>
         <module>commons-static-adminlte</module>
-        <module>commons-static-vue</module>
     </modules>
 
     <dependencies>
