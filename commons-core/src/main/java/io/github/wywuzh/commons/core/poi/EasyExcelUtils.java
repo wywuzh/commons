@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package io.github.wywuzh.commons.core.poi;
 
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
 import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
 import com.alibaba.excel.write.handler.WorkbookWriteHandler;
 import com.alibaba.excel.write.handler.context.WorkbookWriteHandlerContext;
@@ -58,10 +59,33 @@ public class EasyExcelUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(EasyExcelUtils.class);
 
     /**
+     * 根据目标文件创建ExcelWriterBuilder对象
+     *
+     * @param destFile 目标文件
+     * @return ExcelWriterBuilder对象
+     * @since v3.5.0
+     */
+    public static ExcelWriterBuilder createExcelWriterBuilder(File destFile) {
+        return EasyExcelFactory.write(destFile);
+    }
+
+    /**
+     * 根据目标文件、模板文件创建ExcelWriterBuilder对象
+     *
+     * @param destFile     目标文件
+     * @param templateFile 模板文件
+     * @return ExcelWriterBuilder对象
+     * @since v3.5.0
+     */
+    public static ExcelWriterBuilder createExcelWriterBuilder(File destFile, File templateFile) {
+        return EasyExcelFactory.write(destFile).withTemplate(templateFile);
+    }
+
+    /**
      * 根据目标文件路径名创建ExcelWriter对象
      *
      * @param filePath 目标文件路径名
-     * @return
+     * @return ExcelWriter对象
      */
     public static ExcelWriter createExcelWriter(String filePath) {
         return EasyExcelFactory.write(filePath).build();
@@ -71,7 +95,7 @@ public class EasyExcelUtils {
      * 根据目标文件创建ExcelWriter对象
      *
      * @param destFile 目标文件
-     * @return
+     * @return ExcelWriter对象
      */
     public static ExcelWriter createExcelWriter(File destFile) {
         return EasyExcelFactory.write(destFile).build();
@@ -81,7 +105,7 @@ public class EasyExcelUtils {
      * 根据目标文件输出流创建ExcelWriter对象
      *
      * @param outputStream 目标文件输出流
-     * @return
+     * @return ExcelWriter对象
      */
     public static ExcelWriter createExcelWriter(OutputStream outputStream) {
         return EasyExcelFactory.write(outputStream).build();
@@ -92,7 +116,7 @@ public class EasyExcelUtils {
      *
      * @param destFile     目标文件
      * @param templateFile 模板文件
-     * @return
+     * @return ExcelWriter对象
      */
     public static ExcelWriter createExcelWriter(File destFile, String templateFile) {
         return EasyExcelFactory.write(destFile).withTemplate(templateFile).build();
@@ -103,7 +127,7 @@ public class EasyExcelUtils {
      *
      * @param destFile     目标文件
      * @param templateFile 模板文件
-     * @return
+     * @return ExcelWriter对象
      */
     public static ExcelWriter createExcelWriter(File destFile, File templateFile) {
         return EasyExcelFactory.write(destFile).withTemplate(templateFile).build();
@@ -114,7 +138,7 @@ public class EasyExcelUtils {
      *
      * @param destFile            目标文件
      * @param templateInputStream 模板文件输入流
-     * @return
+     * @return ExcelWriter对象
      */
     public static ExcelWriter createExcelWriter(File destFile, InputStream templateInputStream) {
         return EasyExcelFactory.write(destFile).withTemplate(templateInputStream).build();
@@ -126,7 +150,7 @@ public class EasyExcelUtils {
      * @param sheetName     Sheet页名
      * @param columnTitles  列的标题
      * @param columnLengths 列的长度
-     * @return
+     * @return ExcelWriter对象
      * @deprecated 已废弃，请使用 {@link #createWriteSheet(ExcelExportRequest)} 方法
      */
     @Deprecated
@@ -158,7 +182,7 @@ public class EasyExcelUtils {
      * 创建WriteSheet对象
      *
      * @param excelExportRequest 导出请求
-     * @return
+     * @return WriteSheet对象
      * @since v2.7.8
      */
     public static WriteSheet createWriteSheet(ExcelExportRequest excelExportRequest) {

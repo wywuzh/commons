@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.wywuzh.commons.core.util;
+package io.github.wywuzh.commons.core.sort;
 
 import java.util.*;
 
@@ -25,13 +25,13 @@ import org.apache.commons.collections.comparators.ComparatorChain;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * 类ComparatorUtils的实现描述：排序工具类
+ * 类ComparatorUtils的实现描述：排序工具类 - Bean对象
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2020-08-22 23:02:11
  * @version v2.3.2
  * @since JDK 1.8
  */
-public class SortUtils {
+public class BeanSortUtils {
 
     /**
      * 排序，正序

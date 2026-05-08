@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,5 +31,5 @@ public interface ResponseCallBack {
      * @param resultJson 返回结果
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月11日 上午10:58:18
      */
-    public void response(int statusCode, String resultJson);
+    void response(int statusCode, String resultJson);
 }

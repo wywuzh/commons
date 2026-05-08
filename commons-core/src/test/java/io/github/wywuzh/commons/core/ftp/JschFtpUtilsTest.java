@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,6 @@
  */
 package io.github.wywuzh.commons.core.ftp;
 
-import com.jcraft.jsch.JSchException;
-
-import java.io.IOException;
-
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
@@ -33,20 +29,43 @@ import org.junit.Test;
 @Slf4j
 public class JschFtpUtilsTest {
 
+    // 上传文件
     @Test
     public void uploadFile() {
-        String host = "10.0.43.32";
-        int port = 60777;
+        String host = "172.20.10.8";
+        int port = 50237;
         String username = "root";
-        String password = "12345678";
-        String path = "/www/tools/";
-        String localFile = "D:\\test.txt";
+        String password = "admin123456";
+        String ftpPath = "/www/tools/";
+        String localFile = "D:\\data\\test.txt";
         String remoteFile = "test.txt";
         try {
-            JschFtpUtils.uploadFile(host, port, username, password, path, localFile, remoteFile);
-        } catch (IOException e) {
+            JschFtpUtils.uploadFile(host, port, username, password, ftpPath, localFile, remoteFile);
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
-        } catch (JSchException e) {
+        }
+    }
+
+    // 下载文件
+    @Test
+    public void downloadFile() {
+        // 服务器地址
+        String host = "172.20.10.8";
+        // 服务器端口
+        int port = 50237;
+        // 用户名
+        String username = "root";
+        // 密码
+        String password = "admin123456";
+        // 远程文件路径
+        String remotePath = "/www/tools/";
+        // 远程文件名
+        String remoteFile = "test.txt";
+        // 本地文件路径
+        String localFile = "D:\\data\\test.txt";
+        try {
+            JschFtpUtils.downloadFile(host, port, username, password, remotePath, remoteFile, localFile);
+        } catch (Exception e) {
             log.error(e.getMessage(), e);
         }
     }

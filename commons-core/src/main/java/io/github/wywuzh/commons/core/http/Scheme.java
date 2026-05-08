@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public enum Scheme {
     /**
      * 协议名称
      */
-    private String name;
+    private final String name;
 
     private Scheme(String name) {
         this.name = name;

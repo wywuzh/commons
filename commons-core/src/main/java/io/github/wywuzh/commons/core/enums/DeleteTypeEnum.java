@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ public enum DeleteTypeEnum {
      */
     PHYSICS("PHYSICS", "物理删除");
 
-    private String type;
-    private String desc;
+    private final String type;
+    private final String desc;
 
     DeleteTypeEnum(String type, String desc) {
         this.type = type;

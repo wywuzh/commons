@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.wywuzh.commons.core.json.gson;
+package io.github.wywuzh.commons.core.json.gson.serializer;
 
 import com.google.gson.*;
 
 import java.lang.reflect.Type;
+import java.util.Date;
 
 /**
  * 类DateTimeSerializer.java的实现描述：java.util.Date 日期时间格式
@@ -31,7 +32,7 @@ import java.lang.reflect.Type;
  * @version v1.0.0
  * @since JDK 1.7
  */
-public class DateTimeSerializer implements TypeSerializer<java.util.Date> {
+public class DateTimeSerializer implements TypeSerializer<Date> {
 
     @Override
     public Type getType() {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,11 @@
 package io.github.wywuzh.commons.core.util;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -60,6 +59,7 @@ public class DateUtils {
     public static final String PATTERN_YYYY_MM_DD_24HH = "yyyy-MM-dd HH";
     public static final String PATTERN_YYYY_MM_DD_24HH_MI = "yyyy-MM-dd HH:mm";
     public static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    public static final String PATTERN_DATE_TIME1 = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final String PATTERN_TIME = "HH:mm:ss";
 
     public static final int FIELD_YEAR = Calendar.YEAR;
@@ -72,15 +72,63 @@ public class DateUtils {
     public static final int FIELD_SECOND = Calendar.SECOND;
     public static final int FIELD_MILLISECOND = Calendar.MILLISECOND;
 
+    // -------------------------------------------------------------------- Java 8+ DateTimeFormatter >>> start
     /**
-     * 时间格式化工具
+     * 时间格式化工具：key=pattern, value=DateTimeFormatter。为每种 pattern 维护独立的 DateTimeFormatter
+     *
+     * @since v3.5.0
      */
-    private static ThreadLocal<SimpleDateFormat> threadLocal = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat(PATTERN_DATE_TIME);
-        }
-    };
+    public static final Map<String, DateTimeFormatter> PATTERN_FORMATTER_CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * 获取DateTimeFormatter实例
+     *
+     * <pre>
+     *  创建DateTimeFormatter实例，pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
+     *
+     *  DateUtil工具在创建DateTimeFormatter实例时，采用single单例模式，确保DateUtils类对象中永远只有一个DateTimeFormatter实例
+     * </pre>
+     *
+     * @return DateTimeFormatter实例
+     * @since v3.5.0
+     */
+    public static DateTimeFormatter getFormatter() {
+        return getFormatter(PATTERN_DATE_TIME);
+    }
+
+    /**
+     * 获取pattern格式的DateTimeFormatter实例
+     *
+     * <pre>
+     * 根据传入的pattern格式创建DateTimeFormatter实例，如果传入pattern参数为空，则pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
+     *
+     * DateUtil工具在创建DateTimeFormatter实例时，采用single单例模式，确保DateUtils类对象中永远只有一个DateTimeFormatter实例
+     * </pre>
+     *
+     * @param pattern 时间格式
+     * @return DateTimeFormatter实例
+     * @since v3.5.0
+     */
+    public static DateTimeFormatter getFormatter(String pattern) {
+        Assert.notBlank(pattern, "Pattern must not be blank");
+        return PATTERN_FORMATTER_CACHE.computeIfAbsent(pattern, p -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern).withZone(ZoneId.of("GMT+8"));
+            return formatter;
+        });
+    }
+    // -------------------------------------------------------------------- Java 8+ DateTimeFormatter <<< End
+
+    /**
+     * 时间格式化工具：key=pattern, value=ThreadLocal。为每种 pattern 维护独立的 ThreadLocal
+     */
+    public static final Map<String, ThreadLocal<SimpleDateFormat>> PATTERN_CACHE = new ConcurrentHashMap<>();
+
+    /**
+     * 清理 ThreadLocal（避免内存泄漏）
+     */
+    public static void clear() {
+        PATTERN_CACHE.values().forEach(ThreadLocal::remove);
+    }
 
     /**
      * 获取SimpleDateFormat实例
@@ -88,7 +136,7 @@ public class DateUtils {
      * <pre>
      *  创建SimpleDateFormat实例，pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
      *
-     *  DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtil类对象中永远只有一个SimpleDateFormat实例
+     *  DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtils类对象中永远只有一个SimpleDateFormat实例
      * </pre>
      *
      * @return SimpleDateFormat实例
@@ -103,7 +151,7 @@ public class DateUtils {
      * <pre>
      * 根据传入的pattern格式创建SimpleDateFormat实例，如果传入pattern参数为空，则pattern默认采用“yyyy-MM-dd HH:mm:ss”格式
      *
-     * DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtil类对象中永远只有一个SimpleDateFormat实例
+     * DateUtil工具在创建SimpleDateFormat实例时，采用single单例模式，确保DateUtils类对象中永远只有一个SimpleDateFormat实例
      * </pre>
      *
      * @param pattern 时间格式
@@ -112,9 +160,11 @@ public class DateUtils {
     public static SimpleDateFormat getInstance(String pattern) {
         Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must not be null");
 
-        SimpleDateFormat dateFormat = threadLocal.get();
-        dateFormat.applyPattern(pattern);
-        return dateFormat;
+        return PATTERN_CACHE.computeIfAbsent(pattern, p -> ThreadLocal.withInitial(() -> {
+            SimpleDateFormat sdf = new SimpleDateFormat(p);
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+            return sdf;
+        })).get();
     }
 
     /**
@@ -126,7 +176,7 @@ public class DateUtils {
     public static String format(Date date) {
         Assert.notNull(date, "[Assertion failed] - the date argument must not be null");
 
-        return getInstance(PATTERN_DATE_TIME).format(date);
+        return format(date, PATTERN_DATE_TIME);
     }
 
     /**
@@ -145,6 +195,10 @@ public class DateUtils {
         Assert.notBlank(pattern, "[Assertion failed] - the pattern argument must not be null");
 
         return getInstance(pattern).format(date);
+        /*
+         * Instant instant = date.toInstant();
+         * return getFormatter(pattern).format(instant);
+         */
     }
 
     /**
@@ -184,7 +238,7 @@ public class DateUtils {
         Date date = null;
         try {
             date = getInstance(pattern).parse(parseDate);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             LOGGER.error("parseDate={}, pattern={} 解析失败：", parseDate, pattern, e);
             if (!quietly) {
                 throw new RuntimeException(e.getMessage(), e);

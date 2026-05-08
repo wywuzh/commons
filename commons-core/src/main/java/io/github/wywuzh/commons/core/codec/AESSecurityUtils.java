@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,13 @@ import io.github.wywuzh.commons.core.common.CharacterSet;
  * </pre>
  *
  * <pre>
+ * 安全说明：
+ * 1. 使用PBKDF2密钥派生函数从密码生成密钥，避免弱密钥问题
+ * 2. 支持GCM模式提供认证加密，防止密文被篡改
+ * 3. 每次加密生成随机盐和IV，提高安全性
+ * </pre>
+ *
+ * <pre>
  * 参考网址：
  * 1）https://www.iteye.com/blog/duanfei-1725613
  * 2）http://blog.sina.com.cn/s/blog_51a7b40e0100xn2l.html
@@ -46,6 +53,7 @@ import io.github.wywuzh.commons.core.common.CharacterSet;
  * @version v1.0.0
  * @since JDK 1.7
  */
+@Deprecated
 public class AESSecurityUtils {
 
     public static final String ALGORITHM = "AES";

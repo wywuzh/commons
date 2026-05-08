@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,16 +26,19 @@ public class Product {
     /**
      * 数据库类型
      */
-    private Type type;
+    private final Type type;
     /**
      * 数据库版本
      */
-    private String version;
+    private final String version;
+
+    public Product(Type type, String version) {
+        this.type = type;
+        this.version = version;
+    }
 
     public Product(String name, String version) {
-        super();
-        this.type = Type.findBy(name);
-        this.version = version;
+        this(Type.findBy(name), version);
     }
 
     public Type getType() {

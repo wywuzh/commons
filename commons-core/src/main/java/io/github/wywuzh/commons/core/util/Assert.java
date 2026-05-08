@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,12 @@ public class Assert extends org.springframework.util.Assert {
 
     public static void notBlank(@Nullable String text, String message) {
         if (StringUtils.isBlank(text)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void notEmpty(@Nullable byte[] array, String message) {
+        if (array == null || array.length == 0) {
             throw new IllegalArgumentException(message);
         }
     }

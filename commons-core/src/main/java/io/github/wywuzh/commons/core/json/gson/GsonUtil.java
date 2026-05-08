@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,37 +20,44 @@ import com.google.gson.stream.JsonReader;
 
 import java.io.StringReader;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.github.wywuzh.commons.core.json.gson.serializer.DateSerializer;
+import io.github.wywuzh.commons.core.json.gson.serializer.DateTimeSerializer;
+import io.github.wywuzh.commons.core.json.gson.serializer.TypeSerializer;
 
 /**
- * 类GsonUtil.java的实现描述：Google JSON转换工具类型
+ * 类GsonUtil.java的实现描述：Google JSON转换工具
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午9:29:46
  * @version v1.0.0
  * @since JDK 1.7
  */
 public class GsonUtil {
-    private static final Log logger = LogFactory.getLog(GsonUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(GsonUtil.class);
 
-    private static GsonBuilder gsonBuilder;
-    public static Gson gson = null;
+    private static volatile GsonBuilder gsonBuilder = createDefaultBuilder();
+    private static volatile Gson gson = null;
 
-    static {
-        gsonBuilder = new GsonBuilder();
-        // 注册java.util.Date 日期时间格式转换
-        gsonBuilder.registerTypeAdapter(Date.class, new DateTimeSerializer());
-        // 注册java.sql.Date 日期格式转换
-        gsonBuilder.registerTypeAdapter(java.sql.Date.class, new DateSerializer());
+    private GsonUtil() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+    private static GsonBuilder createDefaultBuilder() {
+        GsonBuilder builder = new GsonBuilder();
+        // 注册 java.util.Date 日期时间格式转换
+        builder.registerTypeAdapter(Date.class, new DateTimeSerializer());
+        // 注册 java.sql.Date 日期格式转换
+        builder.registerTypeAdapter(java.sql.Date.class, new DateSerializer());
         // 解决value为null时key不存在的问题
-        gsonBuilder.serializeNulls();
-
-        create();
+        builder.serializeNulls();
+        return builder;
     }
 
     /**
@@ -60,7 +67,10 @@ public class GsonUtil {
      * @param typeSerializer 类型转换器
      */
     public static <T> void register(Class<TypeSerializer<T>> clazz, TypeSerializer<T> typeSerializer) {
-        gsonBuilder.registerTypeAdapter(clazz, typeSerializer);
+        synchronized (GsonUtil.class) {
+            gsonBuilder.registerTypeAdapter(clazz, typeSerializer);
+            gson = null; // 使现有实例失效
+        }
     }
 
     /**
@@ -70,7 +80,10 @@ public class GsonUtil {
      * @param typeSerializer 类型转换器
      */
     public static <T> void register(Type type, TypeSerializer<T> typeSerializer) {
-        gsonBuilder.registerTypeAdapter(type, typeSerializer);
+        synchronized (GsonUtil.class) {
+            gsonBuilder.registerTypeAdapter(type, typeSerializer);
+            gson = null; // 使现有实例失效
+        }
     }
 
     /**
@@ -78,41 +91,61 @@ public class GsonUtil {
      *
      * @param list 类型转换器集合
      */
-    public static <T> void register(List<? extends TypeSerializer<T>> list) {
-        for (TypeSerializer<T> serializer : list) {
-            gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
+    public static <T> void registerAll(List<? extends TypeSerializer<T>> list) {
+        synchronized (GsonUtil.class) {
+            for (TypeSerializer<T> serializer : list) {
+                gsonBuilder.registerTypeAdapter(serializer.getType(), serializer);
+            }
+            gson = null; // 使现有实例失效
         }
     }
 
+    /**
+     * 获取GsonBuilder实例（线程安全副本）
+     */
     public static GsonBuilder getGsonBuilder() {
-        return gsonBuilder;
+        synchronized (GsonUtil.class) {
+            return gsonBuilder;
+        }
     }
 
+    /**
+     * 创建或获取Gson实例
+     */
     public static Gson create() {
-        gson = gsonBuilder.create();
+        if (gson == null) {
+            synchronized (GsonUtil.class) {
+                if (gson == null) {
+                    gson = gsonBuilder.create();
+                }
+            }
+        }
         return gson;
     }
 
     /**
-     * 将Bean对象转换为JSON
+     * 重置为默认配置
+     */
+    public static void reset() {
+        synchronized (GsonUtil.class) {
+            gsonBuilder = createDefaultBuilder();
+            gson = null;
+        }
+    }
+
+    /**
+     * 将Bean对象转换为JSON字符串
      *
      * @param bean 实现Serializable接口的Bean对象
      * @return JSON格式字符串
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:41
      */
     public static String format(Object bean) {
-        if (gson == null) {
-            synchronized (GsonUtil.class) {
-                if (gson == null) {
-                    create();
-                }
-            }
-        }
-        return gson.toJson(bean);
+        return create().toJson(bean);
     }
 
     /**
-     * 将Bean对象转换为json
+     * 将Bean对象转换为JSON字符串
      *
      * @param bean 实现Serializable接口的Bean对象
      * @param type Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
@@ -120,51 +153,51 @@ public class GsonUtil {
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:17:39
      */
     public static String format(Object bean, Type type) {
-        if (gson == null) {
-            synchronized (GsonUtil.class) {
-                if (gson == null) {
-                    create();
-                }
-            }
-        }
-        return gson.toJson(bean, type);
+        return create().toJson(bean, type);
     }
 
     /**
      * 将Bean对象集合转换为json
      *
-     * @param beanList Bean对象集合
+     * @param collection Bean对象集合
      * @return JSON格式字符串
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:45
      */
-    public static String format(List<?> beanList) {
-        if (gson == null) {
-            synchronized (GsonUtil.class) {
-                if (gson == null) {
-                    create();
-                }
-            }
-        }
-        return gson.toJson(beanList);
+    public static String format(Collection<?> collection) {
+        return create().toJson(collection);
     }
 
     /**
      * 将Bean对象集合转换为json
      *
-     * @param beanList Bean对象集合
-     * @param type     Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
+     * @param collection Bean对象集合
+     * @param type       Bean对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
      * @return JSON格式字符串
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月2日 下午6:21:55
      */
-    public static String format(List<?> beanList, Type type) {
-        if (gson == null) {
-            synchronized (GsonUtil.class) {
-                if (gson == null) {
-                    create();
-                }
-            }
-        }
-        return gson.toJson(beanList, type);
+    public static String format(Collection<?> collection, Type type) {
+        return create().toJson(collection, type);
+    }
+
+    /**
+     * 将Map对象转换为json
+     *
+     * @param map Map对象
+     * @return JSON格式字符串
+     */
+    public static String format(Map<?, ?> map) {
+        return create().toJson(map);
+    }
+
+    /**
+     * 将Map对象转换为json
+     *
+     * @param map  Map对象
+     * @param type Map对象对应的type。例子：new TypeToken&lt;T&gt;(){}.getType()
+     * @return JSON格式字符串
+     */
+    public static String format(Map<?, ?> map, Type type) {
+        return create().toJson(map, type);
     }
 
     /**
@@ -176,27 +209,19 @@ public class GsonUtil {
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
      */
     public static <T> T parse(String json, Type type) {
-        if (gson == null) {
-            synchronized (GsonUtil.class) {
-                if (gson == null) {
-                    create();
-                }
-            }
+        if (json == null || json.trim().isEmpty()) {
+            throw new IllegalArgumentException("JSON字符串不能为空");
         }
-
-        T t = null;
-        try {
-            JsonReader jsonReader = new JsonReader(new StringReader(json));
+        try (JsonReader jsonReader = new JsonReader(new StringReader(json))) {
             jsonReader.setLenient(true);
-            t = gson.fromJson(jsonReader, type);
+            return create().fromJson(jsonReader, type);
+        } catch (JsonSyntaxException e) {
+            logger.error("解析JSON到类型失败: {}, json: {}", type, json, e);
+            throw e;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Throwable e) {
-            logger.error(e.getMessage(), e);
-            throw e;
+            logger.error("解析JSON时发生意外错误: {}", json, e);
+            throw new RuntimeException("解析JSON失败", e);
         }
-        return t;
     }
 
     /**
@@ -208,25 +233,50 @@ public class GsonUtil {
      * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2015年11月12日 上午10:05:50
      */
     public static <T> T parse(JsonElement json, Type type) {
-        if (gson == null) {
-            synchronized (GsonUtil.class) {
-                if (gson == null) {
-                    create();
-                }
-            }
+        if (json == null || json.isJsonNull()) {
+            throw new IllegalArgumentException("JSON元素不能为空");
         }
-
-        T t = null;
         try {
-            t = gson.fromJson(json, type);
+            return create().fromJson(json, type);
+        } catch (JsonSyntaxException e) {
+            logger.error("解析JSON到类型失败: {}", type, e);
+            throw e;
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw e;
-        } catch (Throwable e) {
-            logger.error(e.getMessage(), e);
-            throw e;
+            logger.error("解析JSON时发生意外错误", e);
+            throw new RuntimeException("解析JSON失败", e);
         }
-        return t;
+    }
+
+    /**
+     * 安静地将json转换为对象，失败时返回null
+     *
+     * @param json 需要转换的json数据
+     * @param type 需要转换的数据类型
+     * @return 转换成功的Bean对象，失败返回null
+     */
+    public static <T> T parseQuietly(String json, Type type) {
+        try {
+            return parse(json, type);
+        } catch (Exception e) {
+            logger.warn("安静解析JSON失败，返回null: {}", e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 安静地将json转换为对象，失败时返回null
+     *
+     * @param json 需要转换的json数据
+     * @param type 需要转换的数据类型
+     * @return 转换成功的Bean对象，失败返回null
+     */
+    public static <T> T parseQuietly(JsonElement json, Type type) {
+        try {
+            return parse(json, type);
+        } catch (Exception e) {
+            logger.warn("安静解析JSON失败，返回null: {}", e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -237,6 +287,9 @@ public class GsonUtil {
      * @throws JsonSyntaxException
      */
     public static JsonObject fromObject(String json) throws JsonSyntaxException {
+        if (json == null || json.trim().isEmpty()) {
+            throw new IllegalArgumentException("JSON字符串不能为空");
+        }
         JsonElement jsonElement = JsonParser.parseString(json);
         if (jsonElement.isJsonObject()) {
             return jsonElement.getAsJsonObject();
@@ -253,6 +306,9 @@ public class GsonUtil {
      * @throws JsonSyntaxException
      */
     public static JsonArray fromArray(String json) throws JsonSyntaxException {
+        if (json == null || json.trim().isEmpty()) {
+            throw new IllegalArgumentException("JSON字符串不能为空");
+        }
         JsonElement jsonElement = JsonParser.parseString(json);
         if (jsonElement.isJsonArray()) {
             return jsonElement.getAsJsonArray();
@@ -261,23 +317,58 @@ public class GsonUtil {
         }
     }
 
-    public static void main(String[] args) {
-        Gson gson = new Gson();
-        String json = gson.toJson(new Date());
-        System.out.println(json);
-        System.out.println(format(new Date()));
-
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("total", "12");
-        map.put("rows", null);
-        gson = new GsonBuilder().serializeNulls().create();
-        String json2 = gson.toJson(map, Map.class);
-        System.out.println(json2);
-
-        String jsonObject = "1234";
-        JsonElement parse = JsonParser.parseString(jsonObject);
-        if (parse.isJsonObject()) {
-            System.out.println(parse.getAsJsonObject());
+    /**
+     * 验证是否为有效的JSON字符串
+     *
+     * @param json json字符串
+     * @return 是否为有效JSON
+     */
+    public static boolean isValidJson(String json) {
+        if (json == null || json.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            JsonParser.parseString(json);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
+
+    /**
+     * 验证是否为有效的JsonObject格式
+     *
+     * @param json json字符串
+     * @return 是否为有效JsonObject
+     */
+    public static boolean isValidJsonObject(String json) {
+        if (json == null || json.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            JsonElement jsonElement = JsonParser.parseString(json);
+            return jsonElement.isJsonObject();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * 验证是否为有效的JsonArray格式
+     *
+     * @param json json字符串
+     * @return 是否为有效JsonArray
+     */
+    public static boolean isValidJsonArray(String json) {
+        if (json == null || json.trim().isEmpty()) {
+            return false;
+        }
+        try {
+            JsonElement jsonElement = JsonParser.parseString(json);
+            return jsonElement.isJsonArray();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }

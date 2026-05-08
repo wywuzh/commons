@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,18 @@
 package io.github.wywuzh.commons.core.executor;
 
 /**
- * 类TransUnit.java的实现描述：业务执行
+ * 类TransUnit.java的实现描述：业务执行 - 定义在事务中执行的业务操作
  *
  * @author 伍章红 2014-7-29 上午10:59:43
  * @since JDK 1.6.0_20
  */
+@FunctionalInterface
 public interface TransUnit {
 
-    public void excute();
+    /**
+     * 在事务中执行的业务逻辑
+     *
+     * @throws Exception 执行过程中可能抛出的异常
+     */
+    void execute();
 }

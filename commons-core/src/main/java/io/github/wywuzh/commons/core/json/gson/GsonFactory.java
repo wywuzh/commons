@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 
+import io.github.wywuzh.commons.core.json.gson.serializer.TypeSerializer;
+
 /**
  * 类GsonFactory.java的实现描述：Google Gson工厂
  *
@@ -35,8 +37,8 @@ public class GsonFactory {
     /**
      * 得到GsonBuilder对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static GsonBuilder getGsonBuilder() {
         return new GsonBuilder();
@@ -45,12 +47,10 @@ public class GsonFactory {
     /**
      * 得到GsonBuilder对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-     * @param clazz
-     *                           需要转换的类的Class
-     * @param typeSerializer
-     *                           类型转换器接口
+     * @param clazz          需要转换的类的Class
+     * @param typeSerializer 类型转换器接口
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static <T> GsonBuilder getGsonBuilder(Class<TypeSerializer<T>> clazz, TypeSerializer<T> typeSerializer) {
         GsonBuilder gsonBuilder = getGsonBuilder();
@@ -61,12 +61,10 @@ public class GsonFactory {
     /**
      * 得到GsonBuilder对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-     * @param type
-     *                           需要转换的类的Type
-     * @param typeSerializer
-     *                           类型转换器接口
+     * @param type           需要转换的类的Type
+     * @param typeSerializer 类型转换器接口
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static <T> GsonBuilder getGsonBuilder(Type type, TypeSerializer<T> typeSerializer) {
         GsonBuilder gsonBuilder = getGsonBuilder();
@@ -77,10 +75,9 @@ public class GsonFactory {
     /**
      * 得到GsonBuilder对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-     * @param list
-     *                 类型转换器接口集合
+     * @param list 类型转换器接口集合
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static <T> GsonBuilder getGsonBuilder(List<? extends TypeSerializer<T>> list) {
         GsonBuilder gsonBuilder = getGsonBuilder();
@@ -93,10 +90,9 @@ public class GsonFactory {
     /**
      * 得到GsonBuilder对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-     * @param serializers
-     *                        类型转换器接口数组
+     * @param serializers 类型转换器接口数组
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static <T> GsonBuilder getGsonBuilder(TypeSerializer<T>[] serializers) {
         if (null == serializers || serializers.length == 0) {
@@ -108,8 +104,8 @@ public class GsonFactory {
     /**
      * 得到Gson对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static Gson getGson() {
         return getGsonBuilder().create();
@@ -118,10 +114,9 @@ public class GsonFactory {
     /**
      * 得到Gson对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-     * @param omitNull
-     *                     是否忽略value值为null的属性
+     * @param omitNull 是否忽略value值为null的属性
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static Gson getGson(boolean omitNull) {
         GsonBuilder gsonBuilder = getGsonBuilder();
@@ -134,10 +129,9 @@ public class GsonFactory {
     /**
      * 得到Gson对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-     * @param serializers
-     *                        类型转换器接口数组
+     * @param serializers 类型转换器接口数组
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static <T> Gson getGson(TypeSerializer<T>[] serializers) {
         return getGsonBuilder(serializers).create();
@@ -146,12 +140,10 @@ public class GsonFactory {
     /**
      * 得到Gson对象示例
      *
-     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
-     * @param serializers
-     *                        类型转换器接口数组
-     * @param omitNull
-     *                        是否忽略value值为null的属性
+     * @param serializers 类型转换器接口数组
+     * @param omitNull    是否忽略value值为null的属性
      * @return
+     * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年8月3日 下午5:49:04
      */
     public static <T> Gson getGson(TypeSerializer<T>[] serializers, boolean omitNull) {
         GsonBuilder gsonBuilder = getGsonBuilder(serializers);

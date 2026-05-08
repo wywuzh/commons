@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,11 @@
  */
 package io.github.wywuzh.commons.core.sql;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * 类Type的实现描述：数据库类型
  *
@@ -23,11 +28,20 @@ package io.github.wywuzh.commons.core.sql;
  * @since JDK 1.8
  */
 public enum Type {
-    MySQL("MySQL"), Oracle("Oracle"), UNKNOW(""),;
+    MySQL("MySQL"), Oracle("Oracle"), UNKNOWN(""),;
 
-    private String name;
+    private final String name;
+    private static final Map<String, Type> NAME_MAP = new HashMap<>();
 
-    private Type(String name) {
+    static {
+        for (Type type : values()) {
+            if (type != UNKNOWN) {
+                NAME_MAP.put(type.name.toLowerCase(), type);
+            }
+        }
+    }
+
+    Type(String name) {
         this.name = name;
     }
 
@@ -36,11 +50,16 @@ public enum Type {
     }
 
     public static Type findBy(String name) {
-        for (Type type : values()) {
-            if (type.name.equals(name)) {
-                return type;
-            }
+        if (StringUtils.isBlank(name)) {
+            return UNKNOWN;
         }
-        return UNKNOW;
+
+        String normalizedName = name.trim().toLowerCase();
+        return NAME_MAP.getOrDefault(normalizedName, UNKNOWN);
     }
+
+    public boolean isKnown() {
+        return this != UNKNOWN;
+    }
+
 }
