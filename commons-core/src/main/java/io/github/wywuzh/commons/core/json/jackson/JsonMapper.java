@@ -38,7 +38,15 @@ import org.slf4j.LoggerFactory;
  * @since JDK 1.8
  */
 public class JsonMapper {
-    private static Logger logger = LoggerFactory.getLogger(JsonMapper.class);
+    private static final Logger logger = LoggerFactory.getLogger(JsonMapper.class);
+
+    private static boolean isNullOrEmptyJson(String jsonString) {
+        return StringUtils.isBlank(jsonString) || "null".equalsIgnoreCase(jsonString.trim());
+    }
+
+    private static boolean isEmptyArrayJson(String jsonString) {
+        return jsonString != null && "[]".equals(jsonString.trim());
+    }
 
     public static final JsonMapper DEFAULT_JSON_MAPPER = JsonMapper.buildNormalMapper();
     public static final JsonMapper JSON_MAPPER_NON_NULL = JsonMapper.buildNonNullMapper();
@@ -53,11 +61,16 @@ public class JsonMapper {
 
     public JsonMapper(JsonInclude.Include include) {
         objectMapper = new ObjectMapper();
-        // 对象的所有字段全部列入
+        // 控制哪些字段会被序列化成 JSON
+        // NON_NULL：只序列化非 null 字段（最常用）
+        // NON_EMPTY：排除 null、空字符串、空集合
+        // ALWAYS：所有字段都输出（包括 null）
         objectMapper.setSerializationInclusion(include);
-        // 取消默认转换timestamp形式
+        // 日期不输出时区
+        // WRITE_DATES_WITH_ZONE_ID=false：日期不输出时区 ID，只输出时间字符串 / 时间戳。避免出现：2025-01-01T12:00:00[Asia/Shanghai]
         objectMapper.configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, false);
-        // 忽略空Bean转json的错误
+        // FAIL_ON_EMPTY_BEANS=true：空对象（无任何字段）转 JSON 直接抛异常
+        // FAIL_ON_EMPTY_BEANS=false：空对象转 JSON 返回 {}，不报错
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true);
         /*
          * // 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
@@ -108,7 +121,7 @@ public class JsonMapper {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Failed to serialize object to JSON. objectClass={}", (object != null ? object.getClass().getName() : "null"), e);
             throw new RuntimeException("JSON serialization failed", e);
         }
     }
@@ -121,7 +134,7 @@ public class JsonMapper {
         try {
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Failed to serialize object to formatted JSON. objectClass={}", (object != null ? object.getClass().getName() : "null"), e);
             throw new RuntimeException("JSON serialization failed", e);
         }
     }
@@ -135,14 +148,14 @@ public class JsonMapper {
      * @see #constructParametricType(Class, Class...)
      */
     public <T> T fromJson(String jsonString, Class<T> clazz) {
-        if (StringUtils.isEmpty(jsonString)) {
+        if (isNullOrEmptyJson(jsonString)) {
             return null;
         }
 
         try {
             return objectMapper.readValue(jsonString, clazz);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Failed to deserialize JSON string to class. targetClass={}, json={}", (clazz != null ? clazz.getName() : "null"), jsonString, e);
             throw new RuntimeException("JSON deserialization failed", e);
         }
     }
@@ -157,27 +170,27 @@ public class JsonMapper {
      */
     @SuppressWarnings("unchecked")
     public <T> T fromJson(String jsonString, JavaType javaType) {
-        if (StringUtils.isEmpty(jsonString)) {
+        if (isNullOrEmptyJson(jsonString)) {
             return null;
         }
 
         try {
             return (T) objectMapper.readValue(jsonString, javaType);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Failed to deserialize JSON string to JavaType. targetType={}, json={}", javaType, jsonString, e);
             throw new RuntimeException("JSON deserialization failed", e);
         }
     }
 
     public <T> T fromJson(String jsonString, TypeReference<T> valueTypeRef) {
-        if (StringUtils.isEmpty(jsonString)) {
+        if (isNullOrEmptyJson(jsonString)) {
             return null;
         }
 
         try {
-            return (T) objectMapper.readValue(jsonString, valueTypeRef);
+            return objectMapper.readValue(jsonString, valueTypeRef);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Failed to deserialize JSON string to TypeReference. targetTypeRef={}, json={}", valueTypeRef, jsonString, e);
             throw new RuntimeException("JSON deserialization failed", e);
         }
     }
@@ -189,18 +202,28 @@ public class JsonMapper {
 
     @SuppressWarnings("unchecked")
     public <T> List<T> fromJsonToList(String jsonString, Class<T> classMeta) {
+        if (isNullOrEmptyJson(jsonString)) {
+            return null;
+        }
+        if (isEmptyArrayJson(jsonString)) {
+            return new java.util.ArrayList<>();
+        }
         return (List<T>) this.fromJson(jsonString, constructParametricType(List.class, classMeta));
     }
 
     @SuppressWarnings("unchecked")
     public <T> T fromJson(JsonParser jsonParser, Class<?> parametrized, Class<?>... parameterClasses) {
+        if (jsonParser == null) {
+            logger.warn("JsonParser is null when calling fromJson(JsonParser, ...) ; return null.");
+            return null;
+        }
         JavaType javaType = constructParametricType(parametrized, parameterClasses);
         try {
             return (T) objectMapper.readValue(jsonParser, javaType);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Failed to deserialize from JsonParser to type. parametrized={}, parameterClasses={}", parametrized, java.util.Arrays.toString(parameterClasses), e);
+            throw new RuntimeException("JSON deserialization from parser failed", e);
         }
-        return null;
     }
 
     /**
@@ -216,12 +239,20 @@ public class JsonMapper {
      */
     @SuppressWarnings("unchecked")
     public <T> T update(T object, String jsonString) {
+        if (object == null) {
+            logger.warn("Target object is null in update(), jsonString={}", jsonString);
+            return null;
+        }
+        if (StringUtils.isBlank(jsonString) || "null".equalsIgnoreCase(jsonString.trim())) {
+            logger.debug("Empty or null jsonString in update(). Return original object without changes.");
+            return object;
+        }
         try {
             return (T) objectMapper.readerForUpdating(object).readValue(jsonString);
         } catch (JsonProcessingException e) {
-            logger.warn("update json string:" + jsonString + " to object:" + object + " error.", e);
+            logger.error("Failed to update object from json. targetClass={}, json={}", object.getClass().getName(), jsonString, e);
+            throw new RuntimeException("JSON update failed", e);
         }
-        return null;
     }
 
     /**
@@ -249,12 +280,15 @@ public class JsonMapper {
     }
 
     public JsonNode parseNode(String json) {
+        if (isNullOrEmptyJson(json)) {
+            return null;
+        }
         try {
             return objectMapper.readValue(json, JsonNode.class);
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Failed to parse JSON to JsonNode. json={}", json, e);
+            throw new RuntimeException("JSON parse to JsonNode failed", e);
         }
-        return null;
     }
 
     /**
