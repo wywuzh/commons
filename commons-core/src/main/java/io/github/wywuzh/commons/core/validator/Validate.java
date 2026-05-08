@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,7 @@ public abstract class Validate {
     /**
      * 返回校验规则对象
      *
-     * @param pattern
-     *                    校验规则
+     * @param pattern 校验规则
      * @return
      */
     public Pattern pattern(String pattern) {
@@ -45,10 +44,8 @@ public abstract class Validate {
     /**
      * 验证
      *
-     * @param pattern
-     *                    校验规则
-     * @param object
-     *                    需要进行验证的对象
+     * @param pattern 校验规则
+     * @param object  需要进行验证的对象
      * @return true or false
      */
     public boolean matches(String pattern, Object object) {
@@ -63,12 +60,11 @@ public abstract class Validate {
     /**
      * 验证
      *
-     * @param object
-     *                   需要进行验证的对象
+     * @param object 需要进行验证的对象
      * @return true or false
      */
     public boolean matches(Object object) {
-        return this.matches(getPatternType().getPattern(), object);
+        return this.matches(getPatternType().getRegex(), object);
     }
 
     /**
@@ -76,5 +72,5 @@ public abstract class Validate {
      *
      * @return 验证类型
      */
-    protected abstract PatternType getPatternType();
+    protected abstract PatternRegexEnum getPatternType();
 }

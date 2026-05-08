@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,8 +49,8 @@ import io.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
 import io.github.wywuzh.commons.core.poi.modle.FreezePane;
 import io.github.wywuzh.commons.core.poi.style.CellStyleTools;
 import io.github.wywuzh.commons.core.reflect.ReflectUtils;
+import io.github.wywuzh.commons.core.sort.BeanSortUtils;
 import io.github.wywuzh.commons.core.util.DateUtils;
-import io.github.wywuzh.commons.core.util.SortUtils;
 import io.github.wywuzh.commons.core.util.StringHelper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -916,7 +916,8 @@ public class ExcelUtils {
         for (int i = 0; i < columnValidationData.length; i++) {
             hideSheet.createRow(i).createCell(0).setCellValue(columnValidationData[i]);
         }
-        // 创建名称，可被其他单元格引用
+        // 创建名称为 {prefixName}_hidden 的命名区域，可被其他单元格引用
+        // tips：命名区域名称不能重复，否则会报“The workbook already contains this name:”的异常。如果是往已存在的模板中添加命名区域，则需要先删除已存在的命名区域(公式 -> 名称管理器)。
         Name categoryName = workbook.createName();
         categoryName.setNameName(prefixName + "_hidden");
         // 设置名称引用的公式
@@ -1062,7 +1063,7 @@ public class ExcelUtils {
             return columns;
         }
         // 排序：索引、排序、字段标题
-        SortUtils.sort(excelCellFieldList, new String[] {
+        BeanSortUtils.sort(excelCellFieldList, new String[] {
                 "index"/* , "sortNo", "fieldTitle" */
         });
 
