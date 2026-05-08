@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package io.github.wywuzh.commons.core.validator;
  * @author 伍章红 2015-8-6 下午12:58:10
  * @since JDK 1.6.0_20
  */
-public enum PatternType {
+public enum PatternRegexEnum {
 
     /**
      * 电话，格式020-88888888
@@ -51,13 +51,11 @@ public enum PatternType {
      */
     PATTERN_NUMBER("^(-[1-9][0-9]*)|(0|[1-9][0-9]*)$"),
     /**
-     * 数字金额的验证：
-     * 支持正数和负数，不包括零
+     * 数字金额的验证：支持正数和负数，不包括零
      */
     PATTERN_EX_ZERO("^(-[1-9][0-9]*)|([1-9][0-9]*)$"),
     /**
-     * 数字金额的验证：
-     * 支持正数，不包括零和负数
+     * 数字金额的验证：支持正数，不包括零和负数
      */
     PATTERN_EX_ZERO_NEGATIVE("([1-9][0-9]*)$"),
     /**
@@ -72,16 +70,23 @@ public enum PatternType {
     /**
      * 日期+时间格式：yyyy-MM-dd HH:mm:ss
      */
-    PATTERN_DATE_TIME(
-            "^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29)\\s(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9]))$"),;
+    PATTERN_DATE_TIME("^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])" + "|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)" + "|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])"
+            + "|(?:0[48]|[2468][048]|[13579][26])00)-02-29)" + "\\s(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9]))$"),
+    /**
+     * 日期+时间格式：yyyy-MM-dd HH:mm:ss.SSS
+     *
+     * @since v3.5.0
+     */
+    PATTERN_DATE_TIME1("^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])" + "|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)" + "|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])"
+            + "|(?:0[48]|[2468][048]|[13579][26])00)-02-29)" + "\\s(([0-1]?[0-9])|([2][0-3])):([0-5]?[0-9])(:([0-5]?[0-9]))(.[0-9]{1,3})$"),;
 
-    private String pattern;
+    private String regex;
 
-    private PatternType(String pattern) {
-        this.pattern = pattern;
+    private PatternRegexEnum(String regex) {
+        this.regex = regex;
     }
 
-    public String getPattern() {
-        return pattern;
+    public String getRegex() {
+        return regex;
     }
 }

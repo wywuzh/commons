@@ -19,26 +19,23 @@ import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
+import io.github.wywuzh.commons.core.executor.exception.TransactionalTaskException;
+
 /**
  * 事务性任务执行器：为Runnable和Callable任务提供事务管理支持
  *
- * @author 伍章红 2014-7-18 下午9:29:30
- * @since JDK 1.6.0_20
+ * @author 伍章红
+ * @since JDK 1.8
  */
-@Component
-public class TransactionalTaskExecutor {
+public class TransactionalTaskExecutor extends AbstractTransactionExecutor {
 
     private static final Logger logger = LoggerFactory.getLogger(TransactionalTaskExecutor.class);
-
-    private final TransactionTemplate transactionTemplate;
 
     /**
      * 构造函数
@@ -46,20 +43,7 @@ public class TransactionalTaskExecutor {
      * @param transactionManager 事务管理器，不能为null
      */
     public TransactionalTaskExecutor(PlatformTransactionManager transactionManager) {
-        Assert.notNull(transactionManager, "PlatformTransactionManager must not be null");
-
-        this.transactionTemplate = new TransactionTemplate(transactionManager);
-        configureDefaultTransactionAttributes();
-    }
-
-    /**
-     * 配置默认事务属性
-     */
-    private void configureDefaultTransactionAttributes() {
-        this.transactionTemplate.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED);
-        this.transactionTemplate.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
-        this.transactionTemplate.setTimeout(30); // 30秒超时
-        this.transactionTemplate.setReadOnly(false);
+        super(transactionManager);
     }
 
     /**
@@ -109,14 +93,14 @@ public class TransactionalTaskExecutor {
                     T result = task.call();
                     logger.debug("Callable任务在事务中执行完成，返回结果: {}", result);
                     return result;
+                } catch (RuntimeException e) {
+                    throw e;
                 } catch (Exception e) {
-                    if (e instanceof RuntimeException) {
-                        throw (RuntimeException) e;
-                    } else {
-                        throw new TransactionalTaskException("Callable任务执行异常", e);
-                    }
+                    throw new TransactionalTaskException("Callable任务执行异常", e);
                 }
             });
+        } catch (TransactionalTaskException e) {
+            throw e;
         } catch (Exception e) {
             String errorMsg = "事务中执行Callable任务失败";
             logger.error(errorMsg, e);
@@ -128,9 +112,11 @@ public class TransactionalTaskExecutor {
      * 在只读事务中执行Runnable任务
      *
      * @param task 要执行的任务
+     * @throws IllegalArgumentException   当task为null时抛出
+     * @throws TransactionalTaskException 当事务执行失败时抛出
      */
     public void executeInReadOnlyTransaction(Runnable task) {
-        executeWithCustomAttributes(task, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED, 30, true);
+        executeWithCustomAttributes(task, DEFAULT_PROPAGATION, DEFAULT_ISOLATION, DEFAULT_TIMEOUT, true);
     }
 
     /**
@@ -139,9 +125,11 @@ public class TransactionalTaskExecutor {
      * @param task 要执行的任务
      * @param <T>  返回结果类型
      * @return 任务执行结果
+     * @throws IllegalArgumentException   当task为null时抛出
+     * @throws TransactionalTaskException 当事务执行失败时抛出
      */
     public <T> T executeInReadOnlyTransaction(Callable<T> task) {
-        return executeWithCustomAttributes(task, TransactionDefinition.PROPAGATION_REQUIRED, TransactionDefinition.ISOLATION_READ_COMMITTED, 30, true);
+        return executeWithCustomAttributes(task, DEFAULT_PROPAGATION, DEFAULT_ISOLATION, DEFAULT_TIMEOUT, true);
     }
 
     /**
@@ -152,6 +140,8 @@ public class TransactionalTaskExecutor {
      * @param isolationLevel      事务隔离级别
      * @param timeout             事务超时时间（秒）
      * @param readOnly            是否只读事务
+     * @throws IllegalArgumentException   当task为null时抛出
+     * @throws TransactionalTaskException 当事务执行失败时抛出
      */
     public void executeWithCustomAttributes(Runnable task, int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
         Assert.notNull(task, "Runnable task must not be null");
@@ -182,6 +172,8 @@ public class TransactionalTaskExecutor {
      * @param readOnly            是否只读事务
      * @param <T>                 返回结果类型
      * @return 任务执行结果
+     * @throws IllegalArgumentException   当task为null时抛出
+     * @throws TransactionalTaskException 当事务执行失败时抛出
      */
     public <T> T executeWithCustomAttributes(Callable<T> task, int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
         Assert.notNull(task, "Callable task must not be null");
@@ -192,53 +184,18 @@ public class TransactionalTaskExecutor {
             return customTemplate.execute(status -> {
                 try {
                     return task.call();
+                } catch (RuntimeException e) {
+                    throw e;
                 } catch (Exception e) {
-                    if (e instanceof RuntimeException) {
-                        throw (RuntimeException) e;
-                    } else {
-                        throw new TransactionalTaskException("Callable任务执行异常", e);
-                    }
+                    throw new TransactionalTaskException("Callable任务执行异常", e);
                 }
             });
+        } catch (TransactionalTaskException e) {
+            throw e;
         } catch (Exception e) {
             String errorMsg = "自定义事务中执行Callable任务失败";
             logger.error(errorMsg, e);
             throw new TransactionalTaskException(errorMsg, e);
         }
-    }
-
-    /**
-     * 创建自定义事务模板
-     */
-    private TransactionTemplate createCustomTransactionTemplate(int propagationBehavior, int isolationLevel, int timeout, boolean readOnly) {
-        TransactionTemplate customTemplate = new TransactionTemplate(transactionTemplate.getTransactionManager());
-        customTemplate.setPropagationBehavior(propagationBehavior);
-        customTemplate.setIsolationLevel(isolationLevel);
-        customTemplate.setTimeout(timeout);
-        customTemplate.setReadOnly(readOnly);
-        return customTemplate;
-    }
-
-    /**
-     * 获取底层事务模板（用于高级定制）
-     *
-     * @return TransactionTemplate实例
-     */
-    public TransactionTemplate getTransactionTemplate() {
-        return this.transactionTemplate;
-    }
-}
-
-/**
- * 事务性任务执行异常
- */
-class TransactionalTaskException extends RuntimeException {
-
-    public TransactionalTaskException(String message) {
-        super(message);
-    }
-
-    public TransactionalTaskException(String message, Throwable cause) {
-        super(message, cause);
     }
 }
