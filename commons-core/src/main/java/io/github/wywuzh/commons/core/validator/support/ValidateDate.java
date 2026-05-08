@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package io.github.wywuzh.commons.core.validator.support;
 
-import io.github.wywuzh.commons.core.validator.PatternType;
+import io.github.wywuzh.commons.core.validator.PatternRegexEnum;
 import io.github.wywuzh.commons.core.validator.Validate;
 
 /**
@@ -23,14 +23,14 @@ import io.github.wywuzh.commons.core.validator.Validate;
  *
  * @author 伍章红 2015-8-6 下午1:11:50
  * @see Validate
- * @see PatternType
+ * @see PatternRegexEnum
  * @since JDK 1.7.0_71
  */
 public class ValidateDate extends Validate {
 
     @Override
-    protected PatternType getPatternType() {
-        return PatternType.PATTERN_DATE;
+    protected PatternRegexEnum getPatternType() {
+        return PatternRegexEnum.PATTERN_DATE;
     }
 
 }

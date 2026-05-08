@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ public class DateUtils {
     public static final String PATTERN_YYYY_MM_DD_24HH = "yyyy-MM-dd HH";
     public static final String PATTERN_YYYY_MM_DD_24HH_MI = "yyyy-MM-dd HH:mm";
     public static final String PATTERN_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+    public static final String PATTERN_DATE_TIME1 = "yyyy-MM-dd HH:mm:ss.SSS";
     public static final String PATTERN_TIME = "HH:mm:ss";
 
     public static final int FIELD_YEAR = Calendar.YEAR;
@@ -237,20 +238,6 @@ public class DateUtils {
         Date date = null;
         try {
             date = getInstance(pattern).parse(parseDate);
-
-            /*
-             * DateTimeFormatter formatter = getFormatter(pattern);
-             * TemporalAccessor temporalAccessor = formatter.parse(parseDate);
-             * LocalDateTime localDateTime = LocalDateTimeUtil.of(temporalAccessor);
-             * if (localDateTime.getYear() < 0) { // !temporalAccessor.isSupported(ChronoField.YEAR)
-             * // tips：year小于0时，代表传入的时间字符串未年份，此处设置一个默认的日期1970-01-01
-             * LocalTime localTime = LocalTime.from(temporalAccessor);
-             * localDateTime = localTime.atDate(LocalDate.EPOCH);
-             * }
-             * // 转换为Instant
-             * Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
-             * date = Date.from(instant);
-             */
         } catch (Exception e) {
             LOGGER.error("parseDate={}, pattern={} 解析失败：", parseDate, pattern, e);
             if (!quietly) {

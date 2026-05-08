@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2025 the original author or authors.
+ * Copyright 2015-2026 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import java.util.Date;
 import org.springframework.util.Assert;
 
 import io.github.wywuzh.commons.core.util.DateUtils;
-import io.github.wywuzh.commons.core.validator.PatternType;
+import io.github.wywuzh.commons.core.validator.PatternRegexEnum;
 import io.github.wywuzh.commons.core.validator.Validate;
 
 /**
@@ -28,7 +28,7 @@ import io.github.wywuzh.commons.core.validator.Validate;
  *
  * @author 伍章红 2015-8-6 下午2:59:47
  * @see Validate
- * @see PatternType
+ * @see PatternRegexEnum
  * @since JDK 1.7.0_71
  */
 public class ValidateRangeDate extends ValidateDate {
