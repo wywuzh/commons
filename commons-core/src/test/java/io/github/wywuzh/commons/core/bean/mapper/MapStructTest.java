@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
@@ -82,7 +83,7 @@ public class MapStructTest {
         list.add(user);
 
         List<UserVo> userVoList = BeanMapperFactory.MAPPER_FACTORY.UserToUserVos(list);
-        log.info("转换结果：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(userVoList));
+        log.info("转换结果：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(userVoList));
     }
 
     @Test

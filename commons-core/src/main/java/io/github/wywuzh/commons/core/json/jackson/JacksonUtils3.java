@@ -16,30 +16,29 @@
 package io.github.wywuzh.commons.core.json.jackson;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.*;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.cfg.EnumFeature;
+
 /**
- * java对象和json相互转化 https://suipian1029.iteye.com/blog/2002536
+ * 类JsonMapper3的实现描述：Jackson 3.x 工具
  *
- * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2018-12-28 18:07
- * @version v1.0.0
- * @since JDK 1.8
- * @deprecated 已废弃，请使用 {@link JacksonUtils3} 工具
+ * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2026-07-26 11:52:47
+ * @version v4.0.0
+ * @since JDK 17
  */
-@Deprecated
-public class JsonMapper {
-    private static final Logger logger = LoggerFactory.getLogger(JsonMapper.class);
+public class JacksonUtils3 {
+    private static final Logger logger = LoggerFactory.getLogger(JacksonUtils3.class);
 
     private static boolean isNullOrEmptyJson(String jsonString) {
         return StringUtils.isBlank(jsonString) || "null".equalsIgnoreCase(jsonString.trim());
@@ -49,68 +48,62 @@ public class JsonMapper {
         return jsonString != null && "[]".equals(jsonString.trim());
     }
 
-    public static final JsonMapper DEFAULT_JSON_MAPPER = JsonMapper.buildNormalMapper();
-    public static final JsonMapper JSON_MAPPER_NON_NULL = JsonMapper.buildNonNullMapper();
-    public static final JsonMapper JSON_MAPPER_NON_DEFAULT = JsonMapper.buildNonDefaultMapper();
-    public static final JsonMapper JSON_MAPPER_NON_EMPTY = JsonMapper.buildNonEmptyMapper();
+    public static final JacksonUtils3 DEFAULT_JSON_MAPPER = JacksonUtils3.buildNormalMapper();
+    public static final JacksonUtils3 JSON_MAPPER_NON_NULL = JacksonUtils3.buildNonNullMapper();
+    public static final JacksonUtils3 JSON_MAPPER_NON_DEFAULT = JacksonUtils3.buildNonDefaultMapper();
+    public static final JacksonUtils3 JSON_MAPPER_NON_EMPTY = JacksonUtils3.buildNonEmptyMapper();
 
-    private ObjectMapper objectMapper;
+    private tools.jackson.databind.json.JsonMapper objectMapper;
 
-    public JsonMapper() {
+    public JacksonUtils3() {
         this(JsonInclude.Include.ALWAYS);
     }
 
-    public JsonMapper(JsonInclude.Include include) {
-        objectMapper = new ObjectMapper();
-        // 控制哪些字段会被序列化成 JSON
-        // NON_NULL：只序列化非 null 字段（最常用）
-        // NON_EMPTY：排除 null、空字符串、空集合
-        // ALWAYS：所有字段都输出（包括 null）
-        objectMapper.setSerializationInclusion(include);
-        // 日期不输出时区
-        // WRITE_DATES_WITH_ZONE_ID=false：日期不输出时区 ID，只输出时间字符串 / 时间戳。避免出现：2025-01-01T12:00:00[Asia/Shanghai]
-        objectMapper.configure(SerializationFeature.WRITE_DATES_WITH_ZONE_ID, false);
-        // FAIL_ON_EMPTY_BEANS=true：空对象（无任何字段）转 JSON 直接抛异常
-        // FAIL_ON_EMPTY_BEANS=false：空对象转 JSON 返回 {}，不报错
-        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, true);
-        /*
-         * // 设置自定义的 SimpleDateFormat，该对象支持"yyyy-MM-dd HH:mm:ss"格式
-         * objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-         */
-        // 使用 Jackson 的 JavaTimeModule 来处理日期
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        // 忽略在json字符串中存在，但是在Java对象中不存在对应属性的情况
-        // 有时JSON字符串中含有我们并不需要的字段，那么当对应的实体类中不含有该字段时，会抛出一个异常，告诉你有些字段（java 原始类型）没有在实体类中找到
-        // 设置为false即不抛出异常
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+    public JacksonUtils3(JsonInclude.Include include) {
+        // Jackson 3.x: 使用不可变的 Builder 模式构建 ObjectMapper
+        // 注：FAIL_ON_EMPTY_BEANS 默认值在 3.x 中变为 false（2.x 为 true），此处显式启用保持原有行为
+        // 注：FAIL_ON_UNKNOWN_PROPERTIES 默认值在 3.x 中变为 false（2.x 为 true），此处显式启用保持原有行为
+        // 注：JavaTimeModule 在 3.x 中已内置到 jackson-databind，无需手动注册
+        // 注：WRITE_DATES_AS_TIMESTAMPS 在 3.x 中默认关闭（输出 ISO-8601 字符串），此处显式启用以兼容遗留系统
+        objectMapper = tools.jackson.databind.json.JsonMapper.builder()
+                // 控制哪些字段会被序列化成 JSON
+                .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(include))
+                // 日期输出为时间戳（兼容旧版行为），而非 ISO-8601 字符串
+                .enable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                // 日期不输出时区 ID，避免出现：2025-01-01T12:00:00[Asia/Shanghai]
+                .disable(DateTimeFeature.WRITE_DATES_WITH_ZONE_ID)
+                // 空对象（无任何字段）转 JSON 直接抛异常
+                .enable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                // 反序列化时遇到未知字段抛出异常
+                .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES).build();
     }
 
     /**
      * 创建输出全部属性到Json字符串的Mapper.
      */
-    public static JsonMapper buildNormalMapper() {
-        return new JsonMapper(JsonInclude.Include.ALWAYS);
+    public static JacksonUtils3 buildNormalMapper() {
+        return new JacksonUtils3(JsonInclude.Include.ALWAYS);
     }
 
     /**
      * 创建只输出非空属性到Json字符串的Mapper.
      */
-    public static JsonMapper buildNonNullMapper() {
-        return new JsonMapper(JsonInclude.Include.NON_NULL);
+    public static JacksonUtils3 buildNonNullMapper() {
+        return new JacksonUtils3(JsonInclude.Include.NON_NULL);
     }
 
     /**
      * 创建只输出初始值被改变的属性到Json字符串的Mapper.
      */
-    public static JsonMapper buildNonDefaultMapper() {
-        return new JsonMapper(JsonInclude.Include.NON_DEFAULT);
+    public static JacksonUtils3 buildNonDefaultMapper() {
+        return new JacksonUtils3(JsonInclude.Include.NON_DEFAULT);
     }
 
     /**
      * 创建只输出非Null且非Empty(如List.isEmpty)的属性到Json字符串的Mapper.
      */
-    public static JsonMapper buildNonEmptyMapper() {
-        return new JsonMapper(JsonInclude.Include.NON_EMPTY);
+    public static JacksonUtils3 buildNonEmptyMapper() {
+        return new JacksonUtils3(JsonInclude.Include.NON_EMPTY);
     }
 
     /**
@@ -120,7 +113,7 @@ public class JsonMapper {
     public String toJson(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.error("Failed to serialize object to JSON. objectClass={}", (object != null ? object.getClass().getName() : "null"), e);
             throw new RuntimeException("JSON serialization failed", e);
         }
@@ -133,7 +126,7 @@ public class JsonMapper {
     public String toJsonFormat(Object object) {
         try {
             return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.error("Failed to serialize object to formatted JSON. objectClass={}", (object != null ? object.getClass().getName() : "null"), e);
             throw new RuntimeException("JSON serialization failed", e);
         }
@@ -154,7 +147,7 @@ public class JsonMapper {
 
         try {
             return objectMapper.readValue(jsonString, clazz);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.error("Failed to deserialize JSON string to class. targetClass={}, json={}", (clazz != null ? clazz.getName() : "null"), jsonString, e);
             throw new RuntimeException("JSON deserialization failed", e);
         }
@@ -176,7 +169,7 @@ public class JsonMapper {
 
         try {
             return (T) objectMapper.readValue(jsonString, javaType);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.error("Failed to deserialize JSON string to JavaType. targetType={}, json={}", javaType, jsonString, e);
             throw new RuntimeException("JSON deserialization failed", e);
         }
@@ -189,7 +182,7 @@ public class JsonMapper {
 
         try {
             return objectMapper.readValue(jsonString, valueTypeRef);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.error("Failed to deserialize JSON string to TypeReference. targetTypeRef={}, json={}", valueTypeRef, jsonString, e);
             throw new RuntimeException("JSON deserialization failed", e);
         }
@@ -220,7 +213,7 @@ public class JsonMapper {
         JavaType javaType = constructParametricType(parametrized, parameterClasses);
         try {
             return (T) objectMapper.readValue(jsonParser, javaType);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.error("Failed to deserialize from JsonParser to type. parametrized={}, parameterClasses={}", parametrized, java.util.Arrays.toString(parameterClasses), e);
             throw new RuntimeException("JSON deserialization from parser failed", e);
         }
@@ -249,7 +242,8 @@ public class JsonMapper {
         }
         try {
             return (T) objectMapper.readerForUpdating(object).readValue(jsonString);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
+            // Jackson 3.x: JacksonException 继承自 RuntimeException，为非受检异常
             logger.error("Failed to update object from json. targetClass={}, json={}", object.getClass().getName(), jsonString, e);
             throw new RuntimeException("JSON update failed", e);
         }
@@ -257,19 +251,32 @@ public class JsonMapper {
 
     /**
      * 輸出JSONP格式數據.
+     * <p>
+     * 注：Jackson 3.x 已移除 JSONPObject 类，此处直接手动拼接 JSONP 回调格式
      */
     public String toJsonP(String functionName, Object object) {
-        return toJson(new JSONPObject(functionName, object));
+        return functionName + "(" + toJson(object) + ");";
     }
 
     /**
      * 設定是否使用Enum的toString函數來讀寫Enum,
-     * 為False時時使用Enum的name()函數來讀寫Enum, 默認為False.
-     * 注意本函數一定要在Mapper創建後, 所有的讀寫動作之前調用.
+     * 為False時使用Enum的name()函數來讀寫Enum, 默認為False.
+     * <p>
+     * 注：Jackson 3.x 中 JsonMapper3 为不可变对象，
+     * 需通过 {@code rebuild()} 重新构建来修改配置。
      */
     public void setEnumUseToString(boolean value) {
-        objectMapper.configure(SerializationFeature.WRITE_ENUMS_USING_TO_STRING, value);
-        objectMapper.configure(DeserializationFeature.READ_ENUMS_USING_TO_STRING, value);
+        // Jackson 3.x: configure() 已移除，改用 enable/disable；
+        // WRITE_ENUMS_USING_TO_STRING / READ_ENUMS_USING_TO_STRING 已迁移至 EnumFeature
+        tools.jackson.databind.json.JsonMapper.Builder builder = objectMapper.rebuild();
+        if (value) {
+            builder.enable(EnumFeature.WRITE_ENUMS_USING_TO_STRING);
+            builder.enable(EnumFeature.READ_ENUMS_USING_TO_STRING);
+        } else {
+            builder.disable(EnumFeature.WRITE_ENUMS_USING_TO_STRING);
+            builder.disable(EnumFeature.READ_ENUMS_USING_TO_STRING);
+        }
+        objectMapper = builder.build();
     }
 
     /**
@@ -285,7 +292,7 @@ public class JsonMapper {
         }
         try {
             return objectMapper.readValue(json, JsonNode.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             logger.error("Failed to parse JSON to JsonNode. json={}", json, e);
             throw new RuntimeException("JSON parse to JsonNode failed", e);
         }
