@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
 
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import io.github.wywuzh.commons.dingtalk.response.AccessTokenResponse;
 import io.github.wywuzh.commons.dingtalk.response.JsapiTicketResponse;
 import io.github.wywuzh.commons.dingtalk.response.SsoAccessTokenResponse;
@@ -44,7 +44,7 @@ public class TokenAPITest {
         String signature = "XXX";
         String authCorpid = "XXX";
         AccessTokenResponse accessTokenResponse = TokenAPI.getCorpToken(accessKey, timestamp, suiteTicket, signature, authCorpid);
-        log.info("获取第三方企业应用的access_token(HTTP请求)：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(accessTokenResponse));
+        log.info("获取第三方企业应用的access_token(HTTP请求)：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(accessTokenResponse));
     }
 
     @Test
@@ -53,14 +53,14 @@ public class TokenAPITest {
         String suiteSecret = "XXX";
         String suiteTicket = "XXX";
         SuiteAccessTokenResponse suiteAccessTokenResponse = TokenAPI.getSuiteToken(suiteKey, suiteSecret, suiteTicket);
-        log.info("获取第三方企业应用的suite_ticket：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(suiteAccessTokenResponse));
+        log.info("获取第三方企业应用的suite_ticket：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(suiteAccessTokenResponse));
     }
 
     @Test
     public void getJsapiTicket() {
         String accessToken = "XXX";
         JsapiTicketResponse jsapiTicketResponse = TokenAPI.getJsapiTicket(accessToken);
-        log.info("获取jsapi_ticket：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(jsapiTicketResponse));
+        log.info("获取jsapi_ticket：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(jsapiTicketResponse));
     }
 
     @Test
@@ -68,7 +68,7 @@ public class TokenAPITest {
         String corpId = "XXX";
         String corpSecret = "XXX";
         SsoAccessTokenResponse ssoAccessTokenResponse = TokenAPI.ssoGettoken(corpId, corpSecret);
-        log.info("获取微应用后台免登的access_token：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(ssoAccessTokenResponse));
+        log.info("获取微应用后台免登的access_token：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(ssoAccessTokenResponse));
     }
 
 }

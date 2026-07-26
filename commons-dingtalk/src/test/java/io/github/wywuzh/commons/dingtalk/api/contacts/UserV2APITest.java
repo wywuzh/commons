@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
 
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import io.github.wywuzh.commons.dingtalk.api.AbstractTest;
 import io.github.wywuzh.commons.dingtalk.enums.Language;
 import io.github.wywuzh.commons.dingtalk.request.contacts.UserCreateRequest;
@@ -57,7 +57,7 @@ public class UserV2APITest extends AbstractTest {
 ////        for (int i = 0; i < types.length; i++) {
 ////            parameterClasses[i] = (Class<?>) types[i];
 ////        }
-////        ContactsResponse<UserGet> response = JsonMapper.buildNormalMapper().fromJson(result, ContactsResponse.class, parameterClasses);
+////        ContactsResponse<UserGet> response = JacksonUtils3.buildNormalMapper().fromJson(result, ContactsResponse.class, parameterClasses);
 //
 ////        Method method = MethodUtils.getAccessibleMethod(UserV2API.class, "get", String.class);
 ////        Class<?> clazz = method.getReturnType();
@@ -67,7 +67,7 @@ public class UserV2APITest extends AbstractTest {
 ////        for (int i = 0; i < types.length; i++) {
 ////            classes[i] = (Class<?>) types[i];
 ////        }
-////        ContactsResponse<UserGet> response = JsonMapper.buildNonNullMapper().fromJson(result, clazz, classes);
+////        ContactsResponse<UserGet> response = JacksonUtils3.buildNonNullMapper().fromJson(result, clazz, classes);
 //    }
 
     @Test
@@ -80,7 +80,7 @@ public class UserV2APITest extends AbstractTest {
         request.setName("伍章红");
         request.setDeptIdList("457359137");
         ContactsResponse<UserCreate> response = userV2API.create(request);
-        log.info("创建用户：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("创建用户：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class UserV2APITest extends AbstractTest {
         request.setLanguage("zh_CN");
         request.setDeptIdList("457359137");
         BaseResponse response = userV2API.update(request);
-        log.info("更新用户信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("更新用户信息：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -104,7 +104,7 @@ public class UserV2APITest extends AbstractTest {
         // 根据userid获取用户详情
         String userid = "manager8283"; // userid=manager8283
         ContactsResponse<UserGet> get = userV2API.get(userid, Language.zh_CN);
-        log.info("根据userid获取用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(get));
+        log.info("根据userid获取用户详情：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(get));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class UserV2APITest extends AbstractTest {
         request.setSize(20L);
 
         ContactsResponse<PageResult<ListUserSimple>> response = userV2API.listSimple(request);
-        log.info("获取部门用户基础信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("获取部门用户基础信息：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -126,7 +126,7 @@ public class UserV2APITest extends AbstractTest {
         UserV2API userV2API = new UserV2API(apiConfig);
         Long deptId = 1L;
         ContactsResponse<ListUserByDept> listId = userV2API.listId(deptId);
-        log.info("获取部门用户userid列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(listId));
+        log.info("获取部门用户userid列表：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(listId));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class UserV2APITest extends AbstractTest {
         request.setSize(20L);
 
         ContactsResponse<PageResult<ListUserSimple>> response = userV2API.v2UserList(request);
-        log.info("获取部门用户详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("获取部门用户详情：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -150,7 +150,7 @@ public class UserV2APITest extends AbstractTest {
         // 根据手机号获取userid
         String mobile = "14706660503"; // userid=manager8283
         ContactsResponse<UserGetByMobile> getByMobile = userV2API.getByMobile(mobile);
-        log.info("根据手机号获取用户信息：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(getByMobile));
+        log.info("根据手机号获取用户信息：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(getByMobile));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class UserV2APITest extends AbstractTest {
         // 根据unionid获取用户userid
         String unionID = "VKxwWW2JCj2V3oBOcwiiDLAiEiE";
         ContactsResponse<UserGetByUnionid> getByUnionId = userV2API.getByUnionid(unionID);
-        log.info("根据unionid获取用户userid：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(getByUnionId));
+        log.info("根据unionid获取用户userid：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(getByUnionId));
     }
 
 }

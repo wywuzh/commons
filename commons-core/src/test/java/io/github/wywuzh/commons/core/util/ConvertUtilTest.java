@@ -22,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
 
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 
 /**
  * 类ConvertUtilTest.java的实现描述：类型转换工具类测试
@@ -55,7 +55,7 @@ public class ConvertUtilTest {
 
         Map<String, Object> map = ConvertUtil.convertBean(bean);
         log.info("Bean转Map结果：");
-        log.info(JsonMapper.DEFAULT_JSON_MAPPER.toJson(map));
+        log.info(JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(map));
 
         // 验证转换结果
         assert map.containsKey("id");
@@ -74,11 +74,11 @@ public class ConvertUtilTest {
     public void testConvertMap() {
         Map<String, Object> map = ConvertUtil.convertBean(createTestBean());
         log.info("\n原始Map：");
-        log.info(JsonMapper.DEFAULT_JSON_MAPPER.toJson(map));
+        log.info(JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(map));
 
         TestBean bean = (TestBean) ConvertUtil.convertMap(map, TestBean.class);
         log.info("\nMap转Bean结果：");
-        log.info(JsonMapper.DEFAULT_JSON_MAPPER.toJson(bean));
+        log.info(JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(bean));
 
         // 验证转换结果
         assert bean.getId().equals(100L);
@@ -100,7 +100,7 @@ public class ConvertUtilTest {
 
         Map<String, Object> map = ConvertUtil.convertBean(bean);
         log.info("\n含null值的Bean转Map结果：");
-        log.info(JsonMapper.DEFAULT_JSON_MAPPER.toJson(map));
+        log.info(JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(map));
 
         // null值应转换为空字符串
         assert map.get("age").equals("");
@@ -188,17 +188,17 @@ public class ConvertUtilTest {
     public void testBidirectionalConversion() {
         TestBean originalBean = createTestBean();
         log.info("\n原始Bean：");
-        log.info(JsonMapper.DEFAULT_JSON_MAPPER.toJson(originalBean));
+        log.info(JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(originalBean));
 
         // Bean -> Map
         Map<String, Object> map = ConvertUtil.convertBean(originalBean);
         log.info("\n转Map：");
-        log.info(JsonMapper.DEFAULT_JSON_MAPPER.toJson(map));
+        log.info(JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(map));
 
         // Map -> Bean
         TestBean convertedBean = (TestBean) ConvertUtil.convertMap(map, TestBean.class);
         log.info("\n转回Bean：");
-        log.info(JsonMapper.DEFAULT_JSON_MAPPER.toJson(convertedBean));
+        log.info(JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(convertedBean));
 
         // 验证一致性
         assert originalBean.getId().equals(convertedBean.getId());

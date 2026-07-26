@@ -21,18 +21,17 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.*;
 
-import lombok.extern.slf4j.Slf4j;
-
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.junit.Test;
 
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import io.github.wywuzh.commons.core.poi.annotation.ExcelCell;
 import io.github.wywuzh.commons.core.poi.constants.CellStyleConstants;
 import io.github.wywuzh.commons.core.poi.entity.User;
 import io.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
 import io.github.wywuzh.commons.core.poi.style.CellStyleTools;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 类ExcelUtilsTest的实现描述：Excel 工具
@@ -282,7 +281,7 @@ public class ExcelUtilsTest {
                     "username", "nick", "email", "mobile", "sex"
             };
             List<User> dataColl = ExcelUtils.importData(inputStream, User.class, null, 2);
-            log.info("导入结果:{}", JsonMapper.buildNonEmptyMapper().toJson(dataColl));
+            log.info("导入结果:{}", JacksonUtils3.buildNonEmptyMapper().toJson(dataColl));
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         } finally {

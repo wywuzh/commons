@@ -19,9 +19,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
-import lombok.extern.slf4j.Slf4j;
-
 import org.junit.Test;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
@@ -32,8 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.github.wywuzh.commons.core.bean.mapper.entity.UserVo;
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import io.github.wywuzh.commons.core.poi.entity.User;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 类MapStructTest的实现描述：使用Mapstruct来进行PO与VO之间的映射

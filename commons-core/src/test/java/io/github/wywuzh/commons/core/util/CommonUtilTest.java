@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
 
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 
 /**
  * 类CommonUtilTest.java的实现描述：通用工具类测试
@@ -69,7 +69,7 @@ public class CommonUtilTest {
         String separator = "+-*/=()";
         List<String> result = CommonUtil.splitContent(content, separator);
 
-        log.info("处理结果：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJson(result));
+        log.info("处理结果：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(result));
     }
 
 }

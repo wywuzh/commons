@@ -28,7 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import io.github.wywuzh.commons.core.math.CalculationUtils;
 
 /**
@@ -195,8 +195,8 @@ public class ReflectUtils {
         Assert.notEmpty(targetFields, "targetFields is not empty");
 
         if (sourceFields.length != targetFields.length) {
-            LOGGER.error("sourceFields={},targetFields={} sourceFields和targetFields的数组长度不一致！", JsonMapper.DEFAULT_JSON_MAPPER.toJson(sourceFields),
-                    JsonMapper.DEFAULT_JSON_MAPPER.toJson(targetFields));
+            LOGGER.error("sourceFields={},targetFields={} sourceFields和targetFields的数组长度不一致！", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(sourceFields),
+                    JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(targetFields));
             throw new IllegalArgumentException("sourceFields和targetFields的数组长度不一致！");
         }
 
@@ -250,8 +250,8 @@ public class ReflectUtils {
         Assert.notEmpty(targetFields, "targetFields is not empty");
 
         if (sourceFields.length != targetFields.length) {
-            LOGGER.error("sourceFields={},targetFields={} sourceFields和targetFields的数组长度不一致！", JsonMapper.DEFAULT_JSON_MAPPER.toJson(sourceFields),
-                    JsonMapper.DEFAULT_JSON_MAPPER.toJson(targetFields));
+            LOGGER.error("sourceFields={},targetFields={} sourceFields和targetFields的数组长度不一致！", JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(sourceFields),
+                    JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(targetFields));
             throw new IllegalArgumentException("sourceFields和targetFields的数组长度不一致！");
         }
 

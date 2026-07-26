@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.junit.Test;
 
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import io.github.wywuzh.commons.dingtalk.api.AbstractTest;
 import io.github.wywuzh.commons.dingtalk.enums.Language;
 import io.github.wywuzh.commons.dingtalk.request.contacts.DepartmentCreateRequest;
@@ -47,7 +47,7 @@ public class DeptV2APITest extends AbstractTest {
         request.setName("mall");
         request.setParentId(1L);
         ContactsResponse<DeptCreate> response = deptV2API.create(request);
-        log.info("创建部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("创建部门：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -59,7 +59,7 @@ public class DeptV2APITest extends AbstractTest {
         request.setDeptId(457162465L);
         request.setName("电商中心");
         ContactsResponse<DeptCreate> response = deptV2API.update(request);
-        log.info("更新部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("更新部门：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -69,7 +69,7 @@ public class DeptV2APITest extends AbstractTest {
         // 删除部门 deptId=457162465
         Long deptId = 457162465L;
         ContactsResponse response = deptV2API.delete(deptId);
-        log.info("删除部门：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("删除部门：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class DeptV2APITest extends AbstractTest {
         // 获取部门详情 deptId=457162465
         Long deptId = 457162465L;
         ContactsResponse<DeptGet> response = deptV2API.get(deptId, Language.zh_CN);
-        log.info("获取部门详情：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("获取部门详情：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class DeptV2APITest extends AbstractTest {
         // 获取子部门ID列表 deptId=457162465
         Long deptId = 457162465L;
         ContactsResponse<DeptListSubId> response = deptV2API.listSubId(deptId);
-        log.info("获取子部门ID列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("获取子部门ID列表：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class DeptV2APITest extends AbstractTest {
         // 获取指定用户的所有父部门列表 deptId=457162465
         String userid = "103559512720455311";
         ContactsResponse<DeptListParentByUser> response = deptV2API.listParentByUser(userid);
-        log.info("获取指定用户的所有父部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("获取指定用户的所有父部门列表：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class DeptV2APITest extends AbstractTest {
         // 获取部门详情 deptId=457162465
         Long deptId = 457162465L;
         ContactsResponse<DeptListParentByDeptId> response = deptV2API.listParentByDept(deptId);
-        log.info("获取指定部门的所有父部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("获取指定部门的所有父部门列表：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
     @Test
@@ -118,7 +118,7 @@ public class DeptV2APITest extends AbstractTest {
         // 获取部门列表
         Long deptId = 1L; // deptId=457359137, name=商品
         ContactsResponse<List<DeptBase>> response = deptV2API.listSub(deptId, Language.zh_CN);
-        log.info("获取部门列表：{}", JsonMapper.DEFAULT_JSON_MAPPER.toJsonFormat(response));
+        log.info("获取部门列表：{}", JacksonUtils3.DEFAULT_JSON_MAPPER.toJsonFormat(response));
     }
 
 }

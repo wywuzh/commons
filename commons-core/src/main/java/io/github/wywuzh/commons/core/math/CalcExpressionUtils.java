@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.expression.ExpressionException;
 
 import io.github.wywuzh.commons.core.common.Constants;
-import io.github.wywuzh.commons.core.json.jackson.JsonMapper;
+import io.github.wywuzh.commons.core.json.jackson.JacksonUtils3;
 import io.github.wywuzh.commons.core.reflect.ReflectUtils;
 import io.github.wywuzh.commons.core.util.CommonUtil;
 
@@ -137,24 +137,24 @@ public class CalcExpressionUtils {
         Object value = jep.getValueAsObject();
         if (value == null) {
             LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式解析失败！", calcFieldName, calcFieldTitle, calcExpression, resolvedCalcExpression,
-                    JsonMapper.DEFAULT_JSON_MAPPER.toJson(target));
+                    JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(target));
             throw new ExpressionException("【" + calcExpression + "】 公式解析失败！");
         }
         if (StringUtils.equalsIgnoreCase("Infinity", value.toString())) {
             LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式分母中出现为0的数值，解析失败！", calcFieldName, calcFieldTitle, calcExpression,
-                    resolvedCalcExpression, JsonMapper.DEFAULT_JSON_MAPPER.toJson(target));
+                    resolvedCalcExpression, JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(target));
             throw new ExpressionException("【" + calcExpression + "】 公式分母中出现为0的数值，解析失败！");
         }
         if (StringUtils.equalsIgnoreCase("NaN", value.toString())) {
             LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式分子和分母中出现为0的数值，解析失败！", calcFieldName, calcFieldTitle, calcExpression,
-                    resolvedCalcExpression, JsonMapper.DEFAULT_JSON_MAPPER.toJson(target));
+                    resolvedCalcExpression, JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(target));
             throw new ExpressionException("【" + calcExpression + "】 公式分子和分母中出现为0的数值，解析失败！");
         }
         try {
             return new BigDecimal(value.toString());
         } catch (Exception e) {
             LOGGER.error("calcFieldName={}, calcFieldTitle={}, calcExpression={}, resolvedCalcExpression={}, target={} 公式解析失败，结果值={}", calcFieldName, calcFieldTitle, calcExpression,
-                    resolvedCalcExpression, JsonMapper.DEFAULT_JSON_MAPPER.toJson(target), value);
+                    resolvedCalcExpression, JacksonUtils3.DEFAULT_JSON_MAPPER.toJson(target), value);
             throw new ExpressionException("【" + calcExpression + "】 公式解析失败！");
         }
     }
