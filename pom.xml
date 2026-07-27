@@ -56,9 +56,9 @@
         <skipTest>true</skipTest>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.locale>zh_CN</project.build.locale>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <java.version>17</java.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>21</java.version>
 
         <revision>4.0.0.RELEASE</revision>
         <spring-boot.version>4.0.0</spring-boot.version>
@@ -175,8 +175,8 @@
         <!-- Maven插件 -->
         <license-maven-plugin.version>4.1</license-maven-plugin.version>
         <flatten-maven-plugin.version>1.3.0</flatten-maven-plugin.version>
-        <formatter-maven-plugin.version>2.21.0</formatter-maven-plugin.version>
-        <impsort-maven-plugin.version>1.8.0</impsort-maven-plugin.version>
+        <formatter-maven-plugin.version>2.27.0</formatter-maven-plugin.version>
+        <impsort-maven-plugin.version>1.12.0</impsort-maven-plugin.version>
         <build-tools.version>1.3.0</build-tools.version>
         <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
         <nexus-staging-maven-plugin.version>1.6.13</nexus-staging-maven-plugin.version>
@@ -832,6 +832,8 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <configuration>
+                        <!-- 推荐使用 release 替代 source/target -->
+                        <release>${java.version}</release>
                         <!-- 源代码编译版本 -->
                         <source>${java.version}</source>
                         <!-- 目标平台编译版本 一般而言，target与source是保持一致的，但是，有时候为了让程序能在其他版本的jdk中运行(对于低版本目标jdk，源代码中需要没有使用低版本jdk中不支持的语法)，会存在target不同于source的情况 -->
@@ -992,12 +994,16 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!-- 格式化源代码插件 -->
+                <!-- 格式化源代码插件
+                核心功能：自动格式化Java源代码的代码风格，例如缩进、空格、大括号位置、换行等。
+                实现原理：底层主要依赖 Eclipse 代码格式化器，因此它能保证与Eclipse IDE的格式化效果高度一致。你可以在pom.xml中指定一个Eclipse的代码风格配置文件（eclipse-formatter.xml）来统一规则。
+                 -->
                 <plugin>
                     <groupId>net.revelc.code.formatter</groupId>
                     <artifactId>formatter-maven-plugin</artifactId>
                     <version>${formatter-maven-plugin.version}</version>
                     <dependencies>
+                        <!-- 配置聚合包（Configuration Jar）：它的核心作用是解决项目中代码规范工具配置分散、难以统一维护的问题。它本身不执行构建，而是为其他 Maven 插件（特别是代码风格与质量检查类插件）提供统一的配置文件 -->
                         <dependency>
                             <groupId>com.github.hazendaz</groupId>
                             <artifactId>build-tools</artifactId>
@@ -1010,6 +1016,12 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+                <!-- 导入排序插件：
+                核心功能：专门负责整理Java文件中的import语句。
+                具体工作：
+                1. 排序：按照定义的规则（如java.、javax.、org.、com.等分组）对导入语句进行排序。
+                2. 清理：移除代码中未使用到的import语句。
+                 -->
                 <plugin>
                     <groupId>net.revelc.code</groupId>
                     <artifactId>impsort-maven-plugin</artifactId>

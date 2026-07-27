@@ -15,12 +15,14 @@
  */
 package io.github.wywuzh.commons.core.json.jackson;
 
-import io.github.wywuzh.commons.core.poi.entity.User;
-import lombok.extern.slf4j.Slf4j;
-import org.junit.Test;
-
 import java.math.BigDecimal;
 import java.util.Date;
+
+import lombok.extern.slf4j.Slf4j;
+
+import org.junit.Test;
+
+import io.github.wywuzh.commons.core.poi.entity.User;
 
 /**
  * 类JacksonUtils3Test的实现描述：Jackson 3.x 工具
