@@ -824,6 +824,10 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+            </plugin>
         </plugins>
         <pluginManagement>
             <plugins>
@@ -1004,11 +1008,11 @@
                     <version>${formatter-maven-plugin.version}</version>
                     <dependencies>
                         <!-- 配置聚合包（Configuration Jar）：它的核心作用是解决项目中代码规范工具配置分散、难以统一维护的问题。它本身不执行构建，而是为其他 Maven 插件（特别是代码风格与质量检查类插件）提供统一的配置文件 -->
-                        <dependency>
+                        <!--<dependency>
                             <groupId>com.github.hazendaz</groupId>
                             <artifactId>build-tools</artifactId>
                             <version>${build-tools.version}</version>
-                        </dependency>
+                        </dependency>-->
                         <dependency>
                             <groupId>io.github.wywuzh</groupId>
                             <artifactId>commons-build-tools</artifactId>
@@ -1067,11 +1071,16 @@
                     <groupId>org.sonatype.central</groupId>
                     <artifactId>central-publishing-maven-plugin</artifactId>
                     <version>${central-publishing-maven-plugin.version}</version>
+                    <!-- 生命周期扩展：这是一个通用的Maven插件标志，表示该插件会将自己的目标（goal）绑定到Maven默认的生命周期中。对于这个插件，它让 mvn deploy 命令能够触发新式的Central Portal发布流程，而非旧式的Nexus Staging流程 -->
                     <extensions>true</extensions>
                     <configuration>
+                        <!-- 认证凭据关联：指定了在 settings.xml 中用于认证的服务器ID。插件会用这里配置的 central 去 ~/.m2/settings.xml 中查找对应的 <server>，并使用其下的用户名和密码（即Sonatype用户令牌）进行身份验证 -->
                         <publishingServerId>central</publishingServerId>
+                        <!-- 自动发布开关：设为 true 时，构件一旦通过校验，就会自动发布到Maven Central，无需人工在网页上点击发布按钮。对CI/CD非常有用。默认值为 false -->
                         <autoPublish>true</autoPublish>
+                        <!-- 等待策略：控制mvn deploy命令的阻塞行为。设置为 published 时，命令会一直等待，直到构件完成全部流程（上传、校验、发布到Maven Central）后才退出 -->
                         <waitUntil>published</waitUntil>
+                        <!-- 部署名称：在Sonatype Central Portal的"Deployments"页面上显示的名称。便于你识别和管理不同的部署任务。默认值为 Deployment -->
                         <deploymentName>${project.groupId}:${project.artifactId}:${project.version}</deploymentName>
                     </configuration>
                 </plugin>

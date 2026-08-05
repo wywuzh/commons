@@ -15,4 +15,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <dependencies>
+        <!-- 配置聚合包（Configuration Jar）：它的核心作用是解决项目中代码规范工具配置分散、难以统一维护的问题。它本身不执行构建，而是为其他 Maven 插件（特别是代码风格与质量检查类插件）提供统一的配置文件 -->
+        <dependency>
+            <groupId>com.github.hazendaz</groupId>
+            <artifactId>build-tools</artifactId>
+            <version>${build-tools.version}</version>
+        </dependency>
+    </dependencies>
+
 </project>
