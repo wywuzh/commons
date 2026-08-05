@@ -605,6 +605,17 @@ public class ExcelUtils {
         if (StringUtils.isBlank(format)) {
             return -1;
         }
+        return getDateFormat(workbook, format);
+    }
+
+    /**
+     * @param workbook 工作簿
+     * @param format   格式
+     * @return format对应的索引值
+     * @see org.apache.poi.ss.usermodel.BuiltinFormats
+     * @since v4.0.0
+     */
+    public static short getDateFormat(Workbook workbook, String format) {
         DataFormat dataFormat = workbook.createDataFormat();
         return dataFormat.getFormat(format);
     }

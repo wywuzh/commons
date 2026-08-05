@@ -15,17 +15,6 @@
  */
 package io.github.wywuzh.commons.core.poi;
 
-import com.alibaba.excel.EasyExcelFactory;
-import com.alibaba.excel.ExcelWriter;
-import com.alibaba.excel.write.builder.ExcelWriterBuilder;
-import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
-import com.alibaba.excel.write.handler.WorkbookWriteHandler;
-import com.alibaba.excel.write.handler.context.WorkbookWriteHandlerContext;
-import com.alibaba.excel.write.metadata.WriteSheet;
-import com.alibaba.excel.write.metadata.style.WriteCellStyle;
-import com.alibaba.excel.write.metadata.style.WriteFont;
-import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
-
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -37,6 +26,18 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.alibaba.excel.EasyExcelFactory;
+import com.alibaba.excel.ExcelWriter;
+import com.alibaba.excel.metadata.data.DataFormatData;
+import com.alibaba.excel.write.builder.ExcelWriterBuilder;
+import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
+import com.alibaba.excel.write.handler.WorkbookWriteHandler;
+import com.alibaba.excel.write.handler.context.WorkbookWriteHandlerContext;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.style.WriteCellStyle;
+import com.alibaba.excel.write.metadata.style.WriteFont;
+import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 
 import io.github.wywuzh.commons.core.poi.modle.ExcelCellField;
 import io.github.wywuzh.commons.core.poi.modle.ExcelExportRequest;
@@ -297,7 +298,7 @@ public class EasyExcelUtils {
         contentWriteCellStyle.setBorderBottom(BorderStyle.NONE);
         contentWriteCellStyle.setBorderLeft(BorderStyle.NONE);
         // 不显示背景颜色
-        contentWriteCellStyle.setFillPatternType(FillPatternType.NO_FILL);
+//        contentWriteCellStyle.setFillPatternType(FillPatternType.NO_FILL);
         // 内容水平居中 、垂直居中
         contentWriteCellStyle.setHorizontalAlignment(HorizontalAlignment.CENTER);
         contentWriteCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
@@ -312,6 +313,69 @@ public class EasyExcelUtils {
     }
 
     /**
+     * 将POI CellStyle的样式属性复制到EasyExcel WriteCellStyle（包含字体）
+     *
+     * @param workbook  工作簿，用于获取字体信息
+     * @param cellStyle POI单元格样式
+     * @return EasyExcel WriteCellStyle
+     * @since v4.0.0
+     */
+    public static WriteCellStyle convertCellStyle(Workbook workbook, CellStyle cellStyle) {
+        WriteCellStyle writeCellStyle = new WriteCellStyle();
+
+        // 对齐方式
+        writeCellStyle.setHorizontalAlignment(cellStyle.getAlignment());
+        writeCellStyle.setVerticalAlignment(cellStyle.getVerticalAlignment());
+
+        // 边框样式
+        writeCellStyle.setBorderTop(cellStyle.getBorderTop());
+        writeCellStyle.setBorderBottom(cellStyle.getBorderBottom());
+        writeCellStyle.setBorderLeft(cellStyle.getBorderLeft());
+        writeCellStyle.setBorderRight(cellStyle.getBorderRight());
+
+        // 边框颜色
+        writeCellStyle.setTopBorderColor(cellStyle.getTopBorderColor());
+        writeCellStyle.setBottomBorderColor(cellStyle.getBottomBorderColor());
+        writeCellStyle.setLeftBorderColor(cellStyle.getLeftBorderColor());
+        writeCellStyle.setRightBorderColor(cellStyle.getRightBorderColor());
+
+        // 填充色
+        writeCellStyle.setFillForegroundColor(cellStyle.getFillForegroundColor());
+        writeCellStyle.setFillBackgroundColor(cellStyle.getFillBackgroundColor());
+        writeCellStyle.setFillPatternType(cellStyle.getFillPattern());
+
+        // 数据格式
+        DataFormatData dataFormatData = new DataFormatData();
+        dataFormatData.setIndex(cellStyle.getDataFormat());
+        dataFormatData.setFormat(BuiltinFormats.getBuiltinFormat(cellStyle.getDataFormat()));
+        writeCellStyle.setDataFormatData(dataFormatData);
+
+        // 字体
+        Font poiFont = workbook.getFontAt(cellStyle.getFontIndex());
+        WriteFont writeFont = new WriteFont();
+        writeFont.setFontName(poiFont.getFontName());
+        writeFont.setFontHeightInPoints(poiFont.getFontHeightInPoints());
+        writeFont.setBold(poiFont.getBold());
+        writeFont.setItalic(poiFont.getItalic());
+        writeFont.setStrikeout(poiFont.getStrikeout());
+        writeFont.setUnderline(poiFont.getUnderline());
+        writeFont.setColor(poiFont.getColor());
+        writeFont.setTypeOffset(poiFont.getTypeOffset());
+        writeFont.setCharset(poiFont.getCharSet());
+        writeCellStyle.setWriteFont(writeFont);
+
+        // 其他属性
+        writeCellStyle.setWrapped(cellStyle.getWrapText());
+        writeCellStyle.setLocked(cellStyle.getLocked());
+        writeCellStyle.setHidden(cellStyle.getHidden());
+        writeCellStyle.setShrinkToFit(cellStyle.getShrinkToFit());
+        writeCellStyle.setRotation(cellStyle.getRotation());
+        writeCellStyle.setIndent(cellStyle.getIndention());
+
+        return writeCellStyle;
+    }
+
+    /**
      * 写入数据
      *
      * @param excelWriter ExcelWriter对象
@@ -319,24 +383,16 @@ public class EasyExcelUtils {
      * @param list        数据
      * @param columns     列名/字段名
      */
-    public static <T> void writeData(ExcelWriter excelWriter, WriteSheet writeSheet, List<T> list, String[] columns) {
-        excelWriter.writeContext().writeWorkbookHolder();
-
+    public static <T> void writeData(ExcelWriter excelWriter, WriteSheet writeSheet, Collection<T> list, String[] columns) {
         List<List<Object>> data = new LinkedList<>();
         for (T item : list) {
             List<Object> row = new LinkedList<>();
-            if (item instanceof Map) {
-                for (String column : columns) {
-                    row.add(((Map) item).get(column));
-                }
-            } else {
-                for (String column : columns) {
-                    try {
-                        Object value = ReflectUtils.getValue(item, column);
-                        row.add(value);
-                    } catch (IllegalAccessException e) {
-                        LOGGER.error("class={}, column={} 字段取值有误：", item.getClass(), column, e);
-                    }
+            for (String column : columns) {
+                try {
+                    Object value = ReflectUtils.getValue(item, column);
+                    row.add(value);
+                } catch (IllegalAccessException e) {
+                    LOGGER.error("class={}, column={} 字段取值有误：", item.getClass(), column, e);
                 }
             }
             data.add(row);
@@ -363,7 +419,7 @@ public class EasyExcelUtils {
      * @param columns      列名/字段名
      * @param columnTitles 列的标题
      */
-    public static <T> void writer(File destFile, List<T> list, String[] columns, String[] columnTitles) {
+    public static <T> void writer(File destFile, Collection<T> list, String[] columns, String[] columnTitles) {
         EasyExcelUtils.writer(destFile, "sheet", list, columns, columnTitles, null);
     }
 
@@ -377,7 +433,7 @@ public class EasyExcelUtils {
      * @param columnTitles  列的标题
      * @param columnLengths 列的长度
      */
-    public static <T> void writer(File destFile, String sheetName, List<T> list, String[] columns, String[] columnTitles, Integer[] columnLengths) {
+    public static <T> void writer(File destFile, String sheetName, Collection<T> list, String[] columns, String[] columnTitles, Integer[] columnLengths) {
         // sheetName传入为空时，默认为“sheet”
         if (StringUtils.isBlank(sheetName)) {
             sheetName = "sheet";
@@ -391,20 +447,32 @@ public class EasyExcelUtils {
             }
         }
 
-        // 1. 创建ExcelWriter对象
-        ExcelWriter excelWriter = EasyExcelUtils.createExcelWriter(destFile);
-
-        // 2. 创建WriteSheet对象
         ExcelExportRequest excelExportRequest = new ExcelExportRequest();
         excelExportRequest.setSheetName(sheetName);
         excelExportRequest.setColumns(columns);
         excelExportRequest.setColumnTitles(columnTitles);
         excelExportRequest.setColumnLengths(columnLengths);
         excelExportRequest.setDataColl(list);
+
+        EasyExcelUtils.writer(destFile, excelExportRequest);
+    }
+
+    /**
+     * 将数据写出到目标文件
+     *
+     * @param destFile           目标文件
+     * @param excelExportRequest 导出请求
+     * @since v4.0.0
+     */
+    public static <T> void writer(File destFile, ExcelExportRequest excelExportRequest) {
+        // 1. 创建ExcelWriter对象
+        ExcelWriter excelWriter = EasyExcelUtils.createExcelWriter(destFile);
+
+        // 2. 创建WriteSheet对象
         WriteSheet writeSheet = EasyExcelUtils.createWriteSheet(excelExportRequest);
 
         // 3. 写入数据
-        EasyExcelUtils.writeData(excelWriter, writeSheet, list, columns);
+        EasyExcelUtils.writeData(excelWriter, writeSheet, excelExportRequest.getDataColl(), excelExportRequest.getColumns());
 
         // 4. 关闭IO
         EasyExcelUtils.finish(excelWriter);
