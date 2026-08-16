@@ -64,11 +64,11 @@ public class JacksonUtils3 {
         // 注：FAIL_ON_EMPTY_BEANS 默认值在 3.x 中变为 false（2.x 为 true），此处显式启用保持原有行为
         // 注：FAIL_ON_UNKNOWN_PROPERTIES 默认值在 3.x 中变为 false（2.x 为 true），此处显式启用保持原有行为
         // 注：JavaTimeModule 在 3.x 中已内置到 jackson-databind，无需手动注册
-        // 注：WRITE_DATES_AS_TIMESTAMPS 在 3.x 中默认关闭（输出 ISO-8601 字符串），此处显式启用以兼容遗留系统
+        // 注：WRITE_DATES_AS_TIMESTAMPS 在 3.x 中默认关闭（输出 ISO-8601 字符串），此处显式启用以兼容遗留系统依赖的时间戳格式
         objectMapper = tools.jackson.databind.json.JsonMapper.builder()
                 // 控制哪些字段会被序列化成 JSON
                 .changeDefaultPropertyInclusion(incl -> incl.withValueInclusion(include))
-                // 日期输出为时间戳（兼容旧版行为），而非 ISO-8601 字符串
+                // 日期（java.util.Date / java.util.Calendar）输出为 epoch 毫秒时间戳，而非 ISO-8601 字符串
                 .enable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
                 // 日期不输出时区 ID，避免出现：2025-01-01T12:00:00[Asia/Shanghai]
                 .disable(DateTimeFeature.WRITE_DATES_WITH_ZONE_ID)
