@@ -19,6 +19,10 @@ import java.io.Serializable;
 
 /**
  * 类Entity.java的实现描述：数据库持久层实体基类
+ * <p>
+ * 所有实体接口的顶层基类，约定实体必须支持序列化。
+ * 同时显式声明 {@link #hashCode()}、{@link #equals(Object)}、{@link #toString()} 三个方法，
+ * 强制实现类必须重写（Java 规范禁止接口以 default 方式覆盖 Object 的 public 方法，故此处采用抽象声明约束实现类）。
  *
  * @author <a href="mailto:wywuzh@163.com">伍章红</a> 2016年12月7日 下午11:21:12
  * @version v1.0.0
@@ -28,23 +32,30 @@ import java.io.Serializable;
 public interface Entity extends Serializable {
 
     /**
+     * 实体哈希码，实现类必须重写，建议基于业务主键生成
+     *
      * @author 伍章红 2015-8-19 上午10:43:36
-     * @return
+     * @return 哈希码
      */
     @Override
     public int hashCode();
 
     /**
+     * 实体相等性比较，实现类必须重写，建议基于业务主键比较
+     *
      * @author 伍章红 2015-8-19 上午10:43:37
      * @param obj
-     * @return
+     *                待比较对象
+     * @return true 表示相等
      */
     @Override
     public boolean equals(Object obj);
 
     /**
+     * 实体字符串表示，实现类必须重写
+     *
      * @author 伍章红 2015-8-19 上午10:43:38
-     * @return
+     * @return 字符串表示
      */
     @Override
     public String toString();

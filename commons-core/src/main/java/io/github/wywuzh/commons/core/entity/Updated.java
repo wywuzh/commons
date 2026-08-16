@@ -15,6 +15,8 @@
  */
 package io.github.wywuzh.commons.core.entity;
 
+import java.util.Date;
+
 /**
  * 类Updated.java的实现描述：信息修改人
  *
@@ -45,11 +47,11 @@ public interface Updated extends Entity {
      * @author 伍章红 2015-8-19 上午11:53:40
      * @return
      */
-    public java.util.Date getUpdateTime();
+    public Date getUpdateTime();
 
     /**
      * @author 伍章红 2015-8-19 上午11:53:48
      * @param updateTime
      */
-    public void setUpdateTime(java.util.Date updateTime);
+    public void setUpdateTime(Date updateTime);
 }

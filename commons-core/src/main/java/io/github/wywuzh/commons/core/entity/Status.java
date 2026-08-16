@@ -26,20 +26,35 @@ package io.github.wywuzh.commons.core.entity;
 public interface Status extends Entity {
 
     /**
+     * 初始（不可用）
+     */
+    String STATUS_INITIAL = "0";
+
+    /**
+     * 正常
+     */
+    String STATUS_NORMAL = "1";
+
+    /**
+     * 删除（逻辑删除标识）
+     */
+    String STATUS_DELETE = "2";
+
+    /**
      * 数据使用状态
-     * 0）初始（不可用）
-     * 1）正常
-     * 2）删除
+     * <p>
+     * 取值参考：{@link #STATUS_INITIAL}、{@link #STATUS_NORMAL}、{@link #STATUS_DELETE}
      *
      * @author 伍章红 2015-8-19 上午11:40:07
-     * @return
+     * @return 数据使用状态
      */
-    public String getStatus();
+    String getStatus();
 
     /**
      * @author 伍章红 2015-8-19 上午11:40:11
      * @param status
+     *                   数据使用状态，取值参考 {@link #STATUS_INITIAL}、{@link #STATUS_NORMAL}、{@link #STATUS_DELETE}
      */
-    public void setStatus(String status);
+    void setStatus(String status);
 
 }

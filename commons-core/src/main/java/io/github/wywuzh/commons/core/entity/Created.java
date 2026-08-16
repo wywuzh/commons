@@ -15,6 +15,8 @@
  */
 package io.github.wywuzh.commons.core.entity;
 
+import java.util.Date;
+
 /**
  * 类Created.java的实现描述：创建者
  *
@@ -45,13 +47,13 @@ public interface Created extends Entity {
      * @author 伍章红 2015-8-19 上午11:42:40
      * @return
      */
-    public java.util.Date getCreateTime();
+    public Date getCreateTime();
 
     /**
      * @author 伍章红 2015-8-19 上午11:44:11
      * @param createTime
      *                       创建时间
      */
-    public void setCreateTime(java.util.Date createTime);
+    public void setCreateTime(Date createTime);
 
 }
