@@ -46,7 +46,7 @@ public class UserV2APITest extends AbstractTest {
 //        }.getType());
 //        System.out.println(response);
 //
-////        ContactsResponse<UserGet> userGet = new ContactsResponse<>();
+    ////        ContactsResponse<UserGet> userGet = new ContactsResponse<>();
 ////        Type type = userGet.getClass().getGenericSuperclass();
 ////        //将type强转成Parameterized
 ////        ParameterizedType pt = (ParameterizedType) type;
@@ -59,7 +59,7 @@ public class UserV2APITest extends AbstractTest {
 ////        }
 ////        ContactsResponse<UserGet> response = JacksonUtils3.buildNormalMapper().fromJson(result, ContactsResponse.class, parameterClasses);
 //
-////        Method method = MethodUtils.getAccessibleMethod(UserV2API.class, "get", String.class);
+    ////        Method method = MethodUtils.getAccessibleMethod(UserV2API.class, "get", String.class);
 ////        Class<?> clazz = method.getReturnType();
 ////        Type returnType = method.getGenericReturnType();
 ////        Type[] types = ((ParameterizedType) returnType).getActualTypeArguments();// 泛型类型列表
